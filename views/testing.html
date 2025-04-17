@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scroll Horizontal</title>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <style>
+        .scroll-container {
+            width: 600px;  /* Ancho del contenedor */
+            overflow-x: auto; /* Activa el scroll horizontal */
+            white-space: nowrap; /* Evita que los elementos se vayan a la siguiente línea */
+            padding: 10px;
+        }
+
+        .item {
+            display: inline-block; /* Permite que los elementos se alineen en una sola línea */
+            width: 150px;
+            height: 100px;
+            background-color: lightblue;
+            margin-right: 10px;
+            text-align: center;
+            line-height: 100px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        tr.selected {
+            background-color: #b0e0e6 !important; /* Azul claro */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="scroll-container">
+        <div class="item">1</div>
+        <div class="item">2</div>
+        <div class="item">3</div>
+        <div class="item">4</div>
+        <div class="item">5</div>
+        <div class="item">6</div>
+        <div class="item">7</div>
+    </div>
+
+    <table id="miTabla" class="display">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Correo</th>
+                <th>Puesto</th>
+                <th>Acciones</th> <!-- Nueva columna para botones -->
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Juan Pérez</td>
+                <td>juan@example.com</td>
+                <td>Gerente</td>
+                <td>
+                    <button class="btnEditar" data-id="1">✏️ Editar</button>
+                    <button class="btnEliminar" data-id="1">🗑️ Eliminar</button>
+                </td>
+            </tr>
+            <tr>
+                <td>María Gómez</td>
+                <td>maria@example.com</td>
+                <td>Desarrolladora</td>
+                <td>
+                    <button class="btnEditar" data-id="2">✏️ Editar</button>
+                    <button class="btnEliminar" data-id="2">🗑️ Eliminar</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <!-- Formulario oculto para edición -->
+    <div id="modalEditar" style="display: none; background: white; padding: 20px; border: 1px solid black;">
+        <h3>Editar Usuario</h3>
+        <label>Nombre: <input type="text" id="nombreEditar"></label>
+        <br>
+        <label>Correo: <input type="email" id="correoEditar"></label>
+        <br>
+        <button id="guardarCambios">Guardar</button>
+        <button id="cerrarModal">Cerrar</button>
+    </div>
+
+</body>
+<script>
+    $(document).ready(function() {
+        let table = $('#miTabla').DataTable();
+    
+        // Evento para el botón "Editar"
+        $('#miTabla tbody').on('click', '.btnEditar', function() {
+            let row = $(this).closest('tr'); // Obtener la fila actual
+            let nombre = row.find('td:eq(0)').text();
+            let correo = row.find('td:eq(1)').text();
+    
+            // Llenar el formulario con los datos actuales
+            $('#nombreEditar').val(nombre);
+            $('#correoEditar').val(correo);
+    
+            // Mostrar el formulario de edición (modal simple)
+            $('#modalEditar').show();
+        });
+    
+        // Evento para el botón "Eliminar"
+        $('#miTabla tbody').on('click', '.btnEliminar', function() {
+            let row = $(this).closest('tr');
+            table.row(row).remove().draw(); // Eliminar la fila
+            alert('Usuario eliminado');
+        });
+    
+        // Cerrar el formulario
+        $('#cerrarModal').click(function() {
+            $('#modalEditar').hide();
+        });
+    
+        // Guardar cambios (solo muestra un mensaje, pero aquí puedes hacer AJAX para guardar en BD)
+        $('#guardarCambios').click(function() {
+            alert('Cambios guardados correctamente');
+            $('#modalEditar').hide();
+        });
+    });
+    </script>
+</html>

@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<title>Comparativas - COARTMEX-PRO</title>
+
+	<!-- Main Styles -->
+	<link rel="stylesheet" href="assets/styles/style.css">
+
+	<!-- mCustomScrollbar -->
+	<link rel="stylesheet" href="assets/plugin/mCustomScrollbar/jquery.mCustomScrollbar.min.css">
+
+	<!-- Waves Effect -->
+	<link rel="stylesheet" href="assets/plugin/waves/waves.min.css">
+
+	<!-- Sweet Alert -->
+	<link rel="stylesheet" href="assets/plugin/sweet-alert/sweetalert.css">
+	
+	<!-- Percent Circle -->
+	<link rel="stylesheet" href="assets/plugin/percircle/css/percircle.css">
+
+	<!-- Chartist Chart -->
+	<link rel="stylesheet" href="assets/plugin/chart/chartist/chartist.min.css">
+
+	<!-- FullCalendar -->
+	<link rel="stylesheet" href="assets/plugin/fullcalendar/fullcalendar.min.css">
+	<link rel="stylesheet" href="assets/plugin/fullcalendar/fullcalendar.print.css" media='print'>
+
+	<!-- Datepicker -->
+	<link rel="stylesheet" href="assets/plugin/datepicker/css/bootstrap-datepicker.min.css">
+
+	<!-- Toastr -->
+	<link rel="stylesheet" href="assets/plugin/toastr/toastr.css">
+
+	<!-- DateRangepicker -->
+	<link rel="stylesheet" href="assets/plugin/daterangepicker/daterangepicker.css">
+
+	<!-- Color Picker -->
+	<link rel="stylesheet" href="assets/color-switcher/color-switcher.min.css">
+</head>
+
+<body>
+<div class="main-menu">
+	<header class="header">
+		<a href="index.html" class="logo">COARTMEX-PRO</a>
+		<button type="button" class="button-close fa fa-times js__menu_close"></button>
+		<div class="user">
+			<a href="#" class="avatar"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTomPrJLgLq4aZpXJJhxQ5HjtOgBguGXzsJw&s" alt=""><span class="status online"></span></a>
+			<h5 class="name"><a id="usuario" href="#">Usuario</a></h5>
+			<h5 class="position" id="departamento">Departamento</h5>
+			<!-- /.name -->
+		</div>
+		<!-- /.user -->
+	</header>
+	<!-- /.header -->
+	<div class="content">
+
+		<div class="navigation">
+			<h5 class="title">Navegación</h5>
+			<!-- /.title -->
+			<ul class="menu js__accordion">
+				<li>
+					<a class="waves-effect" href="index.html"><i class="menu-icon fa fa-home"></i><span>Bienvenida</span></a>
+				</li>
+				<li>
+					<a class="waves-effect parent-item js__control" href="#"><i class="menu-icon fa fa-dashboard"></i><span>Análisis de datos</span><span class="menu-arrow fa fa-angle-down"></span></a>
+					<ul class="sub-menu js__content">
+						<li><a href="analisis.html">■ Dashboard</a></li>
+						<li><a href="analisis_graficas.html">■ Gráficas</a></li>
+						<li><a href="analisis_tablas.html">■ Tabla de datos</a></li>
+						<li class="current"><a href="comparativas.html">■ Comparar años</a></li>
+					</ul>
+					<!-- /.sub-menu js__content -->
+				</li>
+				<li>
+					<a class="waves-effect parent-item js__control" href="#"><i class="menu-icon fa fa-gear"></i><span>Manager PRO</span><span class="menu-arrow fa fa-angle-down"></span></a>
+					<ul class="sub-menu js__content">
+						<li>
+							<a class="waves-effect parent-item js__control" href="#"><i class="menu-icon fa fa-calculator"></i><span>Contable y fiscal </span><span class="menu-arrow fa fa-angle-down"></span></a>
+							<ul class="sub-menu js__content">
+								<li><a href="fuentes.html">■ Interfaz de reportes</a></li>
+							</ul>
+		
+						</li>
+						<li>
+							<a class="waves-effect parent-item js__control" href="#"><i class="menu-icon fa fa-truck"></i><span>Logistica </span><span class="menu-arrow fa fa-angle-down"></span></a>
+							<ul class="sub-menu js__content">
+		
+								
+								<li><a href="socios.html">■ Socios comerciales</a></li>
+			
+							</ul>
+		
+						</li>
+						<li>
+							<a class="waves-effect parent-item js__control" href="#"><i class="menu-icon fa fa-shopping-basket"></i><span>Compras </span><span class="menu-arrow fa fa-angle-down"></span></a>
+							<ul class="sub-menu js__content">
+		
+								<li><a href="categorias_arti.html">■ Categortia de articulos</a></li>
+								<li><a href="almacen.html">■ Artículos </a></li>
+							</ul>
+		
+						</li> 			
+						<li>
+							<a class="waves-effect parent-item js__control" href="#"><i class="menu-icon fa fa-laptop"></i><span>Sistemas </span><span class="menu-arrow fa fa-angle-down"></span></a>
+							<ul class="sub-menu js__content">
+								<li><a href="departamentos.html">■ Departamentos</a></li>
+								<li><a href="empleados.html">■ Colaboradores</a></li>
+								<li><a href="usuarios.html">■ Usuarios</a></li>
+								<li><a href="proveedores.html">■ Proveedores</a></li>
+								<li><a href="grupos_sociosComerciales.html">■ Grupo de socios comerciales</a></li>
+								<li><a href="socios_comerciales.html">■ Socios comerciales</a></li>
+								<li><a href="ubicaciones.html">■ Areas geografica</a></li>
+							</ul>
+		
+						</li>
+
+
+					</ul>
+				</li>
+			</ul>
+			
+		</div>
+		<!-- /.navigation -->
+		 
+	</div>
+	<!-- /.content -->
+</div>
+<!-- /.main-menu -->
+
+<div class="fixed-navbar">
+	<div class="pull-left">
+		<button type="button" class="menu-mobile-button glyphicon glyphicon-menu-hamburger js__menu_mobile"></button>
+		<h1 class="page-title">Comparativas</h1>
+		<!-- /.page-title -->
+	</div>
+	<!-- /.pull-left -->
+	<div class="pull-right">
+		<a id="cerrarSesion" class="ico-item fa fa-power-off logout"></a>
+	</div>
+	<!-- /.pull-right -->
+</div>
+<!-- /.fixed-navbar -->
+
+<div id="wrapper">
+	<div class="main-content">
+		<div class="row small-spacing">
+
+			<div class="col-xs-12">
+				<div class="box-content">
+					<h4 class="box-title text">Rango de fechas</h4>
+					<!-- /.box-title -->
+                    
+					<div class="col-sm-12">
+						<div class="input-daterange input-group" id="date-range">
+							<input type="text" class="form-control" name="start" id="year1">
+							<span class="input-group-addon bg-primary text-white">y</span>
+							<input type="text" class="form-control" name="end" id="year2">
+						</div>
+						<div class="col-sm-offset-1 col-xs-12">
+							<ul class="list-inline">
+								<li>
+									<div class="checkbox"><input value="01" type="checkbox" id="checkbox-1"><label for="checkbox-1">Ene</label></div>
+									<!-- /.checkbox -->
+								</li>
+								<li>
+									<div class="checkbox"><input value="02" type="checkbox" id="checkbox-2"><label for="checkbox-2">Feb</label></div>
+									<!-- /.checkbox -->
+								</li>
+								<li>
+									<div class="checkbox"><input value="03" type="checkbox" id="checkbox-3"><label for="checkbox-3">Mar</label></div>
+									<!-- /.checkbox -->
+								</li>
+								<li>
+									<div class="checkbox"><input value="04" type="checkbox" id="checkbox-4"><label for="checkbox-4">Abr</label></div>
+									<!-- /.checkbox -->
+								</li>
+								<li>
+									<div class="checkbox"><input value="05" type="checkbox" id="checkbox-5"><label for="checkbox-5">May</label></div>
+									<!-- /.checkbox -->
+								</li>
+								<li>
+									<div class="checkbox"><input value="06" type="checkbox" id="checkbox-6"><label for="checkbox-6">Jun</label></div>
+									<!-- /.checkbox -->
+								</li>
+								<li>
+									<div class="checkbox"><input value="07" type="checkbox" id="checkbox-7"><label for="checkbox-7">Jul</label></div>
+									<!-- /.checkbox -->
+								</li>
+								<li>
+									<div class="checkbox"><input value="08" type="checkbox" id="checkbox-8"><label for="checkbox-8">Ago</label></div>
+									<!-- /.checkbox -->
+								</li>
+								<li>
+									<div class="checkbox"><input value="09" type="checkbox" id="checkbox-9"><label for="checkbox-9">Sep</label></div>
+									<!-- /.checkbox -->
+								</li>
+								<li>
+									<div class="checkbox"><input value="10" type="checkbox" id="checkbox-10"><label for="checkbox-10">Oct</label></div>
+									<!-- /.checkbox -->
+								</li>
+								<li>
+									<div class="checkbox"><input value="11" type="checkbox" id="checkbox-11"><label for="checkbox-11">Nov</label></div>
+									<!-- /.checkbox -->
+								</li>
+								<li>
+									<div class="checkbox"><input value="12" type="checkbox" id="checkbox-12"><label for="checkbox-12">Dic</label></div>
+									<!-- /.checkbox -->
+								</li>
+							</ul>
+						</div>
+						<div class="col-sm-offset-5 margin-top-2 margin-left-2" >
+							<ul class="list-inline">
+								<li>
+									<button class="btn btn-default btn-bordered btn-xs waves-effect waves-light" id="todos">Todos</button>
+									
+								</li>
+								<li>
+									<button class="btn btn-info btn-bordered btn-xs waves-effect waves-light" id="filtro"><i class="fa fa-search"></i> Aplicar filtro</button>
+									
+								</li>
+							</ul>
+						</div>
+						
+					</div>
+
+				</div>
+				<!-- /.box-content -->
+			</div>
+			<!-- /.col-lg-4 col-xs-12 -->
+
+
+			<div class="col-lg-6 col-xs-12">
+				<div class="box-content">
+					<h4 class="box-title text-info">Ingresos cobrados</h4>
+					<!-- /.box-title -->
+                    
+                    
+					
+					<div class="content widget-stat">
+						<!-- /#traffic-sparkline-chart-1 -->
+						<div class="right-content">
+							<h2 class="counter text-info" id="ingresos1">N/C</h2>
+							<!-- /.counter -->
+							<p class="text text-info">Ingresos acumulables</p>
+							<!-- /.text -->
+						</div>
+						<!-- .right-content -->
+					</div>
+					<!-- /.content widget-stat -->
+				</div>
+				<!-- /.box-content -->
+			</div>
+			<!-- /.col-lg-4 col-xs-12 -->
+
+			<div class="col-lg-6 col-xs-12">
+				<div class="box-content">
+					<h4 class="box-title text-info">Ingresos cobrados</h4>
+					<!-- /.box-title -->
+                    
+                    
+					
+					<div class="content widget-stat">
+						<!-- /#traffic-sparkline-chart-1 -->
+						<div class="right-content">
+							<h2 class="counter text-info" id="ingresos2">N/C</h2>
+							<!-- /.counter -->
+							<p class="text text-info">Ingresos acumulables</p>
+							<!-- /.text -->
+						</div>
+						<!-- .right-content -->
+					</div>
+					<!-- /.content widget-stat -->
+				</div>
+				<!-- /.box-content -->
+			</div>
+			<!-- /.col-lg-4 col-xs-12 -->
+
+			<div class="col-lg-6 col-xs-12">
+				<div class="box-content">
+					<h4 class="box-title text-warning">Egresos</h4>
+					<!-- /.box-title -->
+					<div class="content widget-stat">
+						<!-- /#traffic-sparkline-chart-2 -->
+						<div class="right-content">
+							<h2 class="counter text-warning" id="efectivoUtilizado1">N/C</h2>
+							<!-- /.counter -->
+							<p class="text text-warning">Gastos y compras</p>
+							<!-- /.text -->
+						</div>
+						<!-- .right-content -->
+					</div>
+					<!-- /.content widget-stat -->
+				</div>
+				<!-- /.box-content -->
+			</div>
+			<!-- /.col-lg-4 col-xs-12 -->
+
+			<div class="col-lg-6 col-xs-12">
+				<div class="box-content">
+					<h4 class="box-title text-warning">Egresos</h4>
+					<!-- /.box-title -->
+					<div class="content widget-stat">
+						<!-- /#traffic-sparkline-chart-2 -->
+						<div class="right-content">
+							<h2 class="counter text-warning" id="efectivoUtilizado2">N/C</h2>
+							<!-- /.counter -->
+							<p class="text text-warning">Gastos y compras</p>
+							<!-- /.text -->
+						</div>
+						<!-- .right-content -->
+					</div>
+					<!-- /.content widget-stat -->
+				</div>
+				<!-- /.box-content -->
+			</div>
+			<!-- /.col-lg-4 col-xs-12 -->
+
+			<div class="col-lg-6 col-xs-12">
+				<div class="box-content">
+					<h4 class="box-title text-success">Flujo de efectivo disponible</h4>
+					<!-- /.box-title -->
+					<div class="content widget-stat">
+						<!-- /#traffic-sparkline-chart-3 -->
+						<div class="right-content">
+							<h2 class="counter text-success" id="flujoRemanente1">N/C <i class="fa fa-angle-double-up"></i></h2>
+							<!-- /.counter -->
+							<p class="text text-success">Efectivo restante</p>
+							<!-- /.text -->
+						</div>
+						<!-- .right-content -->
+					</div>
+					<!-- /.content widget-stat -->
+				</div>
+				<!-- /.box-content -->
+			</div>
+			<!-- /.col-lg-4 col-xs-12 -->
+
+			<div class="col-lg-6 col-xs-12">
+				<div class="box-content">
+					<h4 class="box-title text-success">Flujo de efectivo disponible</h4>
+					<!-- /.box-title -->
+					<div class="content widget-stat">
+						<!-- /#traffic-sparkline-chart-3 -->
+						<div class="right-content">
+							<h2 class="counter text-success" id="flujoRemanente2">N/C <i class="fa fa-angle-double-up"></i></h2>
+							<!-- /.counter -->
+							<p class="text text-success">Efectivo restante</p>
+							<!-- /.text -->
+						</div>
+						<!-- .right-content -->
+					</div>
+					<!-- /.content widget-stat -->
+				</div>
+				<!-- /.box-content -->
+			</div>
+			<!-- /.col-lg-4 col-xs-12 -->
+
+
+
+			<div class="col-lg-6 col-xs-12">
+				<div class="box-content">
+					<h4 class="box-title text-success">Ventas</h4>
+					<!-- /.box-title -->
+					<div class="content widget-stat">
+						<div id="traffic-sparkline-chart-2" class="left-content margin-top-10"></div>
+						<!-- /#traffic-sparkline-chart-2 -->
+						<div class="right-content">
+							<h2 class="counter text-success" id="ventas1">N/C</h2>
+							<!-- /.counter -->
+							<p class="text text-success">Realizadas</p>
+							<!-- /.text -->
+						</div>
+						<!-- .right-content -->
+					</div>
+					<!-- /.content widget-stat -->
+				</div>
+				<!-- /.box-content -->
+			</div>
+			<!-- /.col-lg-4 col-xs-12 -->
+
+			<div class="col-lg-6 col-xs-12">
+				<div class="box-content">
+					<h4 class="box-title text-success">Ventas</h4>
+					<!-- /.box-title -->
+					<div class="content widget-stat">
+						<div id="traffic-sparkline-chart-2" class="left-content margin-top-10"></div>
+						<!-- /#traffic-sparkline-chart-2 -->
+						<div class="right-content">
+							<h2 class="counter text-success" id="ventas2">N/C</h2>
+							<!-- /.counter -->
+							<p class="text text-success">Realizadas</p>
+							<!-- /.text -->
+						</div>
+						<!-- .right-content -->
+					</div>
+					<!-- /.content widget-stat -->
+				</div>
+				<!-- /.box-content -->
+			</div>
+			<!-- /.col-lg-4 col-xs-12 -->
+
+			<div class="col-lg-6 col-xs-12">
+				<div class="box-content">
+					<h4 class="box-title text-primary">Crecimiento</h4>
+					<!-- /.box-title -->
+					<div class="content widget-stat">
+						<div id="traffic-sparkline-chart-1" class="left-content margin-top-15"></div>
+						<!-- /#traffic-sparkline-chart-1 -->
+						<div class="right-content">
+							<h2 class="counter text-primary" id="crecimientos1">N/C</h2>
+							<!-- /.counter -->
+							<p class="text text-primary">De crecimiento</p>
+							<!-- /.text -->
+						</div>
+						<!-- .right-content -->
+					</div>
+					<!-- /.content widget-stat -->
+				</div>
+				<!-- /.box-content -->
+			</div>
+			<!-- /.col-lg-4 col-xs-12 -->
+
+			<div class="col-lg-6 col-xs-12">
+				<div class="box-content">
+					<h4 class="box-title text-primary">Crecimiento</h4>
+					<!-- /.box-title -->
+					<div class="content widget-stat">
+						<div id="traffic-sparkline-chart-1" class="left-content margin-top-15"></div>
+						<!-- /#traffic-sparkline-chart-1 -->
+						<div class="right-content">
+							<h2 class="counter text-primary" id="crecimientos2">N/C</h2>
+							<!-- /.counter -->
+							<p class="text text-primary">De crecimiento</p>
+							<!-- /.text -->
+						</div>
+						<!-- .right-content -->
+					</div>
+					<!-- /.content widget-stat -->
+				</div>
+				<!-- /.box-content -->
+			</div>
+			<!-- /.col-lg-4 col-xs-12 -->
+	
+			<div class="col-lg-6 col-md-6 col-xs-12">
+				<div class="box-content bg-success text-white">
+					<div class="statistics-box with-icon">
+						<i class="ico small fa fa-diamond"></i>
+						<p class="text text-white">VAL INVENTARIO</p>
+						<h2 class="counter" id="inventarios1">N/C</h2>
+					</div>
+				</div>
+				<!-- /.box-content -->
+			</div>
+
+			<div class="col-lg-6 col-md-6 col-xs-12">
+				<div class="box-content bg-success text-white">
+					<div class="statistics-box with-icon">
+						<i class="ico small fa fa-diamond"></i>
+						<p class="text text-white">VAL INVENTARIO</p>
+						<h2 class="counter" id="inventarios2">N/C</h2>
+					</div>
+				</div>
+				<!-- /.box-content -->
+			</div>
+
+			<!-- /.col-lg-3 col-md-6 col-xs-12 -->
+			<div class="col-lg-6 col-md-6 col-xs-12">
+				<div class="box-content bg-info text-white">
+					<div class="statistics-box with-icon">
+						<i class="ico small fa fa-money"></i>
+						<p class="text text-white">CxC</p>
+						<h2 class="counter" id="cuentasPorCobrar1">N/C</h2>
+					</div>
+				</div>
+				<!-- /.box-content -->
+			</div>
+
+			<!-- /.col-lg-3 col-md-6 col-xs-12 -->
+			<div class="col-lg-6 col-md-6 col-xs-12">
+				<div class="box-content bg-info text-white">
+					<div class="statistics-box with-icon">
+						<i class="ico small fa fa-money"></i>
+						<p class="text text-white">CxC</p>
+						<h2 class="counter" id="cuentasPorCobrar2">N/C</h2>
+					</div>
+				</div>
+				<!-- /.box-content -->
+			</div>
+
+			
+			
+			<!-- /.col-lg-3 col-md-6 col-xs-12 -->
+			<div class="col-lg-6 col-md-6 col-xs-12">
+				<div class="box-content bg-danger text-white">
+					<div class="statistics-box with-icon">
+						<i class="ico small fa fa-calculator"></i>
+						<p class="text text-white">CxP</p>
+						<h2 class="counter" id="cuentasPorPagar1">N/C</h2>
+					</div>
+				</div>
+				<!-- /.box-content -->
+			</div>
+
+			<div class="col-lg-6 col-md-6 col-xs-12">
+				<div class="box-content bg-danger text-white">
+					<div class="statistics-box with-icon">
+						<i class="ico small fa fa-calculator"></i>
+						<p class="text text-white">CxP</p>
+						<h2 class="counter" id="cuentasPorPagar2">N/C</h2>
+					</div>
+				</div>
+				<!-- /.box-content -->
+			</div>
+
+			<!-- /.col-lg-3 col-md-6 col-xs-12 -->
+			<div class="col-lg-6 col-md-6 col-xs-12">
+				<div class="box-content bg-warning text-white">
+					<div class="statistics-box with-icon">
+						<i class="ico small fa fa-usd"></i>
+						<p class="text text-white">GASTOS</p>
+						<h2 class="counter" id="gastos1">N/C</h2>
+					</div>
+				</div>
+				<!-- /.box-content -->
+			</div>
+
+			<div class="col-lg-6 col-md-6 col-xs-12">
+				<div class="box-content bg-warning text-white">
+					<div class="statistics-box with-icon">
+						<i class="ico small fa fa-usd"></i>
+						<p class="text text-white">GASTOS</p>
+						<h2 class="counter" id="gastos2">N/C</h2>
+					</div>
+				</div>
+				<!-- /.box-content -->
+			</div>
+
+
+			
+			<div class="col-lg-6 col-md-6 col-xs-12">
+				<div class="box-content">
+					<div class="statistics-box with-icon">
+						<i class="ico fa fa-tag text-inverse"></i>
+						<h2 class="counter text-inverse" id="articulos1">N/C</h2>
+						<p class="text">ARTICULOS</p>
+					</div>
+				</div>
+				<!-- /.box-content -->
+			</div>
+			<!-- /.col-lg-3 col-md-6 col-xs-12 -->
+
+			<div class="col-lg-6 col-md-6 col-xs-12">
+				<div class="box-content">
+					<div class="statistics-box with-icon">
+						<i class="ico fa fa-tag text-inverse"></i>
+						<h2 class="counter text-inverse" id="articulos2">N/C</h2>
+						<p class="text">ARTICULOS</p>
+					</div>
+				</div>
+				<!-- /.box-content -->
+			</div>
+
+			<div class="col-lg-6 col-md-6 col-xs-12">
+				<div class="box-content">
+					<div class="statistics-box with-icon">
+						<i class="ico fa fa-credit-card text-success"></i>
+						<h2 class="counter text-success" id="compras1">N/C</h2>
+						<p class="text">COMPRAS MCIA</p>
+					</div>
+				</div>
+				<!-- /.box-content -->
+			</div>
+
+			
+			<!-- /.col-lg-3 col-md-6 col-xs-12 -->
+			<div class="col-lg-6 col-md-6 col-xs-12">
+				<div class="box-content">
+					<div class="statistics-box with-icon">
+						<i class="ico fa fa-credit-card text-success"></i>
+						<h2 class="counter text-success" id="compras2">N/C</h2>
+						<p class="text">COMPRAS MCIA</p>
+					</div>
+				</div>
+				<!-- /.box-content -->
+			</div>
+			<!-- /.col-lg-3 col-md-6 col-xs-12 -->
+			<div class="col-lg-6 col-md-6 col-xs-12">
+				<div class="box-content">
+					<div class="statistics-box with-icon">
+						<i class="ico fa fa-users text-primary"></i>
+						<h2 class="counter text-primary" id="socios1">N/C</h2>
+						<p class="text">CLIENTES</p>
+					</div>
+				</div>
+				<!-- /.box-content -->
+			</div>
+
+			<div class="col-lg-6 col-md-6 col-xs-12">
+				<div class="box-content">
+					<div class="statistics-box with-icon">
+						<i class="ico fa fa-users text-primary"></i>
+						<h2 class="counter text-primary" id="socios2">N/C</h2>
+						<p class="text">CLIENTES</p>
+					</div>
+				</div>
+				<!-- /.box-content -->
+			</div>
+			<!-- /.col-lg-3 col-md-6 col-xs-12 -->
+			<div class="col-lg-6 col-md-6 col-xs-12">
+				<div class="box-content">
+					<div class="statistics-box with-icon">
+						<i class="ico fa fa-shopping-basket text-info"></i>
+						<h2 class="counter text-info" id="articulosVendidos1">N/C</h2>
+						<p class="text">ART VENDIDOS</p>
+					</div>
+				</div>
+				<!-- /.box-content -->
+			</div>
+
+
+			<!-- /.col-lg-3 col-md-6 col-xs-12 -->
+			<div class="col-lg-6 col-md-6 col-xs-12">
+				<div class="box-content">
+					<div class="statistics-box with-icon">
+						<i class="ico fa fa-shopping-basket text-info"></i>
+						<h2 class="counter text-info" id="articulosVendidos2">N/C</h2>
+						<p class="text">ART VENDIDOS</p>
+					</div>
+				</div>
+				<!-- /.box-content -->
+			</div>
+			<!-- /.col-lg-3 col-md-6 col-xs-12 -->
+			
+		</div>
+		<!-- /.row small-spacing -->
+			
+	</div>
+	<!-- /.main-content -->
+</div><!--/#wrapper -->
+	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+	<!--[if lt IE 9]>
+		<script src="assets/script/html5shiv.min.js"></script>
+		<script src="assets/script/respond.min.js"></script>
+	<![endif]-->
+	<!-- 
+	================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="assets/JS/comparativa.js"></script> 
+	<script src="assets/JS/autenticar.js"></script>
+
+	<!-- <script src="assets/scripts/jquery.min.js"></script> -->
+	<script src="assets/scripts/modernizr.min.js"></script>
+	<script src="assets/plugin/bootstrap/js/bootstrap.min.js"></script>
+	<script src="assets/plugin/mCustomScrollbar/jquery.mCustomScrollbar.concat.min.js"></script>
+	<script src="assets/plugin/nprogress/nprogress.js"></script>
+	<script src="assets/plugin/waves/waves.min.js"></script>
+	<!-- Full Screen Plugin -->
+	<script src="assets/plugin/fullscreen/jquery.fullscreen-min.js"></script>
+
+	<!-- Percent Circle -->
+	<script src="assets/plugin/percircle/js/percircle.js"></script>
+
+	<!-- Google Chart -->
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+	<!-- Chartist Chart -->
+	<script src="assets/plugin/chart/chartist/chartist.min.js"></script>
+	<script src="assets/scripts/chart.chartist.init.min.js"></script>
+
+	<!-- Sparkline Chart -->
+	<script src="assets/plugin/chart/sparkline/jquery.sparkline.min.js"></script>
+	<script src="assets/scripts/chart.sparkline.init.min.js"></script>
+
+	<!-- Datepicker -->
+	<script src="assets/plugin/datepicker/js/bootstrap-datepicker.js"></script>
+
+	<!-- Moment -->
+	<script src="assets/plugin/moment/moment.js"></script>
+
+	<!-- DateRangepicker -->
+	<script src="assets/plugin/daterangepicker/daterangepicker.js"></script>
+
+	<!-- Demo Scripts -->
+	<script src="assets/scripts/form.demo.min.js"></script>
+
+	<!-- Toastr -->
+	<script src="assets/plugin/toastr/toastr.min.js"></script>
+
+	<!-- FullCalendar -->
+	<script src="assets/plugin/moment/moment.js"></script>
+	<script src="assets/plugin/fullcalendar/fullcalendar.min.js"></script>
+	<script src="assets/scripts/fullcalendar.init.js"></script>
+
+	<script src="assets/scripts/main.min.js"></script>
+	<script src="assets/color-switcher/color-switcher.min.js"></script>
+</body>
+</html>
