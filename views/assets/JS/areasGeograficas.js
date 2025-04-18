@@ -3,8 +3,8 @@ $(document).ready(function () {
     listar();
 
     if (sessionStorage.getItem("departamento") !== 'Logistica Comercial' && sessionStorage.getItem("departamento") !== 'Dirección general') {
-        window.location.href = './index.html';
-        toastr.warning('Usted no debería estar aquí', 'Atención', { "closeButton": true });
+        //window.location.href = './index.html';
+        //toastr.warning('Usted no debería estar aquí', 'Atención', { "closeButton": true });
     }
     
 });
@@ -22,7 +22,8 @@ $(document).ready(function() {
             { title: "Municipio" },
             { title: "Estado" },
             { title: "Pais" },
-        ]
+        ],
+        scrollX: true,
     });
 
 

@@ -44,7 +44,7 @@
 <body>
 <div class="main-menu">
 	<header class="header">
-		<a href="index.html" class="logo">COARTMEX</a>
+		<a href="index.html" class="logo">COARTMEX-PRO</a>
 		<button type="button" class="button-close fa fa-times js__menu_close"></button>
 		<div class="user">
 			<a href="#" class="avatar"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTomPrJLgLq4aZpXJJhxQ5HjtOgBguGXzsJw&s" alt=""><span class="status online"></span></a>
@@ -61,16 +61,16 @@
 			<h5 class="title">Navegación</h5>
 			<!-- /.title -->
 			<ul class="menu js__accordion">
-				<li>
+				<li class="current">
 					<a class="waves-effect" href="index.html"><i class="menu-icon fa fa-home"></i><span>Bienvenida</span></a>
 				</li>
 				<li>
 					<a class="waves-effect parent-item js__control" href="#"><i class="menu-icon fa fa-dashboard"></i><span>Análisis de datos</span><span class="menu-arrow fa fa-angle-down"></span></a>
 					<ul class="sub-menu js__content">
-						<li><a href="analisis.html">■ Dashboard</a></li>
-						<li><a href="analisis_graficas.html">■ Gráficas</a></li>
-						<li><a href="analisis_tablas.html">■ Tabla de datos</a></li>
-						<li><a href="comparativas.html">■ Comparar años</a></li>
+						<li><a href="analisis.html"><i class="fa fa-percent"></i> Dashboard</a></li>
+						<li><a href="analisis_graficas.html"><i class="fa fa-bar-chart"></i> Gráficas</a></li>
+						<li><a href="analisis_tablas.html"><i class="fa fa-table"></i> Tabla de datos</a></li>
+						<li><a href="comparativas.html"><i class="fa fa-calendar-minus-o"></i> Comparar años</a></li>
 					</ul>
 					<!-- /.sub-menu js__content -->
 				</li>
@@ -80,39 +80,17 @@
 						<li>
 							<a class="waves-effect parent-item js__control" href="#"><i class="menu-icon fa fa-calculator"></i><span>Contable y fiscal </span><span class="menu-arrow fa fa-angle-down"></span></a>
 							<ul class="sub-menu js__content">
-								<li><a href="fuentes.html">■ Interfaz de reportes</a></li>
+								<li><a href="fuentes.html"><i class="fa fa-file-excel-o"></i> Interfaz de reportes</a></li>
 							</ul>
 		
-						</li>
-						<li>
-							<a class="waves-effect parent-item js__control" href="#"><i class="menu-icon fa fa-truck"></i><span>Logistica </span><span class="menu-arrow fa fa-angle-down"></span></a>
-							<ul class="sub-menu js__content">
-		
-								
-								<li><a href="socios.html">■ Socios comerciales</a></li>
-			
-							</ul>
-		
-						</li>
-						<li>
-							<a class="waves-effect parent-item js__control" href="#"><i class="menu-icon fa fa-shopping-basket"></i><span>Compras </span><span class="menu-arrow fa fa-angle-down"></span></a>
-							<ul class="sub-menu js__content">
-		
-								<li><a href="categorias_arti.html">■ Categortia de articulos</a></li>
-								<li><a href="almacen.html">■ Artículos </a></li>
-							</ul>
-		
-						</li> 			
+						</li>		
 						<li>
 							<a class="waves-effect parent-item js__control" href="#"><i class="menu-icon fa fa-laptop"></i><span>Sistemas </span><span class="menu-arrow fa fa-angle-down"></span></a>
 							<ul class="sub-menu js__content">
-								<li><a href="departamentos.html">■ Departamentos</a></li>
-								<li><a href="empleados.html">■ Colaboradores</a></li>
-								<li><a href="usuarios.html">■ Usuarios</a></li>
-								<li><a href="proveedores.html">■ Proveedores</a></li>
-								<li><a href="grupos_sociosComerciales.html">■ Grupo de socios comerciales</a></li>
-								<li><a href="socios_comerciales.html">■ Socios comerciales</a></li>
-								<li><a href="ubicaciones.html">■ Areas geografica</a></li>
+								<li><a href="empleados.html"><i class="fa fa-suitcase"></i> Colaboradores</a></li>
+								<li><a href="usuarios.html"><i class="fa fa-user"></i> Usuarios</a></li>
+								<li><a href="proveedores.html"><i class="fa fa-truck"></i> Proveedores</a></li>
+								<li><a href="socios_comerciales.html"><i class="fa fa-star"></i> Socios comerciales</a></li>
 							</ul>
 		
 						</li>
@@ -124,7 +102,9 @@
 			
 		</div>
 		<!-- /.navigation -->
+			
 	</div>
+	<!-- /.content -->
 </div>
 <!-- /.main-menu -->
 
@@ -149,19 +129,6 @@
 		<div class="row small-spacing">
 			<div class="col-xs-12">
 				<div class="box-content">
-					<div class="dropdown js__drop_down">
-						<a href="#" class="dropdown-icon glyphicon glyphicon-option-vertical js__drop_down_button"></a>
-						<ul class="sub-menu">
-							<li><a href="#">Action</a></li>
-							<li><a href="#">Another action</a></li>
-							<li><a href="#">Something else there</a></li>
-							<li class="split"></li>
-							<li><a href="#">Separated link</a></li>
-						</ul>
-						<!-- /.sub-menu -->
-					</div>
-					<!-- /.dropdown js__dropdown -->
-
 					
 					<h5 class="position">Fuentes subidas</h5>
 
@@ -171,7 +138,7 @@
 						<h1></h1>
 					</div>
 
-					<table id="fuenteTable" class="table table-striped table-bordered display" style="width:100%">
+					<table id="fuenteTable" class="table table-small-font table-hover table-bordered display" style="width:100%">
 						
 					</table>
 				</div>
@@ -180,9 +147,8 @@
 		</div>
 		<!-- /.col-xs-12 -->
 			
-		</div>
-		<!-- /.row -->		
 	</div>
+	<!-- /.row -->		
 	<!-- /.main-content -->
 </div><!--/#wrapper -->
 

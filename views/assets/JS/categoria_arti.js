@@ -20,7 +20,8 @@ $(document).ready(function() {
     $('#categoriaArticuloTable').DataTable({
         columns: [
             { title: "Nombre de la categoria" }
-        ]
+        ],
+        scrollX: true,
     });
 
     

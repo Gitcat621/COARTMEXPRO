@@ -88,7 +88,8 @@ $(document).ready(function() {
             { title: "Municipio" },
             { title: "Estado" },
             { title: "Pais" }
-        ]
+        ],
+        scrollX: true,
     });
 
 

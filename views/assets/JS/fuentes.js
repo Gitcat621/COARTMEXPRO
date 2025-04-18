@@ -38,7 +38,8 @@ $(document).ready(function() {
                             </div>`;
                 }
             }
-        ]
+        ],
+        scrollX: true,
     });
 
 

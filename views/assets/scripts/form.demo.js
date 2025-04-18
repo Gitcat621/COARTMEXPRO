@@ -100,6 +100,14 @@
 	if ($("#datepicker").length)
 		$('#datepicker').datepicker();
 
+	if ($("#datepicker2").length)
+		$('#datepicker2').datepicker({
+			format: 'mm',
+			autoclose: true,
+			startView: 1,		
+			minViewMode: 1,
+		});
+
 	if ($("#datepicker-autoclose").length)
 		$('#datepicker-autoclose').datepicker({
 			autoclose: true,

@@ -1,5 +1,4 @@
-import mysql.connector
-from mysql.connector import Error
+import pymysql
 import os
 from dotenv import load_dotenv
 
@@ -9,20 +8,17 @@ class Database:
         self.connection = None
         self.cursor = None
         try:
-            self.connection = mysql.connector.connect(
+            self.connection = pymysql.connect(
                 host=os.getenv("DB_HOST"),
                 user=os.getenv("DB_USER"),
                 password=os.getenv("DB_PASSWORD"),
-                database=os.getenv("DB_NAME")
+                database=os.getenv("DB_NAME"),
+                cursorclass=pymysql.cursors.DictCursor  # Devuelve los resultados como diccionario
             )
-            if self.connection.is_connected():
-                self.cursor = self.connection.cursor(dictionary=True)
-                print("✅ Conexión a MySQL exitosa")
-            else:
-                print("❌ No se pudo conectar a la base de datos")
-        except Error as e:
+            self.cursor = self.connection.cursor()
+            print("✅ Conexión exitosa a MySQL")
+        except pymysql.MySQLError as e:
             print(f"❌ Error de conexión a MySQL: {e}")
-
 
     def execute_query(self, query, params=None):
         """Ejecuta una consulta SELECT"""
@@ -32,7 +28,7 @@ class Database:
         try:
             self.cursor.execute(query, params)
             return self.cursor.fetchall()
-        except Error as e:
+        except pymysql.MySQLError as e:
             print(f"❌ Error al ejecutar consulta: {e}")
             return None
 
@@ -45,7 +41,7 @@ class Database:
             self.cursor.execute(query, params)
             self.connection.commit()
             return True
-        except Error as e:
+        except pymysql.MySQLError as e:
             print(f"❌ Error al ejecutar consulta: {e}")
             return False
 

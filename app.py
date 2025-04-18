@@ -60,6 +60,8 @@ app.register_blueprint(cuentaBanco_bp, url_prefix='/coartmex')
 def default():
     return 'Welcome'
 
+load_dotenv() 
+
 if __name__ == '__main__':
     app.run(debug=True, host=os.getenv("FLASK_HOST"), port=int(os.getenv("FLASK_PORT")))
     

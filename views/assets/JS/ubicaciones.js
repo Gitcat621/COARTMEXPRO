@@ -1,8 +1,8 @@
 $(document).ready(function () {
 
     if (sessionStorage.getItem("departamento") !== 'Sistemas' && sessionStorage.getItem("departamento") !== 'Dirección general') {
-        window.location.href = './index.html';
-        toastr.warning('Usted no debería estar aquí', 'Atención', { "closeButton": true });
+        //window.location.href = './index.html';
+        //toastr.warning('Usted no debería estar aquí', 'Atención', { "closeButton": true });
     }
     listarCP();
     listarPC();
@@ -188,7 +188,8 @@ $(document).ready(function() {
                             </div>`;
                 }
             }
-        ]
+        ],
+        scrollX: true,
     });
 
     
