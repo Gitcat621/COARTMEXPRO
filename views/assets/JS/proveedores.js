@@ -6,6 +6,9 @@ $(document).ready(function () {
     }
     listarProveedores();
     listarUbicaciones();
+    listarTelefonos();
+    listarCuentas();
+    listarPaqueterias();
     
 });
 
@@ -39,6 +42,120 @@ function listarUbicaciones(){
     .catch(error => console.error("Error al cargar los datos:", error));
 }
 
+async function listarTelefonos() {
+    try {
+        const response = await fetch('http://127.0.0.1:5000/coartmex/telefonos', { // Cambia la URL según tu API
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        const data = await response.json();
+
+        if (!response.ok) {
+            console.error("Error al obtener los datos:", response.status);
+            return;
+        }
+
+
+        const select = document.getElementById('telefono_menu');
+        select.innerHTML = ""; // Limpiar contenido previo
+
+        option = document.createElement('option');
+        option.value = '0';
+        option.textContent = '1234567890';
+        option.selected = true;
+        select.appendChild(option);
+
+        data.forEach(telefono => {
+
+            let option = document.createElement('option');
+            option.value = telefono.pkTelefono; // Asignar el nombre del telefono
+            option.textContent = telefono.numeroTelefono;
+            select.appendChild(option);
+        });
+
+    } catch (error) {
+        console.error("Error al conectar con la API:", error);
+    }
+}
+
+async function listarCuentas() {
+    try {
+        const response = await fetch('http://127.0.0.1:5000/coartmex/cuentasBanco', { // Cambia la URL según tu API
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        const data = await response.json();
+
+        if (!response.ok) {
+            console.error("Error al obtener los datos:", response.status);
+            return;
+        }
+
+
+        const select = document.getElementById('banco_menu');
+        select.innerHTML = ""; // Limpiar contenido previo
+
+        option = document.createElement('option');
+        option.value = '0';
+        option.textContent = 'Cuenta de banco';
+        option.selected = true;
+        select.appendChild(option);
+
+        data.forEach(telefono => {
+
+            let option = document.createElement('option');
+            option.value = telefono.pkCuentaBanco; // Asignar el nombre del telefono
+            option.textContent = telefono.numeroCuenta;
+            select.appendChild(option);
+        });
+
+    } catch (error) {
+        console.error("Error al conectar con la API:", error);
+    }
+}
+
+async function listarPaqueterias() {
+    try {
+        const response = await fetch('http://127.0.0.1:5000/coartmex/paqueterias', { // Cambia la URL según tu API
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        const data = await response.json();
+
+        if (!response.ok) {
+            console.error("Error al obtener los datos:", response.status);
+            return;
+        }
+
+
+        const select = document.getElementById('paqueteria_menu');
+        select.innerHTML = ""; // Limpiar contenido previo
+
+        option = document.createElement('option');
+        option.value = '0';
+        option.textContent = 'Paqueteria';
+        option.selected = true;
+        select.appendChild(option);
+
+        data.forEach(telefono => {
+
+            let option = document.createElement('option');
+            option.value = telefono.pkPaqueteria; // Asignar el nombre del telefono
+            option.textContent = telefono.nombrePaqueteria;
+            select.appendChild(option);
+        });
+
+    } catch (error) {
+        console.error("Error al conectar con la API:", error);
+    }
+}
+
 //Asignar funcion al boton de abrir modal
 $("#modalAgregar").click(function() {
     abrirModal(1);
@@ -70,8 +187,8 @@ $(document).ready(function() {
                 title: "Opciones",
                 render: function (data, type, row) { // 'row' contiene toda la fila de datos
                     return `<div class="text-center">
-                                <button class="btn btn-warning btn-sm editar-btn" data-row='${JSON.stringify(row)}'><i class="fa fa-pencil"></i></button>
-                                <button class="btn btn-danger btn-sm eliminar-btn" data-pk="${row[16]}"><i class="fa fa-trash"></i></button>
+                                <button class="btn btn-xs editar-btn" data-row='${JSON.stringify(row)}'><i class="fa fa-pencil"></i></button>
+                                <button class="btn btn-xs eliminar-btn" data-pk="${row[16]}"><i class="fa fa-trash"></i></button>
                             </div>`;
                 }
             }
@@ -349,7 +466,7 @@ function abrirModal(modo, pkProveedor) {
         document.getElementById('diasCredito').value = '';
         document.getElementById('fn_menu').value = '';
         document.getElementById('ubicacion_menu').value = '';
-        document.getElementById('infop_menu').value = '';
+        document.getElementById('telefono_menu').value = '';
 
     } else if (modo === 2) {
 

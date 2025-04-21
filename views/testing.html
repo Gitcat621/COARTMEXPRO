@@ -3,125 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scroll Horizontal</title>
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <title>Sparkline Chart con Chart.js</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        .scroll-container {
-            width: 600px;  /* Ancho del contenedor */
-            overflow-x: auto; /* Activa el scroll horizontal */
-            white-space: nowrap; /* Evita que los elementos se vayan a la siguiente línea */
-            padding: 10px;
-        }
-
-        .item {
-            display: inline-block; /* Permite que los elementos se alineen en una sola línea */
+        .chart-container {
             width: 150px;
-            height: 100px;
-            background-color: lightblue;
-            margin-right: 10px;
-            text-align: center;
-            line-height: 100px;
-            font-size: 20px;
-            font-weight: bold;
-        }
-
-        tr.selected {
-            background-color: #b0e0e6 !important; /* Azul claro */
+            height: 50px;
         }
     </style>
 </head>
 <body>
 
-    <div class="scroll-container">
-        <div class="item">1</div>
-        <div class="item">2</div>
-        <div class="item">3</div>
-        <div class="item">4</div>
-        <div class="item">5</div>
-        <div class="item">6</div>
-        <div class="item">7</div>
+    <h2>Ejemplo de Sparkline Charts</h2>
+    
+    <div class="chart-container">
+        <canvas id="sparkline1"></canvas>
+    </div>
+    <div class="chart-container">
+        <canvas id="sparkline2"></canvas>
+    </div>
+    <div class="chart-container">
+        <canvas id="sparkline3"></canvas>
     </div>
 
-    <table id="miTabla" class="display">
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Correo</th>
-                <th>Puesto</th>
-                <th>Acciones</th> <!-- Nueva columna para botones -->
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Juan Pérez</td>
-                <td>juan@example.com</td>
-                <td>Gerente</td>
-                <td>
-                    <button class="btnEditar" data-id="1">✏️ Editar</button>
-                    <button class="btnEliminar" data-id="1">🗑️ Eliminar</button>
-                </td>
-            </tr>
-            <tr>
-                <td>María Gómez</td>
-                <td>maria@example.com</td>
-                <td>Desarrolladora</td>
-                <td>
-                    <button class="btnEditar" data-id="2">✏️ Editar</button>
-                    <button class="btnEliminar" data-id="2">🗑️ Eliminar</button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    
-    <!-- Formulario oculto para edición -->
-    <div id="modalEditar" style="display: none; background: white; padding: 20px; border: 1px solid black;">
-        <h3>Editar Usuario</h3>
-        <label>Nombre: <input type="text" id="nombreEditar"></label>
-        <br>
-        <label>Correo: <input type="email" id="correoEditar"></label>
-        <br>
-        <button id="guardarCambios">Guardar</button>
-        <button id="cerrarModal">Cerrar</button>
-    </div>
+    <script>
+        function createSparklineChart(canvasId, data) {
+            const ctx = document.getElementById(canvasId).getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.map((_, index) => index + 1),
+                    datasets: [{
+                        data: data,
+                        borderColor: '#007bff',
+                        backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                        borderWidth: 1,
+                        tension: 0.4,
+                        pointRadius: 0,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: { display: false },
+                        y: { display: false }
+                    },
+                    elements: {
+                        line: { borderWidth: 2 }
+                    }
+                }
+            });
+        }
+
+        createSparklineChart("sparkline1", [12, 19, 3, 5, 2, 3, 9]);
+        createSparklineChart("sparkline2", [3, 5, 2, 12, 19, 3, 9]);
+        createSparklineChart("sparkline3", [7, 3, 15, 10, 4, 8, 12]);
+    </script>
 
 </body>
-<script>
-    $(document).ready(function() {
-        let table = $('#miTabla').DataTable();
-    
-        // Evento para el botón "Editar"
-        $('#miTabla tbody').on('click', '.btnEditar', function() {
-            let row = $(this).closest('tr'); // Obtener la fila actual
-            let nombre = row.find('td:eq(0)').text();
-            let correo = row.find('td:eq(1)').text();
-    
-            // Llenar el formulario con los datos actuales
-            $('#nombreEditar').val(nombre);
-            $('#correoEditar').val(correo);
-    
-            // Mostrar el formulario de edición (modal simple)
-            $('#modalEditar').show();
-        });
-    
-        // Evento para el botón "Eliminar"
-        $('#miTabla tbody').on('click', '.btnEliminar', function() {
-            let row = $(this).closest('tr');
-            table.row(row).remove().draw(); // Eliminar la fila
-            alert('Usuario eliminado');
-        });
-    
-        // Cerrar el formulario
-        $('#cerrarModal').click(function() {
-            $('#modalEditar').hide();
-        });
-    
-        // Guardar cambios (solo muestra un mensaje, pero aquí puedes hacer AJAX para guardar en BD)
-        $('#guardarCambios').click(function() {
-            alert('Cambios guardados correctamente');
-            $('#modalEditar').hide();
-        });
-    });
-    </script>
 </html>

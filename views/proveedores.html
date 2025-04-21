@@ -34,6 +34,12 @@
 
     <!-- Toastr -->
     <link rel="stylesheet" href="assets/plugin/toastr/toastr.css">
+
+	<!-- Select2 -->
+	<link rel="stylesheet" href="assets/plugin/select2/css/select2.min.css">
+
+	<!-- FlexDatalist -->
+	<link rel="stylesheet" href="assets/plugin/flexdatalist/jquery.flexdatalist.min.css">
 </head>
 
 <body>
@@ -196,6 +202,21 @@
 					<select class="form-control" id="ubicacion_menu" >
 					</select>
 				</div>
+				<div class="form-group">
+					<label>Asignar telefonos</label><br>
+					<select class="form-control select2_1" multiple="multiple" id="telefono_menu" >
+					</select>
+				</div>
+				<div class="form-group">
+					<label>Asignar cuentas de bancos</label><br>
+					<select class="form-control select2_1" multiple="multiple" id="banco_menu" >
+					</select>
+				</div>
+				<div class="form-group">
+					<label>Asignar paqueterias</label><br>
+					<select class="form-control select2_1" multiple="multiple" id="paqueteria_menu" >
+					</select>
+				</div>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default btn-xs waves-effect waves-light" data-dismiss="modal">Cerrar</button>
@@ -259,6 +280,15 @@
     <!-- Toastr -->
 	<script src="assets/plugin/toastr/toastr.min.js"></script>
 	<script src="assets/scripts/toastr.demo.min.js"></script>
+
+	<!-- Select2 -->
+	<script src="assets/plugin/select2/js/select2.min.js"></script>
+
+	<!-- Multi Select -->
+	<script src="assets/plugin/multiselect/multiselect.min.js"></script>
+
+	<!-- Demo Scripts -->
+	<script src="assets/scripts/form.demo.min.js"></script>
 
 </body>
 </html>
