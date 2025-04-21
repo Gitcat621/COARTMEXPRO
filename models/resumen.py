@@ -242,77 +242,6 @@ class Resumen:
             resultado = db.execute_query(consulta)
             db.close()
             return resultado
-    
-    
-    def listar_ventas(self):
-
-        db = Database()
-
-        print(self.foreingKey)
-
-        if self.foreingKey == 621:
-            filtros = []
-            if self.fecha:
-                try:
-                    anio = int(self.fecha)
-                    filtros.append(f"YEAR(v.fechaVenta) = {anio}")
-                except ValueError:
-                    pass
-
-            clausula_where = f"WHERE {' AND '.join(filtros)}" if filtros else ""
-
-            consulta = f'''
-            SELECT 
-                gs.nombreGrupoSocio AS grupo,
-                SUM(v.montoVenta) AS totalVentas
-            FROM ventas v
-            JOIN socios_comerciales sc ON sc.pkSocioComercial = v.fkSocioComercial
-            JOIN grupos_socio gs ON gs.pkGrupoSocio = sc.fkGrupoSocio
-            {clausula_where}
-            GROUP BY gs.nombreGrupoSocio
-            ORDER BY totalVentas DESC;
-
-            '''
-
-            print(consulta)
-
-            resultado = db.execute_query(consulta)
-            db.close()
-
-            return resultado
-            
-        else:
-        
-            filtros = []
-            
-            if self.fecha:
-                try:
-                    anio = int(self.fecha)
-                    filtros.append(f"YEAR(v.fechaVenta) = {anio}")
-                except ValueError:
-                    pass
-
-            if self.foreingKey:
-                filtros.append(f"gs.pkGrupoSocio = {int(self.foreingKey)}")
-
-            clausula_where = f"WHERE {' AND '.join(filtros)}" if filtros else ""
-
-            consulta = f'''
-            SELECT sc.nombreSocio, v.montoVenta, v.fechaVenta FROM ventas v 
-            JOIN socios_comerciales sc ON sc.pkSocioComercial = v.fkSocioComercial
-            JOIN grupos_socio gs ON gs.pkGrupoSocio = sc.fkGrupoSocio
-            {clausula_where}
-            GROUP BY 
-                sc.nombreSocio, 
-                v.fechaVenta;
-            '''
-
-            print(consulta)
-
-            resultado = db.execute_query(consulta)
-            db.close()
-
-            return resultado
 
     @staticmethod
     def listar_cuentasPorPagar():
@@ -324,6 +253,8 @@ class Resumen:
         JOIN proveedores p ON cm.fkProveedor = p.pkProveedor
         WHERE cm.pagoPendiente  != 0
         '''
+
+        print(consulta)
 
         resultado = db.execute_query(consulta)
         db.close()
@@ -342,6 +273,8 @@ class Resumen:
         LEFT JOIN grupos_socio gs ON gs.pkGrupoSocio = sc.fkGrupoSocio 
         WHERE f.fechaPagado IS NULL;
         '''
+
+        print(consulta)
 
         resultado = db.execute_query(consulta)
         db.close()
@@ -556,28 +489,3 @@ class Resumen:
         db.close()
 
         return resultado
-
-
-    def crear_venta(self, db):
-        """Guarda un nuevo registro en la base de datos"""
-
-        query = '''
-        INSERT INTO ventas (montoVenta, fechaVenta, fkSocioComercial) VALUES
-        (%s, %s, (SELECT pkSocioComercial FROM socios_comerciales WHERE nombreSocio = %s))
-        '''
-
-        valores = (self.montoVenta, self.fechaVenta, self.fkSocioComercial)
-
-        try:
-
-
-            print(query % valores)
-
-            resultado = db.execute_commit(query, valores)  # Ejecutar la consulta
-            
-            return resultado
-
-        except Exception as e:
-
-            print(f"Error al insertar compra {self.numeroOrdenCompra}: {e}")
-            return None

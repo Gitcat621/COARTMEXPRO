@@ -132,73 +132,10 @@
 	<div class="main-content">
 		<div class="row small-spacing">
             <div class="col-xs-12">
-				<!--<div class="box-content">
-					<h4 class="box-title"></h4>
-					<ul class="list-inline">
-
-						 <div class="btn-group margin-top-10">
-							<button type="button" class="btn btn-xs btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Re abastos <span class="caret"></span></button> 
-							<ul class="dropdown-menu">
-								<li><a href="#">Seccion1</a></li>
-								<li><a href="#">Seccion2</a></li>
-							</ul>
-						</div>
-						<div class="btn-group margin-top-10">
-							<button type="button" class="btn btn-xs btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">RH <span class="caret"></span></button> 
-							<ul class="dropdown-menu">
-								<li><a href="#">Seccion1</a></li>
-								<li><a href="#">Seccion2</a></li>
-							</ul>
-						</div>
-						<div class="btn-group margin-top-10">
-							<button type="button" class="btn btn-xs btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admon. Comercial <span class="caret"></span></button> 
-							<ul class="dropdown-menu">
-								<li><a href="#" onclick="cargarTablas('ventas')">Ventas</a></li>
-								<li><a href="#" onclick="cargarTablas('articulos')">Inventario</a></li>
-								<li><a href="#" onclick="cargarTablas('facturas')">Facturacion</a></li>
-								<li><a href="#" onclick="cargarTablas('cuentasPorPagar')">CxP</a></li>
-								<li><a href="#" onclick="cargarTablas('cuentasPorCobrar')">CxC</a></li>
-								<li><a href="#" onclick="cargarTablas('ingresos')">Ingresos</a></li>
-								<li><a href="#" onclick="cargarTablas('complementos')">Complementos de pago</a></li>
-								<li><a href="#" onclick="cargarTablas('comprasMercancia')">Compras</a></li>
-								<li><a href="#" onclick="cargarTablas('gastos')">Gastos</a></li>
-							</ul>
-						</div>
-						<div class="btn-group margin-top-10">
-							<button type="button" class="btn btn-xs btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admon. Contable y Fiscal <span class="caret"></span></button> 
-							<ul class="dropdown-menu">
-								<li><a href="#">Seccion1</a></li>
-								<li><a href="#">Seccion2</a></li>
-							</ul>
-						</div>
-						<div class="btn-group margin-top-10">
-							<button type="button" class="btn btn-xs btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Direccion Comercial <span class="caret"></span></button> 
-							<ul class="dropdown-menu">
-								<li><a href="#">Seccion1</a></li>
-								<li><a href="#">Seccion2</a></li>
-							</ul>
-						</div>
-						<div class="btn-group margin-top-10">
-							<button type="button" class="btn btn-xs btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Logistica <span class="caret"></span></button> 
-							<ul class="dropdown-menu">
-								<li><a href="#">Seccion1</a></li>
-								<li><a href="#">Seccion2</a></li>
-							</ul>
-						</div>
-						<div class="btn-group margin-top-10">
-							<button type="button" class="btn btn-xs btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Des. Innov. pducto <span class="caret"></span></button> 
-							<ul class="dropdown-menu">
-								<li><a href="#">Seccion1</a></li>
-								<li><a href="#">Seccion2</a></li>
-							</ul>
-						</div>  
-					</ul>
-				</div>-->
 				<div class="box-content">
 					<!-- /.list-inline -->
 					<h4 class="box-title" id="tableTitle">Selecciona una tabla para visualizar</h4>
 					<!-- /.box-title -->
-
 
 					<div class="col-sm-offset-2 margin-top-2 margin-left-2" >
 
@@ -223,9 +160,9 @@
 								
 							</ul>
 						</div>
-						<!-- <div class="btn-group margin-top-10">
+						<div class="btn-group margin-top-10">
 							<button onclick="cargarTablas('articulos', 0)" type="button" class="btn btn-xs btn-violet dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Inventario</button> 
-						</div> -->
+						</div>
 						<div class="btn-group margin-top-10">
 							<button onclick="cargarTablas('cuentasPorPagar', 0)" type="button" class="btn btn-xs btn-violet dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">CxP</button> 
 						</div>
@@ -237,24 +174,25 @@
 						</div>
 					</div>
 
-					<div class="col-sm-offset-8 col-sm-4 margin-top-10"  id="contenedorAnio"> <!-- style="display: none;" -->
+					<div class="col-sm-offset-9 col-sm-3 margin-top-10"  id="contenedorAnio">
 						<div class="input-group">
 							<input type="text" class="form-control" placeholder="año" id="datepicker" autocomplete="off">
+							<span class="input-group-addon text-white" style="background-color: rgb(0, 75, 195);"><i class="fa fa-calendar"></i></span>
 
-							<span class="input-group-addon bg-primary text-white"><i class="fa fa-calendar"></i></span>
-
-							<!-- <input type="text" class="form-control" placeholder="mes" id="datepicker2">
-							<span class="input-group-addon bg-primary text-white"><i class="fa fa-calendar"></i></span> -->
-						</div>
-						<!-- /.input-group -->
-					</div>
-
-					<div class="col-sm-offset-10 col-sm-2 margin-bottom-10" id="contenedorMes"> 
-						<div class="input-group">
 							
 						</div>
 						<!-- /.input-group -->
 					</div>
+
+					<div class="col-sm-offset-10 col-sm-2 margin-top-10" id="contenedorMes"  style="display: none;"> 
+						<div class="input-group">
+							<input type="text" class="form-control" placeholder="mes" id="datepicker2">
+							<span class="input-group-addon text-white" style="background-color: rgb(67, 139, 255);"><i class="fa fa-calendar"></i></span>
+						</div>
+						<!-- /.input-group -->
+					</div>
+
+					<br><br><br><br><br><br><br>
 
 					<table id="dataTable" class="table table-small-font table-bordered table-hover table-striped display nowrap" style="width:100%">
 						
@@ -280,7 +218,6 @@
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 	<script src="assets/JS/autenticar.js"></script>
     <script src="assets/JS/analisis_tablas.js"></script>
-	<script src="assets/JS/datePickerMes.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 	<!-- <script src="assets/scripts/jquery.min.js"></script> -->

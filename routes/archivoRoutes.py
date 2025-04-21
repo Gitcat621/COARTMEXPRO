@@ -9,6 +9,7 @@ from models.factura import Factura
 from models.gasto import Gasto
 from models.articulo import Articulo
 from models.resumen import Resumen
+from models.venta import Venta
 from database import Database
 
 archivo_bp = Blueprint('archivo_bp', __name__)
@@ -210,12 +211,12 @@ def procesar_ordenes(df):
                 raise Exception(f"Error al insertar orden {fila['No. OC']}")
 
         for _, fila in df.iterrows():
-            resumen = Resumen(
+            venta = Venta(
                 montoVenta=fila["Cant vendida"] * fila["Precio de venta"],
                 fechaVenta=fila["Fecha entrega"],
                 fkSocioComercial=fila["Socio comercial"],
             )
-            resultado = resumen.crear_venta(db)  # Pasamos la conexión activa
+            resultado = venta.crear_venta(db)  # Pasamos la conexión activa
             if resultado is None or resultado is False:
                 raise Exception(f"Error al insertar orden {fila['No. OC']}")
 

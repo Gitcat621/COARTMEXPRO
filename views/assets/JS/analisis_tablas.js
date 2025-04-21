@@ -69,15 +69,17 @@ function actualizarLista(idElemento, tipo, data) {
 
 
 //Hace las peticiones a las tablas
-async function cargarTablas(endpoint, foreingKey, anio) {
+async function cargarTablas(endpoint, foreingKey, anio, mes) {
 
     try {
 
         anio = document.getElementById('datepicker').value;
+        mes = document.getElementById('datepicker2').value;
 
     } catch {
 
         anio = undefined;
+        mes = undefined;
 
     }
 
@@ -86,8 +88,14 @@ async function cargarTablas(endpoint, foreingKey, anio) {
         anio = new Date().getFullYear();
 
     }
+    if (!mes) {
 
-    console.log(`Se envió la petición: ${endpoint} con llave foránea ${foreingKey} con fecha ${anio}`);
+        mes = new Date().getMonth();
+        mes = mes + 1; 
+
+    }
+
+    console.log(`Endpoint: ${endpoint} / fk: ${foreingKey} / mes: ${mes} / año: ${anio}`);
 
     try {
         const response = await fetch(`http://127.0.0.1:5000/coartmex/${endpoint}?foreingKey=${foreingKey}&fecha=${anio}`, {

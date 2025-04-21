@@ -25,6 +25,7 @@ from routes.compraMercanciaRoutes import compraMercancia_bp
 from routes.facturaRoutes import factura_bp
 from routes.infoPaqueteriaRoutes import infoPaqueteria_bp
 from routes.cuentaBancoRoutes import cuentaBanco_bp
+from routes.ventaRoutes import venta_bp
 
 app = Flask(__name__)
 
@@ -55,6 +56,7 @@ app.register_blueprint(compraMercancia_bp, url_prefix='/coartmex')
 app.register_blueprint(factura_bp, url_prefix='/coartmex') 
 app.register_blueprint(infoPaqueteria_bp, url_prefix='/coartmex') 
 app.register_blueprint(cuentaBanco_bp, url_prefix='/coartmex') 
+app.register_blueprint(venta_bp, url_prefix='/coartmex')
 
 @app.route('/')
 def default():

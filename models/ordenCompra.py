@@ -5,7 +5,8 @@ class OrdenCompra:
         pkOrdenCompra=None, 
         numeroOrdenCompra=None, 
         fechaOrdenCompra=None,
-        fkSocioComercial=None, 
+        fkSocioComercial=None,
+        
         codigoArticulo=None, 
         cantidadOrden=None,
         cantidadVenta=None, 
@@ -17,6 +18,7 @@ class OrdenCompra:
         self.numeroOrdenCompra = numeroOrdenCompra
         self.fechaOrdenCompra = fechaOrdenCompra
         self.fkSocioComercial = fkSocioComercial
+
         self.codigoArticulo = codigoArticulo
         self.cantidadOrden = cantidadOrden
         self.cantidadVenta = cantidadVenta
@@ -84,8 +86,6 @@ class OrdenCompra:
 
             print(f"Error al insertar artículo en orden: {e}")
             return None
-
-
 
 
     def crear_venta(self, db):
@@ -158,6 +158,7 @@ class OrdenCompra:
         resultado = db.execute_commit(query, (self.fechaOrdenCompra, self.fkSocioComercial, self.numeroOrdenCompra))
         db.close()
         return resultado
+
 
     def eliminar_ordenCompra(self):
         """Elimina un registro de la base de datos."""

@@ -29,7 +29,7 @@ class Articulo:
         JOIN categoria_articulos ca ON ca.pkCategoriaArticulo = a.fkCategoriaArticulo 
         JOIN proveedores p ON p.pkProveedor = a.fkProveedor
         JOIN existencias e ON e.fkCodigoArticulo = a.codigoArticulo
-        WHERE YEAR(e.fechaExistencia) = YEAR({year}) AND MONTH(e.fechaExistencia) = MONTH({month}))
+        WHERE YEAR(e.fechaExistencia) = YEAR({year}) AND MONTH(e.fechaExistencia) = MONTH({month})
         '''
         resultado = db.execute_query(consulta)
         db.close()
@@ -62,7 +62,6 @@ class Articulo:
         except Exception as e:
             print(f"Error al insertar la existencia {self.codigoArticulo}: {e}")
             return None
-
 
     def editar_articulo(self):
         """Edita un registro en la base de datos."""

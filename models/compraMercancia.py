@@ -47,7 +47,6 @@ class CompraMercancia:
             return None
 
 
-
     def editar_compra(self, db):
         query = '''UPDATE compras_mercancia SET pagoPendiente = %s WHERE folioELV = %s'''
         valores = (self.pagoPendiente, self.folioELV)
