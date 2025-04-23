@@ -1,16 +1,18 @@
 from flask import Blueprint, request, jsonify
 from models.venta import Venta
+
 venta_bp = Blueprint('venta_bp', __name__)
 
 @venta_bp.route('/ventas', methods=['GET'])
 def listar_ventas():
-    filtro = request.args.get('foreingKey')
-    fecha = request.args.get('fecha')
+    
+    grupo = request.args.get('grupo')
+    year = request.args.get('year')
 
     try:
-        filtro = int(filtro) if filtro else None
+        grupo = int(grupo) if grupo else None
     except ValueError:
-        filtro = None
+        grupo = None
 
     data = {}
 
@@ -21,10 +23,10 @@ def listar_ventas():
         "October": "Octubre", "November": "Noviembre", "December": "Diciembre"
     }
 
-    ventas = Venta(fkSocioComercial=filtro, fechaVenta=fecha)
+    ventas = Venta(fkSocioComercial=grupo, fechaVenta=year)
     ventas = ventas.listar_ventas()
 
-    if filtro == 621:
+    if grupo == 621:
         return jsonify(ventas), 200
     else:
         for venta in ventas:

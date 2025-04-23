@@ -57,8 +57,8 @@ $(document).ready(function() {
                 title: "Opciones",
                 render: function (data, type, row) { // 'row' contiene toda la fila de datos
                     return `<div class="text-center">
-                                <button class="btn btn-warning btn-xs editar-btn" data-row='${JSON.stringify(row)}'><i class="fa fa-pencil"></i></button>
-                                <button class="btn btn-danger btn-xs eliminar-btn" data-pk="${row[6]}"><i class="fa fa-trash"></i></button>
+                                <button class="btn btn-xs editar-btn" data-row='${JSON.stringify(row)}'><i class="fa fa-pencil"></i></button>
+                                <button class="btn btn-xs eliminar-btn" data-pk="${row[6]}"><i class="fa fa-trash"></i></button>
                             </div>`;
                 }
             }
@@ -75,8 +75,8 @@ $(document).ready(function() {
 
         const nombreUsuario = rowData[0];
         const contrasena = rowData[1];
-        const fkEmpleado = rowData[5];
-        const pkUsuario = rowData[6];
+        const fkEmpleado = rowData[3];
+        const pkUsuario = rowData[4];
 
 
         document.getElementById('nombreUsuario').value = nombreUsuario;

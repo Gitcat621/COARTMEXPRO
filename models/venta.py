@@ -1,4 +1,11 @@
 from database import Database
+import datetime
+
+def guardar_en_log(texto):
+    """Guarda el texto en un archivo de log."""
+    with open("registro_log.txt", "a", encoding="utf-8") as archivo:
+        timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        archivo.write(f"[{timestamp}] {texto}\n")
 
 class Venta:
     def __init__(self, pkVenta=None, montoVenta=None, fechaVenta=None, fkSocioComercial=None):
@@ -89,15 +96,16 @@ class Venta:
         try:
 
 
-            print(query % valores)
+            log_query = query.replace("%s", "'{}'").format(*valores)
+            guardar_en_log(f"Consulta ejecutada: {log_query}")
 
-            resultado = db.execute_commit(query, valores)  # Ejecutar la consulta
+            resultado = db.execute(query, valores)  # Ejecutar la consulta
             
             return resultado
 
         except Exception as e:
 
-            print(f"Error al insertar compra {self.numeroOrdenCompra}: {e}")
+            guardar_en_log(f"❌ Error al insertar compra {self.fkSocioComercial}: {e}")
             return None
 
 

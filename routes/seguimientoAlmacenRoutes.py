@@ -1,12 +1,12 @@
 from flask import Blueprint, request, jsonify
-from controllers.seguimientoAlmacenController import SeguimientoAlmacenController
+from models.seguimientoAlmacen import SeguiminetoAlmacen
 
 seguimientoAlmacen_bp = Blueprint('seguimientoAlmacen_bp', __name__)
 
 @seguimientoAlmacen_bp.route('/seguimientosAlmacen', methods=['GET'])
 def listar_seguimientosAlmacen():
     """Endpoint para obtener todos los registros"""
-    seguimientosAlmacen = SeguimientoAlmacenController.listar_seguimientosAlmacen()
+    seguimientosAlmacen = SeguiminetoAlmacen.listar_seguimientosAlmacen()
     return jsonify(seguimientosAlmacen), 200
 
 @seguimientoAlmacen_bp.route('/seguimientosAlmacen', methods=['POST'])
@@ -25,7 +25,7 @@ def crear_seguimientoAlmacen():
     if not fechaSurtido or not fechaEmpaque:
         return jsonify({'mensaje': 'Faltan datos'}), 400
 
-    if SeguimientoAlmacenController.crear_seguimientoAlmacen(fechaSurtido, fechaEmpaque):
+    if SeguiminetoAlmacen.crear_seguimientoAlmacen(fechaSurtido, fechaEmpaque):
         return jsonify({'mensaje': 'Seguimiento de almacén insertado correctamente'}), 201
     else:
         return jsonify({'mensaje': 'Error al insertar seguimiento de almacén'}), 500
@@ -39,7 +39,7 @@ def editar_seguimientoAlmacen():
         fechaSurtido = data.get('fechaSurtido')
         fechaEmpaque = data.get('fechaEmpaque')
 
-        if SeguimientoAlmacenController.editar_seguimientoAlmacen(pkSeguimientoAlmacen, fechaSurtido, fechaEmpaque):
+        if SeguiminetoAlmacen.editar_seguimientoAlmacen(pkSeguimientoAlmacen, fechaSurtido, fechaEmpaque):
             return jsonify({'mensaje': 'Seguimiento de almacén editado correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo editar el seguimiento de almacén'}), 500
@@ -54,7 +54,7 @@ def eliminar_seguimientoAlmacen():
         data = request.json
         pkSeguimientoAlmacen = data.get('pkSeguimientoAlmacen')
 
-        if SeguimientoAlmacenController.eliminar_seguimientoAlmacen(pkSeguimientoAlmacen):
+        if SeguiminetoAlmacen.eliminar_seguimientoAlmacen(pkSeguimientoAlmacen):
             return jsonify({'mensaje': 'Seguimiento de almacén eliminado correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo eliminar el seguimiento de almacén'}), 500

@@ -1,12 +1,12 @@
 from flask import Blueprint, request, jsonify
-from controllers.municipioController import MunicipioController
+from models.municipio import Municipio
 
 municipio_bp = Blueprint('municipio_bp', __name__)
 
 @municipio_bp.route('/municipios', methods=['GET'])
 def listar_municipios():
     """Endpoint para obtener todos los registros"""
-    municipios = MunicipioController.listar_municipios()
+    municipios = Municipio.listar_municipios()
     return jsonify(municipios), 200
 
 @municipio_bp.route('/municipios', methods=['POST'])
@@ -21,7 +21,7 @@ def crear_municipio():
     if not nombreMunicipio:
         return jsonify({'mensaje': 'Faltan datos'}), 400
 
-    if MunicipioController.crear_municipio(nombreMunicipio):
+    if Municipio.crear_municipio(nombreMunicipio):
         return jsonify({'mensaje': 'Municipio insertado correctamente'}), 201
     else:
         return jsonify({'mensaje': 'Error al insertar municipio'}), 500
@@ -34,7 +34,7 @@ def editar_municipio():
         pkMunicipio = data.get('pkMunicipio')
         nombreMunicipio = data.get('nombreMunicipio')
 
-        if MunicipioController.editar_municipio(pkMunicipio, nombreMunicipio):
+        if Municipio.editar_municipio(pkMunicipio, nombreMunicipio):
             return jsonify({'mensaje': 'Municipio editado correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo editar el municipio'}), 500
@@ -49,7 +49,7 @@ def eliminar_municipio():
         data = request.json
         pkMunicipio = data.get('pkMunicipio')
 
-        if MunicipioController.eliminar_municipio(pkMunicipio):
+        if Municipio.eliminar_municipio(pkMunicipio):
             return jsonify({'mensaje': 'Municipio eliminado correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo eliminar el municipio'}), 500

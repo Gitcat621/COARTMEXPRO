@@ -1,4 +1,11 @@
 from database import Database
+import datetime
+
+def guardar_en_log(texto):
+    """Guarda el texto en un archivo de log."""
+    with open("registro_log.txt", "a", encoding="utf-8") as archivo:
+        timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        archivo.write(f"[{timestamp}] {texto}\n")
 
 class Factura:
     def __init__(self, 
@@ -47,9 +54,7 @@ class Factura:
         resultado = db.execute_query(consulta)
         db.close()
         return resultado
-    
-    
-    
+        
     def crear_factura(self, db):
         """Guarda un nuevo registro en la base de datos"""
 
@@ -84,16 +89,15 @@ class Factura:
 
         try:
             
-            print(query % valores)
+            log_query = query.replace("%s", "'{}'").format(*valores)
+            guardar_en_log(f"Consulta ejecutada: {log_query}")
 
-            resultado = db.execute_commit(query, valores)
+            resultado = db.execute(query, valores)
 
             return resultado
         except Exception as e:
-            print(f"Error al insertar factura {self.numeroAño}: {e}")
+            guardar_en_log(f"❌ Error al insertar compra {self.numeroAño}: {e}")
             return None
-
-
 
     def editar_factura(self, db):
         """Edita un registro en la base de datos."""
@@ -104,18 +108,16 @@ class Factura:
         
         try:
 
-            print(query % valores)
+            log_query = query.replace("%s", "'{}'").format(*valores)
+            guardar_en_log(f"Consulta ejecutada: {log_query}")
 
-            resultado = db.execute_commit(query, valores)  # Ejecutar la consulta
+            resultado = db.execute(query, valores)  # Ejecutar la consulta
             
             return resultado
 
         except Exception as e:
-            print(f"Error al insertar compra {self.numeroAño}: {e}")
+            guardar_en_log(f"❌ Error al insertar compra {self.numeroAño}: {e}")
             return None
-
-        finally:
-            db.close()
 
     def eliminar_factura(self):
         """Elimina un registro de la base de datos."""

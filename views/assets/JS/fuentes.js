@@ -175,7 +175,6 @@ async function agregarArchivo() {
 }
 
 
-
 function listarArchivos() {
 
     //Peticion GET al servidor
@@ -205,7 +204,7 @@ function listarArchivos() {
     
 }
 
-function editarArchivo(pkArchivo, nombreArchivo){   
+async function editarArchivo(pkArchivo, nombreArchivo) {   
 
     // Evita que se envíe el formulario si falta pkArchivo o nombreArchivo
     if (!pkArchivo || !nombreArchivo) {
@@ -240,73 +239,73 @@ function editarArchivo(pkArchivo, nombreArchivo){
     formData.append('pkArchivo', pkArchivo);
     formData.append('nombreArchivo', nombreArchivo);
 
-    // Enviar los datos al backend (Flask) para editar
-    fetch('http://127.0.0.1:5000/coartmex/archivos', {
-        method: 'PUT',
-        body: formData,
-    })
-    .then(response => response.json())
-    .then(data => {
+    try {
+        // Enviar los datos al backend (Flask) para editar
+        const response = await fetch('http://127.0.0.1:5000/coartmex/archivos', {
+            method: 'PUT',
+            body: formData,
+        });
 
+        const data = await response.json();
+
+        if (!response.ok) {
+
+            toastr.error(`${data.mensaje}`, 'Error', {"closeButton": true});
+
+            throw new Error('Hubo un problema al enviar la solicitud');
+        }
 
         // Mostrar el mensaje de la respuesta de la API
         listarArchivos();
         
-        toastr.success(`${data.mensaje}`, 'Realizado', {"closeButton": true,});
-
-
-    })
-    .catch(error => {
-
-
+        toastr.success(`${data.mensaje}`, 'Realizado', {"closeButton": true});
+        
+    } catch (error) {
         console.error('Error:', error);
-
-        toastr.error('Hubo un error al intentar la acción', 'Error', {"closeButton": true,});
-        return;
-    });
+        toastr.error('Hubo un error al intentar la acción', 'Error', {"closeButton": true});
+    }
 }
 
-function eliminarArchivo(pkArchivo, nombreArchivo){
+
+async function eliminarArchivo(pkArchivo, nombreArchivo) {
 
     // Verificar si llega el id
     if (!pkArchivo || !nombreArchivo) {
-
-
-        toastr.warning('No se pudo obtener el elemento', 'Advertencia', {"closeButton": true,});
+        toastr.warning('No se pudo obtener el elemento', 'Advertencia', { "closeButton": true });
         return;
-
-
     }
 
-    // Enviar los datos al backend (Flask) para insertar
-    fetch('http://127.0.0.1:5000/coartmex/archivos', {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ pkArchivo, nombreArchivo })
-    })
-    .then(response => response.json())
-    .then(data => {
+    try {
+        // Enviar los datos al backend (Flask) para eliminar
+        const response = await fetch('http://127.0.0.1:5000/coartmex/archivos', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ pkArchivo, nombreArchivo })
+        });
 
+        const data = await response.json();
+
+        if (!response.ok) {
+
+            toastr.error(`${data.mensaje}`, 'Error', {"closeButton": true});
+
+            throw new Error('Hubo un problema al enviar la solicitud');
+        }
+
+      
 
         // Mostrar el mensaje de la respuesta de la API
         listarArchivos();
+        toastr.success(`${data.mensaje}`, 'Realizado', { "closeButton": true });
 
-        toastr.success(`${data.mensaje}`, 'Realizado', {"closeButton": true,});
-
-
-    })
-    .catch(error => {
-
-
+    } catch (error) {
         console.error('Error:', error);
-
-        toastr.success(`${data.mensaje}`, 'Error', {"closeButton": true,});
-        return;
-
-    });
+        toastr.error('Hubo un error al intentar la acción', 'Error', { "closeButton": true });
+    }
 }
+
 
 function abrirModal(modo, pkArchivo, nombreArchivo) {
 

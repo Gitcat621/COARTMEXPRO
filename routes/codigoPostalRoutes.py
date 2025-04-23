@@ -1,12 +1,12 @@
 from flask import Blueprint, request, jsonify
-from controllers.codigoPostalController import CodigoPostalController
+from models.codigoPostal import CodigoPostal
 
 codigoPostal_bp = Blueprint('codigoPostal_bp', __name__)
 
 @codigoPostal_bp.route('/codigosPostales', methods=['GET'])
 def listar_codigosPostales():
     """Endpoint para obtener todos los registros"""
-    codigosPostales = CodigoPostalController.listar_codigosPostales()
+    codigosPostales = CodigoPostal.listar_codigosPostales()
     return jsonify(codigosPostales), 200
 
 @codigoPostal_bp.route('/codigosPostales', methods=['POST'])
@@ -17,7 +17,7 @@ def crear_codigoPostal():
     if not isinstance(codigoPostal, str):
         return jsonify({'mensaje': 'codigoPostal debe ser una cadena de texto'}), 400
 
-    if CodigoPostalController.crear_codigoPostal(codigoPostal):
+    if CodigoPostal.crear_codigoPostal(codigoPostal):
         return jsonify({'mensaje': 'Código postal insertado correctamente'}), 201
     else:
         return jsonify({'mensaje': 'Error al insertar código postal'}), 500
@@ -30,7 +30,7 @@ def editar_codigoPostal():
         pkCodigoPostal = data.get('pkCodigoPostal')
         codigoPostal = data.get('codigoPostal')
 
-        if CodigoPostalController.editar_codigoPostal(pkCodigoPostal, codigoPostal):
+        if CodigoPostal.editar_codigoPostal(pkCodigoPostal, codigoPostal):
             return jsonify({'mensaje': 'Código postal editado correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo editar el código postal'}), 500
@@ -45,7 +45,7 @@ def eliminar_codigoPostal():
         data = request.json
         pkCodigoPostal = data.get('pkCodigoPostal')
 
-        if CodigoPostalController.eliminar_codigoPostal(pkCodigoPostal):
+        if CodigoPostal.eliminar_codigoPostal(pkCodigoPostal):
             return jsonify({'mensaje': 'Código postal eliminado correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo eliminar el código postal'}), 500

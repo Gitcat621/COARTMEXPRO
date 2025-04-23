@@ -1,4 +1,11 @@
 from database import Database
+import datetime
+
+def guardar_en_log(texto):
+    """Guarda el texto en un archivo de log."""
+    with open("registro_log.txt", "a", encoding="utf-8") as archivo:
+        timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        archivo.write(f"[{timestamp}] {texto}\n")
 
 class MotivoGasto:
     def __init__(self, pkMotivoGasto=None, nombreMotivoGasto=None, tipoGasto=None):
@@ -24,41 +31,41 @@ class MotivoGasto:
         db.close()
         return resultado
     
-    def actualizar_motivos(self):
+    def actualizar_motivos(self, db):
         """Guarda un nuevo motivo de gasto en la base de datos si no existe"""
-        db = Database()
         
         # Verificar si el motivo ya existe en la base de datos
         query_check_motivo = "SELECT pkMotivoGasto FROM motivos_gasto WHERE nombreMotivoGasto = %s"
-        db.cursor.execute(query_check_motivo, (self.fkMotivoGasto,))
-        motivo_existente = db.cursor.fetchone()
+        db.execute(query_check_motivo, (self.nombreMotivoGasto,))
+        motivo_existente = db.fetchone()
 
         if not motivo_existente:  # Si no existe el motivo, lo insertamos
             query_insert_motivo = """
             INSERT INTO motivos_gasto (nombreMotivoGasto, tipoGasto) 
             VALUES (%s, %s)
             """
-            valores = (self.fkMotivoGasto, self.tipoGasto)
+            valores = (self.nombreMotivoGasto, self.tipoGasto)
             
             try:
-                db.connection.autocommit = False  # Desactivar autocommit para iniciar la transacción
-                #print(query_insert_motivo % valores)
                 
-                db.cursor.execute(query_insert_motivo, valores)  # Insertar el motivo
-                db.connection.commit()  # Confirmar la transacción si todo sale bien
-                #print(f"Motivo insertado: {self.fkMotivoGasto} - {self.tipoGasto}")
-                db.close()
+                db.execute(query_insert_motivo, valores)  # Insertar el motivo
+
+                log_query = query_insert_motivo.replace("%s", "'{}'").format(*valores)
+                guardar_en_log(f"Consulta ejecutada: {log_query}")
+
+                #print(f"Motivo insertado: {self.nombreMotivoGasto} - {self.tipoGasto}")
+
+
                 return True
             
             except Exception as e:
-                db.connection.rollback()  # Revertir la transacción si hay un error
-                print(f"Error al insertar el motivo {self.fkMotivoGasto}: {e}")
-                db.close()
+
+                guardar_en_log(f"❌ Error al insertar compra {self.nombreMotivoGasto}: {e}")
                 return None
 
         else:
-            #print(f"El motivo '{self.fkMotivoGasto}' ya existe.")
-            db.close()
+            #print(f"El motivo '{self.nombreMotivoGasto}' ya existe.")
+            guardar_en_log(f"El motivo '{self.nombreMotivoGasto}' ya existe.")
             return True  # El motivo ya existe, no es necesario insertarlo
     
     def editar_motivoGasto(self):

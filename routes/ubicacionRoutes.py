@@ -1,12 +1,12 @@
 from flask import Blueprint, request, jsonify
-from controllers.ubicacionController import UbicacionController
+from models.ubicacion import Ubicacion
 
 ubicacion_bp = Blueprint('ubicacion_bp', __name__)
 
 @ubicacion_bp.route('/ubicaciones', methods=['GET'])
 def listar_ubicaciones():
     """Endpoint para obtener todos los registros"""
-    ubicaciones = UbicacionController.listar_ubicaciones()
+    ubicaciones = Ubicacion.listar_ubicaciones()
     return jsonify(ubicaciones), 200
 
 @ubicacion_bp.route('/ubicaciones', methods=['POST'])
@@ -33,7 +33,7 @@ def crear_ubicacion():
     if not fkPuebloCiudad or not fkCodigoPostal or not fkMunicipio or not fkEstado or not fkPais:
         return jsonify({'mensaje': 'Faltan datos'}), 400
 
-    if UbicacionController.crear_ubicacion(fkPuebloCiudad, fkCodigoPostal, fkMunicipio, fkEstado, fkPais):
+    if Ubicacion.crear_ubicacion(fkPuebloCiudad, fkCodigoPostal, fkMunicipio, fkEstado, fkPais):
         return jsonify({'mensaje': 'Ubicación insertada correctamente'}), 201
     else:
         return jsonify({'mensaje': 'Error al insertar ubicación'}), 500
@@ -50,7 +50,7 @@ def editar_ubicacion():
         fkEstado = data.get('fkEstado')
         fkPais = data.get('fkPais')
 
-        if UbicacionController.editar_ubicacion(pkUbicacion, fkPuebloCiudad, fkCodigoPostal, fkMunicipio, fkEstado, fkPais):
+        if Ubicacion.editar_ubicacion(pkUbicacion, fkPuebloCiudad, fkCodigoPostal, fkMunicipio, fkEstado, fkPais):
             return jsonify({'mensaje': 'Ubicación editada correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo editar la ubicación'}), 500
@@ -65,7 +65,7 @@ def eliminar_ubicacion():
         data = request.json
         pkUbicacion = data.get('pkUbicacion')
 
-        if UbicacionController.eliminar_ubicacion(pkUbicacion):
+        if Ubicacion.eliminar_ubicacion(pkUbicacion):
             return jsonify({'mensaje': 'Ubicación eliminada correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo eliminar la ubicación'}), 500

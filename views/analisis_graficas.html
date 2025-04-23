@@ -33,6 +33,9 @@
 	<!-- Color Picker -->
 	<link rel="stylesheet" href="assets/color-switcher/color-switcher.min.css">
 
+	<!-- Select2 -->
+	<link rel="stylesheet" href="assets/plugin/select2/css/select2.min.css">
+
 	<!-- Toastr -->
 	<link rel="stylesheet" href="assets/plugin/toastr/toastr.css">
 </head>
@@ -130,28 +133,31 @@
 					<div class="row">
 						<div class="col-lg-12">
 							<div class="row-inline-block">
-								<div class="col-md-1 col-xs-12"><div class="checkbox"><input value="01" type="checkbox" id="checkbox-1"><label for="checkbox-1">Ene</label></div></div>
-								<div class="col-md-1 col-xs-12"><div class="checkbox"><input value="02" type="checkbox" id="checkbox-2"><label for="checkbox-2">Feb</label></div></div>
-								<div class="col-md-1 col-xs-12"><div class="checkbox"><input value="03" type="checkbox" id="checkbox-3"><label for="checkbox-3">Mar</label></div></div>
-								<div class="col-md-1 col-xs-12"><div class="checkbox"><input value="04" type="checkbox" id="checkbox-4"><label for="checkbox-4">Abr</label></div></div>
-								<div class="col-md-1 col-xs-12"><div class="checkbox"><input value="05" type="checkbox" id="checkbox-5"><label for="checkbox-5">May</label></div></div>
-								<div class="col-md-1 col-xs-12"><div class="checkbox"><input value="06" type="checkbox" id="checkbox-6"><label for="checkbox-6">Jun</label></div></div>
-								<div class="col-md-1 col-xs-12"><div class="checkbox"><input value="07" type="checkbox" id="checkbox-7"><label for="checkbox-7">Jul</label></div></div>
-								<div class="col-md-1 col-xs-12"><div class="checkbox"><input value="08" type="checkbox" id="checkbox-8"><label for="checkbox-8">Ago</label></div></div>
-								<div class="col-md-1 col-xs-12"><div class="checkbox"><input value="09" type="checkbox" id="checkbox-9"><label for="checkbox-9">Sep</label></div></div>
-								<div class="col-md-1 col-xs-12"><div class="checkbox"><input value="10" type="checkbox" id="checkbox-10"><label for="checkbox-10">Oct</label></div></div>
-								<div class="col-md-1 col-xs-12"><div class="checkbox"><input value="11" type="checkbox" id="checkbox-11"><label for="checkbox-11">Nov</label></div></div>
-								<div class="col-md-1 col-xs-12"><div class="checkbox"><input value="12" type="checkbox" id="checkbox-12"><label for="checkbox-12">Dic</label></div></div>
+								<div class="col-md-1 col-xs-3"><div class="checkbox"><input value="01" type="checkbox" id="checkbox-1"><label for="checkbox-1">Ene</label></div></div>
+								<div class="col-md-1 col-xs-3"><div class="checkbox"><input value="02" type="checkbox" id="checkbox-2"><label for="checkbox-2">Feb</label></div></div>
+								<div class="col-md-1 col-xs-3"><div class="checkbox"><input value="03" type="checkbox" id="checkbox-3"><label for="checkbox-3">Mar</label></div></div>
+								<div class="col-md-1 col-xs-3"><div class="checkbox"><input value="04" type="checkbox" id="checkbox-4"><label for="checkbox-4">Abr</label></div></div>
+								<div class="col-md-1 col-xs-3"><div class="checkbox"><input value="05" type="checkbox" id="checkbox-5"><label for="checkbox-5">May</label></div></div>
+								<div class="col-md-1 col-xs-3"><div class="checkbox"><input value="06" type="checkbox" id="checkbox-6"><label for="checkbox-6">Jun</label></div></div>
+								<div class="col-md-1 col-xs-3"><div class="checkbox"><input value="07" type="checkbox" id="checkbox-7"><label for="checkbox-7">Jul</label></div></div>
+								<div class="col-md-1 col-xs-3"><div class="checkbox"><input value="08" type="checkbox" id="checkbox-8"><label for="checkbox-8">Ago</label></div></div>
+								<div class="col-md-1 col-xs-3"><div class="checkbox"><input value="09" type="checkbox" id="checkbox-9"><label for="checkbox-9">Sep</label></div></div>
+								<div class="col-md-1 col-xs-3"><div class="checkbox"><input value="10" type="checkbox" id="checkbox-10"><label for="checkbox-10">Oct</label></div></div>
+								<div class="col-md-1 col-xs-3"><div class="checkbox"><input value="11" type="checkbox" id="checkbox-11"><label for="checkbox-11">Nov</label></div></div>
+								<div class="col-md-1 col-xs-3"><div class="checkbox"><input value="12" type="checkbox" id="checkbox-12"><label for="checkbox-12">Dic</label></div></div>
 							</div>
 
-							<div class="col-sm-offset-5 margin-top-2 margin-left-2" >
+							<div class="col-sm-offset-3 margin-top-2 margin-left-2" >
 								<ul class="list-inline">
 									<li>
-										<button class="btn btn-default btn-bordered btn-xs waves-effect waves-light" id="todos">Todos</button>
+										<select class="form-control" id="grupoSocio_menu"></select>
+									</li>
+									<li>
+										<button class="btn btn-default btn-bordered btn-sm waves-effect waves-light" id="todos">Todos</button>
 										
 									</li>
 									<li>
-										<button class="btn btn-info btn-bordered btn-xs waves-effect waves-light" id="meses"><i class="fa fa-search"></i> Aplicar filtro</button>
+										<button class="btn btn-info btn-bordered btn-sm waves-effect waves-light" id="meses"><i class="fa fa-search"></i> Aplicar filtro</button>
 										
 									</li>
 								</ul>
@@ -170,23 +176,9 @@
 				<div class="box-content">
 					<h4 class="box-title">Grafica de barras - Cantidad ventas</h4>
 					<!-- /.box-title -->
-					<div class="dropdown js__drop_down">
-						<a href="#" class="dropdown-icon glyphicon glyphicon-option-vertical js__drop_down_button"></a>
-						<ul id="filtro1" class="sub-menu">
-
-						</ul>
-						<!-- /.sub-menu -->
-					</div>
-					<!-- /.dropdown js__dropdown -->
+					
 					<div id="bar-morris-chart" class="morris-chart" style="height: 320px"></div>
-					<!-- <div class="text-center">
-						<ul class="list-inline morris-chart-detail-list">
-							<li><i class="fa fa-circle"></i>Series A</li>
-							<li><i class="fa fa-circle"></i>Series B</li>
-							<li><i class="fa fa-circle"></i>Series C</li>
-						</ul>
-					</div> -->
-					<!-- /#bar-morris-chart.morris-chart -->
+					
 				</div>
 				<!-- /.box-content -->
 			</div>
@@ -221,14 +213,6 @@
 					<!-- /.box-title -->
 
 					<div id="stack-morris-chart" class="morris-chart" style="height: 320px"></div>
-					<!-- <div class="text-center">
-						<ul class="list-inline morris-chart-detail-list">
-							<li><i class="fa fa-circle"></i>Series A</li>
-							<li><i class="fa fa-circle"></i>Series B</li>
-							<li><i class="fa fa-circle"></i>Series C</li>
-							<li><i class="fa fa-circle"></i>Series D</li>
-						</ul>
-					</div> -->
 					<!-- /#stack-morris-chart.morris-chart -->
 				</div>
 				<!-- /.box-content -->
@@ -243,12 +227,6 @@
 					<!-- /.dropdown js__dropdown -->
 					<div id="area-morris-chart" class="morris-chart" style="height: 320px; position: relative; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
 					</div>
-					<!-- <div class="text-center">
-						<ul class="list-inline morris-chart-detail-list">
-							<li><i class="fa fa-circle"></i>Salary</li>
-							<li><i class="fa fa-circle"></i>Sales</li>
-						</ul>
-					</div> -->
 					<!-- /#area-morris-chart.morris-chart -->
 				</div>
 				<!-- /.box-content -->
@@ -308,6 +286,12 @@
 
 	<!-- Toastr -->
 	<script src="assets/plugin/toastr/toastr.min.js"></script>
+
+	<!-- Select2 -->
+	<script src="assets/plugin/select2/js/select2.min.js"></script>
+
+	<!-- Demo Scripts -->
+	<script src="assets/scripts/form.demo.js"></script>
 
 	<script src="assets/scripts/main.min.js"></script>
 	<script src="assets/scripts/horizontal-menu.min.js"></script>

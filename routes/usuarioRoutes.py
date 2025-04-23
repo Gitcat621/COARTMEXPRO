@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, render_template
 from flask_cors import cross_origin
-from controllers.usuarioController import UsuarioController
+from models.usuario import Usuario
 import re
 
 usuario_bp = Blueprint('usuario_bp', __name__)
@@ -9,7 +9,7 @@ usuario_bp = Blueprint('usuario_bp', __name__)
 @usuario_bp.route('/usuarios', methods=['GET'])
 def listar_usuarios():
     """Endpoint para obtener todos los usuarios"""
-    usuarios = UsuarioController.listar_usuarios()
+    usuarios = Usuario.listar_usuarios()
     return jsonify(usuarios), 200
 
 @usuario_bp.route('/usuarios/login', methods=['POST'])
@@ -23,7 +23,7 @@ def iniciar_sesion():
     #     return jsonify({'mensaje': 'Faltan datos'}), 400  # Devuelve un error si faltan datos
 
 
-    usuario = UsuarioController.iniciar_sesion(nombreUsuario, contrasena)
+    usuario = Usuario.iniciar_sesion(nombreUsuario, contrasena)
 
     if usuario:
         return jsonify(usuario), 200  # Devuelve los datos del usuario si el inicio de sesión es exitoso
@@ -42,7 +42,7 @@ def crear_usuario():
     if not nombreUsuario or not contrasena:
         return jsonify({'mensaje': 'Faltan datos'}), 400
     
-    if UsuarioController.crear_usuario(nombreUsuario, contrasena, fkEmpleado):
+    if Usuario.crear_usuario(nombreUsuario, contrasena, fkEmpleado):
         return jsonify({'mensaje': 'Usuario insertado correctamente'}), 201
     else:
         return jsonify({'mensaje': 'Error al insertar usuario'}), 500
@@ -71,7 +71,7 @@ def editar_usuario():
         #     return jsonify({'mensaje': 'Correo inválido'}), 400
 
         # Llamar al controlador para actualizar el usuario
-        if UsuarioController.editar_usuario(pkUsuario, nombreUsuario, contrasena, fkEmpleado):
+        if Usuario.editar_usuario(pkUsuario, nombreUsuario, contrasena, fkEmpleado):
             return jsonify({'mensaje': 'Usuario editado correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo editar el usuario'}), 500
@@ -92,7 +92,7 @@ def eliminar_usuario():
 
 
         # Llamar al controlador para actualizar el usuario
-        if UsuarioController.eliminar_usuario(pkUsuario):
+        if Usuario.eliminar_usuario(pkUsuario):
             return jsonify({'mensaje': 'Usuario eliminado correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo eliminar el usuario'}), 500

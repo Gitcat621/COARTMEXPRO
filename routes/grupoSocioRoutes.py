@@ -1,12 +1,12 @@
 from flask import Blueprint, request, jsonify
-from controllers.grupoSocioController import GrupoSocioComercialController
+from models.grupoSocioComercial import GrupoSocioComercial
 
 grupoSocioComercial_bp = Blueprint('grupoSocioComercial_bp', __name__)
 
 @grupoSocioComercial_bp.route('/gruposSocio', methods=['GET'])
 def listar_gruposSocio():
     """Endpoint para obtener todos los registros"""
-    gruposSocio = GrupoSocioComercialController.listar_gruposSocio()
+    gruposSocio = GrupoSocioComercial.listar_gruposSocio()
     return jsonify(gruposSocio), 200
 
 @grupoSocioComercial_bp.route('/gruposSocio', methods=['POST'])
@@ -21,7 +21,7 @@ def crear_grupoSocio():
     if not nombreGrupoSocio:
         return jsonify({'mensaje': 'Faltan datos'}), 400
 
-    if GrupoSocioComercialController.crear_grupoSocio(nombreGrupoSocio):
+    if GrupoSocioComercial.crear_grupoSocio(nombreGrupoSocio):
         return jsonify({'mensaje': 'Grupo de socio insertado correctamente'}), 201
     else:
         return jsonify({'mensaje': 'Error al insertar grupo de socio'}), 500
@@ -34,7 +34,7 @@ def editar_grupoSocio():
         pkGrupoSocio = data.get('pkGrupoSocio')
         nombreGrupoSocio = data.get('nombreGrupoSocio')
 
-        if GrupoSocioComercialController.editar_grupoSocio(pkGrupoSocio, nombreGrupoSocio):
+        if GrupoSocioComercial.editar_grupoSocio(pkGrupoSocio, nombreGrupoSocio):
             return jsonify({'mensaje': 'Grupo de socio editado correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo editar el grupo de socio'}), 500
@@ -49,7 +49,7 @@ def eliminar_grupoSocio():
         data = request.json
         pkGrupoSocio = data.get('pkGrupoSocio')
 
-        if GrupoSocioComercialController.eliminar_grupoSocio(pkGrupoSocio):
+        if GrupoSocioComercial.eliminar_grupoSocio(pkGrupoSocio):
             return jsonify({'mensaje': 'Grupo de socio eliminado correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo eliminar el grupo de socio'}), 500

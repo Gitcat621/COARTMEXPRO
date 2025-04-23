@@ -1,14 +1,20 @@
 from database import Database
+import datetime
+
+def guardar_en_log(texto):
+    """Guarda el texto en un archivo de log."""
+    with open("registro_log.txt", "a", encoding="utf-8") as archivo:
+        timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        archivo.write(f"[{timestamp}] {texto}\n")
 
 class Gasto:
-    def __init__(self, pkGasto=None, montoGasto=None, fechaGasto=None, fkMotivoGasto=None, tipoGasto=None, filtro=None):
+    def __init__(self, pkGasto=None, montoGasto=None, fechaGasto=None, fkMotivoGasto=None, tipoGasto=None):
         """Inicializa un objeto"""
         self.pkGasto = pkGasto
         self.montoGasto = montoGasto
         self.fechaGasto = fechaGasto
         self.fkMotivoGasto = fkMotivoGasto
         self.tipoGasto = tipoGasto
-        self.filtro = filtro
 
 
     def listar_gastos(self):
@@ -23,39 +29,31 @@ class Gasto:
             consulta += f" {self.fechaGasto}"
         resultado = db.execute_query(consulta)
 
-        if self.filtro:
-            consulta += f" {self.filtro}"
+        if self.tipoGasto:
+            consulta += f" {self.tipoGasto}"
         resultado = db.execute_query(consulta)
         
         print(consulta)
         db.close()
         return resultado
     
-    def crear_gasto(self):
+    def crear_gasto(self, db):
         """Guarda un nuevo registro en la base de datos"""
-        db = Database()
         query = "INSERT INTO gastos (montoGasto,fechaGasto,fkMotivoGasto) VALUES (%s,%s,(SELECT pkMotivoGasto FROM motivos_gasto WHERE nombreMotivoGasto = %s)) "
 
         valores = (self.montoGasto, self.fechaGasto, self.fkMotivoGasto)
         
         try:
-            db.connection.autocommit = False  # Desactivar autocommit para iniciar la transacción
+            log_query = query.replace("%s", "'{}'").format(*valores)
+            guardar_en_log(f"Consulta ejecutada: {log_query}")
 
-            #print(query % valores)
-
-            resultado = db.execute_commit(query, valores)  # Ejecutar la consulta
-            db.connection.commit()  # Confirmar la transacción si todo sale bien
-            
+            resultado = db.execute(query, valores)  # Ejecutar la consulta            
            
             return resultado
 
         except Exception as e:
-            db.connection.rollback()  # Revertir la transacción si hay un error
-            print(f"Error al insertar el gasto {self.fechaGasto}: {e}")
+            guardar_en_log(f"❌ Error al insertar compra {self.fechaGasto}: {e}")
             return None
-
-        finally:
-            db.close()
 
     def editar_gasto(self):
         """Edita un registro en la base de datos."""

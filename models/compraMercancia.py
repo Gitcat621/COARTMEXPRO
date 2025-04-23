@@ -1,4 +1,12 @@
 from database import Database
+import datetime
+
+def guardar_en_log(texto):
+    """Guarda el texto en un archivo de log."""
+    with open("registro_log.txt", "a", encoding="utf-8") as archivo:
+        timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        archivo.write(f"[{timestamp}] {texto}\n")
+
 
 class CompraMercancia:
     def __init__(self, pkCompraMercancia=None, montoMercancia=None, fechaMercancia=None, folioELV=None, pagoPendiente=None,fkProveedor=None, filtro=None):
@@ -29,6 +37,7 @@ class CompraMercancia:
     
     def crear_compra(self, db):
         """Guarda un nuevo registro en la base de datos dentro de una transacción activa."""
+
         query = '''
         INSERT INTO compras_mercancia (fechaMercancia, montoMercancia, folioELV, pagoPendiente, fkProveedor)
         VALUES (%s, %s ,%s, %s, (SELECT pkProveedor FROM proveedores WHERE nombreProveedor = %s LIMIT 1))
@@ -37,13 +46,15 @@ class CompraMercancia:
         valores = (self.fechaMercancia, self.montoMercancia, self.folioELV, self.pagoPendiente, self.fkProveedor)
 
         try:
-            print(query % valores)  # Para depuración
-            resultado = db.execute_commit(query, valores)  # Ejecutar la consulta
-            
-            return resultado  # Devuelve el resultado sin cerrar la conexión aquí
+            log_query = query.replace("%s", "'{}'").format(*valores)
+            guardar_en_log(f"Consulta ejecutada: {log_query}")
+
+            resultado = db.execute(query, valores)
+
+            return resultado
 
         except Exception as e:
-            print(f"Error al insertar compra {self.folioELV}: {e}")
+            guardar_en_log(f"❌ Error al insertar compra {self.folioELV}: {e}")
             return None
 
 
@@ -52,10 +63,15 @@ class CompraMercancia:
         valores = (self.pagoPendiente, self.folioELV)
 
         try:
-            resultado = db.execute_commit(query, valores)
+            log_query = query.replace("%s", "'{}'").format(*valores)
+            guardar_en_log(f"Consulta ejecutada: {log_query}")
+
+            resultado = db.execute(query, valores)
+
             return resultado
+        
         except Exception as e:
-            print(f"Error al actualizar compra {self.folioELV}: {e}")
+            guardar_en_log(f"❌ Error al insertar compra {self.folioELV}: {e}")
             return None
 
 

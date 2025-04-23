@@ -1,12 +1,12 @@
 from flask import Blueprint, request, jsonify
-from controllers.facturaController import FacturaController
+from models.factura import Factura
 
 factura_bp = Blueprint('factura_bp', __name__)
 
 @factura_bp.route('/facturas', methods=['GET'])
 def listar_facturas():
     """Endpoint para obtener todos los registros"""
-    facturas = FacturaController.listar_facturas()
+    facturas = Factura.listar_facturas()
     return jsonify(facturas), 200
 
 @factura_bp.route('/facturas', methods=['POST'])
@@ -39,7 +39,7 @@ def crear_factura():
     if not fechaFactura or not numeroAño or not montoFactura or not fechaVencimiento or not diasVencidos or not fkVenta:
         return jsonify({'mensaje': 'Faltan datos'}), 400
 
-    if FacturaController.crear_factura(fechaFactura, numeroAño, montoFactura, fechaVencimiento, diasVencidos, fechaPagado, fkVenta):
+    if Factura.crear_factura(fechaFactura, numeroAño, montoFactura, fechaVencimiento, diasVencidos, fechaPagado, fkVenta):
         return jsonify({'mensaje': 'Factura insertada correctamente'}), 201
     else:
         return jsonify({'mensaje': 'Error al insertar factura'}), 500
@@ -58,7 +58,7 @@ def editar_factura():
         fechaPagado = data.get('fechaPagado')
         fkVenta = data.get('fkVenta')
 
-        if FacturaController.editar_factura(pkFactura, fechaFactura, numeroAño, montoFactura, fechaVencimiento, diasVencidos, fechaPagado, fkVenta):
+        if Factura.editar_factura(pkFactura, fechaFactura, numeroAño, montoFactura, fechaVencimiento, diasVencidos, fechaPagado, fkVenta):
             return jsonify({'mensaje': 'Factura editada correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo editar la factura'}), 500
@@ -73,7 +73,7 @@ def eliminar_factura():
         data = request.json
         pkFactura = data.get('pkFactura')
 
-        if FacturaController.eliminar_factura(pkFactura):
+        if Factura.eliminar_factura(pkFactura):
             return jsonify({'mensaje': 'Factura eliminada correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo eliminar la factura'}), 500

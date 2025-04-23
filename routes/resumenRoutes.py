@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify, render_template
-from controllers.resumenController import ResumenController
+from models.resumen import Resumen
 
 resumen_bp = Blueprint('resumen_bp', __name__)
 
@@ -11,7 +11,7 @@ def listar_resumenAnalisis():
     meses = request.args.getlist('items[]')  # Recibe como lista
     year = request.args.get('year')
 
-    resumen = ResumenController.listar_resumenAnalisis(meses, year)
+    resumen = Resumen.listar_resumenAnalisis(meses, year)
     if resumen:
         return jsonify(resumen), 200 # Devuelve el analisis si la consulta es exitosa
     else:
@@ -21,8 +21,14 @@ def listar_resumenAnalisis():
 #Tablas
 @resumen_bp.route('/ingresos', methods=['GET'])
 def listar_ingresos():
-    filtro = request.args.get('foreingKey', default=0, type=int)  # Conversión directa
-    fecha = request.args.get('fecha')
+
+    grupo = request.args.get('grupo', default=0, type=int)  # Conversión directa
+    year = request.args.get('year')
+
+    if grupo is 0:
+        grupo = ""
+    else:
+        grupo = f"AND gs.pkGrupoSocio = {grupo}"
 
     data = {}
     meses_es = {
@@ -32,9 +38,10 @@ def listar_ingresos():
         "October": "Octubre", "November": "Noviembre", "December": "Diciembre"
     }
 
-    ingresos = ResumenController.listar_ingresos(filtro, fecha)
+    ingresos = Resumen(foreingKey=grupo, fecha=year)
+    ingresos = ingresos.listar_ingresos()
 
-    if filtro == 621:
+    if grupo == 621:
         return jsonify(ingresos), 200
     else:
         for ingreso in ingresos:
@@ -53,13 +60,13 @@ def listar_ingresos():
 @resumen_bp.route('/cuentasPorPagar', methods=['GET'])
 def listar_cuentasPorPagar():
     """Endpoint para obtener todos los registros"""
-    resumen = ResumenController.listar_cuentasPorPagar()
+    resumen = Resumen.listar_cuentasPorPagar()
     return jsonify(resumen), 200
 
 @resumen_bp.route('/cuentasPorCobrar', methods=['GET'])
 def listar_cuentasPorCobrar():
     """Endpoint para obtener todos los registros"""
-    resumen = ResumenController.listar_cuentasPorCobrar()
+    resumen = Resumen.listar_cuentasPorCobrar()
     return jsonify(resumen), 200
 
 @resumen_bp.route('/servicio', methods=['GET'])
@@ -67,7 +74,7 @@ def listar_servicio():
     """Endpoint para obtener todos los registros"""
 
     items = request.args.getlist('items[]')  # Recibe como lista
-    resumen = ResumenController.listar_servicio(items)
+    resumen = Resumen.listar_servicio(items)
     return jsonify(resumen), 200
 
 
@@ -76,28 +83,28 @@ def listar_servicio():
 def listar_top1(meses):
     """Endpoint para obtener todos los registros"""
     
-    resumen = ResumenController.listar_top1(meses)
+    resumen = Resumen.listar_top1(meses)
     return resumen
 
 @resumen_bp.route('/top2', methods=['GET'])
 def listar_top2(meses):
     """Endpoint para obtener todos los registros"""
     
-    resumen = ResumenController.listar_top2(meses)
+    resumen = Resumen.listar_top2(meses)
     return resumen
 
 @resumen_bp.route('/top3', methods=['GET'])
 def listar_top3(meses):
     """Endpoint para obtener todos los registros"""
     
-    resumen = ResumenController.listar_top3(meses)
+    resumen = Resumen.listar_top3(meses)
     return resumen
 
 @resumen_bp.route('/top4', methods=['GET'])
 def listar_top4(meses):
     """Endpoint para obtener todos los registros"""
     
-    resumen = ResumenController.listar_top4(meses)
+    resumen = Resumen.listar_top4(meses)
     return resumen
 
 @resumen_bp.route('/tops', methods=['GET'])
@@ -123,28 +130,35 @@ def obtener_todos_los_tops():
 def listar_grafica1(meses, grupo):
     """Endpoint para obtener todos los registros"""
 
-    resumen = ResumenController.listar_grafica1(meses, grupo)
+    try:
+        grupo = int(grupo)  # Intenta convertir grupo a entero
+    except ValueError:
+        grupo = 0  # Si falla, asigna 0
+
+    foreingKey = f"gs.pkGrupoSocio = {grupo} AND" if grupo else ""
+
+    resumen = Resumen.listar_grafica1(meses, foreingKey)
     return resumen
 
 @resumen_bp.route('/grafica2', methods=['GET'])
 def listar_grafica2(meses):
     """Endpoint para obtener todos los registros"""
 
-    resumen = ResumenController.listar_grafica2(meses)
+    resumen = Resumen.listar_grafica2(meses)
     return resumen
 
 @resumen_bp.route('/grafica3', methods=['GET'])
 def listar_grafica3(meses):
     """Endpoint para obtener todos los registros"""
 
-    resumen = ResumenController.listar_grafica3(meses)
+    resumen = Resumen.listar_grafica3(meses)
     return resumen
 
 @resumen_bp.route('/graficas', methods=['GET'])
 def obtener_todos_las_graficas():
     meses = request.args.getlist('items[]')  # Recibe como lista
     grupo = request.args.get('grupo')
-    
+
     grafica1 = listar_grafica1(meses, grupo)
     grafica2 = listar_grafica2(meses)
     grafica3 = listar_grafica3(meses)

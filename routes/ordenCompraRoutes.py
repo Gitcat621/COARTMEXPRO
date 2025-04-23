@@ -1,12 +1,12 @@
 from flask import Blueprint, request, jsonify
-from controllers.ordenCompraController import OrdenCompraController
+from models.ordenCompra import OrdenCompra
 
 ordenCompra_bp = Blueprint('ordenCompra_bp', __name__)
 
 @ordenCompra_bp.route('/ordenesCompra', methods=['GET'])
 def listar_ordenesCompra():
     """Endpoint para obtener todos los registros"""
-    ordenesCompra = OrdenCompraController.listar_ordenesCompra()
+    ordenesCompra = OrdenCompra.listar_ordenesCompra()
     return jsonify(ordenesCompra), 200
 
 @ordenCompra_bp.route('/ordenesCompra', methods=['POST'])
@@ -25,7 +25,7 @@ def crear_ordenCompra():
     if not fechaOrdenCompra or not fkSocioComercial:
         return jsonify({'mensaje': 'Faltan datos'}), 400
 
-    if OrdenCompraController.crear_ordenCompra(fechaOrdenCompra, fkSocioComercial):
+    if OrdenCompra.crear_ordenCompra(fechaOrdenCompra, fkSocioComercial):
         return jsonify({'mensaje': 'Orden de compra insertada correctamente'}), 201
     else:
         return jsonify({'mensaje': 'Error al insertar orden de compra'}), 500
@@ -39,7 +39,7 @@ def editar_ordenCompra():
         fechaOrdenCompra = data.get('fechaOrdenCompra')
         fkSocioComercial = data.get('fkSocioComercial')
 
-        if OrdenCompraController.editar_ordenCompra(pkOrdenCompra, fechaOrdenCompra, fkSocioComercial):
+        if OrdenCompra.editar_ordenCompra(pkOrdenCompra, fechaOrdenCompra, fkSocioComercial):
             return jsonify({'mensaje': 'Orden de compra editada correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo editar la orden de compra'}), 500
@@ -54,7 +54,7 @@ def eliminar_ordenCompra():
         data = request.json
         pkOrdenCompra = data.get('pkOrdenCompra')
 
-        if OrdenCompraController.eliminar_ordenCompra(pkOrdenCompra):
+        if OrdenCompra.eliminar_ordenCompra(pkOrdenCompra):
             return jsonify({'mensaje': 'Orden de compra eliminada correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo eliminar la orden de compra'}), 500

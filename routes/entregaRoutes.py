@@ -1,12 +1,12 @@
 from flask import Blueprint, request, jsonify
-from controllers.entregaController import EntregaController
+from models.entrega import Entrega
 
 entrega_bp = Blueprint('entrega_bp', __name__)
 
 @entrega_bp.route('/entregas', methods=['GET'])
 def listar_entregas():
     """Endpoint para obtener todos los registros"""
-    entregas = EntregaController.listar_entregas()
+    entregas = Entrega.listar_entregas()
     return jsonify(entregas), 200
 
 @entrega_bp.route('/entregas', methods=['POST'])
@@ -25,7 +25,7 @@ def crear_entrega():
     if not fechaEntrega or not fkSeguimientoAlmacen:
         return jsonify({'mensaje': 'Faltan datos'}), 400
 
-    if EntregaController.crear_entrega(fechaEntrega, fkSeguimientoAlmacen):
+    if Entrega.crear_entrega(fechaEntrega, fkSeguimientoAlmacen):
         return jsonify({'mensaje': 'Entrega insertada correctamente'}), 201
     else:
         return jsonify({'mensaje': 'Error al insertar entrega'}), 500
@@ -39,7 +39,7 @@ def editar_entrega():
         fechaEntrega = data.get('fechaEntrega')
         fkSeguimientoAlmacen = data.get('fkSeguimientoAlmacen')
 
-        if EntregaController.editar_entrega(pkEntrega, fechaEntrega, fkSeguimientoAlmacen):
+        if Entrega.editar_entrega(pkEntrega, fechaEntrega, fkSeguimientoAlmacen):
             return jsonify({'mensaje': 'Entrega editada correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo editar la entrega'}), 500
@@ -54,7 +54,7 @@ def eliminar_entrega():
         data = request.json
         pkEntrega = data.get('pkEntrega')
 
-        if EntregaController.eliminar_entrega(pkEntrega):
+        if Entrega.eliminar_entrega(pkEntrega):
             return jsonify({'mensaje': 'Entrega eliminada correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo eliminar la entrega'}), 500

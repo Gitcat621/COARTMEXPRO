@@ -70,7 +70,7 @@ $(document).ready(function() {
 
     $('#empleadoTable').DataTable({
         columns: [
-            { title: "Numero de empleado" },
+            { title: "No. empleado" },
             { title: "RFC" },
             { title: "Nombre del empleado" },
             { title: "Fecha de ingreso" },

@@ -2,10 +2,11 @@ from flask import Blueprint, request, jsonify
 import os
 import pandas as pd
 from datetime import datetime
-from controllers.archivoController import ArchivoController
+from models.archivo import Archivo
 from models.compraMercancia import CompraMercancia
 from models.ordenCompra import OrdenCompra
 from models.factura import Factura
+from models.motivoGasto import MotivoGasto
 from models.gasto import Gasto
 from models.articulo import Articulo
 from models.resumen import Resumen
@@ -24,9 +25,12 @@ if not os.path.exists(UPLOAD_FOLDER):
 @archivo_bp.route('/archivos', methods=['GET'])
 def listar_archivos():
     """Endpoint para obtener todos los registros"""
-    archivos = ArchivoController.listar_archivos()
+    archivos = Archivo.listar_archivos()
     return jsonify(archivos), 200
 
+# ------------------ FUNCIONES DE LIMPIEZA ------------------
+
+import pandas as pd
 
 def procesar_archivo(ruta_archivo):
     """Procesa un archivo Excel y almacena los datos en la base de datos."""
@@ -43,11 +47,17 @@ def procesar_archivo(ruta_archivo):
         for hoja, columnas in hojas_excel.items():
             df = pd.read_excel(ruta_archivo, usecols=columnas[0], sheet_name=hoja)
             if df.empty:
-                print(f"❌ Hoja '{hoja}' vacía. Saltando...")
+                print(f"⚠️ Hoja '{hoja}' vacía. Saltando...")
                 continue
 
-            #Llamar a la función específica para cada hoja
-            if hoja == "COMPRA DE MERCANCIA":
+            # Validar columnas B y C para la hoja de INVENTARIO (índices 1 y 2)
+            if hoja == "INVENTARIO":
+                if df.iloc[:, 1].isna().all() and df.iloc[:, 2].isna().all():
+                    print(f"⚠️ Columnas B y C vacías en la hoja '{hoja}'. Saltando hoja...")
+                    continue
+                procesar_inventario(df)
+
+            elif hoja == "COMPRA DE MERCANCIA":
                 procesar_compras(df)
             elif hoja == "CUENTAS POR PAGAR":
                 procesar_cuentas_por_pagar(df)
@@ -58,8 +68,6 @@ def procesar_archivo(ruta_archivo):
                 procesar_cuentas_cobradas(df)
             elif hoja == "GASTOS":
                 procesar_gastos(df)
-            elif hoja == "INVENTARIO":
-                procesar_inventario(df)
 
         return True
 
@@ -67,8 +75,8 @@ def procesar_archivo(ruta_archivo):
         print(f"❌ Error al procesar el archivo: {e}")
         return False
 
-
-# ------------------ FUNCIONES AUXILIARES ------------------
+# Eliminar doble espacio o mas
+#df["tu_columna"] = df["tu_columna"].astype(str).str.replace(r'\s{2,}', ' ', regex=True)
 
 def procesar_compras(df):
     """Procesa y guarda compras de mercancía dentro de una única transacción."""
@@ -81,23 +89,24 @@ def procesar_compras(df):
         df["Fecha"] = pd.to_datetime(df["Fecha"], errors="coerce").dt.strftime('%Y-%m-%d')
         df.fillna("N/A", inplace=True)
 
-        for _, fila in df.iterrows():
-            pagoPendiente = fila["Monto"] if str(fila["¿Credito?"]).strip().upper() == "SI" else 0
+        with db.connection.cursor() as cursor:
+            for _, fila in df.iterrows():
+                pagoPendiente = fila["Monto"] if str(fila["¿Credito?"]).strip().upper() == "SI" else 0
 
-            compra = CompraMercancia(
-                folioELV=fila["Folio ELV"],
-                fkProveedor=fila["Proveedor"],
-                montoMercancia=fila["Monto"],
-                fechaMercancia=fila["Fecha"],
-                pagoPendiente=pagoPendiente
-            )
+                compra = CompraMercancia(
+                    folioELV=fila["Folio ELV"],
+                    fkProveedor=fila["Proveedor"],
+                    montoMercancia=fila["Monto"],
+                    fechaMercancia=fila["Fecha"],
+                    pagoPendiente=pagoPendiente
+                )
 
-            resultado = compra.crear_compra()
-            if resultado is None or resultado is False:
-                raise Exception(f"Error al insertar compra con folio {fila['Folio ELV']}")
+                resultado = compra.crear_compra(cursor)
+                if resultado is None or resultado is False:
+                    raise Exception(f"Error al insertar compra con folio {fila['Folio ELV']}")
 
         db.connection.commit()  # Confirmar la transacción si todas las inserciones fueron exitosas
-        print("Todas las compras fueron insertadas exitosamente.")
+        print("🆗 Todas las compras fueron insertadas exitosamente.")
 
     except Exception as e:
         db.connection.rollback()  # Revertir todos los cambios si ocurre algún error
@@ -114,17 +123,18 @@ def procesar_cuentas_por_pagar(df):
     try:
         db.connection.autocommit = False  # Desactivar autocommit
 
-        for _, fila in df.iterrows():
-            compra = CompraMercancia(
-                folioELV=fila["Folio ELV"],
-                pagoPendiente=fila["Monto pendiente"]
-            )
-            resultado = compra.editar_compra(db)  # Pasamos la conexión activa
-            if resultado is None or resultado is False:
-                raise Exception(f"Error al actualizar la compra con folio {fila['Folio ELV']}")
+        with db.connection.cursor() as cursor:
+            for _, fila in df.iterrows():
+                compra = CompraMercancia(
+                    folioELV=fila["Folio ELV"],
+                    pagoPendiente=fila["Monto pendiente"]
+                )
+                resultado = compra.editar_compra(cursor)  # Pasamos la conexión activa
+                if resultado is None or resultado is False:
+                    raise Exception(f"Error al actualizar la compra con folio {fila['Folio ELV']}")
 
         db.connection.commit()  # Confirmar la transacción si todo salió bien
-        print("Cuentas por pagar procesadas exitosamente.")
+        print("🆗Cuentas por pagar procesadas exitosamente.")
 
     except Exception as e:
         db.connection.rollback()  # Revertir todos los cambios en caso de error
@@ -139,14 +149,16 @@ def procesar_ordenes(df):
     db = Database()
 
     try:
-        db.connection.autocommit = False
+        db.connection.autocommit = False  # Desactivar autocommit para manejar la transacción manualmente
 
+        # ARREGLAR Y AJUSTAR EL FORMATO DE LOS NUMEROS DE ORDEN DE COMPRA
         df["No. OC"] = df["No. OC"].fillna("N/A")
         df["No. OC"] = df["No. OC"].astype(str).str.strip().str.replace(r'\.0$', '', regex=True)
 
+        # DAR FORMATO DE FECHA EN INGLES
         df["Fecha OC"] = pd.to_datetime(df["Fecha OC"], errors="coerce").dt.strftime('%Y-%m-%d')
 
-        
+        # TRANSFORMAR LOS NOMBRES A LOS DE LA BD
         df['Socio comercial'] = df['Socio comercial'].replace({
             'COSTA MUJERES': 'COSTA MUJERES - CATALONIA',
             'WHYNDHAM MAYA': 'MAYA - WYNDHAM',
@@ -163,77 +175,86 @@ def procesar_ordenes(df):
             'MORPHO':'MORPHO TRAVEL'
         })
 
+        # DEJAR SOLO UNA APARICION POR ORDEN DE COMPRA DIFERENTE (ELIMINAR REPETIDOS)
         ordenes_unicas = df.drop_duplicates(subset=["No. OC", "Fecha OC", "Socio comercial"]).copy()
 
+        # DAR FORMATO EN INGLES A LAS FECHAS
         ordenes_unicas["Fecha OC"] = pd.to_datetime(ordenes_unicas["Fecha OC"], errors="coerce").dt.strftime('%Y-%m-%d')
         ordenes_unicas["Fecha de surtido"] = pd.to_datetime(ordenes_unicas["Fecha de surtido"], errors="coerce").dt.strftime('%Y-%m-%d')
         ordenes_unicas["Fecha entrega"] = pd.to_datetime(ordenes_unicas["Fecha entrega"], errors="coerce").dt.strftime('%Y-%m-%d')
 
+        # LLENAR CELDAS VACIAS CON UN VALOR DEFAULT
         ordenes_unicas["Fecha de surtido"] = ordenes_unicas["Fecha de surtido"].fillna("N/A")
         ordenes_unicas["Fecha entrega"] = ordenes_unicas["Fecha entrega"].fillna("N/A")
         
-        for _, fila in ordenes_unicas.iterrows():
-            ordenCompra = OrdenCompra(
-                numeroOrdenCompra=fila["No. OC"],
-                fechaOrdenCompra=fila["Fecha OC"],
-                fkSocioComercial=fila["Socio comercial"]
-            )
+        # ENVIAR DATOS POR FILA PARA ARMAR CONSULTA
+        with db.connection.cursor() as cursor:
+            for _, fila in ordenes_unicas.iterrows():
+                ordenCompra = OrdenCompra(
+                    numeroOrdenCompra=fila["No. OC"],
+                    fechaOrdenCompra=fila["Fecha OC"],
+                    fkSocioComercial=fila["Socio comercial"]
+                )
 
-            resultado = ordenCompra.crear_ordenCompra(db)  # Pasamos la conexión activa
-            if resultado is None or resultado is False:
-                raise Exception(f"Error al insertar orden {fila['No. OC']}")
+                resultado = ordenCompra.crear_ordenCompra(cursor)  # Pasamos la conexión activa
+                # SI LA CONSULTA DEVUELVE UN FALSO, BRINCA UN ERROR
+                if resultado is None or resultado is False:
+                    raise Exception(f"Error al insertar orden {fila['No. OC']}")
 
         
+        with db.connection.cursor() as cursor:
+            for _, fila in df.iterrows():
+                ordenCompra = OrdenCompra(
+                    codigoArticulo=fila["Codigo de articulo"],
+                    numeroOrdenCompra=fila["No. OC"],
+                    fechaOrdenCompra=fila["Fecha OC"],
+                    fkSocioComercial=fila["Socio comercial"],
+                    cantidadOrden=fila["Cant en OC"]
+                )
+                resultado = ordenCompra.crear_articulosEnOrden(cursor)  # Pasamos la conexión activa
+                if resultado is None or resultado is False:
+                    raise Exception(f"Error al insertar orden {fila['No. OC']}")
 
-        for _, fila in df.iterrows():
-            ordenCompra = OrdenCompra(
-                codigoArticulo=fila["Codigo de articulo"],
-                numeroOrdenCompra=fila["No. OC"],
-                fechaOrdenCompra=fila["Fecha OC"],
-                fkSocioComercial=fila["Socio comercial"],
-                cantidadOrden=fila["Cant en OC"]
-            )
-            resultado = ordenCompra.crear_articulosEnOrden(db)  # Pasamos la conexión activa
-            if resultado is None or resultado is False:
-                raise Exception(f"Error al insertar orden {fila['No. OC']}")
+        with db.connection.cursor() as cursor:
+            for _, fila in df.iterrows():
+                ordenCompra = OrdenCompra(
+                    codigoArticulo=fila["Codigo de articulo"],
+                    numeroOrdenCompra=fila["No. OC"],
+                    fechaOrdenCompra=fila["Fecha OC"],
+                    fkSocioComercial=fila["Socio comercial"],
+                    cantidadVenta=fila["Cant vendida"],
+                    precioVenta=fila["Precio de venta"]
+                )
+                resultado = ordenCompra.crear_venta(cursor)  # Pasamos la conexión activa
+                if resultado is None or resultado is False:
+                    raise Exception(f"Error al insertar orden {fila['No. OC']}")
 
-        for _, fila in df.iterrows():
-            ordenCompra = OrdenCompra(
-                codigoArticulo=fila["Codigo de articulo"],
-                numeroOrdenCompra=fila["No. OC"],
-                fechaOrdenCompra=fila["Fecha OC"],
-                fkSocioComercial=fila["Socio comercial"],
-                cantidadVenta=fila["Cant vendida"],
-                precioVenta=fila["Precio de venta"]
-            )
-            resultado = ordenCompra.crear_venta(db)  # Pasamos la conexión activa
-            if resultado is None or resultado is False:
-                raise Exception(f"Error al insertar orden {fila['No. OC']}")
+        with db.connection.cursor() as cursor:
+            for _, fila in df.iterrows():
+                venta = Venta(
+                    montoVenta=fila["Cant vendida"] * fila["Precio de venta"],
+                    fechaVenta=fila["Fecha entrega"],
+                    fkSocioComercial=fila["Socio comercial"],
+                )
+                resultado = venta.crear_venta(cursor)  # Pasamos la conexión activa
+                if resultado is None or resultado is False:
+                    raise Exception(f"Error al insertar orden {fila['No. OC']}")
 
-        for _, fila in df.iterrows():
-            venta = Venta(
-                montoVenta=fila["Cant vendida"] * fila["Precio de venta"],
-                fechaVenta=fila["Fecha entrega"],
-                fkSocioComercial=fila["Socio comercial"],
-            )
-            resultado = venta.crear_venta(db)  # Pasamos la conexión activa
-            if resultado is None or resultado is False:
-                raise Exception(f"Error al insertar orden {fila['No. OC']}")
-
-        for _, fila in ordenes_unicas.iterrows():
-            ordenCompra = OrdenCompra(
-                fechaSurtido=fila["Fecha de surtido"],
-                fechaEntrega=fila["Fecha entrega"],
-                numeroOrdenCompra=fila["No. OC"],
-                fechaOrdenCompra=fila["Fecha OC"],
-                fkSocioComercial=fila["Socio comercial"]
-            )
-            resultado = ordenCompra.crear_respuesta(db)  # Pasamos la conexión activa
-            if resultado is None or resultado is False:
-                raise Exception(f"Error al insertar orden {fila['No. OC']}")
+        with db.connection.cursor() as cursor:
+            for _, fila in ordenes_unicas.iterrows():
+                ordenCompra = OrdenCompra(
+                    fechaSurtido=fila["Fecha de surtido"],
+                    fechaEntrega=fila["Fecha entrega"],
+                    numeroOrdenCompra=fila["No. OC"],
+                    fechaOrdenCompra=fila["Fecha OC"],
+                    fkSocioComercial=fila["Socio comercial"]
+                )
+                resultado = ordenCompra.crear_respuesta(cursor)  # Pasamos la conexión activa
+                if resultado is None or resultado is False:
+                    raise Exception(f"Error al insertar orden {fila['No. OC']}")
                 
         db.connection.commit()
-        print("Órdenes procesadas exitosamente.")   
+        print("🆗 Órdenes procesadas exitosamente.")   
 
     except Exception as e:
         db.connection.rollback()
@@ -248,6 +269,7 @@ def procesar_facturas(df):
     db = Database()
 
     try:
+        db.connection.autocommit = False  # Desactivar autocommit para manejar la transacción manualmente
 
         df['Socio comercial'] = df['Socio comercial'].replace({
             'COSTA MUJERES': 'COSTA MUJERES - CATALONIA',
@@ -276,26 +298,27 @@ def procesar_facturas(df):
 
         facturas_unicas.fillna("N/A", inplace=True)
 
-        for _, fila in facturas_unicas.iterrows():
-            factura = Factura(
-                numeroAño=fila["No. factura"],
-                fechaFactura=fila["Fecha emision"],
-                subTotalFactura=fila["Sub total factura"],
-                totalFactura=fila["Total factura"],
-                fechaVencimiento=fila["Fecha de vencimiento"],
-                razonSocial=fila["Razon social"],
-                numeroNotaCredito=fila["Nota credito"],
-                montoDescuento=fila["Monto descuento"],
-                fkOrdenCompra=fila["No. OC"],
-                fechaOrdenCompra=fila["Fecha OC"],
-                fkSocioComercial=fila["Socio comercial"],
-            )
-            resultado = factura.crear_factura(db)  # Pasamos la conexión activa
-            if resultado is None or resultado is False:
-                raise Exception(f"Error al insertar factura {fila['No. factura']}")
+        with db.connection.cursor() as cursor:
+            for _, fila in facturas_unicas.iterrows():
+                factura = Factura(
+                    numeroAño=fila["No. factura"],
+                    fechaFactura=fila["Fecha emision"],
+                    subTotalFactura=fila["Sub total factura"],
+                    totalFactura=fila["Total factura"],
+                    fechaVencimiento=fila["Fecha de vencimiento"],
+                    razonSocial=fila["Razon social"],
+                    numeroNotaCredito=fila["Nota credito"],
+                    montoDescuento=fila["Monto descuento"],
+                    fkOrdenCompra=fila["No. OC"],
+                    fechaOrdenCompra=fila["Fecha OC"],
+                    fkSocioComercial=fila["Socio comercial"],
+                )
+                resultado = factura.crear_factura(cursor)  # Pasamos la conexión activa
+                if resultado is None or resultado is False:
+                    raise Exception(f"Error al insertar factura {fila['No. factura']}")
 
         db.connection.commit()  # Confirmar la transacción si todas las inserciones fueron exitosas
-        print("Todas las facturas fueron insertadas exitosamente.")
+        print("🆗 Todas las facturas fueron insertadas exitosamente.")
     except Exception as e:
         db.connection.rollback()
         print(f"🛑 Error en la transacción de facturas: {e}")
@@ -310,20 +333,22 @@ def procesar_cuentas_cobradas(df):
     db = Database()
 
     try:
+        db.connection.autocommit = False  # Desactivar autocommit para manejar la transacción manualmente
 
         df["Fecha pagada"] = pd.to_datetime(df["Fecha pagada"], errors="coerce").dt.strftime('%Y-%m-%d')
 
-        for _, fila in df.iterrows():
-            factura = Factura(
-                numeroAño=fila["No. factura"],
-                fechaPagado=fila["Fecha pagada"]
-            )
-            resultado = factura.editar_factura(db)  # Pasamos la conexión activa
-            if resultado is None or resultado is False:
-                raise Exception(f"Error al insertar factura {fila['No. factura']}")
+        with db.connection.cursor() as cursor:
+            for _, fila in df.iterrows():
+                factura = Factura(
+                    numeroAño=fila["No. factura"],
+                    fechaPagado=fila["Fecha pagada"]
+                )
+                resultado = factura.editar_factura(cursor)  # Pasamos la conexión activa
+                if resultado is None or resultado is False:
+                    raise Exception(f"Error al insertar factura {fila['No. factura']}")
 
         db.connection.commit()
-        print("Cuentas cobradas procesadas exitosamente.")   
+        print("🆗 Cuentas cobradas procesadas exitosamente.")   
 
     except Exception as e:
         db.connection.rollback()
@@ -335,26 +360,46 @@ def procesar_cuentas_cobradas(df):
 
 def procesar_gastos(df):
     """Procesa y guarda gastos."""
-    
-    df["Motivo"] = df["Motivo"].str.strip()
-    df["Tipo de gasto"] = df["Tipo de gasto"].replace({"FIJO": 1, "VARIABLE": 2}).astype("Int64")
-    df["Fecha"] = pd.to_datetime(df["Fecha"], errors="coerce").dt.strftime('%Y-%m-%d')
+    db = Database()
 
-    for _, fila in df.iterrows():
-        gasto = Gasto(
-            fkMotivoGasto=fila["Motivo"],
-            tipoGasto=fila["Tipo de gasto"]
-        )
-        gasto.actualizar_motivos()
+    try:
+        db.connection.autocommit = False  # Desactivar autocommit para manejar la transacción manualmente
 
-    for _, fila in df.iterrows():
-        gasto = Gasto(
-            montoGasto=fila["Monto"],
-            fechaGasto=fila["Fecha"],
-            fkMotivoGasto=fila["Motivo"],
-            tipoGasto=fila["Tipo de gasto"]
-        )
-        gasto.crear_gasto()
+        df["Motivo"] = df["Motivo"].str.strip()
+        df["Tipo de gasto"] = df["Tipo de gasto"].str.strip()
+        df["Tipo de gasto"] = df["Tipo de gasto"].replace({"FIJO": 1, "VARIABLE": 2}).astype("Int64")
+        df["Fecha"] = pd.to_datetime(df["Fecha"], errors="coerce").dt.strftime('%Y-%m-%d')
+
+        with db.connection.cursor() as cursor:
+            for _, fila in df.iterrows():
+                motivoGasto = MotivoGasto(
+                    nombreMotivoGasto=fila["Motivo"],
+                    tipoGasto=fila["Tipo de gasto"]
+                )
+                resultado = motivoGasto.actualizar_motivos(cursor)
+                if resultado is None or resultado is False:
+                    raise Exception(f"Error al actualizar el motivo de gasto {fila['Motivo']}")
+
+        with db.connection.cursor() as cursor:
+            for _, fila in df.iterrows():
+                gasto = Gasto(
+                    montoGasto=fila["Monto"],
+                    fechaGasto=fila["Fecha"],
+                    fkMotivoGasto=fila["Motivo"],
+                    tipoGasto=fila["Tipo de gasto"]
+                )
+                resultado = gasto.crear_gasto(cursor)
+                if resultado is None or resultado is False:
+                    raise Exception(f"Error al insertar el gasto {fila['Motivo']}")
+            
+        db.connection.commit()  # Confirmar la transacción si todas las inserciones fueron exitosas
+        print("🆗 Todas los gastos fueron insertados exitosamente.")    
+    except Exception as e:
+        db.connection.rollback()
+        print(f"🛑 Error en la transacción de gastos: {e}")
+
+    finally:
+        db.close()
 
 
 def procesar_inventario(df):
@@ -362,20 +407,23 @@ def procesar_inventario(df):
     db = Database()
 
     try:
+        db.connection.autocommit = False  # Desactivar autocommit para manejar la transacción manualmente
+
         df["Fecha"] = pd.to_datetime(df["Fecha"], errors="coerce").dt.strftime('%Y-%m-%d')
 
-        for _, fila in df.iterrows():
-            inventario = Articulo(
-                cantidadExistencia=fila["Existencias"],
-                fechaExistencia=fila["Fecha"],
-                codigoArticulo=fila["Codigo"]
-            )
-            resultado = inventario.crear_existencias(db)  # Pasamos la conexión activa
-            if resultado is None or resultado is False:
-                raise Exception(f"Error al insertar existencias del artículo {fila['Codigo']}")
+        with db.connection.cursor() as cursor:
+            for _, fila in df.iterrows():
+                inventario = Articulo(
+                    cantidadExistencia=fila["Existencias"],
+                    fechaExistencia=fila["Fecha"],
+                    codigoArticulo=fila["Codigo"]
+                )
+                resultado = inventario.crear_existencias(cursor)  # Pasamos la conexión activa
+                if resultado is None or resultado is False:
+                    raise Exception(f"Error al insertar existencias del artículo {fila['Codigo']}")
     
         db.connection.commit()  # Confirmar la transacción si todas las inserciones fueron exitosas
-        print("Todas las existencias fueron insertadas exitosamente.")
+        print("🆗 Todas las existencias fueron insertadas exitosamente.")
     except Exception as e:
         db.connection.rollback()
         print(f"🛑 Error en la transacción de existencias: {e}")
@@ -383,9 +431,11 @@ def procesar_inventario(df):
     finally:
         db.close()
 
+# ------------------ FIN FUNCIONES AUXILIARES ------------------
 
 @archivo_bp.route('/archivos', methods=['POST'])
 def crear_archivo():
+
     if 'archivo' not in request.files:
         return jsonify({'mensaje': 'No se ha enviado ningún archivo'}), 400
 
@@ -421,7 +471,9 @@ def crear_archivo():
             return jsonify({'mensaje': 'ruta debe ser una cadena de texto'}), 400 
         if not nombreArchivo or peso is None or not fechaSubida or not ruta: 
             return jsonify({'mensaje': 'Faltan datos'}), 400 
-        if ArchivoController.crear_archivo(nombreArchivo, peso, fechaSubida, ruta): 
+        
+        archivo = Archivo(nombreArchivo=nombreArchivo, peso=peso, fechaSubida=fechaSubida, ruta=ruta)
+        if archivo.crear_archivo():
             return jsonify({'mensaje': 'Archivo procesado y datos almacenados correctamente'}), 201
     else:
         os.remove(ruta_archivo)
@@ -457,7 +509,7 @@ def eliminar_archivo():
         os.remove(ruta_archivo)
 
         # Si el archivo se eliminó correctamente, eliminar el registro en la BD
-        if ArchivoController.eliminar_archivo(pkArchivo):
+        if Archivo.eliminar_archivo(pkArchivo):
             return jsonify({'mensaje': 'Archivo eliminado correctamente'}), 200
         else:
             return jsonify({'mensaje': 'Error al eliminar el registro en la base de datos'}), 500

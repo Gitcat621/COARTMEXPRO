@@ -1,22 +1,30 @@
 $(document).ready(function () {
 
-    if (sessionStorage.getItem("departamento") !== 'Admon. Contable y Fiscal' && sessionStorage.getItem("departamento") !== 'Dirección general') {
-        //window.location.href = './index.html';
-        //toastr.warning('Usted no debería estar aquí', 'Atención', { "closeButton": true });
-    }
     gruposSocios();
 
 });
 
+var seleccionado;
 
-// Escuchar el cambio de fecha
-$('#datepicker').on('changeDate', function (e) {
-    const anio = e.format(); // devuelve el año seleccionado
-    console.log("Año seleccionado:", anio);
+//Añade funcion a los botones por la clase del color (Actualizar si se cambia el color de los botones)
+document.querySelectorAll('.btn-violet').forEach(button => {
+    button.addEventListener('click', () => {
+
+        cargarTablas(button.textContent);
+        seleccionado = button.textContent;
+        
+    });
+});
+
+//Funcion para obtener meses marcados en las casillas
+document.getElementById('busqueda').addEventListener('click', () => {
+
+    //console.log("el seleccionado es: " + seleccionado);
+    cargarTablas(seleccionado);
 
 });
 
-
+//Obtiene y mapea los grupos de socios
 async function gruposSocios() {
 
     try {
@@ -28,18 +36,37 @@ async function gruposSocios() {
             }
         });
 
-        if (response.status === 500) {
-
-            toastr.error('El servidor no pudo obtener la informacion', 'Error inesperado', {"closeButton": true,});
-
-            return;
-        
-        }
-
         const data = await response.json();
 
-        actualizarLista('gruposIngresos', 'ingresos', data);
-        actualizarLista('gruposVentas', 'ventas', data);
+        if(!response.ok){
+
+            if (response.status === 500) {
+
+                toastr.error('El servidor no pudo obtener la informacion', 'Error inesperado', {"closeButton": true,});
+            }
+
+            throw new Error('Hubo un problema al enviar la solicitud');
+        }
+
+        toastr.success('Se han obtenido los datos: Grupos socios', 'Api consumida', {"closeButton": true,});
+
+        const select = document.getElementById('grupoSocio_menu');
+        select.innerHTML = ""; // Limpiar contenido previo
+
+        option = document.createElement('option');
+        option.value = '0';
+        option.textContent = 'GENERAL';
+        option.selected = true;
+        select.appendChild(option);
+
+        data.forEach(grupos => {
+
+            let option = document.createElement('option');
+            option.value = grupos.pkGrupoSocio;
+            option.textContent = grupos.nombreGrupoSocio;
+            select.appendChild(option);
+
+        });
 
     } catch (error) {
 
@@ -49,56 +76,62 @@ async function gruposSocios() {
 
 }
 
-//Asigna los socios a las listas
-function actualizarLista(idElemento, tipo, data) {
-
-    const contenedor = document.getElementById(idElemento);
-
-
-    contenedor.innerHTML = data.map(grupo =>
-        `<li><a href="#" onclick="cargarTablas('${tipo}', ${grupo.pkGrupoSocio})">${grupo.nombreGrupoSocio}</a></li>`
-    ).join('');
-
-    contenedor.innerHTML += `
-        <li role="separator" class="divider"></li>
-        <li><a href="#" onclick="cargarTablas('${tipo}', 0)">GENERAL</a></li>
-        <li><a href="#" onclick="cargarTablas('${tipo}', 621)">TOTAL POR SOCIOS</a></li>
-    `;
-}
-
-
-
 //Hace las peticiones a las tablas
-async function cargarTablas(endpoint, foreingKey, anio, mes) {
+async function cargarTablas(endpoint, grupo, anio, mes) {
 
-    try {
+    // Obtener valores de los inputs
+    anio = document.getElementById('datepicker')?.value || '';
+    mes = document.getElementById('datepicker2')?.value || '';
 
-        anio = document.getElementById('datepicker').value;
-        mes = document.getElementById('datepicker2').value;
+    // Convertir valores a números y validar
+    anio = parseInt(anio, 10);
+    mes = parseInt(mes, 10);
 
-    } catch {
-
-        anio = undefined;
-        mes = undefined;
-
-    }
-
-    if (!anio) {
-
+    // Si no se obtiene un año válido, usar el actual
+    if (isNaN(anio)) {
         anio = new Date().getFullYear();
-
-    }
-    if (!mes) {
-
-        mes = new Date().getMonth();
-        mes = mes + 1; 
-
     }
 
-    console.log(`Endpoint: ${endpoint} / fk: ${foreingKey} / mes: ${mes} / año: ${anio}`);
+    // Si no se obtiene un mes válido, usar el actual (sumando 1 porque `getMonth()` devuelve valores de 0 a 11)
+    if (isNaN(mes) || mes < 1 || mes > 12) {
+        mes = new Date().getMonth() + 1;
+    }
+
+    //Ajustar el endpoint respecto al boton seleccionado
+    if(endpoint == "Ingresos" || endpoint == "Gastos" || endpoint == "Ventas"){
+        endpoint = endpoint.charAt(0).toLowerCase() + endpoint.slice(1);
+    }
+    if(endpoint == "Inventario"){
+        endpoint = "articulos"
+    }
+    if(endpoint == "CxC"){
+        endpoint = "cuentasPorCobrar"
+    }
+    if(endpoint == "CxP"){
+        endpoint = "cuentasPorPagar"
+    }
+    if(endpoint == "Compras de mercancía"){
+        endpoint = "comprasMercancia"
+    }
+
+    //Validar el select a usar para el grupo
+    ofGrupo = document.getElementById('contenedorGrupo');
+    ofGasto = document.getElementById('contenedorGasto');
+
+    if (ofGrupo.style.display === 'block') {
+
+        grupo = document.getElementById('grupoSocio_menu').value;
+
+    }else if(ofGasto.style.display === 'block'){
+
+        grupo = document.getElementById('gasto_menu').value;
+
+    }
+    
+    //console.log(`Endpoint: ${endpoint} / grupo: ${grupo} / mes: ${mes} / año: ${anio}`);
 
     try {
-        const response = await fetch(`http://127.0.0.1:5000/coartmex/${endpoint}?foreingKey=${foreingKey}&fecha=${anio}`, {
+        const response = await fetch(`http://127.0.0.1:5000/coartmex/${endpoint}?grupo=${grupo}&year=${anio}&month=${mes}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -129,19 +162,39 @@ async function cargarTablas(endpoint, foreingKey, anio, mes) {
 //Arma las tablas
 function inicializarTabla(data, endpoint){
 
+    //SI YA EXISTE UNA TABLA, LIMPIARLA PARA ACTUALIZARLA
     if ($.fn.DataTable.isDataTable('#dataTable')) {
         $('#dataTable').DataTable().destroy();
         $('#dataTable').empty(); // Limpia el contenido de la tabla
     }
 
-    var elemento = document.getElementById('contenedorAnio');
-    if (elemento.style.display === 'none') {
-        elemento.style.display = 'block'
+    try{
+        elemento = document.getElementById('contenedorGrupo');
+        if (elemento.style.display === 'none') {
+            elemento.style.display = 'block'
+        }
+        var elemento = document.getElementById('contenedorYear');
+        if (elemento.style.display === 'none') {
+            elemento.style.display = 'block'
+        }
+        elemento = document.getElementById('contenedorBoton');
+        if (elemento.style.display === 'none') {
+            elemento.style.display = 'block'
+        }
+        elemento = document.getElementById('contenedorGasto');
+        if (elemento.style.display === 'block') {
+            elemento.style.display = 'none'
+        }
+        var elemento = document.getElementById('contenedorMonth');
+        if (elemento.style.display === 'block') {
+            elemento.style.display = 'none'
+        }
+    }catch{
+        toastr.error('Sucedio un error al cargar los elementos', 'Error', {"closeButton": true,});
     }
 
     switch (endpoint) {
         case 'ingresos':
-
             try{
                 if(data[0].grupo !== undefined){
                     // Inicializar la DataTable y asignarla a una variable
@@ -243,14 +296,30 @@ function inicializarTabla(data, endpoint){
 
                 
         break;
-        case 'gastosFiltro':
+        case 'gastos':
+
+            elemento = document.getElementById('contenedorGasto');
+            if (elemento.style.display === 'none') {
+                elemento.style.display = 'block'
+            }
+            var elemento = document.getElementById('contenedorGrupo');
+            if (elemento.style.display === 'block') {
+                elemento.style.display = 'none'
+            }
+            var elemento = document.getElementById('contenedorMonth');
+            if (elemento.style.display === 'block') {
+                elemento.style.display = 'none'
+            }
 
             document.getElementById('tableTitle').innerHTML = "Gastos";
+
+            console.log(data);
 
             $('#dataTable').DataTable({
                 scrollX: true, // Activa el scroll horizontal
                 columns: [
-                    { title: "Gasto" },
+                    { title: "Concepto" },
+                    { title: "Tipo" },
                     { title: "Ene" },
                     { title: "Feb" },
                     { title: "Mar" },
@@ -267,44 +336,42 @@ function inicializarTabla(data, endpoint){
                 ],
                 "ordering": false  // Desactiva el ordenamiento automático
             });
-
-            //Iniciar la datatable y asignarla a una variable
+            
             var tabla = $('#dataTable').DataTable();
-
             var totals = Array(12).fill(0); // Array para las sumas de cada mes
+            
             var dataArray = Object.keys(data).map(motivo => {
+                let tipoGasto = data[motivo]?.tipoGasto || "Desconocido";
+                let meses = data[motivo]?.meses || {};
+            
                 let valores = [
-                    data[motivo]["Enero"] || 0,
-                    data[motivo]["Febrero"] || 0,
-                    data[motivo]["Marzo"] || 0,
-                    data[motivo]["Abril"] || 0,
-                    data[motivo]["Mayo"] || 0,
-                    data[motivo]["Junio"] || 0,
-                    data[motivo]["Julio"] || 0,
-                    data[motivo]["Agosto"] || 0,
-                    data[motivo]["Septiembre"] || 0,
-                    data[motivo]["Octubre"] || 0,
-                    data[motivo]["Noviembre"] || 0,
-                    data[motivo]["Diciembre"] || 0
+                    meses["Enero"] || 0,
+                    meses["Febrero"] || 0,
+                    meses["Marzo"] || 0,
+                    meses["Abril"] || 0,
+                    meses["Mayo"] || 0,
+                    meses["Junio"] || 0,
+                    meses["Julio"] || 0,
+                    meses["Agosto"] || 0,
+                    meses["Septiembre"] || 0,
+                    meses["Octubre"] || 0,
+                    meses["Noviembre"] || 0,
+                    meses["Diciembre"] || 0
                 ];
-                
-
-                // Sumar fila (Total por socio)
+            
                 let totalFila = valores.reduce((a, b) => a + b, 0);
-
-                // Acumular sumas por mes
                 valores.forEach((value, index) => totals[index] += value);
-
-                return [motivo, ...valores.map(formatoMoneda), formatoMoneda(totalFila)];
+            
+                return [motivo, tipoGasto, ...valores.map(formatoMoneda), formatoMoneda(totalFila)];
             });
-
-
+            
             // Agregar datos a la tabla
             tabla.rows.add(dataArray).draw();
-
-            // Agregar la fila "Total General" con formato de moneda
+            
+            // Agregar la fila "TOTAL GENERAL"
             var totalGeneral = formatoMoneda(totals.reduce((a, b) => a + b, 0));
-            tabla.row.add(["TOTAL GENERAL", ...totals.map(formatoMoneda), totalGeneral]).draw(false);
+            tabla.row.add(["TOTAL GENERAL", "", ...totals.map(formatoMoneda), totalGeneral]).draw(false);
+            
 
 
         break;
@@ -415,10 +482,16 @@ function inicializarTabla(data, endpoint){
         break;
         case 'articulos':
 
-            var elemento = document.getElementById('contenedorMes');
+            
+            elemento = document.getElementById('contenedorMonth');
             if (elemento.style.display === 'none') {
                 elemento.style.display = 'block'
             }
+            var elemento = document.getElementById('contenedorGrupo');
+            if (elemento.style.display === 'block') {
+                elemento.style.display = 'none'
+            }
+            
 
 
             document.getElementById('tableTitle').innerHTML = "Inventario";
@@ -430,7 +503,7 @@ function inicializarTabla(data, endpoint){
                 columns: [
                     { title: "Código de articulo" },
                     { title: "Descripción" },
-                    { title: "Precio de almacen" },
+                    { title: "Costo" },
                     { title: "Proveedor" },
                     { title: "Categoría" },
                 ]
@@ -449,6 +522,11 @@ function inicializarTabla(data, endpoint){
 
         break;
         case 'cuentasPorPagar':
+
+            var elemento = document.getElementById('contenedorGrupo');
+            if (elemento.style.display === 'block') {
+                elemento.style.display = 'none'
+            }
 
             document.getElementById('tableTitle').innerHTML = "Cuentas por pagar";
 
@@ -506,6 +584,11 @@ function inicializarTabla(data, endpoint){
 
         break;
         case 'comprasMercancia':
+
+            var elemento = document.getElementById('contenedorGrupo');
+            if (elemento.style.display === 'block') {
+                elemento.style.display = 'none'
+            }
 
             document.getElementById('tableTitle').innerHTML = "Compras de mercancia";
 
@@ -574,7 +657,11 @@ function inicializarTabla(data, endpoint){
         break;
         case 'facturas':
 
-
+            var elemento = document.getElementById('contenedorGrupo');
+            if (elemento.style.display === 'block') {
+                elemento.style.display = 'none'
+            }
+        
             document.getElementById('tableTitle').innerHTML = "Facturas";
             // Código si expresion === valor3
             $('#dataTable').DataTable({
@@ -590,13 +677,11 @@ function inicializarTabla(data, endpoint){
 
         break;
         default:
-            // Código si ninguno de los valores anteriores coincide
+            //Si ninguno de los valores anteriores coincide
+            toastr.warning('Se ha seleccionado una opción inexistente ¿Como lo hiciste?', 'Atención', {"closeButton": true,}); 
     }
-    
 
 }
-
-
 
 //Transforma los datos
 function formatoMoneda(valor) {

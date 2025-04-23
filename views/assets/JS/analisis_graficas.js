@@ -1,61 +1,9 @@
 $(document).ready(function () {
 
-    if (sessionStorage.getItem("departamento") !== 'Admon. Contable y Fiscal' && sessionStorage.getItem("departamento") !== 'Dirección general') {
-        //window.location.href = './index.html';
-        //toastr.warning('Usted no debería estar aquí', 'Atención', { "closeButton": true });
-    }
-
     gruposSocios();
     
 });
 
-async function gruposSocios() {
-
-    try {
-
-        const response = await fetch(`http://127.0.0.1:5000/coartmex/gruposSocio`, {
-            method: 'GET',
-            headers: {
-            'Content-Type': 'application/json'
-            }
-        });
-
-        if (response.status === 500) {
-
-            toastr.error('El servidor no pudo obtener la informacion', 'Error inesperado', {"closeButton": true,});
-
-            return;
-        
-        }
-    
-        const data = await response.json();
-    
-        const filtro = document.getElementById('filtro1');
-
-        filtro.innerHTML = "";
-    
-        // Mapear elementos
-        data.forEach(item => {
-
-            const HTML = `<li><a href="#" onclick="obtenerFiltro(${item.pkGrupoSocio})">${item.nombreGrupoSocio}</a></li>`;
-            filtro.innerHTML += HTML;
-
-        });
-    
-        const extraHTML = `
-            <li class="split"></li>
-            <li><a href="#" onclick="obtenerFiltro(0)">GENERAL</a></li>
-        `;
-
-        filtro.innerHTML += extraHTML;
-    
-    } catch (error) {
-
-        toastr.error('La petición no se pudo conectar', 'Error', {"closeButton": true,});
-
-    }
-}
-  
 //Funcion que marca y desmarca las casillas de meses
 document.getElementById('todos').addEventListener('click', () => {
 
@@ -93,25 +41,60 @@ document.getElementById('meses').addEventListener('click', () => {
 
     }
     
-    cargarGraficas(meses);
+    grupo = document.getElementById('grupoSocio_menu').value;
+    
+    cargarGraficas(meses,grupo);
 
 });
 
-function obtenerFiltro(grupo){
+async function gruposSocios() {
 
-    meses = obtenerMeses();
+    try {
 
-    if(meses.length === 0){
-
-        //console.log('No hay meses')
-        toastr.warning(`No hay meses seleccionados`, 'meses', {
-            "closeButton": true,
+        const response = await fetch(`http://127.0.0.1:5000/coartmex/gruposSocio`, {
+            method: 'GET',
+            headers: {
+            'Content-Type': 'application/json'
+            }
         });
-        return;
+
+        const data = await response.json();
+
+        if(!response.ok){
+
+            if (response.status === 500) {
+
+                toastr.error('El servidor no pudo obtener la informacion', 'Error inesperado', {"closeButton": true,});
+            }
+
+            throw new Error('Hubo un problema al enviar la solicitud');
+        }
+
+        toastr.success('Se han obtenido los datos: Grupos socios', 'Api consumida', {"closeButton": true,});
+
+        const select = document.getElementById('grupoSocio_menu');
+        select.innerHTML = ""; // Limpiar contenido previo
+
+        option = document.createElement('option');
+        option.value = '0';
+        option.textContent = 'GENERAL';
+        option.selected = true;
+        select.appendChild(option);
+
+        data.forEach(grupos => {
+
+            let option = document.createElement('option');
+            option.value = grupos.pkGrupoSocio;
+            option.textContent = grupos.nombreGrupoSocio;
+            select.appendChild(option);
+
+        });
+
+    } catch (error) {
+
+        toastr.error('La petición no se pudo conectar', 'Error', {"closeButton": true,});
 
     }
-    
-    cargarGrafica1(meses,grupo);
 
 }
 
@@ -136,7 +119,6 @@ function obtenerMeses(){
 
     return mesesSeleccionados;
 }
-
 
 
 //Cargar graficas

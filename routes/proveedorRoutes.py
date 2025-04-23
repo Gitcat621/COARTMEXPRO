@@ -1,12 +1,12 @@
 from flask import Blueprint, request, jsonify
-from controllers.proveedorController import ProveedorController
+from models.proveedor import Proveedor
 
 proveedor_bp = Blueprint('proveedor_bp', __name__)
 
 @proveedor_bp.route('/proveedores', methods=['GET'])
 def listar_proveedores():
     """Endpoint para obtener todos los registros"""
-    proveedores = ProveedorController.listar_proveedores()
+    proveedores = Proveedor.listar_proveedores()
     return jsonify(proveedores), 200
 
 @proveedor_bp.route('/proveedores', methods=['POST'])
@@ -41,7 +41,7 @@ def crear_proveedor():
     if not nombreProveedor or not correoProveedor or diasCredito is None or not facturaNota or fkUbicacion is None or fkInfoPaqueteria is None:
         return jsonify({'mensaje': 'Faltan datos'}), 400
 
-    if ProveedorController.crear_proveedor(nombreProveedor, correoProveedor, diasCredito, facturaNota, fkUbicacion, fkInfoPaqueteria):
+    if Proveedor.crear_proveedor(nombreProveedor, correoProveedor, diasCredito, facturaNota, fkUbicacion, fkInfoPaqueteria):
         return jsonify({'mensaje': 'Proveedor insertado correctamente'}), 201
     else:
         return jsonify({'mensaje': 'Error al insertar proveedor'}), 500
@@ -59,7 +59,7 @@ def editar_proveedor():
         fkUbicacion = data.get('fkUbicacion')
         fkInfoPaqueteria = data.get('fkInfoPaqueteria')
 
-        if ProveedorController.editar_proveedor(pkProveedor, nombreProveedor, correoProveedor, diasCredito, facturaNota, fkUbicacion, fkInfoPaqueteria):
+        if Proveedor.editar_proveedor(pkProveedor, nombreProveedor, correoProveedor, diasCredito, facturaNota, fkUbicacion, fkInfoPaqueteria):
             return jsonify({'mensaje': 'Proveedor editado correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo editar el proveedor'}), 500
@@ -74,7 +74,7 @@ def eliminar_proveedor():
         data = request.json
         pkProveedor = data.get('pkProveedor')
 
-        if ProveedorController.eliminar_proveedor(pkProveedor):
+        if Proveedor.eliminar_proveedor(pkProveedor):
             return jsonify({'mensaje': 'Proveedor eliminado correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo eliminar el proveedor'}), 500

@@ -1,12 +1,12 @@
 from flask import Blueprint, request, jsonify
-from controllers.paqueteriaController import PaqueteriaController
+from models.paqueteria import Paqueteria
 
 paqueteria_bp = Blueprint('paqueteria_bp', __name__)
 
 @paqueteria_bp.route('/paqueterias', methods=['GET'])
 def listar_paqueterias():
     """Endpoint para obtener todos los registros"""
-    paqueterias = PaqueteriaController.listar_paqueterias()
+    paqueterias = Paqueteria.listar_paqueterias()
     return jsonify(paqueterias), 200
 
 @paqueteria_bp.route('/paqueterias', methods=['POST'])
@@ -21,7 +21,7 @@ def crear_paqueteria():
     if not nombrePaqueteria:
         return jsonify({'mensaje': 'Faltan datos'}), 400
 
-    if PaqueteriaController.crear_paqueteria(nombrePaqueteria):
+    if Paqueteria.crear_paqueteria(nombrePaqueteria):
         return jsonify({'mensaje': 'Paquetería insertada correctamente'}), 201
     else:
         return jsonify({'mensaje': 'Error al insertar paquetería'}), 500
@@ -34,7 +34,7 @@ def editar_paqueteria():
         pkPaqueteria = data.get('pkPaqueteria')
         nombrePaqueteria = data.get('nombrePaqueteria')
 
-        if PaqueteriaController.editar_paqueteria(pkPaqueteria, nombrePaqueteria):
+        if Paqueteria.editar_paqueteria(pkPaqueteria, nombrePaqueteria):
             return jsonify({'mensaje': 'Paquetería editada correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo editar la paquetería'}), 500
@@ -49,7 +49,7 @@ def eliminar_paqueteria():
         data = request.json
         pkPaqueteria = data.get('pkPaqueteria')
 
-        if PaqueteriaController.eliminar_paqueteria(pkPaqueteria):
+        if Paqueteria.eliminar_paqueteria(pkPaqueteria):
             return jsonify({'mensaje': 'Paquetería eliminada correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo eliminar la paquetería'}), 500

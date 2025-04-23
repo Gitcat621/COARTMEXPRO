@@ -1,12 +1,12 @@
 from flask import Blueprint, request, jsonify
-from controllers.departamentoController import DepartamentoController
+from models.departamento import Departamento
 
 departamento_bp = Blueprint('departamento_bp', __name__)
 
 @departamento_bp.route('/departamentos', methods=['GET'])
 def listar_departamentos():
     """Endpoint para obtener todos los registros"""
-    departamentos = DepartamentoController.listar_departamentos()
+    departamentos = Departamento.listar_departamentos()
     return jsonify(departamentos), 200
 
 @departamento_bp.route('/departamentos', methods=['POST'])
@@ -21,7 +21,7 @@ def crear_departamento():
     if not nombreDepartamento:
         return jsonify({'mensaje': 'Faltan datos'}), 400
 
-    if DepartamentoController.crear_departamento(nombreDepartamento):
+    if Departamento.crear_departamento(nombreDepartamento):
         return jsonify({'mensaje': 'Departamento insertado correctamente'}), 201
     else:
         return jsonify({'mensaje': 'Error al insertar departamento'}), 500
@@ -34,7 +34,7 @@ def editar_departamento():
         pkDepartamento = data.get('pkDepartamento')
         nombreDepartamento = data.get('nombreDepartamento')
 
-        if DepartamentoController.editar_departamento(pkDepartamento, nombreDepartamento):
+        if Departamento.editar_departamento(pkDepartamento, nombreDepartamento):
             return jsonify({'mensaje': 'Departamento editado correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo editar el departamento'}), 500
@@ -49,7 +49,7 @@ def eliminar_departamento():
         data = request.json
         pkDepartamento = data.get('pkDepartamento')
 
-        if DepartamentoController.eliminar_departamento(pkDepartamento):
+        if Departamento.eliminar_departamento(pkDepartamento):
             return jsonify({'mensaje': 'Departamento eliminado correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo eliminar el departamento'}), 500

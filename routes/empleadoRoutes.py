@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify, render_template
-from controllers.empleadoController import EmpleadoController
+from models.empleado import Empleado
 
 empleado_bp = Blueprint('empleado_bp', __name__)
 
@@ -7,7 +7,7 @@ empleado_bp = Blueprint('empleado_bp', __name__)
 @empleado_bp.route('/empleados', methods=['GET'])
 def listar_empleados():
     """Endpoint para obtener todos los registros"""
-    empleados = EmpleadoController.listar_empleados()
+    empleados = Empleado.listar_empleados()
     return jsonify(empleados), 200
 
 @empleado_bp.route('/empleados', methods=['POST'])
@@ -25,7 +25,7 @@ def crear_empleado():
     if not nombreEmpleado:
         return jsonify({'mensaje': 'Faltan datos'}), 400
     
-    if EmpleadoController.crear_empleado(numeroEmpleado, rfc, nombreEmpleado, fechaIngreso, sueldo, permisosPedidos, fkDepartamento):
+    if Empleado.crear_empleado(numeroEmpleado, rfc, nombreEmpleado, fechaIngreso, sueldo, permisosPedidos, fkDepartamento):
         return jsonify({'mensaje': 'Empleado insertado correctamente'}), 201
     else:
         return jsonify({'mensaje': 'Error al insertar empleado'}), 500
@@ -52,7 +52,7 @@ def editar_empleado():
         #     return jsonify({'mensaje': 'El nombre es obligatorio'}), 400
 
         # Llamar al controlador para actualizar el registro
-        if EmpleadoController.editar_empleado(numeroEmpleado, rfc, nombreEmpleado, fechaIngreso, sueldo, permisosPedidos, fkDepartamento):
+        if Empleado.editar_empleado(numeroEmpleado, rfc, nombreEmpleado, fechaIngreso, sueldo, permisosPedidos, fkDepartamento):
             return jsonify({'mensaje': 'Empleado editado correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo editar el empleado'}), 500
@@ -73,7 +73,7 @@ def eliminar_empleado():
 
 
         # Llamar al controlador para actualizar el registro
-        if EmpleadoController.eliminar_empleado(numeroEmpleado):
+        if Empleado.eliminar_empleado(numeroEmpleado):
             return jsonify({'mensaje': 'Empleado eliminado correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo eliminar el empleado'}), 500

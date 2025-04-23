@@ -1,12 +1,12 @@
 from flask import Blueprint, request, jsonify
-from controllers.puebloCiudadController import PuebloCiudadController
+from models.puebloCiudad import PuebloCiudad
 
 puebloCiudad_bp = Blueprint('puebloCiudad_bp', __name__)
 
 @puebloCiudad_bp.route('/pueblosCiudades', methods=['GET'])
 def listar_pueblosCiudades():
     """Endpoint para obtener todos los registros"""
-    pueblosCiudades = PuebloCiudadController.listar_pueblosCiudades()
+    pueblosCiudades = PuebloCiudad.listar_pueblosCiudades()
     return jsonify(pueblosCiudades), 200
 
 @puebloCiudad_bp.route('/pueblosCiudades', methods=['POST'])
@@ -21,7 +21,7 @@ def crear_puebloCiudad():
     if not nombrePuebloCiudad:
         return jsonify({'mensaje': 'Faltan datos'}), 400
 
-    if PuebloCiudadController.crear_puebloCiudad(nombrePuebloCiudad):
+    if PuebloCiudad.crear_puebloCiudad(nombrePuebloCiudad):
         return jsonify({'mensaje': 'Pueblo/Ciudad insertado correctamente'}), 201
     else:
         return jsonify({'mensaje': 'Error al insertar pueblo/ciudad'}), 500
@@ -34,7 +34,7 @@ def editar_puebloCiudad():
         pkPuebloCiudad = data.get('pkPuebloCiudad')
         nombrePuebloCiudad = data.get('nombrePuebloCiudad')
 
-        if PuebloCiudadController.editar_puebloCiudad(pkPuebloCiudad, nombrePuebloCiudad):
+        if PuebloCiudad.editar_puebloCiudad(pkPuebloCiudad, nombrePuebloCiudad):
             return jsonify({'mensaje': 'Pueblo/Ciudad editado correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo editar el pueblo/ciudad'}), 500
@@ -49,7 +49,7 @@ def eliminar_puebloCiudad():
         data = request.json
         pkPuebloCiudad = data.get('pkPuebloCiudad')
 
-        if PuebloCiudadController.eliminar_puebloCiudad(pkPuebloCiudad):
+        if PuebloCiudad.eliminar_puebloCiudad(pkPuebloCiudad):
             return jsonify({'mensaje': 'Pueblo/Ciudad eliminado correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo eliminar el pueblo/ciudad'}), 500

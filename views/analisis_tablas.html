@@ -133,67 +133,53 @@
 		<div class="row small-spacing">
             <div class="col-xs-12">
 				<div class="box-content">
-					<!-- /.list-inline -->
-					<h4 class="box-title" id="tableTitle">Selecciona una tabla para visualizar</h4>
-					<!-- /.box-title -->
+					<h4 class="box-title">Selecciona una tabla para visualizar</h4>
+					
+					<div class="col-sm-offset-2 margin-left-2" >
 
-					<div class="col-sm-offset-2 margin-top-2 margin-left-2" >
+						<button type="button" class="btn btn-bordered btn-xs btn-violet dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Ingresos</button> 
 
-						<div class="btn-group margin-top-10">
-							<button type="button" class="btn btn-xs btn-violet dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Ingresos <span class="caret"></span></button> 
-							<ul class="dropdown-menu" id="gruposIngresos">
-								
-							</ul>
-						</div>
-						<div class="btn-group margin-top-10">
-							<button type="button" class="btn btn-xs btn-violet dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Gastos <span class="caret"></span></button> 
-							<ul class="dropdown-menu">
-								<li><a href="#" onclick="cargarTablas('gastosFiltro', 1)">Fijos</a></li>
-								<li><a href="#" onclick="cargarTablas('gastosFiltro', 2)">Variables</a></li>
-								<li role="separator" class="divider"></li>
-								<li><a href="#" onclick="cargarTablas('gastosFiltro', 0)">GENERAL</a></li>
-							</ul>
-						</div>
-						<div class="btn-group margin-top-10">
-							<button type="button" class="btn btn-xs btn-violet dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Ventas <span class="caret"></span></button> 
-							<ul class="dropdown-menu" id="gruposVentas">
-								
-							</ul>
-						</div>
-						<div class="btn-group margin-top-10">
-							<button onclick="cargarTablas('articulos', 0)" type="button" class="btn btn-xs btn-violet dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Inventario</button> 
-						</div>
-						<div class="btn-group margin-top-10">
-							<button onclick="cargarTablas('cuentasPorPagar', 0)" type="button" class="btn btn-xs btn-violet dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">CxP</button> 
-						</div>
-						<div class="btn-group margin-top-10">
-							<button onclick="cargarTablas('cuentasPorCobrar', 0)" type="button" class="btn btn-xs btn-violet dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">CxC</button> 
-						</div>
-						<div class="btn-group margin-top-10">
-							<button onclick="cargarTablas('comprasMercancia', 0)" type="button" class="btn btn-xs btn-violet dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Compras de mercancía</button> 
-						</div>
+						<button type="button" class="btn btn-bordered btn-xs btn-violet dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Gastos</button>
+	
+						<button type="button" class="btn btn-bordered btn-xs btn-violet dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Ventas</button> 
+
+						<button type="button" class="btn btn-bordered btn-xs btn-violet dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Inventario</button> 
+
+						<button type="button" class="btn btn-bordered btn-xs btn-violet dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">CxP</button> 
+
+						<button type="button" class="btn btn-bordered btn-xs btn-violet dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">CxC</button> 
+
+						<button type="button" class="btn btn-bordered btn-xs btn-violet dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Compras de mercancía</button>
+						
 					</div>
+ 
+				</div>
 
-					<div class="col-sm-offset-9 col-sm-3 margin-top-10"  id="contenedorAnio">
-						<div class="input-group">
-							<input type="text" class="form-control" placeholder="año" id="datepicker" autocomplete="off">
-							<span class="input-group-addon text-white" style="background-color: rgb(0, 75, 195);"><i class="fa fa-calendar"></i></span>
+				<div class="box-content">
+					<h4 class="box-title" id="tableTitle">Aqui visualizara la tabla</h4>
 
-							
+					<div class="row margin-bottom-10">
+						<div class="col-md-2 margin-bottom-20" id="contenedorYear" style="display: none;">
+							<input type="text" class="form-control" placeholder="año" id="datepicker" autocomplete="off">	
 						</div>
-						<!-- /.input-group -->
-					</div>
-
-					<div class="col-sm-offset-10 col-sm-2 margin-top-10" id="contenedorMes"  style="display: none;"> 
-						<div class="input-group">
-							<input type="text" class="form-control" placeholder="mes" id="datepicker2">
-							<span class="input-group-addon text-white" style="background-color: rgb(67, 139, 255);"><i class="fa fa-calendar"></i></span>
+						<div class="col-md-2 margin-bottom-20" id="contenedorMonth" style="display: none;">
+							<input type="text" class="form-control" placeholder="mes" id="datepicker2" autocomplete="off">
 						</div>
-						<!-- /.input-group -->
+						<div class="col-md-3 margin-bottom-20" id="contenedorGrupo" style="display: none;">
+							<select class="form-control" id="grupoSocio_menu"></select>
+						</div>
+						 <div class="col-md-3 margin-bottom-20" id="contenedorGasto" style="display: none;">
+							<select class="form-control" id="gasto_menu">
+								<option value="0">GENERAL</option>
+								<option value="1">FIJOS</option>
+								<option value="2">VARIABLES</option>
+							</select>
+						</div>
+						<div class="col-md-4 margin-bottom-20" id="contenedorBoton" style="display: none;">
+							<button class="btn btn-info btn-bordered btn-sm waves-effect waves-light" id="busqueda"><i class="fa fa-search"></i> </button>
+						</div> 
 					</div>
-
-					<br><br><br><br><br><br><br>
-
+					
 					<table id="dataTable" class="table table-small-font table-bordered table-hover table-striped display nowrap" style="width:100%">
 						
 					</table>

@@ -83,11 +83,11 @@ $(document).ready(function() {
             { title: "Nombre del socio" },
             { title: "Razon social" },
             { title: "Grupo" },
-            { title: "Codigo postal" },
-            { title: "Pueblo / Ciudad" },
-            { title: "Municipio" },
-            { title: "Estado" },
-            { title: "Pais" },
+            // { title: "Codigo postal" },
+            // { title: "Pueblo / Ciudad" },
+            // { title: "Municipio" },
+            // { title: "Estado" },
+            // { title: "Pais" },
             {
                 title: "Opciones",
                 render: function (data, type, row) { // 'row' contiene toda la fila de datos

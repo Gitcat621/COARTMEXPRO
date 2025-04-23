@@ -1,6 +1,6 @@
 from flask import Flask,render_template, jsonify
-import os
 from dotenv import load_dotenv
+import os
 
 from routes.usuarioRoutes import usuario_bp
 from routes.empleadoRoutes import empleado_bp
@@ -23,7 +23,6 @@ from routes.paqueteriaRoutes import paqueteria_bp
 from routes.gastoRoutes import gasto_bp
 from routes.compraMercanciaRoutes import compraMercancia_bp
 from routes.facturaRoutes import factura_bp
-from routes.infoPaqueteriaRoutes import infoPaqueteria_bp
 from routes.cuentaBancoRoutes import cuentaBanco_bp
 from routes.ventaRoutes import venta_bp
 from routes.telefonoRoutes import telefono_bp
@@ -56,7 +55,6 @@ app.register_blueprint(banco_bp, url_prefix='/coartmex')
 app.register_blueprint(gasto_bp, url_prefix='/coartmex') 
 app.register_blueprint(compraMercancia_bp, url_prefix='/coartmex') 
 app.register_blueprint(factura_bp, url_prefix='/coartmex') 
-app.register_blueprint(infoPaqueteria_bp, url_prefix='/coartmex') 
 app.register_blueprint(venta_bp, url_prefix='/coartmex')
 app.register_blueprint(telefono_bp, url_prefix='/coartmex')
 app.register_blueprint(cuentaBanco_bp, url_prefix='/coartmex')

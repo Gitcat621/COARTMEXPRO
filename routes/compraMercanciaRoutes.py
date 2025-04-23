@@ -1,13 +1,13 @@
 from flask import Blueprint, request, jsonify
-from controllers.compraMercanciaController import CompraMercanciaController
+from models.compraMercancia import CompraMercancia
 
 compraMercancia_bp = Blueprint('compraMercancia_bp', __name__)
 
 @compraMercancia_bp.route('/comprasMercancia', methods=['GET'])
 def listar_compras():
     """Endpoint para obtener todos los registros"""
-    filtro = request.args.get('foreingKey')
-    fecha = request.args.get('fecha')
+
+    year = request.args.get('year')
 
     data = {}
     
@@ -18,7 +18,10 @@ def listar_compras():
         "July": "Julio", "August": "Agosto", "September": "Septiembre",
         "October": "Octubre", "November": "Noviembre", "December": "Diciembre"
     }
-    compras = CompraMercanciaController.listar_compras(fecha)
+    
+    compras = CompraMercancia(fechaMercancia=year)
+    compras = compras.listar_compras()
+
     for compra in compras:
         mes_en = compra["fechaMercancia"].strftime("%B")  # Nombre del mes en inglés
         mes = meses_es[mes_en]  # Convertir al español
@@ -52,7 +55,7 @@ def crear_compra():
     if not montoMercancia or not fechaMercancia or not fkProveedor:
         return jsonify({'mensaje': 'Faltan datos'}), 400
 
-    if CompraMercanciaController.crear_compra(montoMercancia, fechaMercancia, fkProveedor):
+    if CompraMercancia.crear_compra(montoMercancia, fechaMercancia, fkProveedor):
         return jsonify({'mensaje': 'Compra de mercancía insertada correctamente'}), 201
     else:
         return jsonify({'mensaje': 'Error al insertar compra de mercancía'}), 500
@@ -67,7 +70,7 @@ def editar_compra():
         fechaMercancia = data.get('fechaMercancia')
         fkProveedor = data.get('fkProveedor')
 
-        if CompraMercanciaController.editar_compra(pkCompraMercancia, montoMercancia, fechaMercancia, fkProveedor):
+        if CompraMercancia.editar_compra(pkCompraMercancia, montoMercancia, fechaMercancia, fkProveedor):
             return jsonify({'mensaje': 'Compra de mercancía editada correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo editar la compra de mercancía'}), 500
@@ -82,7 +85,7 @@ def eliminar_compra():
         data = request.json
         pkCompraMercancia = data.get('pkCompraMercancia')
 
-        if CompraMercanciaController.eliminar_compra(pkCompraMercancia):
+        if CompraMercancia.eliminar_compra(pkCompraMercancia):
             return jsonify({'mensaje': 'Compra de mercancía eliminada correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo eliminar la compra de mercancía'}), 500

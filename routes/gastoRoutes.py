@@ -1,20 +1,21 @@
 from flask import Blueprint, request, jsonify
-from controllers.gastoController import GastoController
+from models.gasto import Gasto
 
 gasto_bp = Blueprint('gasto_bp', __name__)
 
-@gasto_bp.route('/gastosFiltro', methods=['GET'])
+@gasto_bp.route('/gastos', methods=['GET'])
 def listar_gastos():
     """Endpoint para obtener todos los registros"""
     
-    filtro = request.args.get('foreingKey')
-    fecha = request.args.get('fecha')
+    grupo = request.args.get('grupo')
+    year = request.args.get('year')
 
-    # Convertir filtro a entero para asegurar que sea un número
     try:
-        filtro = int(filtro)  # Convierte el valor de foreingKey a un número
-    except ValueError:
-        filtro = 0  # Si no puede convertirse, se asigna el valor 0
+        grupo = int(grupo) if grupo.isdigit() else 0
+    except:
+        grupo = 0
+
+    tipoGasto = f"WHERE mg.tipoGasto = {grupo}" if grupo else ""
 
     data = {}
 
@@ -26,17 +27,22 @@ def listar_gastos():
         "October": "Octubre", "November": "Noviembre", "December": "Diciembre"
     }
 
-    gastos = GastoController.listar_gastos(filtro,fecha)
+    gastos = Gasto(fechaGasto=year, tipoGasto=tipoGasto)
+    gastos = gastos.listar_gastos()
 
     for gasto in gastos:
-        mes_en = gasto["fechaGasto"].strftime("%B")  # Nombre del mes en inglés
-        mes = meses_es.get(mes_en, "Desconocido")  # Convertir al español
+        mes_en = gasto["fechaGasto"].strftime("%B")
+        mes = meses_es.get(mes_en, "Desconocido")
         motivo = gasto["nombreMotivoGasto"]
+        tipo = gasto["tipoGasto"]
 
         if motivo not in data:
-            data[motivo] = {m: 0 for m in meses_es.values()}  # Usar nombres en español
+            data[motivo] = {
+                "tipoGasto": tipo,
+                "meses": {m: 0 for m in meses_es.values()}
+            }
 
-        data[motivo][mes] += int(gasto["montoGasto"])
+        data[motivo]["meses"][mes] += int(gasto["montoGasto"])
 
     return jsonify(data), 200
 
@@ -63,7 +69,7 @@ def crear_gasto():
     if not montoGasto or not fechaGasto or not fkMotivoGasto:
         return jsonify({'mensaje': 'Faltan datos'}), 400
 
-    if GastoController.crear_gasto(montoGasto, fechaGasto, fkMotivoGasto):
+    if Gasto.crear_gasto(montoGasto, fechaGasto, fkMotivoGasto):
         return jsonify({'mensaje': 'Gasto insertado correctamente'}), 201
     else:
         return jsonify({'mensaje': 'Error al insertar gasto'}), 500
@@ -78,7 +84,7 @@ def editar_gasto():
         fechaGasto = data.get('fechaGasto')
         fkMotivoGasto = data.get('fkMotivoGasto')
 
-        if GastoController.editar_gasto(pkGasto, montoGasto, fechaGasto, fkMotivoGasto):
+        if Gasto.editar_gasto(pkGasto, montoGasto, fechaGasto, fkMotivoGasto):
             return jsonify({'mensaje': 'Gasto editado correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo editar el gasto'}), 500
@@ -93,7 +99,7 @@ def eliminar_gasto():
         data = request.json
         pkGasto = data.get('pkGasto')
 
-        if GastoController.eliminar_gasto(pkGasto):
+        if Gasto.eliminar_gasto(pkGasto):
             return jsonify({'mensaje': 'Gasto eliminado correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo eliminar el gasto'}), 500

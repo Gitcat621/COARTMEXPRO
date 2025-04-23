@@ -1,12 +1,12 @@
 from flask import Blueprint, request, jsonify
-from controllers.socioComercialController import SocioComercialController
+from models.socioComercial import SocioComercial
 
 socioComercial_bp = Blueprint('socioComercial_bp', __name__)
 
 @socioComercial_bp.route('/sociosComerciales', methods=['GET'])
 def listar_sociosComerciales():
     """Endpoint para obtener todos los registros"""
-    sociosComerciales = SocioComercialController.listar_sociosComerciales()
+    sociosComerciales = SocioComercial.listar_sociosComerciales()
     return jsonify(sociosComerciales), 200
 
 @socioComercial_bp.route('/sociosComerciales', methods=['POST'])
@@ -33,7 +33,7 @@ def crear_socioComercial():
     if not nombreSocio or not razonSocial or fkGrupoSocio is None or fkUbicacion is None:
         return jsonify({'mensaje': 'Faltan datos'}), 400
 
-    if SocioComercialController.crear_socioComercial(nombreSocio, razonSocial, fkGrupoSocio, fkUbicacion):
+    if SocioComercial.crear_socioComercial(nombreSocio, razonSocial, fkGrupoSocio, fkUbicacion):
         return jsonify({'mensaje': 'Socio comercial insertado correctamente'}), 201
     else:
         return jsonify({'mensaje': 'Error al insertar socio comercial'}), 500
@@ -51,7 +51,7 @@ def editar_socioComercial():
 
         print(data)
 
-        if SocioComercialController.editar_socioComercial(pkSocioComercial, nombreSocio, razonSocial, fkGrupoSocio, fkUbicacion):
+        if SocioComercial.editar_socioComercial(pkSocioComercial, nombreSocio, razonSocial, fkGrupoSocio, fkUbicacion):
             return jsonify({'mensaje': 'Socio comercial editado correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo editar el socio comercial'}), 500
@@ -66,7 +66,7 @@ def eliminar_socioComercial():
         data = request.json
         pkSocioComercial = data.get('pkSocioComercial')
 
-        if SocioComercialController.eliminar_socioComercial(pkSocioComercial):
+        if SocioComercial.eliminar_socioComercial(pkSocioComercial):
             return jsonify({'mensaje': 'Socio comercial eliminado correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo eliminar el socio comercial'}), 500
