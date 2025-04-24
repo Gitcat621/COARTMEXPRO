@@ -28,7 +28,7 @@ class SocioComercial:
         db.close()
         return resultado
     
-    def crear_area(self):
+    def crear_socioComercial(self):
         """Guarda un nuevo registro en la base de datos"""
         db = Database()
         query = "INSERT INTO socios_comerciales (nombreSocio, razonSocial, fkGrupoSocio, fkUbicacion) VALUES (%s,%s,%s,%s)"
@@ -36,7 +36,7 @@ class SocioComercial:
         db.close()
         return resultado
 
-    def editar_area(self):
+    def editar_socioComercial(self):
         """Edita un registro en la base de datos."""
         if not self.pkSocioComercial:
             raise ValueError("El socio debe tener un ID para ser editado.")
@@ -46,7 +46,7 @@ class SocioComercial:
         db.close()
         return resultado
 
-    def eliminar_area(self):
+    def eliminar_socioComercial(self):
         """Elimina un registro de la base de datos."""
 
         if not self.pkSocioComercial:

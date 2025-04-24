@@ -33,7 +33,8 @@ def crear_socioComercial():
     if not nombreSocio or not razonSocial or fkGrupoSocio is None or fkUbicacion is None:
         return jsonify({'mensaje': 'Faltan datos'}), 400
 
-    if SocioComercial.crear_socioComercial(nombreSocio, razonSocial, fkGrupoSocio, fkUbicacion):
+    socioComercial = SocioComercial(nombreSocio=nombreSocio, razonSocial=razonSocial, fkGrupoSocio=fkGrupoSocio, fkUbicacion=fkUbicacion)
+    if socioComercial.crear_socioComercial():
         return jsonify({'mensaje': 'Socio comercial insertado correctamente'}), 201
     else:
         return jsonify({'mensaje': 'Error al insertar socio comercial'}), 500
@@ -51,7 +52,8 @@ def editar_socioComercial():
 
         print(data)
 
-        if SocioComercial.editar_socioComercial(pkSocioComercial, nombreSocio, razonSocial, fkGrupoSocio, fkUbicacion):
+        socioComercial = SocioComercial(pkSocioComercial=pkSocioComercial, nombreSocio=nombreSocio, razonSocial=razonSocial, fkGrupoSocio=fkGrupoSocio, fkUbicacion=fkUbicacion)
+        if socioComercial.editar_socioComercial():
             return jsonify({'mensaje': 'Socio comercial editado correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo editar el socio comercial'}), 500
@@ -66,7 +68,10 @@ def eliminar_socioComercial():
         data = request.json
         pkSocioComercial = data.get('pkSocioComercial')
 
-        if SocioComercial.eliminar_socioComercial(pkSocioComercial):
+        print(pkSocioComercial)
+
+        socioComercial = SocioComercial(pkSocioComercial=pkSocioComercial)
+        if socioComercial.eliminar_socioComercial():
             return jsonify({'mensaje': 'Socio comercial eliminado correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo eliminar el socio comercial'}), 500

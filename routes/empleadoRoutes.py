@@ -25,7 +25,8 @@ def crear_empleado():
     if not nombreEmpleado:
         return jsonify({'mensaje': 'Faltan datos'}), 400
     
-    if Empleado.crear_empleado(numeroEmpleado, rfc, nombreEmpleado, fechaIngreso, sueldo, permisosPedidos, fkDepartamento):
+    empleado = Empleado(numeroEmpleado, rfc, nombreEmpleado, fechaIngreso, sueldo, permisosPedidos, fkDepartamento)
+    if empleado.crear_empleado():
         return jsonify({'mensaje': 'Empleado insertado correctamente'}), 201
     else:
         return jsonify({'mensaje': 'Error al insertar empleado'}), 500
@@ -52,7 +53,8 @@ def editar_empleado():
         #     return jsonify({'mensaje': 'El nombre es obligatorio'}), 400
 
         # Llamar al controlador para actualizar el registro
-        if Empleado.editar_empleado(numeroEmpleado, rfc, nombreEmpleado, fechaIngreso, sueldo, permisosPedidos, fkDepartamento):
+        empleado = Empleado(numeroEmpleado, rfc, nombreEmpleado, fechaIngreso, sueldo, permisosPedidos, fkDepartamento)
+        if empleado.editar_empleado():
             return jsonify({'mensaje': 'Empleado editado correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo editar el empleado'}), 500
@@ -73,7 +75,8 @@ def eliminar_empleado():
 
 
         # Llamar al controlador para actualizar el registro
-        if Empleado.eliminar_empleado(numeroEmpleado):
+        empleado = Empleado(numeroEmpleado)
+        if empleado.eliminar_empleado():
             return jsonify({'mensaje': 'Empleado eliminado correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo eliminar el empleado'}), 500

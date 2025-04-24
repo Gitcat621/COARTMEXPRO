@@ -42,7 +42,8 @@ def crear_usuario():
     if not nombreUsuario or not contrasena:
         return jsonify({'mensaje': 'Faltan datos'}), 400
     
-    if Usuario.crear_usuario(nombreUsuario, contrasena, fkEmpleado):
+    usuario = Usuario(nombreUsuario=nombreUsuario, contrasena=contrasena, fkEmpleado=fkEmpleado)
+    if usuario.crear_usuario():
         return jsonify({'mensaje': 'Usuario insertado correctamente'}), 201
     else:
         return jsonify({'mensaje': 'Error al insertar usuario'}), 500
@@ -71,7 +72,9 @@ def editar_usuario():
         #     return jsonify({'mensaje': 'Correo inválido'}), 400
 
         # Llamar al controlador para actualizar el usuario
-        if Usuario.editar_usuario(pkUsuario, nombreUsuario, contrasena, fkEmpleado):
+        
+        usuario = Usuario(pkUsuario=pkUsuario, nombreUsuario=nombreUsuario, contrasena=contrasena, fkEmpleado=fkEmpleado)
+        if usuario.editar_usuario():
             return jsonify({'mensaje': 'Usuario editado correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo editar el usuario'}), 500
@@ -92,7 +95,8 @@ def eliminar_usuario():
 
 
         # Llamar al controlador para actualizar el usuario
-        if Usuario.eliminar_usuario(pkUsuario):
+        usuario = Usuario(pkUsuario=pkUsuario)
+        if usuario.eliminar_usuario():
             return jsonify({'mensaje': 'Usuario eliminado correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo eliminar el usuario'}), 500

@@ -18,7 +18,6 @@ def crear_proveedor():
     diasCredito = data.get('diasCredito')
     facturaNota = data.get('facturaNota')
     fkUbicacion = data.get('fkUbicacion')
-    fkInfoPaqueteria = data.get('fkInfoPaqueteria')
 
     if not isinstance(nombreProveedor, str):
         return jsonify({'mensaje': 'nombreProveedor debe ser una cadena de texto'}), 400
@@ -35,13 +34,12 @@ def crear_proveedor():
     # if not isinstance(fkUbicacion, int):
     #     return jsonify({'mensaje': 'fkUbicacion debe ser un entero'}), 400
 
-    # if not isinstance(fkInfoPaqueteria, int):
-    #     return jsonify({'mensaje': 'fkInfoPaqueteria debe ser un entero'}), 400
 
-    if not nombreProveedor or not correoProveedor or diasCredito is None or not facturaNota or fkUbicacion is None or fkInfoPaqueteria is None:
+    if not nombreProveedor or not correoProveedor or diasCredito is None or not facturaNota or fkUbicacion is None:
         return jsonify({'mensaje': 'Faltan datos'}), 400
 
-    if Proveedor.crear_proveedor(nombreProveedor, correoProveedor, diasCredito, facturaNota, fkUbicacion, fkInfoPaqueteria):
+    proveedor = Proveedor(nombreProveedor=nombreProveedor, correoProveedor=correoProveedor, diasCredito=diasCredito, facturaNota=facturaNota, fkUbicacion=fkUbicacion)
+    if proveedor.crear_proveedor():
         return jsonify({'mensaje': 'Proveedor insertado correctamente'}), 201
     else:
         return jsonify({'mensaje': 'Error al insertar proveedor'}), 500
@@ -57,9 +55,9 @@ def editar_proveedor():
         diasCredito = data.get('diasCredito')
         facturaNota = data.get('facturaNota')
         fkUbicacion = data.get('fkUbicacion')
-        fkInfoPaqueteria = data.get('fkInfoPaqueteria')
 
-        if Proveedor.editar_proveedor(pkProveedor, nombreProveedor, correoProveedor, diasCredito, facturaNota, fkUbicacion, fkInfoPaqueteria):
+        proveedor = Proveedor(pkProveedor=pkProveedor,nombreProveedor=nombreProveedor, correoProveedor=correoProveedor, diasCredito=diasCredito, facturaNota=facturaNota, fkUbicacion=fkUbicacion)
+        if proveedor.editar_proveedor():
             return jsonify({'mensaje': 'Proveedor editado correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo editar el proveedor'}), 500
@@ -74,7 +72,8 @@ def eliminar_proveedor():
         data = request.json
         pkProveedor = data.get('pkProveedor')
 
-        if Proveedor.eliminar_proveedor(pkProveedor):
+        proveedor = Proveedor(pkProveedor=pkProveedor)
+        if proveedor.eliminar_proveedor():
             return jsonify({'mensaje': 'Proveedor eliminado correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo eliminar el proveedor'}), 500

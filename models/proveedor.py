@@ -1,7 +1,7 @@
 from database import Database
 
 class Proveedor:
-    def __init__(self, pkProveedor=None, nombreProveedor=None, correoProveedor=None, diasCredito=None, facturaNota =None, fkUbicacion=None, fkInfoPaqueteria=None):
+    def __init__(self, pkProveedor=None, nombreProveedor=None, correoProveedor=None, diasCredito=None, facturaNota =None, fkUbicacion=None):
         """Inicializa un objeto"""
         self.pkProveedor = pkProveedor
         self.nombreProveedor = nombreProveedor
@@ -9,7 +9,6 @@ class Proveedor:
         self.diasCredito = diasCredito
         self.facturaNota = facturaNota
         self.fkUbicacion = fkUbicacion
-        self.fkInfoPaqueteria = fkInfoPaqueteria
 
 
     @staticmethod
@@ -59,8 +58,8 @@ class Proveedor:
     def crear_proveedor(self):
         """Guarda un nuevo registro en la base de datos"""
         db = Database()
-        query = "INSERT INTO proveedores (nombreProveedor, correoProveedor, diasCredito, facturaNota, fkUbicacion, fkInfoPaqueteria) VALUES (%s, %s, %s, %s, %s, %s)"
-        resultado = db.execute_commit(query, (self.nombreProveedor, self.correoProveedor, self.diasCredito, self.facturaNota, self.fkUbicacion, self.fkInfoPaqueteria))
+        query = "INSERT INTO proveedores (nombreProveedor, correoProveedor, diasCredito, facturaNota, fkUbicacion) VALUES (%s, %s, %s, %s, %s)"
+        resultado = db.execute_commit(query, (self.nombreProveedor, self.correoProveedor, self.diasCredito, self.facturaNota, self.fkUbicacion))
         db.close()
         return resultado
 
@@ -69,8 +68,8 @@ class Proveedor:
         if not self.pkProveedor:
             raise ValueError("El proveedor debe tener un ID para ser editado.")
         db = Database()
-        query = "UPDATE proveedores SET nombreProveedor = %s, correoProveedor = %s, diasCredito = %s, facturaNota = %s, fkUbicacion = %s, fkInfoPaqueteria = %s WHERE pkProveedor = %s"
-        resultado = db.execute_commit(query, (self.nombreProveedor, self.correoProveedor, self.diasCredito, self.facturaNota, self.fkUbicacion, self.fkInfoPaqueteria, self.pkProveedor))
+        query = "UPDATE proveedores SET nombreProveedor = %s, correoProveedor = %s, diasCredito = %s, facturaNota = %s, fkUbicacion = %s WHERE pkProveedor = %s"
+        resultado = db.execute_commit(query, (self.nombreProveedor, self.correoProveedor, self.diasCredito, self.facturaNota, self.fkUbicacion, self.pkProveedor))
         db.close()
         return resultado
 

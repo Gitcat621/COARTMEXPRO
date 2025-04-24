@@ -214,7 +214,7 @@ $(document).ready(function() {
         document.getElementById('correoProveedor').value = correoProveedor;
         document.getElementById('diasCredito').value = diasCredito;
         document.getElementById('ubicacion_menu').value = fkUbicacion;
-        document.getElementById('infop_menu').value = fkInfoPaqueteria;
+
 
         abrirModal(2,pkProveedor);
     });
@@ -258,15 +258,10 @@ function agregarProveedor(){
 
 
     const fkUbicacion = ubicacionMenu.value;
-    
 
-    const infoMenu = document.getElementById('infop_menu');
-
-
-    const fkInfoPaqueteria = infoMenu.value;
 
     // Verificar si ambos campos están completos
-    if (!nombreProveedor || !correoProveedor || !diasCredito || !facturaNota || !fkUbicacion || !fkInfoPaqueteria) {
+    if (!nombreProveedor || !correoProveedor || !diasCredito || !facturaNota || !fkUbicacion) {
 
 
         toastr.warning('Porfavor completa todos los campos', 'Advertencia', {"closeButton": true,});
@@ -282,7 +277,7 @@ function agregarProveedor(){
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ nombreProveedor, correoProveedor, diasCredito, facturaNota, fkUbicacion, fkInfoPaqueteria })
+        body: JSON.stringify({ nombreProveedor, correoProveedor, diasCredito, facturaNota, fkUbicacion })
     })
     .then(response => response.json())
     .then(data => {
@@ -337,7 +332,7 @@ function listarProveedores() {
             //          5                           6                   7                       8                           9   
             proveedores.facturaNota, proveedores.bancos, proveedores.numerosCuenta, proveedores.beneficiarios, proveedores.diasEntrega,
             //          10                    11                          12                      13                      14 
-            proveedores.flete, proveedores.paqueterias,  proveedores.codigoPostal, proveedores.nombreMunicipio, proveedores.nombreProveedor,
+            proveedores.flete, proveedores.paqueterias,  proveedores.codigoPostal, proveedores.nombreMunicipio, proveedores.nombreEstado,
             //          15                      16
             proveedores.fkUbicacion ,proveedores.pkProveedor
 
@@ -366,10 +361,8 @@ function editarProveedor(pkProveedor){
 
     const infopMenu = document.getElementById('infop_menu');
 
-    const fkInfoPaqueteria = infopMenu.value;
-
     // Verificar que ningún campo esté vacío
-    if (!pkProveedor || !nombreProveedor || !correoProveedor || !diasCredito|| !facturaNota || !fkUbicacion || !fkInfoPaqueteria) {
+    if (!pkProveedor || !nombreProveedor || !correoProveedor || !diasCredito|| !facturaNota || !fkUbicacion) {
 
 
         toastr.warning('Porfavor completa todos los campos', 'Advertencia', {"closeButton": true,});
@@ -384,7 +377,7 @@ function editarProveedor(pkProveedor){
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ pkProveedor, nombreProveedor, correoProveedor, diasCredito, facturaNota ,fkUbicacion, fkInfoPaqueteria })
+        body: JSON.stringify({ pkProveedor, nombreProveedor, correoProveedor, diasCredito, facturaNota ,fkUbicacion })
     })
     .then(response => response.json())
     .then(data => {
