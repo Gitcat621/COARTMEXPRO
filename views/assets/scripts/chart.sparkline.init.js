@@ -21,7 +21,7 @@
 			$("#traffic-sparkline-chart-1").sparkline("html", {
 				width: "120",
 				height: "35",
-				lineColor: "#4d8cf4",
+				lineColor: "#00bf4f",
 				fillColor: !1,
 				spotColor: !1,
 				minSpotColor: !1,
@@ -31,7 +31,7 @@
 			$("#traffic-sparkline-chart-1").sparkline([0, 5, 3, 7, 5, 10, 3, 6, 5, 10], {
 				width: "120",
 				height: "35",
-				lineColor: "#4d8cf4",
+				lineColor: "#00bf4f",
 				fillColor: !1,
 				spotColor: !1,
 				minSpotColor: !1,
@@ -51,7 +51,7 @@
 				width: '120',
 				height: '65',
 				resize: true,
-				lineColor:'#ff1744'
+				lineColor:'#17a2b8'
 			});
 			$('#traffic-sparkline-chart-3-custom').sparkline([5,5, 6,6, 7,7,6,6, 7,7, 8,8,7,7, 8,8, 9,9,8,8, 9,9, 10,10,], {
 				type: 'discrete',
@@ -63,32 +63,32 @@
 			return false;
 		},
 		bar : function () {
-			$('#bar-sparkline-chart').sparkline([5, 6, 2, 8, 9, 4, 7, 10, 11, 12, 10, 9, 4, 7], {
+			$('#bar-sparkline-chart').sparkline([9, 10, 11, 12, 10, 9, 8], {
 				type: 'bar',
-				height: '200',
+				height: '65',
 				barWidth: '10',
 				resize: true,
 				barSpacing: '7',
 				barColor: '#00aeff'
 			});
-			 $('#bar-sparkline-chart').sparkline([5, 6, 2, 8, 9, 4, 7, 10, 11, 12, 10, 9, 4, 7], {
-				type: 'line',
-				height: '200',
-				lineColor: '#00aeff',
-				fillColor: 'transparent',
-				composite: true,
-				highlightLineColor: 'rgba(0,0,0,.1)',
-				highlightSpotColor: 'rgba(0,0,0,.2)'
-			});
-			return false;
+			//  $('#bar-sparkline-chart').sparkline([8, 10, 11, 12, 10, 9, 8], {
+			// 	type: 'line',
+			// 	height: '100',
+			// 	lineColor: '#00aeff',
+			// 	fillColor: 'transparent',
+			// 	composite: true,
+			// 	highlightLineColor: 'rgba(0,0,0,.1)',
+			// 	highlightSpotColor: 'rgba(0,0,0,.2)'
+			// });
+			// return false;
 		},
 		pie : function () {
 			$('#pie-sparkline-chart').sparkline([50, 70, 60], {
 				type: 'pie',
-				width: '200',
-				height: '200',
+				width: '100',
+				height: '65',
 				resize: true,
-				sliceColors: ['#fcb03b','#ea65a2','#566FC9']
+				sliceColors: ['#00aeff','#66c3ff','#b3d9ff']
 			});
 			return false;
 		}

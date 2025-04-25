@@ -38,6 +38,9 @@ class Articulo:
         JOIN existencias e ON e.fkCodigoArticulo = a.codigoArticulo
         WHERE YEAR(e.fechaExistencia) = YEAR({year}) AND MONTH(e.fechaExistencia) = MONTH({month})
         '''
+
+        print(consulta)
+
         resultado = db.execute_query(consulta)
         db.close()
         return resultado

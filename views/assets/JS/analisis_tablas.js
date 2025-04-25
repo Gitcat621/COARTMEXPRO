@@ -48,8 +48,6 @@ async function gruposSocios() {
             throw new Error('Hubo un problema al enviar la solicitud');
         }
 
-        toastr.success('Se han obtenido los datos: Grupos socios', 'Api consumida', {"closeButton": true,});
-
         const select = document.getElementById('grupoSocio_menu');
         select.innerHTML = ""; // Limpiar contenido previo
 
@@ -692,3 +690,10 @@ function formatoFecha(fecha) {
     let fechaObj = new Date(fecha); // Convertir la cadena a objeto Date
     return fechaObj.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
 }
+
+// Escuchar el cambio de fecha
+$('#datepicker').on('changeDate', function (e) {
+    const anio = e.format(); // devuelve el año seleccionado
+    console.log("Año seleccionado:", anio);
+
+});

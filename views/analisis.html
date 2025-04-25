@@ -21,6 +21,12 @@
 	<!-- Sweet Alert -->
 	<link rel="stylesheet" href="assets/plugin/sweet-alert/sweetalert.css">
 
+	<!-- Fontello Icon -->
+	<link rel="stylesheet" href="assets/fonts/fontello/fontello.css">
+
+	<!-- Material Design Icon -->
+	<link rel="stylesheet" href="assets/fonts/material-design/css/materialdesignicons.css">
+
 	<!-- Toastr -->
 	<link rel="stylesheet" href="assets/plugin/toastr/toastr.css">
 </head>
@@ -112,9 +118,10 @@
 
 			<div class="col-xs-12">
 				<div class="box-content">
-					<h4 class="box-title">Filtro por meses</h4>
+					<h4 class="box-title">Filtro por meses <span id="currentYear">20##</span></h4>
 					<!-- /.box-title -->
 
+					<!-- CHECKBOXES -->
 					<ul class="list-inline">
 						<li>
 							<div class="checkbox"><input value="01" type="checkbox" id="checkbox-1"><label for="checkbox-1">Ene</label></div>
@@ -178,89 +185,28 @@
 				<!-- /.box-content -->
 			</div>
 
+			<!-- FECHA RECIENTE -->
 			<div class="col-xs-12">
 				<div class="box-content">
-					<h4 class="box-title text">Fecha más reciente</h4>
+					<h4 class="text-center box-title text">Fecha más reciente</h4>
 					<!-- /.box-title -->
-					<p id="fechaReciente"></p>
+					<p class="text-center" id="fechaReciente">---</p>
 					
 				</div>
 				<!-- /.box-content -->
 			</div>
 			<!-- /.col-lg-4 col-xs-12 -->
 
-			<div class="col-lg-4 col-xs-12">
-				<div class="box-content">
-					<h4 class="box-title text-info">Ingresos cobrados</h4>
-					<!-- /.box-title -->
-					
-					<div class="content widget-stat">
-						<!-- /#traffic-sparkline-chart-1 -->
-						<div class="right-content">
-							<h2 class="counter text-info" id="ingresos">N/C</h2>
-							<!-- /.counter -->
-							<p class="text text-info">Ingresos acumulables</p>
-							<!-- /.text -->
-						</div>
-						<!-- .right-content -->
-					</div>
-					<!-- /.content widget-stat -->
-				</div>
-				<!-- /.box-content -->
-			</div>
-			<!-- /.col-lg-4 col-xs-12 -->
-
-			<div class="col-lg-4 col-xs-12">
-				<div class="box-content">
-					<h4 class="box-title text-warning">Egresos</h4>
-					<!-- /.box-title -->
-					<div class="content widget-stat">
-						<!-- /#traffic-sparkline-chart-2 -->
-						<div class="right-content">
-							<h2 class="counter text-warning" id="efectivoUtilizado">N/C</h2>
-							<!-- /.counter -->
-							<p class="text text-warning">Gastos y compras</p>
-							<!-- /.text -->
-						</div>
-						<!-- .right-content -->
-					</div>
-					<!-- /.content widget-stat -->
-				</div>
-				<!-- /.box-content -->
-			</div>
-			<!-- /.col-lg-4 col-xs-12 -->
-
-			<div class="col-lg-4 col-xs-12">
-				<div class="box-content">
-					<h4 class="box-title text-success">Flujo de efectivo disponible</h4>
-					<!-- /.box-title -->
-					<div class="content widget-stat">
-						<!-- /#traffic-sparkline-chart-3 -->
-						<div class="right-content">
-							<h2 class="counter text-success" id="flujoRemanente">N/C <i class="fa fa-angle-double-up"></i></h2>
-							<!-- /.counter -->
-							<p class="text text-success">Efectivo restante</p>
-							<!-- /.text -->
-						</div>
-						<!-- .right-content -->
-					</div>
-					<!-- /.content widget-stat -->
-				</div>
-				<!-- /.box-content -->
-			</div>
-			<!-- /.col-lg-4 col-xs-12 -->
-
-
-
+			<!-- VENTAS -->
 			<div class="col-lg-6 col-xs-12">
 				<div class="box-content">
-					<h4 class="box-title text-success">Ventas</h4>
+					<h4 class="text-center box-title text-success">Ventas</h4>
 					<!-- /.box-title -->
 					<div class="content widget-stat">
-						<div id="traffic-sparkline-chart-2" class="left-content margin-top-10"></div>
+						<div id="traffic-sparkline-chart-2" class="left-content"></div>
 						<!-- /#traffic-sparkline-chart-2 -->
-						<div class="right-content">
-							<h2 class="counter text-success" id="ventas">N/C</h2>
+						<div class="right-content text-center">
+							<h2 class="counter text-success" id="ventas">---</h2>
 							<!-- /.counter -->
 							<p class="text text-success">En acumulo</p>
 							<!-- /.text -->
@@ -273,17 +219,18 @@
 			</div>
 			<!-- /.col-lg-4 col-xs-12 -->
 
+			<!-- CRECIMIENTO-->
 			<div class="col-lg-6 col-xs-12">
 				<div class="box-content">
-					<h4 class="box-title text-primary">Crecimiento</h4>
+					<h4 class="text-center box-title text-success">Crecimiento vs <span id="lastYear"></span></h4>
 					<!-- /.box-title -->
 					<div class="content widget-stat">
 						<div id="traffic-sparkline-chart-1" class="left-content margin-top-15"></div>
 						<!-- /#traffic-sparkline-chart-1 -->
-						<div class="right-content">
-							<h2 class="counter text-primary" id="crecimientos">N/C</h2>
+						<div class="right-content text-center">
+							<h2 class="counter text-success" id="crecimientos">---</h2>
 							<!-- /.counter -->
-							<p class="text text-primary">De crecimiento</p>
+							<p class="text text-success">De crecimiento</p>
 							<!-- /.text -->
 						</div>
 						<!-- .right-content -->
@@ -293,95 +240,208 @@
 				<!-- /.box-content -->
 			</div>
 			<!-- /.col-lg-4 col-xs-12 -->
-	
-			<div class="col-lg-3 col-md-6 col-xs-12">
-				<div class="box-content bg-success text-white">
-					<div class="statistics-box with-icon">
-						<i class="ico small fa fa-diamond"></i>
-						<p class="text text-white">VAL INVENTARIO</p>
-						<h2 class="counter" id="inventarios">N/C</h2>
+
+			<!-- INGRESOS COBRADOS -->
+			<div class="col-lg-4 col-xs-12">
+				<div class="box-content">
+					<h4 class="text-center box-title text-info">Ingresos</h4>
+					<!-- /.box-title -->
+					
+					<div class="content widget-stat">
+						<div id="bar-sparkline-chart" class="left-content"></div>
+						<!-- /#traffic-sparkline-chart-1 -->
+						<div class="right-content text-center">
+							
+							<h2 class="counter text-info" id="ingresos">---</h2>
+							<!-- /.counter -->
+							<p class="text text-info">Ingresos acumulables</p>
+							<!-- /.text -->
+						</div>
+						<!-- .right-content -->
 					</div>
+					<!-- /.content widget-stat -->
 				</div>
 				<!-- /.box-content -->
 			</div>
-			<!-- /.col-lg-3 col-md-6 col-xs-12 -->
-			<div class="col-lg-3 col-md-6 col-xs-12">
-				<div class="box-content bg-info text-white">
-					<div class="statistics-box with-icon">
-						<i class="ico small fa fa-money"></i>
-						<p class="text text-white">CxC</p>
-						<h2 class="counter" id="cuentasPorCobrar">N/C</h2>
+			<!-- /.col-lg-4 col-xs-12 -->
+
+			<!-- EGRESOS -->
+			<div class="col-lg-4 col-xs-12">
+				<div class="box-content">
+					<h4 class="text-center box-title text-info">Egresos</h4>
+					<!-- /.box-title -->
+					<div class="content widget-stat">
+						<div id="pie-sparkline-chart" class="left-content"></div>
+						<!-- /#traffic-sparkline-chart-2 -->
+						
+						<div class="right-content text-center">
+							<h2 class="counter text-info" id="efectivoUtilizado">---</h2>
+							<!-- /.counter -->
+							<p class="text text-info">Gastos y compras</p>
+							<!-- /.text -->
+						</div>
+						<!-- .right-content -->
 					</div>
+					<!-- /.content widget-stat -->
 				</div>
 				<!-- /.box-content -->
 			</div>
-			<!-- /.col-lg-3 col-md-6 col-xs-12 -->
-			<div class="col-lg-3 col-md-6 col-xs-12">
-				<div class="box-content bg-danger text-white">
-					<div class="statistics-box with-icon">
-						<i class="ico small fa fa-calculator"></i>
-						<p class="text text-white">CxP</p>
-						<h2 class="counter" id="cuentasPorPagar">N/C</h2>
+			<!-- /.col-lg-4 col-xs-12 -->
+
+			<!-- FLUJO DISPONIBLE -->
+			<div class="col-lg-4 col-xs-12">
+				<div class="box-content">
+					<h4 class="text-center box-title text-info">Flujo de efectivo disponible</h4>
+					<!-- /.box-title -->
+					<div class="content widget-stat">
+						<div id="traffic-sparkline-chart-3" class="left-content"></div>
+						<!-- /#traffic-sparkline-chart-3 -->
+						<div class="right-content text-center">
+							<h2 class="counter text-info" id="flujoRemanente">---</h2>
+							<!-- /.counter -->
+							<p class="text text-info">Efectivo restante</p>
+							<!-- /.text -->
+						</div>
+						<!-- .right-content -->
 					</div>
+					<!-- /.content widget-stat -->
 				</div>
 				<!-- /.box-content -->
 			</div>
-			<!-- /.col-lg-3 col-md-6 col-xs-12 -->
-			<div class="col-lg-3 col-md-6 col-xs-12">
-				<div class="box-content bg-warning text-white">
-					<div class="statistics-box with-icon">
-						<i class="ico small fa fa-usd"></i>
-						<p class="text text-white">GASTOS</p>
-						<h2 class="counter" id="gastos">N/C</h2>
-					</div>
-				</div>
-				<!-- /.box-content -->
-			</div>
+			<!-- /.col-lg-4 col-xs-12 -->
+			
+			<!-- VAlOR INVENTARIO -->
 			<div class="col-lg-3 col-md-6 col-xs-12">
 				<div class="box-content">
 					<div class="statistics-box with-icon">
-						<i class="ico fa fa-tag text-inverse"></i>
-						<h2 class="counter text-inverse" id="articulos">N/C</h2>
-						<p class="text">ARTICULOS</p>
+						<i class="ico small fa fa-tag text-success"></i><!-- text-inverse -->
+						<p class="text text-success">$ INVENTARIO</p>
+						<h2 class="counter text-success" id="inventarios">---</h2>
 					</div>
 				</div>
 				<!-- /.box-content -->
 			</div>
 			<!-- /.col-lg-3 col-md-6 col-xs-12 -->
+
+			<!-- CUENTAS POR COBRAR -->
 			<div class="col-lg-3 col-md-6 col-xs-12">
 				<div class="box-content">
-					<div class="statistics-box with-icon">
-						<i class="ico fa fa-credit-card text-success"></i>
-						<h2 class="counter text-success" id="compras">N/C</h2>
-						<p class="text">COMPRAS MCIA</p>
+					<div class="statistics-box with-icon text-success">
+						<i class="ico small icon-money-2"></i>
+						<p class="text text-success">CxC</p>
+						<h2 class="counter text-success" id="cuentasPorCobrar">---</h2>
 					</div>
 				</div>
 				<!-- /.box-content -->
 			</div>
 			<!-- /.col-lg-3 col-md-6 col-xs-12 -->
+
+			<!-- CUENTAS POR PAGAR -->
 			<div class="col-lg-3 col-md-6 col-xs-12">
 				<div class="box-content">
 					<div class="statistics-box with-icon">
-						<i class="ico fa fa-users text-primary"></i>
-						<h2 class="counter text-primary" id="socios">N/C</h2>
-						<p class="text">CLIENTES</p>
+						<i class="ico small fa fa-calculator text-info"></i>
+						<p class="text text-info">CxP</p>
+						<h2 class="counter text-info" id="cuentasPorPagar">---</h2>
 					</div>
 				</div>
 				<!-- /.box-content -->
 			</div>
 			<!-- /.col-lg-3 col-md-6 col-xs-12 -->
+
+			<!-- GASTOS -->
 			<div class="col-lg-3 col-md-6 col-xs-12">
 				<div class="box-content">
 					<div class="statistics-box with-icon">
-						<i class="ico fa fa-shopping-basket text-info"></i>
-						<h2 class="counter text-info" id="articulosVendidos">N/C</h2>
-						<p class="text">ART VENDIDOS</p>
+						<i class="ico small fa fa-wrench text-info"></i>
+						<p class="text text-info">GASTOS</p>
+						<h2 class="counter text-info" id="gastos">---</h2>
+					</div>
+				</div>
+				<!-- /.box-content -->
+			</div>
+
+			<!-- EXISTENCIAS -->
+			<div class="col-lg-3 col-md-6 col-xs-12">
+				<div class="box-content">
+					<div class="statistics-box with-icon">
+						<i class="ico small mdi mdi-package-variant text-success"></i>
+						<h2 class="counter text-success" id="articulos">---</h2>
+						<p class="text-success">EXISTENCIAS INV</p>
+					</div>
+				</div>
+				<!-- /.box-content -->
+			</div>
+			<!-- /.col-lg-3 col-md-6 col-xs-12 -->
+
+			<!-- COMPRAS DE MERCANCIA -->
+			<div class="col-lg-3 col-md-6 col-xs-12">
+				<div class="box-content">
+					<div class="statistics-box with-icon">
+						<i class="ico small fa fa-credit-card text-success"></i>
+						<h2 class="counter text-success" id="compras">---</h2>
+						<p class="text-success">COMPRAS MCIA</p>
+					</div>
+				</div>
+				<!-- /.box-content -->
+			</div>
+			<!-- /.col-lg-3 col-md-6 col-xs-12 -->
+
+			<!-- CLIENTES -->
+			<div class="col-lg-3 col-md-6 col-xs-12 desplegable" id="clientes">
+				<div class="box-content divSize">
+					<div class="statistics-box with-icon">
+						<i class="ico small fa fa-users text-info"></i>
+						<h2 class="counter text-info" id="socios">---</h2>
+						<p class="text-info">CLIENTES/VTA</p>
+					</div>
+				</div>
+				<!-- /.box-content -->
+			</div>
+			<!-- /.col-lg-3 col-md-6 col-xs-12 -->
+
+			<!-- ARTICULOS VENDIDOS -->
+			<div class="col-lg-3 col-md-6 col-xs-12 desplegable" id="articulosVendidos">
+				<div class="box-content divSize">
+					<div class="statistics-box with-icon">
+						<i class="ico small icon-basket text-info"></i>
+						<h2 class="counter text-info" id="articulosVendidos">---</h2>
+						<p class="text-info">ART VENDIDOS</p>
 					</div>
 				</div>
 				<!-- /.box-content -->
 			</div>
 			<!-- /.col-lg-3 col-md-6 col-xs-12 -->
 			
+			<!-- POPUP -->
+			<div class="popup-container" id="popup" style="display: none;">
+				<div class="popup-card" id="popupCard">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" id="closePopup">&times;</span></button>
+					<h3>Detalles de Clientes</h3>
+					<p>Información de participación:</p>
+					<table class="table table-bordered">
+						<thead>
+						<tr>
+							<th>Socio</th>
+							<th>Monto</th>
+							<th>Procentaje</th>
+						</tr>
+						</thead>
+						<tbody>
+						<tr>
+							<td>Morpho</td>
+							<td>$500,000</td>
+							<td>30%</td>
+						</tr>
+						<tr>
+							<td>GAP</td>
+							<td>$150,500</td>
+							<td>70%</td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
 			
 		</div>
 		<!-- /.row small-spacing -->
@@ -391,7 +451,7 @@
 			
 			<div class="col-lg-6 col-xs-12">
 				<div class="box-content">
-					<h4 class="box-title">Top 20 articulos más vendidos</h4>
+					<h4 class="text-center box-title">Top 20 articulos más vendidos</h4>
 					<!-- /.box-title -->
 					<div class="table-responsive table-purchases">
 						<table class="table table-hover margin-bottom-10">
@@ -414,7 +474,7 @@
 			<!-- /.col-lg-6 col-xs-12 -->
 			<div class="col-lg-6 col-xs-12">
 				<div class="box-content">
-					<h4 class="box-title">Top 20 socios con más OC</h4>
+					<h4 class="text-center box-title">Top 20 socios con más OC</h4>
 					<!-- /.box-title -->
 					<div class="table-responsive table-purchases">
 						<table class="table table-hover margin-bottom-10">
@@ -437,7 +497,7 @@
 			<!-- /.col-lg-6 col-xs-12 -->
 			<div class="col-lg-6 col-xs-12">
 				<div class="box-content">
-					<h4 class="box-title">Top 20 socios con venta más altas</h4>
+					<h4 class="text-center box-title">Top 20 socios con venta más altas</h4>
 					<!-- /.box-title -->
 					<div class="table-responsive table-purchases">
 						<table class="table table-small-font table-hover margin-bottom-10">
@@ -462,7 +522,7 @@
 
 			<div class="col-lg-6 col-xs-12">
 				<div class="box-content">
-					<h4 class="box-title">Top 20 articulos menos vendidos</h4>
+					<h4 class="text-center box-title">Top 20 articulos menos vendidos</h4>
 					<!-- /.box-title -->
 					<div class="table-responsive table-purchases">
 						<table class="table table-small-font table-hover margin-bottom-10">
@@ -488,7 +548,7 @@
 
 		<div class="col-xs-12">
 			<div class="box-content">
-				<h4 class="box-title">Metricas de servicio</h4>
+				<h4 class="text-center box-title">Metricas de servicio</h4>
 				<!-- /.box-title -->
 				<div class="table-responsive table-purchases">
 					<table class="table table-small-font margin-bottom-10 table-hover">

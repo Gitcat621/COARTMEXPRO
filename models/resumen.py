@@ -157,17 +157,19 @@ class Resumen:
         COALESCE((SELECT COUNT(DISTINCT sc.nombreSocio) 
             FROM articulos_ventas av 
             JOIN ordenes_compra oc ON oc.pkOrdenCompra = av.fkOrdenCompra 
+            JOIN respuestas_almacen ra ON ra.fkOrdenCompra = oc.pkOrdenCompra 
             JOIN socios_comerciales sc ON sc.pkSocioComercial = oc.fkSocioComercial 
-            WHERE YEAR(oc.fechaOrdenCompra) = {year}  
-            AND MONTH(oc.fechaOrdenCompra) 
+            WHERE YEAR(ra.fechaEntrega) = {year}  
+            AND MONTH(ra.fechaEntrega) 
             IN ({meses})), 0) AS sociosNegociados,
 
         -- Total de artículos vendidos
-        COALESCE((SELECT COUNT(av.fkCodigoArticulo) 
+        COALESCE((SELECT SUM(av.cantidadVenta)
             FROM articulos_ventas av 
-            JOIN ordenes_compra oc ON oc.pkOrdenCompra = av.fkOrdenCompra 
-            WHERE YEAR(oc.fechaOrdenCompra) = {year} 
-            AND MONTH(oc.fechaOrdenCompra) 
+            JOIN ordenes_compra oc ON oc.pkOrdenCompra = av.fkOrdenCompra
+            JOIN respuestas_almacen ra ON ra.fkOrdenCompra = oc.pkOrdenCompra 
+            WHERE YEAR(ra.fechaEntrega) = {year} 
+            AND MONTH(ra.fechaEntrega) 
             IN ({meses})), 0) AS articulosVendidos,
 
         MAX(GREATEST(
@@ -293,7 +295,8 @@ class Resumen:
         FROM articulos_ventas av
         JOIN articulos a ON a.codigoArticulo = av.fkCodigoArticulo
         JOIN ordenes_compra oc ON oc.pkOrdenCompra = av.fkOrdenCompra
-        WHERE YEAR(oc.fechaOrdenCompra) = YEAR(CURDATE()) AND MONTH(oc.fechaOrdenCompra) IN ({meses})
+        JOIN respuestas_almacen ra ON ra.fkOrdenCompra = oc.pkOrdenCompra 
+        WHERE YEAR(ra.fechaEntrega) = YEAR(CURDATE()) AND MONTH(ra.fechaEntrega) IN ({meses})
         GROUP BY a.nombreArticulo
         ORDER BY totalCantidadVendida DESC
         LIMIT 20
@@ -344,8 +347,9 @@ class Resumen:
     	SELECT a.nombreArticulo, sc.nombreSocio, (av.cantidadVenta * av.precioVenta) AS monto FROM articulos_ventas av 
         JOIN articulos a ON a.codigoArticulo = av.fkCodigoArticulo
         JOIN ordenes_compra oc ON oc.pkOrdenCompra = av.fkOrdenCompra
+        JOIN respuestas_almacen ra ON ra.fkOrdenCompra = oc.pkOrdenCompra 
         JOIN socios_comerciales sc ON sc.pkSocioComercial = oc.fkSocioComercial
-        WHERE YEAR(oc.fechaOrdenCompra) = YEAR(CURDATE()) AND MONTH(oc.fechaOrdenCompra) IN ({meses})
+        WHERE YEAR(ra.fechaEntrega) = YEAR(CURDATE()) AND MONTH(ra.fechaEntrega) IN ({meses})
         GROUP BY a.nombreArticulo
         ORDER BY monto DESC
         LIMIT 20;
@@ -370,7 +374,8 @@ class Resumen:
         FROM articulos_ventas av
         JOIN articulos a ON a.codigoArticulo = av.fkCodigoArticulo
         JOIN ordenes_compra oc ON oc.pkOrdenCompra = av.fkOrdenCompra
-        WHERE YEAR(oc.fechaOrdenCompra) = YEAR(CURDATE()) AND MONTH(oc.fechaOrdenCompra) IN ({meses})
+        JOIN respuestas_almacen ra ON ra.fkOrdenCompra = oc.pkOrdenCompra 
+        WHERE YEAR(ra.fechaEntrega) = YEAR(CURDATE()) AND MONTH(ra.fechaEntrega) IN ({meses})
         GROUP BY a.nombreArticulo
         ORDER BY totalCantidadVendida ASC
         LIMIT 20;

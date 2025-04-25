@@ -70,8 +70,6 @@ async function gruposSocios() {
             throw new Error('Hubo un problema al enviar la solicitud');
         }
 
-        toastr.success('Se han obtenido los datos: Grupos socios', 'Api consumida', {"closeButton": true,});
-
         const select = document.getElementById('grupoSocio_menu');
         select.innerHTML = ""; // Limpiar contenido previo
 
