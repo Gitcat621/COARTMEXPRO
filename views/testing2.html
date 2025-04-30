@@ -1,5 +1,8 @@
 
-<link rel="stylesheet" href="assets/styles/style.css">
+<link rel="stylesheet" href="assets/styles/stylePrueba.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 
 <!-- TU DIV DESPLEGABLE -->
 <div class="col-lg-3 col-md-6 col-xs-12 desplegable" id="clientes">
@@ -11,6 +14,91 @@
       </div>
     </div>
   </div>
+
+  <!-- FILTROS -->
+  <div class="col-xs-10 fixed-element">
+    <div class="box-content">
+      <h4 class="box-title">Filtro por meses <span id="currentYear">20##</span></h4>
+      <!-- /.box-title -->
+
+      <!-- CHECKBOXES -->
+      <ul class="list-inline">
+        <li>
+          <div class="checkbox"><input value="01" type="checkbox" id="checkbox-1"><label for="checkbox-1">Ene</label></div>
+          <!-- /.checkbox -->
+        </li>
+        <li>
+          <div class="checkbox"><input value="02" type="checkbox" id="checkbox-2"><label for="checkbox-2">Feb</label></div>
+          <!-- /.checkbox -->
+        </li>
+        <li>
+          <div class="checkbox"><input value="03" type="checkbox" id="checkbox-3"><label for="checkbox-3">Mar</label></div>
+          <!-- /.checkbox -->
+        </li>
+        <li>
+          <div class="checkbox"><input value="04" type="checkbox" id="checkbox-4"><label for="checkbox-4">Abr</label></div>
+          <!-- /.checkbox -->
+        </li>
+        <li>
+          <div class="checkbox"><input value="05" type="checkbox" id="checkbox-5"><label for="checkbox-5">May</label></div>
+          <!-- /.checkbox -->
+        </li>
+        <li>
+          <div class="checkbox"><input value="06" type="checkbox" id="checkbox-6"><label for="checkbox-6">Jun</label></div>
+          <!-- /.checkbox -->
+        </li>
+        <li>
+          <div class="checkbox"><input value="07" type="checkbox" id="checkbox-7"><label for="checkbox-7">Jul</label></div>
+          <!-- /.checkbox -->
+        </li>
+        <li>
+          <div class="checkbox"><input value="08" type="checkbox" id="checkbox-8"><label for="checkbox-8">Ago</label></div>
+          <!-- /.checkbox -->
+        </li>
+        <li>
+          <div class="checkbox"><input value="09" type="checkbox" id="checkbox-9"><label for="checkbox-9">Sep</label></div>
+          <!-- /.checkbox -->
+        </li>
+        <li>
+          <div class="checkbox"><input value="10" type="checkbox" id="checkbox-10"><label for="checkbox-10">Oct</label></div>
+          <!-- /.checkbox -->
+        </li>
+        <li>
+          <div class="checkbox"><input value="11" type="checkbox" id="checkbox-11"><label for="checkbox-11">Nov</label></div>
+          <!-- /.checkbox -->
+        </li>
+        <li>
+          <div class="checkbox"><input value="12" type="checkbox" id="checkbox-12"><label for="checkbox-12">Dic</label></div>
+          <!-- /.checkbox -->
+        </li>
+        <li>
+          <button type="submit" class="btn btn-default btn-bordered btn-xs waves-effect waves-light" id="todos">Todos</button>
+          
+        </li>
+        <li>
+          <button type="submit" class="btn btn-info btn-bordered btn-xs waves-effect waves-light" id="meses"><i class="fa fa-search"></i> Aplicar filtro</button>
+          
+        </li>
+      </ul>
+       
+    </div>
+    <!-- /.box-content -->
+  </div>
+
+  <div class="fixed-navbar">
+    <div class="pull-left">
+      <button type="button" class="menu-mobile-button glyphicon glyphicon-menu-hamburger js__menu_mobile"></button>
+      <h1 class="page-title">Dashboard</h1>
+      <!-- /.page-title -->
+    </div>
+    <!-- /.pull-left -->
+    <div class="pull-right">
+      <a id="cerrarSesion" class="ico-item fa fa-power-off logout"></a>
+    </div>
+    <!-- /.pull-right -->
+  </div>
+
+
   
   <!-- POPUP (fuera del wrapper/main-content si es posible) -->
   <div class="popup-container" id="popup" style="display: none;">
@@ -41,6 +129,30 @@
       </table>
     </div>
   </div>
+
+  <table class="table table-bordered table-hover display" id="example">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Edad</th>
+            <th>Ciudad</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Juan Pérez</td>
+            <td>32</td>
+            <td>Madrid</td>
+        </tr>
+        <tr>
+            <td>Maria López</td>
+            <td>28</td>
+            <td>Barcelona</td>
+        </tr>
+    </tbody>
+</table>
+
+
   
   <style>
     .popup-container {
@@ -77,6 +189,38 @@
   </style>
   
   <script>
+    $(document).ready(function() {
+      var table = $('#example').DataTable();
+
+    $('#example tbody').on('click', 'tr', function () {
+      var tr = $(this);
+      var row = table.row(tr);
+
+      if (row.child.isShown()) {
+        row.child.hide();
+        tr.removeClass('shown');
+      } else {
+        //<td>Juan Pérez</td>
+        //row.child('<div style="padding: 10px;">Más información sobre ' + row.data()[0] + '</div>').show();
+        row.child(`
+         <tr>
+        <td>Full name:</td>
+        
+    </tr>
+    <tr>
+        <td>Extension number:</td>
+       
+    </tr>
+    <tr>
+        <td>Extra info:</td>
+        
+    </tr>
+        `).show();
+        tr.addClass('shown');
+        }
+      });
+    });
+
     const trigger = document.getElementById('clientes');
     const popup = document.getElementById('popup');
     const popupCard = document.getElementById('popupCard');

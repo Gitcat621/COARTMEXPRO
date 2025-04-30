@@ -1,4 +1,5 @@
-from database import Database
+import os
+
 
 class Archivo:
     def __init__(self, pkArchivo=None, nombreArchivo=None, peso=None, fechaSubida=None, ruta=None):
@@ -11,37 +12,15 @@ class Archivo:
 
     @staticmethod
     def listar_archivos():
-        """Obtiene todos los registros de la base de datos."""
-        db = Database()
-        resultado = db.execute_query("SELECT * FROM archivos")
-        db.close()
-        return resultado
+        """Obtiene todos los registros de la carpeta y los retorna en formato JSON."""
     
-    def crear_archivo(self):
-        """Guarda un nuevo registro en la base de datos"""
-        db = Database()
-        query = "INSERT INTO archivos (nombreArchivo,peso,fechaSubida,ruta) VALUES (%s,%s,%s,%s)"
-        resultado = db.execute_commit(query, (self.nombreArchivo, self.peso, self.fechaSubida, self.ruta))
-        db.close()
-        return resultado
-    
+    def crear_archivo(archivo, ruta_archivo):
+        """Guarda un nuevo registro en el almacenamiento local"""
+
     def editar_archivo(self):
         """Edita un registro en la base de datos."""
-        if not self.pkArchivo:
-            raise ValueError("El archivo debe tener un ID para ser editado.")
-        db = Database()
-        query = "UPDATE archivos SET nombreArchivo = %s, peso = %s, fechaSubida = %s, ruta = %s WHERE pkArchivo = %s"
-        resultado = db.execute_commit(query, (self.nombreArchivo, self.peso, self.fechaSubida, self.ruta, self.pkArchivo))
-        db.close()
-        return resultado
+       
+        #return resultado
 
-    def eliminar_archivo(self):
+    def eliminar_archivo(ruta_archivo):
         """Elimina un registro de la base de datos."""
-
-        if not self.pkArchivo:
-            raise ValueError("El archivo debe tener un ID para ser eliminado.")
-        db = Database()
-        query = "DELETE FROM archivos WHERE pkArchivo = %s"
-        resultado = db.execute_commit(query, (self.pkArchivo,))
-        db.close()
-        return resultado

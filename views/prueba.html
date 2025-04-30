@@ -2,210 +2,39 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DataTable con Tarjeta Emergente</title>
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    	<!-- Main Styles -->
-	<link rel="stylesheet" href="assets/styles/style.css">
-    <style>
-
-        #divSize {
-            transition: background-color 0.3s ease;
-        }
-
-        #divSize:hover {
-            background-color: #dbdbdb;
-        }
-
-        #desplegable {
-            cursor: pointer;
-        }
-        
-        #tarjeta {
-            width: 200px;
-            padding: 15px;
-            background-color: #f1f1f1;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            display: none;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
-        }
-
-        .oculto {
-            display: none;
-        }
-
-
-    </style>
+    <title>Tabla Expandible</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
 </head>
 <body>
 
-<table id="miTabla" class="display">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Edad</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr><td>1</td><td>Juan</td><td>25</td></tr>
-        <tr><td>2</td><td>Maria</td><td>30</td></tr>
-        <tr><td>3</td><td>Carlos</td><td>28</td></tr>
-    </tbody>
-</table>
-
-<div id="tarjeta" class="card">
-    <p><strong>ID:</strong> <span id="card-id"></span></p>
-    <p><strong>Nombre:</strong> <span id="card-nombre"></span></p>
-    <p><strong>Edad:</strong> <span id="card-edad"></span></p>
-    <button onclick="cerrarTarjeta()">Cerrar</button>
+<div class="container mt-4">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Detalles</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr data-toggle="collapse" data-target="#details1" class="clickable">
+                <td>Juan Pérez</td>
+                <td><button class="btn btn-primary btn-sm">Ver más</button></td>
+            </tr>
+            <tr id="details1" class="collapse">
+                <td class="text-center">Zengel</td>
+                <td class="text-center">e621.net</td>
+            </tr>
+        </tbody>
+    </table>
 </div>
 
-
-<div id="miDiv" class="col-lg-3 col-md-6 col-xs-12">
-    <div class="box-content">
-        <div class="statistics-box with-icon">
-            <i class="ico small mdi mdi-package-variant text-success"></i>
-            <h2 class="counter text-success" id="articulos">---</h2>
-            <p class="text-success">EXISTENCIAS INV</p>
-        </div>
-    </div>
-    <!-- /.box-content -->
-</div>
-
-<div id="miDiv">Haz clic aquí</div>
-<div id="tarjeta" class="oculto">
-    <p>¡Hola! Soy una tarjeta emergente. 🎉</p>
-</div>
-
-
-<script>
-    $(document).ready(function() {
-        var table = $('#miTabla').DataTable();
-
-        $('#miTabla tbody').on('click', 'tr', function () {
-            var data = table.row(this).data();
-            $('#card-id').text(data[0]);
-            $('#card-nombre').text(data[1]);
-            $('#card-edad').text(data[2]);
-
-            $('#tarjeta').css('display', 'block');
-        });
-    });
-
-    function cerrarTarjeta() {
-        $('#tarjeta').css('display', 'none');
+<style>
+    .clickable {
+        cursor: pointer;
     }
-
-    document.getElementById("miDiv").addEventListener("click", function() {
-        let tarjeta = document.getElementById("tarjeta");
-        tarjeta.style.display = (tarjeta.style.display === "none" || tarjeta.style.display === "") ? "block" : "none";
-    });
-
-</script>
+</style>
 
 </body>
 </html>
-
-
-
-<!-- <!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DataTable con Tarjeta Emergente</title>
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <style>
-        .selected {
-            background-color: #f1c40f !important;
-        }
-        .card {
-            display: none;
-            position: absolute;
-            top: 50px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #fff;
-            padding: 15px;
-            border-radius: 5px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            z-index: 10;
-        }
-        div {
-        position: relative;
-        cursor: pointer;
-        padding: 10px;
-        }
-
-        div::after {
-            content: "👉"; /* Icono de mano apuntando */
-            position: absolute;
-            right: 10px;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        div:hover::after {
-            opacity: 1;
-        }
-
-    </style>
-</head>
-<body>
-
-<table id="miTabla" class="display">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Edad</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr><td>1</td><td>Juan</td><td>25</td></tr>
-        <tr><td>2</td><td>Maria</td><td>30</td></tr>
-        <tr><td>3</td><td>Carlos</td><td>28</td></tr>
-    </tbody>
-</table>
-
-<div id="tarjeta" class="card">
-    <p><strong>ID:</strong> <span id="card-id"></span></p>
-    <p><strong>Nombre:</strong> <span id="card-nombre"></span></p>
-    <p><strong>Edad:</strong> <span id="card-edad"></span></p>
-    <button onclick="cerrarTarjeta()">Cerrar</button>
-</div>
-
-<div onclick="alert('¡Div clickeado!')">Haz clic aquí</div>
-
-
-<script>
-    $(document).ready(function() {
-        var table = $('#miTabla').DataTable();
-
-        $('#miTabla tbody').on('click', 'tr', function () {
-            var data = table.row(this).data();
-            $('#card-id').text(data[0]);
-            $('#card-nombre').text(data[1]);
-            $('#card-edad').text(data[2]);
-
-            $('#tarjeta').css('display', 'block');
-        });
-    });
-
-    function cerrarTarjeta() {
-        $('#tarjeta').css('display', 'none');
-    }
-</script>
-
-</body>
-</html> -->

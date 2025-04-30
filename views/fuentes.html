@@ -18,11 +18,6 @@
 	<!-- Waves Effect -->
 	<link rel="stylesheet" href="assets/plugin/waves/waves.min.css">
 
-	<!-- Sweet Alert -->
-	<link rel="stylesheet" href="assets/plugin/sweet-alert/sweetalert.css">
-
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-
 	<!-- Dropify -->
 	<link rel="stylesheet" href="assets/plugin/dropify/css/dropify.min.css">
 	
@@ -141,6 +136,8 @@
 					<table id="fuenteTable" class="table table-small-font table-hover table-bordered display" style="width:100%">
 						
 					</table>
+
+					
 				</div>
 			</div>
 			<!-- /.box-content -->
@@ -165,7 +162,10 @@
 			<div class="modal-body">
 
 				<!-- SUBIDA -->
-				<input type="file" id="archivoSubido" class="dropify" />
+				<input type="file" id="archivoSubido" class="dropify" accept=".xlsx,.xls"/>
+
+				<br><br>
+				<div id="contenidoExcel"></div>
 
 			</div>
 			<div class="modal-footer">
@@ -180,7 +180,7 @@
 <div class="remodal" data-remodal-id="remodal" role="dialog" aria-labelledby="modal1Title" aria-describedby="modal1Desc">
 	<button data-remodal-action="close" class="remodal-close" aria-label="Close"></button>
 	<div class="remodal-content">
-		<h2 id="modal1Title">¿Eliminar regsitro?</h2>
+		<h2 id="modal1Title">¿Eliminar <span id="itemDelete">registro</span>?</h2>
 		<p id="modal1Desc">
 			No se podrá recuperar
 		</p>
@@ -199,6 +199,8 @@
 	================================================== -->
 	<!-- Placed at the end of the document so the pages load faster -->
 	<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+	<script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+
 	<script src="assets/JS/fuentes.js"></script>
 	<script src="assets/JS/autenticar.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

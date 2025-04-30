@@ -3,21 +3,27 @@ from models.articulo import Articulo
 
 articulo_bp = Blueprint('articulo_bp', __name__)
 
-@articulo_bp.route('/articulos/', methods=['GET'])
+@articulo_bp.route('/articulos', methods=['GET'])
 def listar_articulos():
     """Endpoint para obtener todos los registros"""
 
     # Obtener parámetros de la URL
-    year = request.args.get('fecha') 
-    month = request.args.get('mes')
+    year = request.args.get('year') 
+    month = request.args.get('month')
+    grupo = request.args.get('grupo')
+
+    print(f"📥 Petición recibida - Grupo: {grupo}, Año: {year}, Mes: {month}")
 
     if not year:
-            year = 'CURDATE()'
+            year = 'YEAR(CURDATE())'
 
     if not month:
-        month = 'CURDATE()'
+        month = 'MONTH(CURDATE())'
 
     articulos = Articulo.listar_articulos(year, month)
+
+    print(f"🔍 Resultados encontrados: {len(articulos)}")
+
     return jsonify(articulos), 200
 
 @articulo_bp.route('/articulos', methods=['POST'])

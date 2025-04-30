@@ -25,6 +25,11 @@ def listar_ingresos():
     grupo = request.args.get('grupo', default=0, type=int)  # Conversión directa
     year = request.args.get('year')
 
+    try:
+        grupo = int(grupo)
+    except (TypeError, ValueError):
+        grupo = 0
+
     if grupo is 0:
         grupo = ""
     else:
@@ -41,15 +46,19 @@ def listar_ingresos():
     ingresos = Resumen(foreingKey=grupo, fecha=year)
     ingresos = ingresos.listar_ingresos()
 
-    if grupo == 621:
+    if grupo == None:
         return jsonify(ingresos), 200
     else:
         for ingreso in ingresos:
+            if ingreso["fechaFactura"] is None:
+                continue  # Saltar si no hay fecha
+
             mes = meses_es[ingreso["fechaFactura"].strftime("%B")]
             socio = ingreso["nombreSocio"] or "SIN SOCIO"
 
-            data.setdefault(socio, {m: 0 for m in meses_es.values()})  # Inicializar estructura
+            data.setdefault(socio, {m: 0 for m in meses_es.values()})
             data[socio][mes] += int(ingreso["totalFactura"])
+
 
         return jsonify(data), 200
 
@@ -70,13 +79,33 @@ def listar_cuentasPorCobrar():
     return jsonify(resumen), 200
 
 @resumen_bp.route('/servicio', methods=['GET'])
-def listar_servicio():
+def listar_servicio(meses):
     """Endpoint para obtener todos los registros"""
 
-    items = request.args.getlist('items[]')  # Recibe como lista
-    resumen = Resumen.listar_servicio(items)
-    return jsonify(resumen), 200
+    resumen = Resumen.listar_servicio(meses)
+    return resumen
 
+@resumen_bp.route('/sociosEnVentas', methods=['GET'])
+def listar_sociosEnVentas(meses, year):
+    """Endpoint para obtener todos los registros"""
+
+    resumen = Resumen.listar_sociosEnVentas(meses, year)
+    return resumen
+
+@resumen_bp.route('/detalles', methods=['GET'])
+def obtener_detalles():
+    
+    meses = request.args.getlist('items[]')  # Recibe como lista
+    year = request.args.get('year')
+
+    servicio = listar_servicio(meses)
+    sociosEnVentas = listar_sociosEnVentas(meses, year)
+
+    
+    return jsonify({
+        'servicio': servicio,
+        'sociosEnVentas': sociosEnVentas,
+    })
 
 #Tops
 @resumen_bp.route('/top1', methods=['GET'])
@@ -100,13 +129,6 @@ def listar_top3(meses):
     resumen = Resumen.listar_top3(meses)
     return resumen
 
-@resumen_bp.route('/top4', methods=['GET'])
-def listar_top4(meses):
-    """Endpoint para obtener todos los registros"""
-    
-    resumen = Resumen.listar_top4(meses)
-    return resumen
-
 @resumen_bp.route('/tops', methods=['GET'])
 def obtener_todos_los_tops():
     meses = request.args.getlist('items[]')  # Recibe como lista
@@ -114,14 +136,12 @@ def obtener_todos_los_tops():
     top1 = listar_top1(meses)
     top2 = listar_top2(meses)
     top3 = listar_top3(meses)
-    top4 = listar_top4(meses)
 
     
     return jsonify({
         'top1': top1,
         'top2': top2,
         'top3': top3,
-        'top4': top4
     })
 
 

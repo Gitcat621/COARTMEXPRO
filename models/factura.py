@@ -96,7 +96,7 @@ class Factura:
 
             return resultado
         except Exception as e:
-            guardar_en_log(f"❌ Error al insertar compra {self.numeroAño}: {e}")
+            guardar_en_log(f"❌ Error al insertar la factura: {self.numeroAño}: {e}")
             return None
 
     def editar_factura(self, db):

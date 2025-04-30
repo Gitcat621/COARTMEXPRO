@@ -126,7 +126,10 @@ async function cargarTablas(endpoint, grupo, anio, mes) {
 
     }
     
-    //console.log(`Endpoint: ${endpoint} / grupo: ${grupo} / mes: ${mes} / año: ${anio}`);
+    console.log(`Endpoint: ${endpoint} / grupo: ${grupo} / mes: ${mes} / año: ${anio}`);
+
+    url = `http://127.0.0.1:5000/coartmex/${endpoint}?grupo=${grupo}&year=${anio}&month=${mes}`;
+    console.log(url);
 
     try {
         const response = await fetch(`http://127.0.0.1:5000/coartmex/${endpoint}?grupo=${grupo}&year=${anio}&month=${mes}`, {
@@ -501,7 +504,9 @@ function inicializarTabla(data, endpoint){
                 columns: [
                     { title: "Código de articulo" },
                     { title: "Descripción" },
+                    { title: "Existencias" },
                     { title: "Costo" },
+                    { title: "Valor" },
                     { title: "Proveedor" },
                     { title: "Categoría" },
                 ]
@@ -512,8 +517,14 @@ function inicializarTabla(data, endpoint){
 
             // Agregar los nuevos datos
             tabla.rows.add(data.map((articulos) => [
-                //    0                              1                      2                               3                                4                   5                               6                           
-                articulos.codigoArticulo, articulos.nombreArticulo, '$' + articulos.precioAlmacen, articulos.nombreProveedor, articulos.nombreCategoriaArticulo, 
+
+                articulos.codigoArticulo, 
+                articulos.nombreArticulo, 
+                articulos.cantidadExistencia,
+                formatoMoneda(articulos.precioAlmacen), 
+                formatoMoneda(articulos.cantidadExistencia * articulos.precioAlmacen),
+                articulos.nombreProveedor, 
+                articulos.nombreCategoriaArticulo, 
                 articulos.fkProveedor, articulos.fkCategoriaArticulo
 
             ])).draw();
@@ -521,7 +532,19 @@ function inicializarTabla(data, endpoint){
         break;
         case 'cuentasPorPagar':
 
-            var elemento = document.getElementById('contenedorGrupo');
+            elemento = document.getElementById('contenedorGrupo');
+            if (elemento.style.display === 'block') {
+                elemento.style.display = 'none'
+            }
+            var elemento = document.getElementById('contenedorYear');
+            if (elemento.style.display === 'block') {
+                elemento.style.display = 'none'
+            }
+            elemento = document.getElementById('contenedorMonth');
+            if (elemento.style.display === 'block') {
+                elemento.style.display = 'none'
+            }
+            var elemento = document.getElementById('contenedorBoton');
             if (elemento.style.display === 'block') {
                 elemento.style.display = 'none'
             }
@@ -534,7 +557,7 @@ function inicializarTabla(data, endpoint){
                 scrollX: true, // Activa el scroll horizontal
                 columns: [
                     { title: "Proveedor" },
-                    { title: "Folio de EL Eventa" },
+                    //{ title: "Folio de EL Eventa" },
                     { title: "Fecha" },
                     { title: "Monto" },
                 ]
@@ -546,7 +569,7 @@ function inicializarTabla(data, endpoint){
             // Agregar los nuevos datos
             tabla.rows.add(data.map((CxP) => [
                 CxP.nombreProveedor, 
-                CxP.folioELV, 
+                //CxP.folioELV, 
                 formatoFecha(CxP.fechaMercancia), // Formatear la fecha antes de agregarla a la tabla
                 formatoMoneda(CxP.pagoPendiente)
             ])).draw();
@@ -554,6 +577,23 @@ function inicializarTabla(data, endpoint){
 
         break;
         case 'cuentasPorCobrar':
+
+            elemento = document.getElementById('contenedorGrupo');
+            if (elemento.style.display === 'block') {
+                elemento.style.display = 'none'
+            }
+            var elemento = document.getElementById('contenedorYear');
+            if (elemento.style.display === 'block') {
+                elemento.style.display = 'none'
+            }
+            elemento = document.getElementById('contenedorMonth');
+            if (elemento.style.display === 'block') {
+                elemento.style.display = 'none'
+            }
+            var elemento = document.getElementById('contenedorBoton');
+            if (elemento.style.display === 'block') {
+                elemento.style.display = 'none'
+            }
 
             document.getElementById('tableTitle').innerHTML = "Cuentas por cobrar";
 

@@ -26,7 +26,7 @@ def listar_ventas():
     ventas = Venta(fkSocioComercial=grupo, fechaVenta=year)
     ventas = ventas.listar_ventas()
 
-    if grupo == 621:
+    if grupo == None:
         return jsonify(ventas), 200
     else:
         for venta in ventas:

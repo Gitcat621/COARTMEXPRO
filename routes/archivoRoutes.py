@@ -12,6 +12,7 @@ from models.articulo import Articulo
 from models.resumen import Resumen
 from models.venta import Venta
 from database import Database
+import time
 
 archivo_bp = Blueprint('archivo_bp', __name__)
 
@@ -25,7 +26,27 @@ if not os.path.exists(UPLOAD_FOLDER):
 @archivo_bp.route('/archivos', methods=['GET'])
 def listar_archivos():
     """Endpoint para obtener todos los registros"""
-    archivos = Archivo.listar_archivos()
+
+    print("🔍 Se listaron los archivos")
+    archivos = []
+
+    for idx, archivo in enumerate(os.listdir(UPLOAD_FOLDER), start=1):
+        ruta_archivo = os.path.join(UPLOAD_FOLDER, archivo)
+
+        if os.path.isfile(ruta_archivo):  # Verificar que sea un archivo
+            tamaño = os.path.getsize(ruta_archivo)  # Tamaño en bytes
+            fecha_creacion = time.ctime(os.path.getctime(ruta_archivo))  # Fecha de creación
+            ruta_absoluta = os.path.abspath(ruta_archivo)  # Ruta absoluta
+            
+            # Crear un objeto Archivo y agregarlo a la lista
+            archivos.append({
+                "pkArchivo": idx,
+                "nombreArchivo": archivo,
+                "peso": tamaño,
+                "fechaSubida": fecha_creacion,
+                "ruta": ruta_absoluta
+            })
+
     return jsonify(archivos), 200
 
 # ------------------ FUNCIONES DE LIMPIEZA ------------------
@@ -33,7 +54,8 @@ def listar_archivos():
 import pandas as pd
 
 def procesar_archivo(ruta_archivo):
-    """Procesa un archivo Excel y almacena los datos en la base de datos."""
+    mensajes = []  # Aquí guardamos todos los mensajes de resultado
+
     try:
         hojas_excel = {
             "COMPRA DE MERCANCIA": ["A:E"],
@@ -45,38 +67,41 @@ def procesar_archivo(ruta_archivo):
         }
 
         for hoja, columnas in hojas_excel.items():
-            df = pd.read_excel(ruta_archivo, usecols=columnas[0], sheet_name=hoja)
-            if df.empty:
-                print(f"⚠️ Hoja '{hoja}' vacía. Saltando...")
-                continue
-
-            # Validar columnas B y C para la hoja de INVENTARIO (índices 1 y 2)
-            if hoja == "INVENTARIO":
-                if df.iloc[:, 1].isna().all() and df.iloc[:, 2].isna().all():
-                    print(f"⚠️ Columnas B y C vacías en la hoja '{hoja}'. Saltando hoja...")
+            try:
+                df = pd.read_excel(ruta_archivo, usecols=columnas[0], sheet_name=hoja)
+                if df.empty:
+                    mensajes.append(f"⚠️ Hoja '{hoja}' vacía. Saltada.")
                     continue
-                procesar_inventario(df)
 
-            elif hoja == "COMPRA DE MERCANCIA":
-                procesar_compras(df)
-            elif hoja == "CUENTAS POR PAGAR":
-                procesar_cuentas_por_pagar(df)
-            elif hoja == "ORDEN-VENTA-ENTREGA-FACTURA":
-                procesar_ordenes(df)
-                procesar_facturas(df)
-            elif hoja == "CUENTAS COBRADAS":
-                procesar_cuentas_cobradas(df)
-            elif hoja == "GASTOS":
-                procesar_gastos(df)
+                if hoja == "INVENTARIO":
+                    if df.iloc[:, 1].isna().all() and df.iloc[:, 2].isna().all():
+                        mensajes.append(f"⚠️ Columnas B y C vacías en '{hoja}'. Saltada.")
+                        continue
+                    mensaje = procesar_inventario(df)
+                elif hoja == "COMPRA DE MERCANCIA":
+                    mensaje = procesar_compras(df)
+                elif hoja == "CUENTAS POR PAGAR":
+                    mensaje = procesar_cuentas_por_pagar(df)
+                elif hoja == "ORDEN-VENTA-ENTREGA-FACTURA":
+                    mensaje1 = procesar_ordenes(df)
+                    mensaje2 = procesar_facturas(df)
+                    mensajes.extend([mensaje1, mensaje2])
+                    continue
+                elif hoja == "CUENTAS COBRADAS":
+                    mensaje = procesar_cuentas_cobradas(df)
+                elif hoja == "GASTOS":
+                    mensaje = procesar_gastos(df)
 
-        return True
+                mensajes.append(mensaje)
+            except Exception as e:
+                mensajes.append(f"❌ Error al procesar hoja '{hoja}': {str(e)}")
+
+        return mensajes  # Se devuelve la lista con mensajes
 
     except Exception as e:
-        print(f"❌ Error al procesar el archivo: {e}")
-        return False
+        return [f"❌ Error general al procesar el archivo: {str(e)}"]
 
-# Eliminar doble espacio o mas
-#df["tu_columna"] = df["tu_columna"].astype(str).str.replace(r'\s{2,}', ' ', regex=True)
+
 
 def procesar_compras(df):
     """Procesa y guarda compras de mercancía dentro de una única transacción."""
@@ -86,6 +111,8 @@ def procesar_compras(df):
         db.connection.autocommit = False  # Desactivar autocommit para manejar la transacción manualmente
 
         df["Proveedor"] = df["Proveedor"].str.strip()
+        df["Proveedor"] = df["Proveedor"].astype(str).str.replace(r'\s{2,}', ' ', regex=True)
+
         df["Fecha"] = pd.to_datetime(df["Fecha"], errors="coerce").dt.strftime('%Y-%m-%d')
         df.fillna("N/A", inplace=True)
 
@@ -107,10 +134,12 @@ def procesar_compras(df):
 
         db.connection.commit()  # Confirmar la transacción si todas las inserciones fueron exitosas
         print("🆗 Todas las compras fueron insertadas exitosamente.")
+        return "🆗 Compras procesadas correctamente."
 
     except Exception as e:
         db.connection.rollback()  # Revertir todos los cambios si ocurre algún error
         print(f"🛑 Error en la transacción: {e}")
+        return f"❌ Error en compras: {str(e)}"
 
     finally:
         db.close()  # Cerrar conexión
@@ -134,11 +163,13 @@ def procesar_cuentas_por_pagar(df):
                     raise Exception(f"Error al actualizar la compra con folio {fila['Folio ELV']}")
 
         db.connection.commit()  # Confirmar la transacción si todo salió bien
-        print("🆗Cuentas por pagar procesadas exitosamente.")
+        print("🆗 Cuentas por pagar procesadas exitosamente.")
+        return "🆗 Cuentas por pagar procesadas exitosamente."
 
     except Exception as e:
         db.connection.rollback()  # Revertir todos los cambios en caso de error
         print(f"🛑 Error en la transacción de cuentas por pagar: {e}")
+        return f"🛑 Error en la transacción de cuentas por pagar: {e}"
 
     finally:
         db.close()
@@ -254,11 +285,13 @@ def procesar_ordenes(df):
                     raise Exception(f"Error al insertar orden {fila['No. OC']}")
                 
         db.connection.commit()
-        print("🆗 Órdenes procesadas exitosamente.")   
+        print("🆗 Órdenes procesadas exitosamente.") 
+        return "🆗 Órdenes procesadas exitosamente."  
 
     except Exception as e:
         db.connection.rollback()
         print(f"🛑 Error en la transacción de órdenes: {e}")
+        return f"🛑 Error en la transacción de órdenes: {e}"
 
     finally:
         db.close()
@@ -287,16 +320,25 @@ def procesar_facturas(df):
             'MORPHO':'MORPHO TRAVEL'
         })
 
+        # Eliminar duplicados
         facturas_unicas = df.drop_duplicates(subset=["No. OC", "Fecha OC", "Socio comercial"]).copy()
 
+        # Reemplazar NaN por None (usualmente útil para columnas numéricas o fechas)
         facturas_unicas["Nota credito"] = facturas_unicas["Nota credito"].apply(lambda x: None if pd.isna(x) else x)
         facturas_unicas["Monto descuento"] = facturas_unicas["Monto descuento"].apply(lambda x: None if pd.isna(x) else x)
         facturas_unicas["No. OC"] = facturas_unicas["No. OC"].apply(lambda x: None if pd.isna(x) else x)
 
+        # Fechas en formato correcto
         facturas_unicas["Fecha emision"] = pd.to_datetime(facturas_unicas["Fecha emision"], errors="coerce").dt.strftime('%Y-%m-%d')
         facturas_unicas["Fecha de vencimiento"] = pd.to_datetime(facturas_unicas["Fecha de vencimiento"], errors="coerce").dt.strftime('%Y-%m-%d')
+        
+        # Se llenan los valores vacios con un valor default
+        facturas_unicas["Fecha emision"] = facturas_unicas["Fecha emision"].apply(lambda x: None if pd.isna(x) else x)
+        facturas_unicas["Sub total factura"] = facturas_unicas["Sub total factura"].fillna("N/A")
+        facturas_unicas["Total factura"] = facturas_unicas["Total factura"].fillna("N/A")
+        facturas_unicas["Razon social"] = facturas_unicas["Razon social"].fillna("N/A")
+        facturas_unicas["Fecha de vencimiento"] = facturas_unicas["Fecha de vencimiento"].apply(lambda x: None if pd.isna(x) else x)
 
-        facturas_unicas.fillna("N/A", inplace=True)
 
         with db.connection.cursor() as cursor:
             for _, fila in facturas_unicas.iterrows():
@@ -319,9 +361,11 @@ def procesar_facturas(df):
 
         db.connection.commit()  # Confirmar la transacción si todas las inserciones fueron exitosas
         print("🆗 Todas las facturas fueron insertadas exitosamente.")
+        return "🆗 Todas las facturas fueron insertadas exitosamente."
     except Exception as e:
         db.connection.rollback()
         print(f"🛑 Error en la transacción de facturas: {e}")
+        return f"🛑 Error en la transacción de facturas: {e}"
 
     finally:
         db.close()
@@ -349,10 +393,12 @@ def procesar_cuentas_cobradas(df):
 
         db.connection.commit()
         print("🆗 Cuentas cobradas procesadas exitosamente.")   
+        return "🆗 Cuentas cobradas procesadas exitosamente."
 
     except Exception as e:
         db.connection.rollback()
         print(f"🛑 Error en la transacción de factura: {e}")
+        return f"🛑 Error en la transacción de factura: {e}"
 
     finally:
         db.close()
@@ -366,9 +412,17 @@ def procesar_gastos(df):
         db.connection.autocommit = False  # Desactivar autocommit para manejar la transacción manualmente
 
         df["Motivo"] = df["Motivo"].str.strip()
-        df["Tipo de gasto"] = df["Tipo de gasto"].str.strip()
-        df["Tipo de gasto"] = df["Tipo de gasto"].replace({"FIJO": 1, "VARIABLE": 2}).astype("Int64")
+
+        # Asegurar tipo string y limpieza de espacios
+        df["Tipo de gasto"] = df["Tipo de gasto"].astype(str).str.strip()
+
+        # Mapeo explícito de texto a números
+        mapa = {"FIJO": 1, "VARIABLE": 2}
+        df["Tipo de gasto"] = df["Tipo de gasto"].map(mapa).astype("Int64")
+
+        # Conversión de fecha segura
         df["Fecha"] = pd.to_datetime(df["Fecha"], errors="coerce").dt.strftime('%Y-%m-%d')
+
 
         with db.connection.cursor() as cursor:
             for _, fila in df.iterrows():
@@ -394,9 +448,11 @@ def procesar_gastos(df):
             
         db.connection.commit()  # Confirmar la transacción si todas las inserciones fueron exitosas
         print("🆗 Todas los gastos fueron insertados exitosamente.")    
+        return "🆗 Todas los gastos fueron insertados exitosamente."
     except Exception as e:
         db.connection.rollback()
         print(f"🛑 Error en la transacción de gastos: {e}")
+        return f"🛑 Error en la transacción de gastos: {e}"
 
     finally:
         db.close()
@@ -424,9 +480,11 @@ def procesar_inventario(df):
     
         db.connection.commit()  # Confirmar la transacción si todas las inserciones fueron exitosas
         print("🆗 Todas las existencias fueron insertadas exitosamente.")
+        return "🆗 Todas las existencias fueron insertadas exitosamente."
     except Exception as e:
         db.connection.rollback()
         print(f"🛑 Error en la transacción de existencias: {e}")
+        return f"🛑 Error en la transacción de existencias: {e}"
 
     finally:
         db.close()
@@ -435,6 +493,8 @@ def procesar_inventario(df):
 
 @archivo_bp.route('/archivos', methods=['POST'])
 def crear_archivo():
+
+    print("💽 Se ha subido un archivo")
 
     if 'archivo' not in request.files:
         return jsonify({'mensaje': 'No se ha enviado ningún archivo'}), 400
@@ -449,35 +509,21 @@ def crear_archivo():
     if os.path.exists(ruta_archivo):
         return jsonify({'mensaje': 'El archivo ya existe'}), 404
 
-    archivo.save(ruta_archivo)  # Guardar el archivo en la carpeta
-    
-    # Procesar el archivo y almacenar los datos
-    if procesar_archivo(ruta_archivo):
-        # Aquí puedes agregar la lógica para guardar los datos en la base de datos. 
+    try:
+        archivo.save(ruta_archivo)
+        mensajes = procesar_archivo(ruta_archivo)
 
-        # Obtener la información del archivo 
-        nombreArchivo = archivo.filename 
-        peso = len(archivo.read())
-        fechaSubida = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        ruta = ruta_archivo
+        if any("❌" in m for m in mensajes):
+            os.remove(ruta_archivo)
+            return jsonify({'mensaje': 'Error al procesar el archivo', 'detalles': mensajes}), 500
+        elif any("🛑" in m for m in mensajes):
+            return jsonify({'mensaje': 'El archivo fue procesado con errores.', 'detalles': mensajes}), 200
+        else:
+            return jsonify({'mensaje': 'Archivo procesado correctamente.', 'detalles': mensajes}), 201
 
-        if not isinstance(nombreArchivo, str): 
-            return jsonify({'mensaje': 'nombreArchivo debe ser una cadena de texto'}), 400 
-        if not isinstance(peso, (int, float)): 
-            return jsonify({'mensaje': 'peso debe ser un número'}), 400 
-        if not isinstance(fechaSubida, str): 
-            return jsonify({'mensaje': 'fechaSubida debe ser una cadena de texto'}), 400 
-        if not isinstance(ruta, str): 
-            return jsonify({'mensaje': 'ruta debe ser una cadena de texto'}), 400 
-        if not nombreArchivo or peso is None or not fechaSubida or not ruta: 
-            return jsonify({'mensaje': 'Faltan datos'}), 400 
-        
-        archivo = Archivo(nombreArchivo=nombreArchivo, peso=peso, fechaSubida=fechaSubida, ruta=ruta)
-        if archivo.crear_archivo():
-            return jsonify({'mensaje': 'Archivo procesado y datos almacenados correctamente'}), 201
-    else:
+    except Exception as e:
         os.remove(ruta_archivo)
-        return jsonify({'mensaje': 'Error al procesar el archivo'}), 500
+        return jsonify({'mensaje': 'Error al procesar el archivo', 'detalles': ''}), 500
 
 
 @archivo_bp.route('/archivos', methods=['PUT'])
@@ -490,12 +536,14 @@ def editar_archivo():
 @archivo_bp.route('/archivos', methods=['DELETE'])
 def eliminar_archivo():
     """Endpoint para eliminar un archivo tanto del servidor como de la base de datos"""
+
+    print("🗑️ Se ha eliminado un archivo")
+
     data = request.json
-    pkArchivo = data.get('pkArchivo')
     nombreArchivo = data.get('nombreArchivo')
 
-    if not nombreArchivo or not pkArchivo:
-        return jsonify({'mensaje': 'Faltan datos'}), 400
+    if not nombreArchivo:
+        return jsonify({'mensaje': 'No se obtuvo el nombre del archivo'}), 400
 
     # Ruta completa del archivo
     ruta_archivo = os.path.join(UPLOAD_FOLDER, nombreArchivo)
@@ -505,14 +553,8 @@ def eliminar_archivo():
         return jsonify({'mensaje': 'El archivo no existe'}), 404
 
     try:
-        # Eliminar el archivo físico
         os.remove(ruta_archivo)
-
-        # Si el archivo se eliminó correctamente, eliminar el registro en la BD
-        if Archivo.eliminar_archivo(pkArchivo):
-            return jsonify({'mensaje': 'Archivo eliminado correctamente'}), 200
-        else:
-            return jsonify({'mensaje': 'Error al eliminar el registro en la base de datos'}), 500
-
+        
+        return jsonify({'mensaje': 'Archivo eliminado correctamente'}), 200
     except Exception as e:
         return jsonify({'mensaje': f'Error al eliminar el archivo: {str(e)}'}), 500

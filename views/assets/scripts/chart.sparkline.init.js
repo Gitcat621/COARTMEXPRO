@@ -21,7 +21,7 @@
 			$("#traffic-sparkline-chart-1").sparkline("html", {
 				width: "120",
 				height: "35",
-				lineColor: "#00bf4f",
+				lineColor: "#17a2b8",
 				fillColor: !1,
 				spotColor: !1,
 				minSpotColor: !1,
@@ -31,7 +31,7 @@
 			$("#traffic-sparkline-chart-1").sparkline([0, 5, 3, 7, 5, 10, 3, 6, 5, 10], {
 				width: "120",
 				height: "35",
-				lineColor: "#00bf4f",
+				lineColor: "#17a2b8",
 				fillColor: !1,
 				spotColor: !1,
 				minSpotColor: !1,
@@ -44,7 +44,7 @@
 				barWidth: '5',
 				resize: true,
 				barSpacing: '5',
-				barColor: '#00bf4f'
+				barColor: '#17a2b9'
 			});
 			$('#traffic-sparkline-chart-3').sparkline([5,5, 6,6, 7,7,6,6, 7,7, 8,8,7,7, 8,8, 9,9,8,8, 9,9, 10,10,], {
 				type: 'discrete',

@@ -36,7 +36,7 @@ class Articulo:
         JOIN categoria_articulos ca ON ca.pkCategoriaArticulo = a.fkCategoriaArticulo 
         JOIN proveedores p ON p.pkProveedor = a.fkProveedor
         JOIN existencias e ON e.fkCodigoArticulo = a.codigoArticulo
-        WHERE YEAR(e.fechaExistencia) = YEAR({year}) AND MONTH(e.fechaExistencia) = MONTH({month})
+        WHERE YEAR(e.fechaExistencia) = {year} AND MONTH(e.fechaExistencia) = {month}
         '''
 
         print(consulta)

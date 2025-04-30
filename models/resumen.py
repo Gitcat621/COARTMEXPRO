@@ -155,12 +155,10 @@ class Resumen:
 
         -- Cantidad de socios comerciales negociados
         COALESCE((SELECT COUNT(DISTINCT sc.nombreSocio) 
-            FROM articulos_ventas av 
-            JOIN ordenes_compra oc ON oc.pkOrdenCompra = av.fkOrdenCompra 
-            JOIN respuestas_almacen ra ON ra.fkOrdenCompra = oc.pkOrdenCompra 
-            JOIN socios_comerciales sc ON sc.pkSocioComercial = oc.fkSocioComercial 
-            WHERE YEAR(ra.fechaEntrega) = {year}  
-            AND MONTH(ra.fechaEntrega) 
+            FROM ventas v 
+            JOIN socios_comerciales sc ON sc.pkSocioComercial = v.fkSocioComercial 
+            WHERE YEAR(v.fechaVenta) = {year} 
+            AND MONTH(v.fechaVenta) 
             IN ({meses})), 0) AS sociosNegociados,
 
         -- Total de artículos vendidos
@@ -299,8 +297,9 @@ class Resumen:
         WHERE YEAR(ra.fechaEntrega) = YEAR(CURDATE()) AND MONTH(ra.fechaEntrega) IN ({meses})
         GROUP BY a.nombreArticulo
         ORDER BY totalCantidadVendida DESC
-        LIMIT 20
+  
         '''
+        #
 
         print(consulta)
 
@@ -352,33 +351,7 @@ class Resumen:
         WHERE YEAR(ra.fechaEntrega) = YEAR(CURDATE()) AND MONTH(ra.fechaEntrega) IN ({meses})
         GROUP BY a.nombreArticulo
         ORDER BY monto DESC
-        LIMIT 20;
-        '''
-
-        print(consulta)
-
-        resultado = db.execute_query(consulta)
-        db.close()
-
-        return resultado
-
-    @staticmethod
-    def listar_top4(meses_str):
-
-        db = Database()
-
-        meses = ", ".join(str(int(mes)) for mes in meses_str)  # Convertir y unir
-
-        consulta = f'''
-        SELECT a.nombreArticulo, SUM(av.cantidadVenta) AS totalCantidadVendida
-        FROM articulos_ventas av
-        JOIN articulos a ON a.codigoArticulo = av.fkCodigoArticulo
-        JOIN ordenes_compra oc ON oc.pkOrdenCompra = av.fkOrdenCompra
-        JOIN respuestas_almacen ra ON ra.fkOrdenCompra = oc.pkOrdenCompra 
-        WHERE YEAR(ra.fechaEntrega) = YEAR(CURDATE()) AND MONTH(ra.fechaEntrega) IN ({meses})
-        GROUP BY a.nombreArticulo
-        ORDER BY totalCantidadVendida ASC
-        LIMIT 20;
+        
         '''
 
         print(consulta)
@@ -486,6 +459,30 @@ class Resumen:
         AND MONTH(oc.fechaOrdenCompra) IN ({meses}) 
         AND av.fkCodigoArticulo = ao.fkCodigoArticulo
         GROUP BY oc.numeroOrdenCompra
+        '''
+
+        print(consulta)
+
+        resultado = db.execute_query(consulta)
+        db.close()
+
+        return resultado
+    
+    @staticmethod
+    def listar_sociosEnVentas(meses_str, year):
+
+        db = Database()
+
+        meses = ", ".join(str(int(mes)) for mes in meses_str)  # Convertir y unir
+
+        consulta = f'''
+        SELECT sc.nombreSocio, SUM(v.montoVenta) AS totalVenta, gs.nombreGrupoSocio
+        FROM ventas v 
+        JOIN socios_comerciales sc ON sc.pkSocioComercial = v.fkSocioComercial 
+        JOIN grupos_socio gs ON gs.pkGrupoSocio = sc.fkGrupoSocio
+        WHERE YEAR(v.fechaVenta) = {year} 
+        AND MONTH(v.fechaVenta) IN ({meses}) 
+        GROUP BY sc.nombreSocio ORDER BY totalVenta DESC;
         '''
 
         print(consulta)

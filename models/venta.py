@@ -20,7 +20,7 @@ class Venta:
 
         db = Database()
 
-        if self.fkSocioComercial == 621:
+        if self.fkSocioComercial == None:
             filtros = []
             if self.fechaVenta:
                 try:
@@ -72,9 +72,7 @@ class Venta:
             JOIN socios_comerciales sc ON sc.pkSocioComercial = v.fkSocioComercial
             JOIN grupos_socio gs ON gs.pkGrupoSocio = sc.fkGrupoSocio
             {clausula_where}
-            GROUP BY 
-                sc.nombreSocio, 
-                v.fechaVenta;
+
             '''
 
             print(consulta)

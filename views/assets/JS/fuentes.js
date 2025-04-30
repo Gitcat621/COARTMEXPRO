@@ -27,8 +27,8 @@ $(document).ready(function() {
         columns: [
             { title: "Nombre" },
             { title: "Peso / Tamaño" },
-            { title: "fecha de subida" },
-            { title: "ruta de almacenamiento" },
+            { title: "Fecha de subida" },
+            { title: "Ruta de almacenamiento" },
             {
                 title: "Opciones",
                 render: function (data, type, row) { // 'row' contiene toda la fila de datos
@@ -47,12 +47,13 @@ $(document).ready(function() {
     // Editar
     $('#fuenteTable').on('click', '.editar-btn', function () {
 
-        const rowData = $(this).data('row'); 
+        // const rowData = $(this).data('row'); 
 
-        const nombreArchivo = rowData[0];
-        const pkArchivo = rowData[4];
+        // const nombreArchivo = rowData[0];
+        // const pkArchivo = rowData[4];
 
-        abrirModal(2,pkArchivo, nombreArchivo);
+        // abrirModal(2,pkArchivo, nombreArchivo);
+        alert("Como presionaste este boton?");
     });
 
     // Eliminar
@@ -61,14 +62,16 @@ $(document).ready(function() {
         const rowData = $(this).data('row');
 
         const nombreArchivo = rowData[0];
-        const pkArchivo = rowData[4];
+
 
         var modal = $('[data-remodal-id="remodal"]').remodal();
+
+        document.getElementById("itemDelete").textContent = nombreArchivo;
 
         modal.open();
 
         $(document).on("confirmation", ".remodal", function () {
-            eliminarArchivo(pkArchivo, nombreArchivo);    
+            eliminarArchivo(nombreArchivo);    
         });
         
     });
@@ -149,14 +152,22 @@ async function agregarArchivo() {
 
         // Mostrar mensaje de éxito o error
 
-        const tipoMensaje = data.mensaje.includes('correctamente') ? 'success' : 'error';
+        const tipoMensaje = (
+            data.mensaje.includes('correctamente') || 
+            data.mensaje.includes('con errores')
+        ) ? 'success' : 'error';
+        
+
+        const listaHTML = data.detalles.map(m => `<li>${m}</li>`).join("");
 
         Swal.fire({
-
-            title: tipoMensaje === 'success' ? "Archivo subido" : "No se pudo subir el archivo",
-            text: data.mensaje,
-            icon: tipoMensaje,
+          width: 500,
+          title: tipoMensaje === 'success' ? "Archivo subido" : "No se pudo subir el archivo",
+          html: `<p>${data.mensaje}</p><ul>${listaHTML}</ul>`,
+          icon: tipoMensaje,
         });
+          
+
 
         toastr[tipoMensaje](data.mensaje, 'Resultado', {"closeButton": true});
 
@@ -267,10 +278,10 @@ async function editarArchivo(pkArchivo, nombreArchivo) {
 }
 
 
-async function eliminarArchivo(pkArchivo, nombreArchivo) {
+async function eliminarArchivo(nombreArchivo) {
 
     // Verificar si llega el id
-    if (!pkArchivo || !nombreArchivo) {
+    if (!nombreArchivo) {
         toastr.warning('No se pudo obtener el elemento', 'Advertencia', { "closeButton": true });
         return;
     }
@@ -282,7 +293,7 @@ async function eliminarArchivo(pkArchivo, nombreArchivo) {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ pkArchivo, nombreArchivo })
+            body: JSON.stringify({ nombreArchivo })
         });
 
         const data = await response.json();
@@ -332,3 +343,99 @@ function abrirModal(modo, pkArchivo, nombreArchivo) {
 }
 
 
+document.getElementById('archivoSubido').addEventListener('change', function(e) {
+    const archivo = e.target.files[0];
+    if (!archivo) return;
+
+    // Validar que sea un archivo de Excel
+    const extensionesValidas = ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel'];
+    if (!extensionesValidas.includes(archivo.type)) {
+        alert('Por favor, selecciona un archivo de Excel (.xlsx o .xls)');
+        return;
+    }
+
+    const lector = new FileReader();
+
+    lector.onload = function(e) {
+        const datos = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(datos, { type: 'array' });
+
+        // Mostrar nombres de hojas
+        const hojas = workbook.SheetNames;
+        const contenedor = document.getElementById('contenidoExcel');
+        contenedor.innerHTML = ''; // Limpiar contenido previo
+
+        hojas.forEach(nombreHoja => {
+            const hoja = workbook.Sheets[nombreHoja];
+            const datosJSON = XLSX.utils.sheet_to_json(hoja, { header: 1 }); // Array de arrays
+
+            // Contenedor con scroll
+            let tablaHTML = `<h4>Hoja: ${nombreHoja}</h4>
+                <div class='' style="overflow: auto; max-width: 100%; max-height: 400px; border: 1px solid #ccc;">
+                    <table class='table table-bordered table-hover' cellpadding="5" style="width: max-content;">
+                        `;
+            datosJSON.forEach(fila => {
+                tablaHTML += "<tr>";
+                fila.forEach(celda => {
+                    tablaHTML += `<td>${celda ?? ''}</td>`;
+                });
+                tablaHTML += "</tr>";
+            });
+            tablaHTML += "</table></div><br>";
+            contenedor.innerHTML += tablaHTML;
+        });
+    };
+
+    lector.readAsArrayBuffer(archivo);
+});
+
+//Mas bonita y datatable (Tiene errores)
+// document.getElementById('archivoExcel').addEventListener('change', function (e) {
+//     const archivo = e.target.files[0];
+//     if (!archivo) return;
+
+//     const lector = new FileReader();
+
+//     lector.onload = function (e) {
+//         const datos = new Uint8Array(e.target.result);
+//         const workbook = XLSX.read(datos, { type: 'array' });
+
+//         const hojas = workbook.SheetNames;
+//         const contenedor = document.getElementById('contenidoExcel');
+//         contenedor.innerHTML = ''; // Limpiar previo
+
+//         hojas.forEach((nombreHoja, index) => {
+//             const hoja = workbook.Sheets[nombreHoja];
+//             const datosJSON = XLSX.utils.sheet_to_json(hoja, { header: 1 });
+
+//             if (datosJSON.length === 0) return;
+
+//             const encabezados = datosJSON[0];
+//             const filas = datosJSON.slice(1).filter(fila => fila.length === encabezados.length);
+
+//             // Crear HTML con tabla única
+//             const idTabla = `tablaExcel_${index}`;
+//             contenedor.innerHTML += `
+//                 <div style="margin-bottom: 30px;">
+//                     <h4>Hoja: ${nombreHoja}</h4>
+//                     <div style="overflow-x:auto">
+//                         <table id="${idTabla}" class="display nowrap" style="width:100%">
+//                             <thead><tr>${encabezados.map(col => `<th>${col}</th>`).join('')}</tr></thead>
+//                             <tbody></tbody>
+//                         </table>
+//                     </div>
+//                 </div>
+//             `;
+
+//             // Inicializar DataTable luego de crear el DOM
+//             const tabla = $(`#${idTabla}`).DataTable({
+//                 data: filas,
+//                 scrollX: true,
+//                 pageLength: 10,
+//                 responsive: true
+//             });
+//         });
+//     };
+
+//     lector.readAsArrayBuffer(archivo);
+// });

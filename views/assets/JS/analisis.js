@@ -15,7 +15,6 @@ $(document).ready(function () {
 });
 
 const trigger = document.getElementById('clientes');
-const trigger2 = document.getElementById('articulosVendidos');
 const popup = document.getElementById('popup');
 const popupCard = document.getElementById('popupCard');
 const closeBtn = document.getElementById('closePopup');
@@ -29,17 +28,6 @@ trigger.addEventListener('click', () => {
     popupCard.style.top = `${rect.bottom + window.scrollY - 15}px`;
     popupCard.style.left = `${rect.left + window.scrollX}px`;
 });
-
-trigger2.addEventListener('click', () => {
-    popup.style.display = 'block';
-
-    const rect = trigger2.getBoundingClientRect();
-
-    // Posición en pantalla
-    popupCard.style.top = `${rect.bottom + window.scrollY - 15}px`;
-    popupCard.style.left = `${rect.left + window.scrollX - 130}px`;
-});
-
 
 closeBtn.addEventListener('click', () => {
     popup.style.display = 'none';
@@ -227,7 +215,6 @@ async function cargarTops(meses) {
         mostrarTop1(data.top1);
         mostrarTop2(data.top2);
         mostrarTop3(data.top3);
-        mostrarTop4(data.top4);
 
     } catch (error) {
 
@@ -343,44 +330,16 @@ function mostrarTop3(data) {
 }
 
 
-function mostrarTop4(data) {
-    let tabla = document.getElementById('top4');
-    tabla.innerHTML = "";
-
-    let totalCantidad = 0;
-
-    // Mapear los datos a la tabla y acumular el total
-    data.forEach(function(item) {
-        let filaHTML = `
-        <tr>
-            <td>${item.nombreArticulo}</td>
-            <td>${item.totalCantidadVendida}</td>
-        </tr>
-        `;
-
-        tabla.innerHTML += filaHTML;
-
-        totalCantidad += Number(item.totalCantidadVendida);
-    });
-
-    // Agregar fila con el total al final
-    let filaTotalHTML = `
-    <tr>
-        <td><strong>Total</strong></td>
-        <td><strong>${totalCantidad}</strong></td>
-    </tr>
-    `;
-
-    tabla.innerHTML += filaTotalHTML;
-}
-
 //Cargar metricas
 async function cargarMetricasServicio(meses) {
+
+    const year = new Date().getFullYear();
+
     const params = new URLSearchParams();
     meses.forEach((mes) => params.append("items[]", mes));
 
     try {
-        const response = await fetch(`http://127.0.0.1:5000/coartmex/servicio?${params.toString()}`, {
+        const response = await fetch(`http://127.0.0.1:5000/coartmex/detalles?${params.toString()}&year=${year}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -393,7 +352,20 @@ async function cargarMetricasServicio(meses) {
         }
 
         const data = await response.json();
-        let tabla = document.getElementById('servicio');
+
+        mostrarServicio(data.servicio);
+        mostrarSociosEnVentas(data.sociosEnVentas);
+        
+
+    } catch (error) {
+        console.error("Error al cargar los datos:", error);
+        toastr.error('La petición de métricas no se pudo conectar', 'Error', {"closeButton": true});
+    }
+}
+
+function mostrarServicio(data){
+
+    let tabla = document.getElementById('servicio');
         tabla.innerHTML = "";
 
         let totalPorcentaje = 0;
@@ -426,10 +398,86 @@ async function cargarMetricasServicio(meses) {
         `;
 
         tabla.innerHTML += filaTotalHTML;
+}
 
-    } catch (error) {
-        console.error("Error al cargar los datos:", error);
-        toastr.error('La petición de métricas no se pudo conectar', 'Error', {"closeButton": true});
-    }
+let agrupadoPorGrupo = false;
+
+function alternarVista() {
+    agrupadoPorGrupo = !agrupadoPorGrupo;
+
+    // Alternar visibilidad de tablas
+    document.getElementById('tablaGrupos').style.display = agrupadoPorGrupo ? "none" : "block";
+    document.getElementById('tablaSocios').style.display = agrupadoPorGrupo ? "block" : "none";
+    
+}
+
+// Función para generar ambas tablas
+function mostrarSociosEnVentas(socios) {
+    const tbodySocios = document.getElementById('sociosEnVentas');
+    const tbodyGrupos = document.getElementById('gruposEnVentas');
+
+    tbodySocios.innerHTML = "";
+    tbodyGrupos.innerHTML = "";
+
+    let totalSocios = socios.reduce((acc, socio) => acc + parseFloat(socio.totalVenta), 0);
+    let grupos = {};
+
+    socios.forEach(socio => {
+        // Construcción de la tabla de socios
+        const monto = parseFloat(socio.totalVenta);
+        const porcentaje = ((monto / totalSocios) * 100).toFixed(2);
+        const montoFormateado = monto.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
+
+        tbodySocios.innerHTML += `
+            <tr>
+                <td>${socio.nombreSocio}</td>
+                <td>${montoFormateado}</td>
+                <td>${porcentaje}%</td>
+            </tr>
+        `;
+
+        // Agrupación de datos por grupo
+        const grupo = socio.nombreGrupoSocio;
+        if (!grupos[grupo]) {
+            grupos[grupo] = { montoTotal: 0, socios: [] };
+        }
+        grupos[grupo].montoTotal += monto;
+        grupos[grupo].socios.push(socio.nombreSocio);
+    });
+
+    let totalGrupos = Object.values(grupos).reduce((acc, grupo) => acc + grupo.montoTotal, 0);
+
+    Object.entries(grupos).forEach(([grupo, datos]) => {
+        const montoFormateado = datos.montoTotal.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
+        const porcentaje = ((datos.montoTotal / totalGrupos) * 100).toFixed(2);
+
+        tbodyGrupos.innerHTML += `
+            <tr>
+                <td>${grupo} (${datos.socios.length} TIENDAS)</td>
+                <td>${montoFormateado}</td>
+                <td>${porcentaje}%</td>
+            </tr>
+        `;
+    });
+
+    // Fila total para ambas tablas
+    const totalFormateadoSocios = totalSocios.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
+    const totalFormateadoGrupos = totalGrupos.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
+
+    tbodySocios.innerHTML += `
+        <tr style="font-weight: bold; background-color: #f0f0f0;">
+            <td>TOTAL</td>
+            <td>${totalFormateadoSocios}</td>
+            <td>100%</td>
+        </tr>
+    `;
+
+    tbodyGrupos.innerHTML += `
+        <tr style="font-weight: bold; background-color: #f0f0f0;">
+            <td>TOTAL</td>
+            <td>${totalFormateadoGrupos}</td>
+            <td>100%</td>
+        </tr>
+    `;
 }
 
