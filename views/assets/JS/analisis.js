@@ -224,6 +224,23 @@ async function cargarTops(meses) {
     }
 }
 
+function toggleTabla() {
+    let contenedor = document.getElementById('contenedor-tabla');
+    if (contenedor.style.display === "block") {
+        contenedor.style.display = "none";
+    } else {
+        contenedor.style.display = "block";
+    }
+
+    let btn = document.getElementById('cerrar2');
+    if (btn.style.display === "block") {
+        btn.style.display = "none";
+    } else {
+        btn.style.display = "block";
+    }
+}
+
+// Función para llenar la tabla con los datos
 function mostrarTop1(data) {
     let tabla = document.getElementById('top1');
     tabla.innerHTML = "";
@@ -242,7 +259,6 @@ function mostrarTop1(data) {
         `;
 
         tabla.innerHTML += filaHTML;
-
         totalCantidad += Number(item.totalCantidadVendida);
     });
 
@@ -271,7 +287,7 @@ function mostrarTop2(data) {
 
         let filaHTML = `
         <tr>
-            <td>${item.nombreSocio}</td>
+            <td>${item.nombreGrupoSocio}</td>
             <td>${montoFormateado}</td>
         </tr>
         `;
@@ -363,121 +379,170 @@ async function cargarMetricasServicio(meses) {
     }
 }
 
-function mostrarServicio(data){
 
-    let tabla = document.getElementById('servicio');
-        tabla.innerHTML = "";
 
-        let totalPorcentaje = 0;
-        let cantidadElementos = data.length;
+function mostrarServicio(data) {
+    const tabla = document.getElementById('servicio');
+    tabla.innerHTML = "";
 
-        data.forEach(function(item) {
-            let porcentajeFormateado = Number(item.porcentajePromedioServicio).toFixed(2); // Limita a 2 decimales
+    // Agrupar por grupo
+    const grupos = {};
+    let totalOrdenadas = 0;
+    let totalVendidas = 0;
+    let totalPorcentaje = 0;
+    const ordenesUnicas = new Set();
 
-            let filaHTML = `
-                <tr>
-                    <td>${item.nombreSocio}</td>
-                    <td>${item.numeroOrdenCompra}</td>
-                    <td>${porcentajeFormateado}%</td>
+    data.forEach(item => {
+        const grupo = item.nombreGrupoSocio;
+        if (!grupos[grupo]) grupos[grupo] = { registros: [], ordenesUnicas: new Set() };
+        grupos[grupo].registros.push(item);
+        grupos[grupo].ordenesUnicas.add(item.numeroOrdenCompra);
+        ordenesUnicas.add(`${item.nombreGrupoSocio}::${item.numeroOrdenCompra}`);
+
+    });
+
+    let index = 0;
+    let htmlBuffer = "";
+
+    Object.entries(grupos).forEach(([grupoNombre, { registros, ordenesUnicas }]) => {
+        const grupoClase = `grupo${index}`;
+        let totalGrupoOrdenadas = 0;
+        let totalGrupoVendidas = 0;
+        let totalGrupoPorcentaje = 0;
+
+        htmlBuffer += `
+            <tr data-toggle="collapse" data-target=".${grupoClase}" class="clickable" style="cursor:pointer; background-color: #f0f0f0; font-weight:bold;">
+                <td colspan="5">${grupoNombre}</td>
+            </tr>
+        `;
+
+        registros.forEach(item => {
+            const porcentaje = parseFloat(item.porcentajePromedioServicio);
+            const ordenadas = parseInt(item.cantidadOrdenada);
+            const vendidas = parseInt(item.cantidadVendida);
+            const oc = item.numeroOrdenCompra;
+
+            htmlBuffer += `
+                <tr class="collapse ${grupoClase}">
+                    <td>${item.nombreSocio}<br><small>${item.codigoArticulo} - ${item.nombreArticulo}</small></td>
+                    <td class="text-center">${ordenadas}</td>
+                    <td class="text-center">${vendidas}</td>
+                    <td class="text-center">${oc}</td>
+                    <td class="text-center">${porcentaje.toFixed(2)}%</td>
                 </tr>
             `;
 
-            tabla.innerHTML += filaHTML;
-            totalPorcentaje += Number(item.porcentajePromedioServicio);
+            totalGrupoOrdenadas += ordenadas;
+            totalGrupoVendidas += vendidas;
+            totalGrupoPorcentaje += porcentaje;
+
+            totalOrdenadas += ordenadas;
+            totalVendidas += vendidas;
+            totalPorcentaje += porcentaje;
         });
 
-        // Calcular el promedio de los porcentajes
-        let promedioPorcentaje = (totalPorcentaje / cantidadElementos).toFixed(2);
+        const promedioGrupo = (totalGrupoPorcentaje / registros.length).toFixed(2);
 
-        // Agregar fila con el promedio al final
-        let filaTotalHTML = `
-        <tr>
-            <td colspan="2"><strong>Promedio</strong></td>
-            <td><strong>${promedioPorcentaje}%</strong></td>
-        </tr>
+        htmlBuffer += `
+            <tr class="collapse ${grupoClase}" style="font-weight: bold;">
+                <td>Totales del grupo</td>
+                <td class="text-center">${totalGrupoOrdenadas}</td>
+                <td class="text-center">${totalGrupoVendidas}</td>
+                <td class="text-center">${ordenesUnicas.size}</td>
+                <td class="text-center">${promedioGrupo}%</td>
+            </tr>
         `;
 
-        tabla.innerHTML += filaTotalHTML;
-}
+        index++;
+    });
 
-let agrupadoPorGrupo = false;
+    const promedioTotal = (totalPorcentaje / data.length).toFixed(2);
 
-function alternarVista() {
-    agrupadoPorGrupo = !agrupadoPorGrupo;
+    htmlBuffer += `
+        <tr style="background-color: #e0e0e0; font-weight: bold;">
+            <td>Total general</td>
+            <td class="text-center">${totalOrdenadas}</td>
+            <td class="text-center">${totalVendidas}</td>
+            <td class="text-center">${ordenesUnicas.size}</td>
+            <td class="text-center">${promedioTotal}%</td>
+        </tr>
+    `;
 
-    // Alternar visibilidad de tablas
-    document.getElementById('tablaGrupos').style.display = agrupadoPorGrupo ? "none" : "block";
-    document.getElementById('tablaSocios').style.display = agrupadoPorGrupo ? "block" : "none";
-    
+    tabla.innerHTML = htmlBuffer;
 }
 
 // Función para generar ambas tablas
-function mostrarSociosEnVentas(socios) {
-    const tbodySocios = document.getElementById('sociosEnVentas');
-    const tbodyGrupos = document.getElementById('gruposEnVentas');
-
-    tbodySocios.innerHTML = "";
-    tbodyGrupos.innerHTML = "";
-
-    let totalSocios = socios.reduce((acc, socio) => acc + parseFloat(socio.totalVenta), 0);
-    let grupos = {};
-
-    socios.forEach(socio => {
-        // Construcción de la tabla de socios
-        const monto = parseFloat(socio.totalVenta);
-        const porcentaje = ((monto / totalSocios) * 100).toFixed(2);
-        const montoFormateado = monto.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
-
-        tbodySocios.innerHTML += `
-            <tr>
-                <td>${socio.nombreSocio}</td>
-                <td>${montoFormateado}</td>
-                <td>${porcentaje}%</td>
-            </tr>
-        `;
-
-        // Agrupación de datos por grupo
-        const grupo = socio.nombreGrupoSocio;
-        if (!grupos[grupo]) {
-            grupos[grupo] = { montoTotal: 0, socios: [] };
-        }
-        grupos[grupo].montoTotal += monto;
-        grupos[grupo].socios.push(socio.nombreSocio);
+function mostrarSociosEnVentas(data) {
+    
+      
+    // 1. Agrupar por grupo
+    const grupos = {};
+    let totalGeneral = 0;
+    
+    data.forEach(item => {
+    const grupo = item.nombreGrupoSocio;
+    const venta = parseFloat(item.totalVenta);
+    if (!grupos[grupo]) grupos[grupo] = [];
+    grupos[grupo].push({ socio: item.nombreSocio, venta });
+    totalGeneral += venta;
     });
+    
+    // 2. Renderizar tabla
+    const tbody = document.getElementById("sociosEnVentas");
+    tbody.innerHTML = "";
 
-    let totalGrupos = Object.values(grupos).reduce((acc, grupo) => acc + grupo.montoTotal, 0);
-
-    Object.entries(grupos).forEach(([grupo, datos]) => {
-        const montoFormateado = datos.montoTotal.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
-        const porcentaje = ((datos.montoTotal / totalGrupos) * 100).toFixed(2);
-
-        tbodyGrupos.innerHTML += `
-            <tr>
-                <td>${grupo} (${datos.socios.length} TIENDAS)</td>
-                <td>${montoFormateado}</td>
-                <td>${porcentaje}%</td>
-            </tr>
-        `;
+    // Convertimos el objeto `grupos` en un array y le sumamos total por grupo
+    const gruposOrdenados = Object.entries(grupos).map(([grupoNombre, socios]) => {
+        const totalGrupo = socios.reduce((acc, s) => acc + s.venta, 0);
+        return { grupoNombre, socios, totalGrupo };
     });
-
-    // Fila total para ambas tablas
-    const totalFormateadoSocios = totalSocios.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
-    const totalFormateadoGrupos = totalGrupos.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
-
-    tbodySocios.innerHTML += `
-        <tr style="font-weight: bold; background-color: #f0f0f0;">
-            <td>TOTAL</td>
-            <td>${totalFormateadoSocios}</td>
-            <td>100%</td>
-        </tr>
+    
+    // Ordenamos de mayor a menor por totalGrupo
+    gruposOrdenados.sort((a, b) => b.totalGrupo - a.totalGrupo);
+  
+    
+    gruposOrdenados.forEach((grupo, index) => {
+        const grupoClase = `grupo${index}`;
+        const porcentajeGrupo = ((grupo.totalGrupo / totalGeneral) * 100).toFixed(2);
+      
+        // Fila principal del grupo
+        tbody.innerHTML += `
+          <tr data-toggle="collapse" data-target=".${grupoClase}" class="desplegable bg-grey">
+            <td class="text-center font-weight-bold">${grupo.grupoNombre}</td>
+            <td class="text-center">${grupo.totalGrupo.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' })}</td>
+            <td class="text-center">${porcentajeGrupo}%</td>
+          </tr>
+        `;
+      
+        // Filas hijas (socios)
+        grupo.socios.forEach(socio => {
+          const porcentajeTiendaGlobal = ((socio.venta / totalGeneral) * 100).toFixed(2);
+      
+          tbody.innerHTML += `
+            <tr class="collapse ${grupoClase}">
+              <td class="text-center">${socio.socio}</td>
+              <td class="text-center">${socio.venta.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' })}</td>
+              <td class="text-center">${porcentajeTiendaGlobal}%</td>
+            </tr>
+          `;
+        });
+      });
+      
+      
+    // Fila total al final de la tabla
+    tbody.innerHTML += `
+    <tr style="font-weight: bold;">
+    <td class="text-center">Total</td>
+    <td class="text-center">${totalGeneral.toLocaleString('es-MX', {
+        style: 'currency',
+        currency: 'MXN'
+    })}</td>
+    <td class="text-center">100%</td>
+    </tr>
     `;
 
-    tbodyGrupos.innerHTML += `
-        <tr style="font-weight: bold; background-color: #f0f0f0;">
-            <td>TOTAL</td>
-            <td>${totalFormateadoGrupos}</td>
-            <td>100%</td>
-        </tr>
-    `;
+      
+      
+      
 }
 

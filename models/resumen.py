@@ -316,18 +316,21 @@ class Resumen:
         meses = ", ".join(str(int(mes)) for mes in meses_str)  # Convertir y unir
 
         consulta = f'''
-    	SELECT 
+        SELECT 
             sc.nombreSocio, 
-            COUNT(DISTINCT oc.pkOrdenCompra) AS totalOrdenesCompra
+            gs.nombreGrupoSocio,
+            COUNT(DISTINCT oc.numeroOrdenCompra) AS totalOrdenesCompra
         FROM ordenes_compra oc
         JOIN socios_comerciales sc ON sc.pkSocioComercial = oc.fkSocioComercial
-        WHERE YEAR(oc.fechaOrdenCompra) = YEAR(CURDATE()) 
-        AND MONTH(oc.fechaOrdenCompra) IN ({meses}) -- O reemplazar por los últimos 3 meses
-        GROUP BY sc.nombreSocio
-        ORDER BY totalOrdenesCompra DESC
-        LIMIT 20;
+        JOIN respuestas_almacen ra ON ra.fkOrdenCompra = oc.pkOrdenCompra
+        JOIN grupos_socio gs ON gs.pkGrupoSocio = sc.fkGrupoSocio
+        WHERE YEAR(ra.fechaEntrega) = YEAR(CURDATE()) 
+        AND MONTH(ra.fechaEntrega) IN ({meses})
+        GROUP BY gs.nombreGrupoSocio
+        ORDER BY totalOrdenesCompra DESC;
+        
         '''
-
+        #GROUP BY sc.nombreSocio
         print(consulta)
 
         resultado = db.execute_query(consulta)
@@ -349,9 +352,8 @@ class Resumen:
         JOIN respuestas_almacen ra ON ra.fkOrdenCompra = oc.pkOrdenCompra 
         JOIN socios_comerciales sc ON sc.pkSocioComercial = oc.fkSocioComercial
         WHERE YEAR(ra.fechaEntrega) = YEAR(CURDATE()) AND MONTH(ra.fechaEntrega) IN ({meses})
-        GROUP BY a.nombreArticulo
         ORDER BY monto DESC
-        
+        LIMIT 20
         '''
 
         print(consulta)
@@ -450,15 +452,24 @@ class Resumen:
         SELECT 
             oc.numeroOrdenCompra, 
             sc.nombreSocio,
-            AVG(av.cantidadVenta / ao.cantidadOrden * 100) AS porcentajePromedioServicio
+            gs.nombreGrupoSocio,
+            a.codigoArticulo,
+            a.nombreArticulo,
+            sc.nombreSocio,
+            av.cantidadVenta AS cantidadVendida,
+            ao.cantidadOrden AS cantidadOrdenada,
+            av.cantidadVenta / ao.cantidadOrden * 100 AS porcentajePromedioServicio
         FROM ordenes_compra oc
-        JOIN socios_comerciales sc ON sc.pkSocioComercial = oc.fkSocioComercial 
-        JOIN articulos_ventas av ON av.fkOrdenCompra = oc.pkOrdenCompra
         JOIN articulos_ordenes ao ON ao.fkOrdenCompra = oc.pkOrdenCompra
-        WHERE YEAR(oc.fechaOrdenCompra) = YEAR(CURDATE()) 
-        AND MONTH(oc.fechaOrdenCompra) IN ({meses}) 
+        JOIN articulos a ON a.codigoArticulo = ao.fkCodigoArticulo
+        JOIN socios_comerciales sc ON sc.pkSocioComercial = oc.fkSocioComercial 
+        JOIN grupos_socio gs ON gs.pkGrupoSocio = sc.fkGrupoSocio
+        JOIN articulos_ventas av ON av.fkOrdenCompra = oc.pkOrdenCompra
+        JOIN respuestas_almacen ra ON ra.fkOrdenCompra = oc.pkOrdenCompra
+        WHERE YEAR(ra.fechaEntrega) = YEAR(CURDATE()) 
+        AND MONTH(ra.fechaEntrega) IN ({meses}) 
         AND av.fkCodigoArticulo = ao.fkCodigoArticulo
-        GROUP BY oc.numeroOrdenCompra
+        ORDER BY oc.numeroOrdenCompra
         '''
 
         print(consulta)

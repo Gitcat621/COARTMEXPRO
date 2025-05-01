@@ -14,7 +14,7 @@ class Archivo:
     def listar_archivos():
         """Obtiene todos los registros de la carpeta y los retorna en formato JSON."""
     
-    def crear_archivo(archivo, ruta_archivo):
+    def crear_archivo(archivo):
         """Guarda un nuevo registro en el almacenamiento local"""
 
     def editar_archivo(self):

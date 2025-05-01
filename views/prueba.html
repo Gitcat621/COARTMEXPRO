@@ -18,15 +18,24 @@
             </tr>
         </thead>
         <tbody>
-            <tr data-toggle="collapse" data-target="#details1" class="clickable">
+            <!-- Fila principal -->
+            <tr data-toggle="collapse" data-target=".grupo1" class="clickable">
                 <td>Juan Pérez</td>
                 <td><button class="btn btn-primary btn-sm">Ver más</button></td>
             </tr>
-            <tr id="details1" class="collapse">
-                <td class="text-center">Zengel</td>
-                <td class="text-center">e621.net</td>
+        
+            <!-- Fila de detalle 1 -->
+            <tr class="collapse grupo1">
+                <td colspan="2">Detalle 1: Dirección - Calle 123</td>
+            </tr>
+        
+            <!-- Fila de detalle 2 -->
+            <tr class="collapse grupo1">
+                <td colspan="2">Detalle 2: Teléfono - 555-1234</td>
             </tr>
         </tbody>
+        
+        
     </table>
 </div>
 

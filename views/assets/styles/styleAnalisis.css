@@ -49,6 +49,20 @@ body {
 }
 
 
+#loader{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.144); /* Fondo semitransparente */
+  z-index: 5000; /* Mayor que el z-index de los modales de Bootstrap */
+  
+}
+
+.oculto {
+  display: none;
+}
 
 
 
@@ -804,6 +818,9 @@ h4 strong {
 }
 .bg-orange {
   background-color: #ff460b !important;
+}
+.bg-grey {
+  background-color: #0000000e !important;
 }
 /* Text colors */
 .text-custom {
@@ -3365,7 +3382,7 @@ table.focus-on tbody tr.focused td {
   border-color: rgba(120, 130, 140, 0.13);
 }
 .table-purchases a {
-  color: #ccc;
+  color: #cccccc;
 }
 .table-purchases a:hover {
   color: #999;

@@ -304,6 +304,9 @@ def procesar_facturas(df):
     try:
         db.connection.autocommit = False  # Desactivar autocommit para manejar la transacción manualmente
 
+        df["No. factura"] = df["No. factura"].fillna("N/A")
+        df["No. factura"] = df["No. factura"].astype(str).str.strip().str.replace(r'\.0$', '', regex=True)
+
         df['Socio comercial'] = df['Socio comercial'].replace({
             'COSTA MUJERES': 'COSTA MUJERES - CATALONIA',
             'WHYNDHAM MAYA': 'MAYA - WYNDHAM',

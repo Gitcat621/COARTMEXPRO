@@ -115,7 +115,7 @@
 <div id="wrapper">
 	<div class="main-content">
 		<div class="row small-spacing">
-
+			
 			<!-- FILTROS -->
 			<div class="col-xs-12">
 				<div class="box-content">
@@ -419,34 +419,19 @@
 				<div class="popup-card" id="popupCard">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" id="closePopup">&times;</span></button>
 					<h3 class="text-center">Detalles de Clientes</h3>
-					<button type="button" class="btn btn-bordered btn-xsxs btn-success margin-bottom-10 limit-width" onclick="alternarVista()">Alternar</button>
-
 					<!-- Contenedor de tablas -->
 
-					<div id="tablaGrupos" style="display: block;">
+					<div id="tablaSocios">
 						<table class="table table-bordered table-hover">
 							<thead>
-								<tr>
-									<th class="text-center">Grupo</th>
-									<th class="text-center">Monto</th>
-									<th class="text-center">% VTA</th>
-								</tr>
-							</thead>
-							<tbody id="gruposEnVentas"></tbody>
-						</table>
-					</div>
-
-					<div id="tablaSocios" style="display: none;">
-						<table class="table table-bordered table-hover">
-							<thead>
-								<tr>
-									<th class="text-center">Socio</th>
-									<th class="text-center">Monto</th>
-									<th class="text-center">% VTA</th>
-								</tr>
+							  <tr>
+								<th class="text-center">Socio</th>
+								<th class="text-center">Monto</th>
+								<th class="text-center">% VTA</th>
+							  </tr>
 							</thead>
 							<tbody id="sociosEnVentas"></tbody>
-						</table>
+						  </table>
 					</div>
 				</div>
 			</div>
@@ -462,17 +447,24 @@
 					<h4 class="text-center box-title">Detalle articulos vendidos</h4>
 					<!-- /.box-title -->
 					<div class="table-responsive table-purchases">
-						<table class="table table-hover margin-bottom-10">
-							<thead>
-								<tr>
-									<th>Articulo</th>
-									<th>Pzas</th>
-								</tr>
-							</thead>
-							<tbody id="top1">
-								
-							</tbody>
-						</table>
+						<div class="text-right">
+							<button class="btn btn-xs btn-bordered" onclick="toggleTabla()">Mostrar/Ocultar Tabla</button>
+						</div>
+						<div id="contenedor-tabla" style="display: block;">
+							<table class="table table-hover margin-bottom-10">
+								<thead>
+									<tr>
+										<th>Articulo</th>
+										<th>Pzas</th>
+									</tr>
+								</thead>
+								<tbody id="top1">
+								</tbody>
+							</table>
+						</div>
+						<div class="text-right" id="cerrar2" style="display: block;">
+							<button class="btn btn-xs btn-bordered" onclick="toggleTabla()">Mostrar/Ocultar Tabla</button>
+						</div>
 						<!-- /.table -->
 					</div>
 					<!-- /.table-responsive -->
@@ -512,7 +504,7 @@
 
 			<div class="col-lg-6 col-xs-12">
 				<div class="box-content">
-					<h4 class="text-center box-title">Top 20 socios con más OC entrantes</h4>
+					<h4 class="text-center box-title">Cantidad OC entregadas</h4>
 					<!-- /.box-title -->
 					<div class="table-responsive table-purchases">
 						<table class="table table-hover margin-bottom-10">
@@ -547,8 +539,10 @@
 							<thead>
 								<tr>
 									<th>Socio</th>
-									<th># OC</th>
-									<th>% Entrega</th>
+									<th class="text-center">Pzas ordenadas</th>
+									<th class="text-center">Pzas entregadas</th>
+									<th class="text-center"># OC</th>
+									<th class="text-center">% Entrega</th>
 								</tr>
 							</thead>
 							<tbody id="servicio">
@@ -568,6 +562,15 @@
 
 	</div>
 	<!-- /.main-content -->
+
+	<div id="loader" style="display:none">
+		<div class="text-center">
+			<img src="./assets/images/404.jpg" width="350" height="280" id="loadGif" style="padding-top: 10%;"/>
+			<p>CARGANDO...</p>
+		</div>
+		<p style="color: black; text-align: center; padding-top: 2%;">Cargando...</p>
+	</div>
+
 </div><!--/#wrapper -->
 	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 	<!--[if lt IE 9]>
