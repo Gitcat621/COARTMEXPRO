@@ -50,10 +50,10 @@ def listar_ingresos():
         return jsonify(ingresos), 200
     else:
         for ingreso in ingresos:
-            if ingreso["fechaFactura"] is None:
+            if ingreso["fechaPagado"] is None:
                 continue  # Saltar si no hay fecha
 
-            mes = meses_es[ingreso["fechaFactura"].strftime("%B")]
+            mes = meses_es[ingreso["fechaPagado"].strftime("%B")]
             socio = ingreso["nombreSocio"] or "SIN SOCIO"
 
             data.setdefault(socio, {m: 0 for m in meses_es.values()})

@@ -239,7 +239,7 @@ function inicializarTabla(data, endpoint){
             $('#dataTable').DataTable({
                 scrollX: true, // Activa el scroll horizontal
                 columns: [
-                    { title: "Gasto" },
+                    { title: "Socio comercial" },
                     { title: "Ene" },
                     { title: "Feb" },
                     { title: "Mar" },
@@ -499,8 +499,9 @@ function inicializarTabla(data, endpoint){
 
 
             // Código si expresion === valor3
-            $('#dataTable').DataTable({
-                scrollX: true, // Activa el scroll horizontal
+            // Iniciar la datatable
+            var tabla = $('#dataTable').DataTable({
+                scrollX: true,
                 columns: [
                     { title: "Código de articulo" },
                     { title: "Descripción" },
@@ -512,22 +513,45 @@ function inicializarTabla(data, endpoint){
                 ]
             });
 
-            //Iniciar la datatable y asignarla a una variable
-            var tabla = $('#dataTable').DataTable();
+            // Calcular los totales
+            let totalExistencias = 0;
+            let totalCosto = 0;
+            let totalValor = 0;
 
-            // Agregar los nuevos datos
-            tabla.rows.add(data.map((articulos) => [
+            // Agregar los nuevos datos y acumular totales
+            let rows = data.map((articulos) => {
+                let existencia = Number(articulos.cantidadExistencia) || 0;
+                let costo = Number(articulos.precioAlmacen) || 0;
+                let valor = existencia * costo;
 
-                articulos.codigoArticulo, 
-                articulos.nombreArticulo, 
-                articulos.cantidadExistencia,
-                formatoMoneda(articulos.precioAlmacen), 
-                formatoMoneda(articulos.cantidadExistencia * articulos.precioAlmacen),
-                articulos.nombreProveedor, 
-                articulos.nombreCategoriaArticulo, 
-                articulos.fkProveedor, articulos.fkCategoriaArticulo
+                totalExistencias += existencia;
+                totalCosto += costo;
+                totalValor += valor;
 
-            ])).draw();
+                return [
+                    articulos.codigoArticulo,
+                    articulos.nombreArticulo,
+                    existencia,
+                    formatoMoneda(costo),
+                    formatoMoneda(valor),
+                    articulos.nombreProveedor,
+                    articulos.nombreCategoriaArticulo
+                ];
+            });
+
+            tabla.rows.add(rows).draw();
+
+            // Agregar la fila TOTAL GENERAL al final
+            tabla.row.add([
+                "TOTAL GENERAL",
+                "",
+                totalExistencias,
+                formatoMoneda(totalCosto),
+                formatoMoneda(totalValor),
+                "",
+                ""
+            ]).draw(false);
+
 
         break;
         case 'cuentasPorPagar':
@@ -560,20 +584,25 @@ function inicializarTabla(data, endpoint){
                     //{ title: "Folio de EL Eventa" },
                     { title: "Fecha" },
                     { title: "Monto" },
-                ]
+                ],
+                "ordering": false,
             });
 
             //Iniciar la datatable y asignarla a una variable
             var tabla = $('#dataTable').DataTable();
-
+            var total = 0;
+            
             // Agregar los nuevos datos
             tabla.rows.add(data.map((CxP) => [
                 CxP.nombreProveedor, 
                 //CxP.folioELV, 
                 formatoFecha(CxP.fechaMercancia), // Formatear la fecha antes de agregarla a la tabla
-                formatoMoneda(CxP.pagoPendiente)
+                formatoMoneda(CxP.pagoPendiente),
+                total = total + parseInt(CxP.pagoPendiente)
             ])).draw();
 
+
+            tabla.row.add(["TOTAL GENERAL", "---", formatoMoneda(total)]).draw(false);
 
         break;
         case 'cuentasPorCobrar':
@@ -605,19 +634,24 @@ function inicializarTabla(data, endpoint){
                     { title: "Socio comercial" },
                     { title: "Fecha" },
                     { title: "Monto" },
-                ]
+                ],
+                "ordering": false,
             });
 
             //Iniciar la datatable y asignarla a una variable
             var tabla = $('#dataTable').DataTable();
+            var total = 0
 
             // Agregar los nuevos datos
             tabla.rows.add(data.map((CxC) => [                    
                 CxC.nombreSocio ?? "SOCIO NO IDENTIFICADO",
                formatoFecha(CxC.fechaFactura), 
-               formatoMoneda(CxC.totalFactura)
-
+               formatoMoneda(CxC.totalFactura),
+               total = total + parseInt(CxC.totalFactura)
             ])).draw();
+
+
+            tabla.row.add(["TOTAL GENERAL", "---", formatoMoneda(total)]).draw(false);
 
 
         break;
@@ -634,7 +668,7 @@ function inicializarTabla(data, endpoint){
             $('#dataTable').DataTable({
                 scrollX: true, // Activa el scroll horizontal
                 columns: [
-                    { title: "Gasto" },
+                    { title: "Proveedor" },
                     { title: "Ene" },
                     { title: "Feb" },
                     { title: "Mar" },

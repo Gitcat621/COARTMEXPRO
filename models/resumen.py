@@ -225,10 +225,10 @@ class Resumen:
         else:
 
             consulta = '''
-            SELECT sc.nombreSocio, f.totalFactura, f.fechaFactura FROM facturas f  
-            LEFT JOIN ordenes_compra oc ON oc.pkOrdenCompra = f.fkOrdenCompra
-            LEFT JOIN socios_comerciales sc ON sc.pkSocioComercial = oc.fkSocioComercial 
-            LEFT JOIN grupos_socio gs ON gs.pkGrupoSocio = sc.fkGrupoSocio
+            SELECT sc.nombreSocio, f.totalFactura, f.fechaPagado FROM facturas f  
+            JOIN ordenes_compra oc ON oc.pkOrdenCompra = f.fkOrdenCompra
+            JOIN socios_comerciales sc ON sc.pkSocioComercial = oc.fkSocioComercial 
+            JOIN grupos_socio gs ON gs.pkGrupoSocio = sc.fkGrupoSocio
             WHERE f.fechaPagado IS NOT NULL AND YEAR(f.fechaPagado) = 
             '''
 
@@ -346,14 +346,15 @@ class Resumen:
         meses = ", ".join(str(int(mes)) for mes in meses_str)  # Convertir y unir
 
         consulta = f'''
-    	SELECT a.nombreArticulo, sc.nombreSocio, (av.cantidadVenta * av.precioVenta) AS monto FROM articulos_ventas av 
-        JOIN articulos a ON a.codigoArticulo = av.fkCodigoArticulo
-        JOIN ordenes_compra oc ON oc.pkOrdenCompra = av.fkOrdenCompra
-        JOIN respuestas_almacen ra ON ra.fkOrdenCompra = oc.pkOrdenCompra 
-        JOIN socios_comerciales sc ON sc.pkSocioComercial = oc.fkSocioComercial
-        WHERE YEAR(ra.fechaEntrega) = YEAR(CURDATE()) AND MONTH(ra.fechaEntrega) IN ({meses})
-        ORDER BY monto DESC
-        LIMIT 20
+        SELECT gs.nombreGrupoSocio, SUM(av.cantidadVenta) AS totalCantidadVendida
+                FROM articulos_ventas av
+                JOIN articulos a ON a.codigoArticulo = av.fkCodigoArticulo
+                JOIN ordenes_compra oc ON oc.pkOrdenCompra = av.fkOrdenCompra
+                JOIN socios_comerciales sc ON sc.pkSocioComercial = oc.fkSocioComercial
+                JOIN grupos_socio gs ON gs.pkGrupoSocio = sc.fkGrupoSocio
+                JOIN respuestas_almacen ra ON ra.fkOrdenCompra = oc.pkOrdenCompra 
+                WHERE YEAR(ra.fechaEntrega) = YEAR(CURDATE()) AND MONTH(ra.fechaEntrega) IN ({meses})
+                GROUP BY gs.nombreGrupoSocio;
         '''
 
         print(consulta)
@@ -429,7 +430,8 @@ class Resumen:
         FROM articulos_ventas av
         JOIN articulos a ON a.codigoArticulo = av.fkCodigoArticulo
         JOIN ordenes_compra oc ON oc.pkOrdenCompra = av.fkOrdenCompra
-        WHERE YEAR(oc.fechaOrdenCompra) = YEAR(CURDATE()) AND MONTH(oc.fechaOrdenCompra) IN ({meses})
+        JOIN respuestas_almacen ra ON ra.fkOrdenCompra = oc.pkOrdenCompra
+        WHERE YEAR(ra.fechaEntrega) = YEAR(CURDATE()) AND MONTH(ra.fechaEntrega) IN ({meses})
         GROUP BY a.nombreArticulo
         ORDER BY totalPiezasVendidas DESC;
         '''
@@ -450,26 +452,42 @@ class Resumen:
 
         consulta = f'''
         SELECT 
-            oc.numeroOrdenCompra, 
+            oc.numeroOrdenCompra,
             sc.nombreSocio,
             gs.nombreGrupoSocio,
             a.codigoArticulo,
             a.nombreArticulo,
-            sc.nombreSocio,
-            av.cantidadVenta AS cantidadVendida,
             ao.cantidadOrden AS cantidadOrdenada,
+            COALESCE(av.cantidadVenta, 0) AS cantidadVendida,
+            COALESCE(av.precioVenta, 0) AS precioVenta,
             av.cantidadVenta / ao.cantidadOrden * 100 AS porcentajePromedioServicio
         FROM ordenes_compra oc
-        JOIN articulos_ordenes ao ON ao.fkOrdenCompra = oc.pkOrdenCompra
-        JOIN articulos a ON a.codigoArticulo = ao.fkCodigoArticulo
+        LEFT JOIN (
+            SELECT 
+                fkOrdenCompra, 
+                fkCodigoArticulo, 
+                SUM(cantidadOrden) AS cantidadOrden
+            FROM articulos_ordenes
+            GROUP BY fkOrdenCompra, fkCodigoArticulo
+        ) ao ON ao.fkOrdenCompra = oc.pkOrdenCompra
+        JOIN articulos a 
+            ON a.codigoArticulo = ao.fkCodigoArticulo
+        LEFT JOIN (
+            SELECT 
+                fkOrdenCompra, 
+                fkCodigoArticulo, 
+                SUM(cantidadVenta) AS cantidadVenta,
+                AVG(precioVenta) AS precioVenta  -- si el precio varía, puedes ajustar esto
+            FROM articulos_ventas
+            GROUP BY fkOrdenCompra, fkCodigoArticulo
+        ) av ON av.fkOrdenCompra = oc.pkOrdenCompra AND av.fkCodigoArticulo = ao.fkCodigoArticulo
+            AND av.fkCodigoArticulo = ao.fkCodigoArticulo
         JOIN socios_comerciales sc ON sc.pkSocioComercial = oc.fkSocioComercial 
         JOIN grupos_socio gs ON gs.pkGrupoSocio = sc.fkGrupoSocio
-        JOIN articulos_ventas av ON av.fkOrdenCompra = oc.pkOrdenCompra
         JOIN respuestas_almacen ra ON ra.fkOrdenCompra = oc.pkOrdenCompra
         WHERE YEAR(ra.fechaEntrega) = YEAR(CURDATE()) 
-        AND MONTH(ra.fechaEntrega) IN ({meses}) 
-        AND av.fkCodigoArticulo = ao.fkCodigoArticulo
-        ORDER BY oc.numeroOrdenCompra
+                AND MONTH(ra.fechaEntrega) IN ({meses}) 
+        ORDER BY oc.numeroOrdenCompra, a.nombreArticulo;
         '''
 
         print(consulta)

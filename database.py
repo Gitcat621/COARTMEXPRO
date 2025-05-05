@@ -16,7 +16,7 @@ class Database:
                 cursorclass=pymysql.cursors.DictCursor  # Devuelve los resultados como diccionario
             )
             self.cursor = self.connection.cursor()
-            print("✅ Conexión exitosa a MySQL")
+            #print("✅ Conexión exitosa a MySQL")
         except pymysql.MySQLError as e:
             print(f"❌ Error de conexión a MySQL: {e}")
 

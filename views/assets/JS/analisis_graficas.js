@@ -201,8 +201,8 @@ function mostrarGrafica2(data){
         element: 'stack-morris-chart',
         data: datosTransformados,
         xkey: 'mes',
-        ykeys: ['7 ELEVEN', 'GAP', 'HOTELES', 'MORPHO', 'SOLUCIONES SENCILLAS'], // Claves dinámicas
-        labels: ['7 ELEVEN', 'GAP', 'HOTELES', 'MORPHO', 'SOLUCIONES SENCILLAS'],
+        ykeys: ['7 ELEVEN', 'GAP', 'HOTELES', 'MORPHO', 'SOLUCIONES SENCILLAS', 'TURISTORE'], // Claves dinámicas
+        labels: ['7 ELEVEN', 'GAP', 'HOTELES', 'MORPHO', 'SOLUCIONES SENCILLAS', 'TURISTORE'],
         stacked: true, // Habilitar apilado
         barColors: [
             '#fcb03b',
@@ -212,6 +212,7 @@ function mostrarGrafica2(data){
             '#70e0a1',
             '#6b203c',
             '#067a40',
+            '#910018',
         ], // Colores de cada grupo
         resize: true
     });

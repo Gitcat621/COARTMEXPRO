@@ -1,42 +1,10 @@
 $(document).ready(function () {
 
-    //cargarMetricas();
-
     const year = new Date().getFullYear();
 
     document.getElementById("currentYear").textContent = year;
     document.getElementById("lastYear").textContent = year - 1;
-
-    if (sessionStorage.getItem("departamento") !== 'Admon. Contable y Fiscal' && sessionStorage.getItem("departamento") !== 'Dirección general') {
-        //window.location.href = './index.html';
-        //toastr.warning('Usted no debería estar aquí', 'Atención', { "closeButton": true });
-    }
     
-});
-
-const trigger = document.getElementById('clientes');
-const popup = document.getElementById('popup');
-const popupCard = document.getElementById('popupCard');
-const closeBtn = document.getElementById('closePopup');
-
-trigger.addEventListener('click', () => {
-    popup.style.display = 'block';
-
-    const rect = trigger.getBoundingClientRect();
-
-    // Posición en pantalla
-    popupCard.style.top = `${rect.bottom + window.scrollY - 15}px`;
-    popupCard.style.left = `${rect.left + window.scrollX}px`;
-});
-
-closeBtn.addEventListener('click', () => {
-    popup.style.display = 'none';
-});
-
-popup.addEventListener('click', (e) => {
-    if (e.target === popup) {
-    popup.style.display = 'none';
-    }
 });
 
 //Funcion que marca y desmarca las casillas de meses
@@ -137,7 +105,7 @@ async function cargarMetricas(meses) {
 
         console.error("Error al cargar los datos:", error);
 
-        toastr.error('La petición de analisis no se pudo conectar', 'Error', {"closeButton": true,});
+        toastr.error('La petición de analisis no se pudo concretar', 'Error', {"closeButton": true,});
     }
 }
 
@@ -220,7 +188,7 @@ async function cargarTops(meses) {
 
         console.error("Error al cargar los datos:", error);
 
-        toastr.error('La petición de tops no se pudo conectar', 'Error', {"closeButton": true,});
+        toastr.error('La petición de tops no se pudo concretar', 'Error', {"closeButton": true,});
     }
 }
 
@@ -318,27 +286,26 @@ function mostrarTop3(data) {
 
     // Mapear los datos a la tabla y acumular el total
     data.forEach(function(item) {
-        let montoFormateado = Number(item.monto).toLocaleString("es-MX");
+        let montoFormateado = Number(item.totalCantidadVendida).toLocaleString("es-MX");
 
         let filaHTML = `
         <tr>
-            <td>${item.nombreArticulo}</td>
-            <td>${item.nombreSocio}</td>
-            <td>$${montoFormateado}</td>
+            <td>${item.nombreGrupoSocio}</td>
+            <td>${montoFormateado}</td>
         </tr>
         `;
 
         tabla.innerHTML += filaHTML;
 
-        totalMonto += Number(item.monto);
+        totalMonto += Number(item.totalCantidadVendida);
     });
 
     // Agregar fila con el total al final
     let totalFormateado = totalMonto.toLocaleString("es-MX");
     let filaTotalHTML = `
     <tr>
-        <td colspan="2"><strong>Total</strong></td>
-        <td><strong>$${totalFormateado}</strong></td>
+        <td><strong>Total</strong></td>
+        <td><strong>${totalFormateado}</strong></td>
     </tr>
     `;
 
@@ -375,7 +342,7 @@ async function cargarMetricasServicio(meses) {
 
     } catch (error) {
         console.error("Error al cargar los datos:", error);
-        toastr.error('La petición de métricas no se pudo conectar', 'Error', {"closeButton": true});
+        toastr.error('La petición de métricas no se pudo concretar', 'Error', {"closeButton": true});
     }
 }
 
@@ -443,6 +410,9 @@ function mostrarServicio(data) {
 
         const promedioGrupo = (totalGrupoPorcentaje / registros.length).toFixed(2);
 
+        totalGrupoOrdenadas = Number(totalGrupoOrdenadas).toLocaleString("es-MX");
+        totalGrupoVendidas = Number(totalGrupoVendidas).toLocaleString("es-MX");
+
         htmlBuffer += `
             <tr class="collapse ${grupoClase}" style="font-weight: bold;">
                 <td>Totales del grupo</td>
@@ -457,6 +427,9 @@ function mostrarServicio(data) {
     });
 
     const promedioTotal = (totalPorcentaje / data.length).toFixed(2);
+    totalOrdenadas = Number(totalOrdenadas).toLocaleString("es-MX");
+    totalVendidas = Number(totalVendidas).toLocaleString("es-MX");
+    
 
     htmlBuffer += `
         <tr style="background-color: #e0e0e0; font-weight: bold;">
@@ -546,3 +519,28 @@ function mostrarSociosEnVentas(data) {
       
 }
 
+//Funciones para POPUP
+const trigger = document.getElementById('clientes');
+const popup = document.getElementById('popup');
+const popupCard = document.getElementById('popupCard');
+const closeBtn = document.getElementById('closePopup');
+
+trigger.addEventListener('click', () => {
+    popup.style.display = 'block';
+
+    const rect = trigger.getBoundingClientRect();
+
+    // Posición en pantalla
+    popupCard.style.top = `${rect.bottom + window.scrollY - 15}px`;
+    popupCard.style.left = `${rect.left + window.scrollX}px`;
+});
+
+closeBtn.addEventListener('click', () => {
+    popup.style.display = 'none';
+});
+
+popup.addEventListener('click', (e) => {
+    if (e.target === popup) {
+    popup.style.display = 'none';
+    }
+});
