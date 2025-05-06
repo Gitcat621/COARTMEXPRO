@@ -1,2 +1,5 @@
-// config.js
-const API_BASE_URL = "http://127.0.0.1:5000"; // cambiar según el entorno
+const config = {
+    API_HOST: "http://127.0.0.1:5000/coartmex/"
+};
+
+export default config;

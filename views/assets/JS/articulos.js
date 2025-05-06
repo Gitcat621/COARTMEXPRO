@@ -6,63 +6,60 @@ $(document).ready(function () {
     
 });
 
+
 //Listar los registros foraneos
-function listarProveedores(){
+async function listarProveedores() {
+    try {
+        const response = await fetch('http://127.0.0.1:5000/coartmex/proveedores', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
 
-    fetch('http://127.0.0.1:5000/coartmex/proveedores', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
+        if (!response.ok) {
+            throw new Error(`Error HTTP: ${response.status}`);
         }
-    })
-    .then(response => response.json())
-    .then(data => {
 
-
+        const data = await response.json();
         document.getElementById('proveedor_menu').innerHTML = "";
 
-        //Mapear en un select
-        data.forEach(function(data) {
-            
-        
-            let HTML = `<option value="${data.pkProveedor}">${data.nombreProveedor}</option>`;
-        
-            //Mapear valor por cada elemento en la consulta 
+        // Mapear en un select
+        data.forEach((proveedor) => {
+            let HTML = `<option value="${proveedor.pkProveedor}">${proveedor.nombreProveedor}</option>`;
             document.getElementById('proveedor_menu').innerHTML += HTML;
-
-
         });
-    })
-    .catch(error => console.error("Error al cargar los datos:", error));
+
+    } catch (error) {
+        console.error("Error al cargar los datos:", error);
+    }
 }
 
-function listarCategoriaArticulos(){
+async function listarCategoriaArticulos() {
+    try {
+        const response = await fetch('http://127.0.0.1:5000/coartmex/categoriaArticulos', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
 
-    fetch('http://127.0.0.1:5000/coartmex/categoriaArticulos', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
+        if (!response.ok) {
+            throw new Error(`Error HTTP: ${response.status}`);
         }
-    })
-    .then(response => response.json())
-    .then(data => {
 
-
+        const data = await response.json();
         document.getElementById('categoria_menu').innerHTML = "";
 
-        //Mapear en un select
-        data.forEach(function(data) {
-            
-        
-            let HTML = `<option value="${data.pkCategoriaArticulo}">${data.nombreCategoriaArticulo}</option>`;
-        
-            //Mapear valor por cada elemento en la consulta 
+        // Mapear en un select
+        data.forEach((categoria) => {
+            let HTML = `<option value="${categoria.pkCategoriaArticulo}">${categoria.nombreCategoriaArticulo}</option>`;
             document.getElementById('categoria_menu').innerHTML += HTML;
-
-
         });
-    })
-    .catch(error => console.error("Error al cargar los datos:", error));
+
+    } catch (error) {
+        console.error("Error al cargar los datos:", error);
+    }
 }
 
 //Asignar funcion al boton de abrir modal
@@ -78,15 +75,15 @@ $(document).ready(function() {
         columns: [
             { title: "Codigo del articulo" },
             { title: "Nombre del articulo" },
-            { title: "Precio" },
+            { title: "Costo" },
             { title: "Proveedor" },
             { title: "Categoria" },
             {
                 title: "Opciones",
                 render: function (data, type, row) { // 'row' contiene toda la fila de datos
                     return `<div class="text-center">
-                                <button class="btn btn-warning btn-sm editar-btn" data-row='${JSON.stringify(row)}'><i class="fa fa-pencil"></i></button>
-                                <button class="btn btn-danger btn-sm eliminar-btn" data-pk="${row[0]}"><i class="fa fa-trash"></i></button>
+                                <button class="btn btn-xs editar-btn" data-row='${JSON.stringify(row)}'><i class="fa fa-pencil"></i></button>
+                                <button class="btn btn-xs eliminar-btn" data-pk="${row[0]}"><i class="fa fa-trash"></i></button>
                             </div>`;
                 }
             }
@@ -122,234 +119,226 @@ $(document).ready(function() {
         const codigoArticulo = $(this).data('pk');
 
         var modal = $('[data-remodal-id="remodal"]').remodal();
-
+        
         modal.open();
-
-        $(document).on("confirmation", ".remodal", function () {
+    
+        // Se usa `.one()` en lugar de `.on()`, para que el evento se ejecute solo una vez por apertura del modal
+        $(document).one("confirmation", ".remodal", function () {
             eliminarUsuario(codigoArticulo);    
         });
-        
     });
+    
 
 });
 
-function agregarUsuario(){
-
-    // Obtener los datos del formulario
-    const codigoArticulo = document.getElementById('codigoArticulo').value.trim();
-
-    const nombreArticulo = document.getElementById('nombreArticulo').value.trim();
-
-    const precioAlmacen = document.getElementById('precioAlmacen').value.trim();
-    
-    const proveedorMenu = document.getElementById('proveedor_menu');
-
-    const fkProveedor = proveedorMenu.value;
-
-    const categoriaMenu = document.getElementById('categoria_menu');
-    
-    const fkCategoriaArticulo = categoriaMenu.value;
+async function agregarArticulo() {
+    try {
 
 
-
-    // Verificar si ambos campos están completos
-    if (!codigoArticulo || !nombreArticulo || !precioAlmacen || !fkProveedor || !fkCategoriaArticulo) {
-
-
-        toastr.warning('Porfavor completa todos los campos', 'Advertencia', {"closeButton": true,});
+        // Obtener los datos del formulario
+        const codigoArticulo = document.getElementById('codigoArticulo').value.trim();
 
 
-        return;
-    }
+        const nombreArticulo = document.getElementById('nombreArticulo').value.trim();
 
 
-    // Enviar los datos al backend (Flask) para insertar
-    fetch('http://127.0.0.1:5000/coartmex/articulos', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ codigoArticulo, nombreArticulo, precioAlmacen, fkProveedor, fkCategoriaArticulo })
-    })
-    .then(response => response.json())
-    .then(data => {
+        const precioAlmacen = document.getElementById('precioAlmacen').value.trim();
 
 
-        // Mostrar el mensaje de la respuesta de la API
-        toastr.success(`${data.mensaje}`, 'Realizado', {
-            "closeButton": true,
+        const proveedorMenu = document.getElementById('proveedor_menu');
+        const fkProveedor = proveedorMenu.value;
+
+
+        const categoriaMenu = document.getElementById('categoria_menu');
+        const fkCategoriaArticulo = categoriaMenu.value;
+
+
+        // Verificar si todos los campos están completos
+        if (!codigoArticulo || !nombreArticulo || !precioAlmacen || !fkProveedor || !fkCategoriaArticulo) {
+
+            toastr.warning('Por favor completa todos los campos', 'Advertencia', { "closeButton": true });
+            return;
+
+        }
+
+        const bodyData = {
+            codigoArticulo: codigoArticulo,
+            nombreArticulo: nombreArticulo,
+            precioAlmacen: parseFloat(precioAlmacen), // Convertir a número decimal
+            fkProveedor: parseInt(fkProveedor), // Convertir a entero
+            fkCategoriaArticulo: parseInt(fkCategoriaArticulo) // Convertir a entero
+        };
+
+        // Enviar los datos al backend (Flask) para insertar
+        const response = await fetch('http://127.0.0.1:5000/coartmex/articulos', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(bodyData)
         });
 
+        const data = await response.json();
 
-        // Acciones posteriores(Cerrar modal y mapear datos)
+        if (!response.ok) {
+
+            //manejo de errores
+            toastr.error(`${data.mensaje}`, 'Error', { "closeButton": true });
+
+            return;
+            //throw new Error(`Error HTTP: ${response.status}`);
+
+        }
+
+    
+        // Mostrar el mensaje de la respuesta de la API
+        toastr.success(`${data.mensaje}`, 'Realizado', { "closeButton": true });
+
+        // Acciones posteriores (Cerrar modal y mapear datos)
         $('#boostrapModal-1').modal('hide');
         listarArticulos();
 
-
-    })
-    .catch(error => {
-
+    } catch (error) {
 
         console.error('Error:', error);
 
-        toastr.error('Hubo un error al intentar la acción', 'Error', {"closeButton": true,});
-        return;
+        toastr.error('Hubo un error al intentar la acción', 'Error', { "closeButton": true });
 
-    });
+    }
 }
 
-function listarArticulos() {
 
-   try{
+async function listarArticulos() {
 
-        var fecha = document.getElementById('datepicker-autoclose').value;
+    try {
 
-    }catch{
+        // Petición GET al servidor
+        const response = await fetch(`http://127.0.0.1:5000/coartmex/articulos`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
 
-        var fecha;
-    }
-
-
-    if (fecha === ""){
-
-
-        const ahora = new Date();
-
-
-        fecha = ahora.geet;
-        
-    }
-
-    //Peticion GET al servidor
-    fetch(`http://127.0.0.1:5000/coartmex/articulos?fecha=${fecha}`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
+        if (!response.ok) {
+            throw new Error(`Error HTTP: ${response.status}`);
         }
-    })
-    .then(response => response.json())
-    .then(data => {
 
-        console.log(data);return;
+        const data = await response.json();
 
-        //Iniciar la datatable y asignarla a una variable
+        // Iniciar la datatable y asignarla a una variable
         let tabla = $('#articuloTable').DataTable();
-        
+
         // Limpiar la tabla antes de agregar nuevos datos
         tabla.clear().draw();
 
         // Agregar los nuevos datos
         tabla.rows.add(data.map((articulos) => [
             //    0                              1                      2                               3             
-            articulos.codigoArticulo, articulos.nombreArticulo, articulos.precioAlmacen, articulos.nombreProveedor,
+            articulos.codigoArticulo, articulos.nombreArticulo, '$' + articulos.precioAlmacen, articulos.nombreProveedor,
             //                       4                   5                               6                         
             articulos.nombreCategoriaArticulo, articulos.fkProveedor, articulos.fkCategoriaArticulo
-
         ])).draw();
-    })
-    .catch(error => console.error("Error al cargar los datos:", error));
-    
+
+    } catch (error) {
+        console.error("Error al cargar los datos:", error);
+        toastr.error('La petición no se pudo concretar', 'Error', {"closeButton": true,});
+    }
 }
 
-function editarUsuario(codigoArticuloOriginal){
 
-    // Obtener los datos del formulario
-    const codigoArticulo = document.getElementById('codigoArticulo').value.trim();
+async function editarUsuario(codigoArticuloOriginal) {
+    try {
+        // Obtener los datos del formulario
+        const codigoArticulo = document.getElementById('codigoArticulo').value.trim();
+        const nombreArticulo = document.getElementById('nombreArticulo').value.trim();
+        const precioAlmacen = document.getElementById('precioAlmacen').value.trim();
+        const proveedorMenu = document.getElementById('proveedor_menu');
+        const fkProveedor = proveedorMenu.value;
+        const categoriaMenu = document.getElementById('categoria_menu');
+        const fkCategoriaArticulo = categoriaMenu.value;
 
-    const nombreArticulo = document.getElementById('nombreArticulo').value.trim();
+        // Verificar que ningún campo esté vacío
+        if (!codigoArticuloOriginal || !codigoArticulo || !nombreArticulo || !precioAlmacen || !fkProveedor || !fkCategoriaArticulo) {
+            toastr.warning('Por favor completa todos los campos', 'Advertencia', { "closeButton": true });
+            return;
+        }
 
-    const precioAlmacen = document.getElementById('precioAlmacen').value.trim();
+        const bodyData = {
+            codigoArticuloOriginal : codigoArticuloOriginal,
+            codigoArticulo: codigoArticulo,
+            nombreArticulo: nombreArticulo,
+            precioAlmacen: parseFloat(precioAlmacen), // Convertir a número decimal
+            fkProveedor: parseInt(fkProveedor), // Convertir a entero
+            fkCategoriaArticulo: parseInt(fkCategoriaArticulo) // Convertir a entero
+        };
 
-    const proveedorMenu = document.getElementById('proveedor_menu');
+        // Enviar los datos al backend (Flask) para editar
+        const response = await fetch('http://127.0.0.1:5000/coartmex/articulos', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(bodyData)
+        });
 
-    const fkProveedor = proveedorMenu.value;
+        const data = await response.json();
 
-    const categoriaMenu = document.getElementById('categoria_menu');
+        if (!response.ok) {
 
-    const fkCategoriaArticulo = categoriaMenu.value;
+            //manejo de errores
+            toastr.error(`${data.mensaje}`, 'Error', { "closeButton": true });
 
+            return;
 
-
-    // Verificar que ningún campo esté vacío
-    if (!codigoArticuloOriginal || !codigoArticulo || !nombreArticulo || !precioAlmacen || !fkProveedor || !fkCategoriaArticulo) {
-
-
-        toastr.warning('Porfavor completa todos los campos', 'Advertencia', {"closeButton": true,});
-        return;
-
-
-    }
-
-    // Enviar los datos al backend (Flask) para editar
-    fetch('http://127.0.0.1:5000/coartmex/articulos', {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ codigoArticuloOriginal, codigoArticulo, nombreArticulo, precioAlmacen, fkProveedor, fkCategoriaArticulo })
-    })
-    .then(response => response.json())
-    .then(data => {
-
+        }
 
         // Mostrar el mensaje de la respuesta de la API
         listarArticulos();
-        
-        toastr.success(`${data.mensaje}`, 'Realizado', {"closeButton": true,});
+        toastr.success(`${data.mensaje}`, 'Realizado', { "closeButton": true });
 
-
-    })
-    .catch(error => {
-
-
+    } catch (error) {
         console.error('Error:', error);
-
-        toastr.error('Hubo un error al intentar la acción', 'Error', {"closeButton": true,});
-        return;
-    });
+        toastr.error('Hubo un error al intentar la acción', 'Error', { "closeButton": true });
+    }
 }
 
-function eliminarUsuario(codigoArticulo){
+async function eliminarUsuario(codigoArticulo) {
+    try {
+        // Verificar si llega el id
+        if (!codigoArticulo) {
+            toastr.warning('No se pudo obtener el elemento', 'Advertencia', { "closeButton": true });
+            return;
+        }
 
-    // Verificar si llega el id
-    if (!codigoArticulo) {
+        // Enviar los datos al backend (Flask) para eliminar
+        const response = await fetch('http://127.0.0.1:5000/coartmex/articulos', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ codigoArticulo })
+        });
 
 
-        toastr.warning('No se pudo obtener el elemento', 'Advertencia', {"closeButton": true,});
-        return;
+        const data = await response.json();
 
-
-    }
-
-    // Enviar los datos al backend (Flask) para insertar
-    fetch('http://127.0.0.1:5000/coartmex/articulos', {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ codigoArticulo })
-    })
-    .then(response => response.json())
-    .then(data => {
-
+        if (!response.ok) {
+            //manejo de errores
+            toastr.error(`${data.mensaje}`, 'Error', { "closeButton": true });
+            return;
+        }
 
         // Mostrar el mensaje de la respuesta de la API
         listarArticulos();
+        toastr.success(`${data.mensaje}`, 'Realizado', { "closeButton": true });
 
-        toastr.success(`${data.mensaje}`, 'Realizado', {"closeButton": true,});
-
-
-    })
-    .catch(error => {
-
-
+    } catch (error) {
         console.error('Error:', error);
-
-        toastr.success(`${data.mensaje}`, 'Error', {"closeButton": true,});
-        return;
-
-    });
+        toastr.error('Hubo un error al intentar la acción', 'Error', { "closeButton": true });
+    }
 }
+
 
 function abrirModal(modo, codigoArticulo) {
 
@@ -361,7 +350,7 @@ function abrirModal(modo, codigoArticulo) {
     if (modo === 1) {
 
         modalTitle.textContent = 'Agregar articulo';
-        modalButton.setAttribute('onclick', 'agregarUsuario()');
+        modalButton.setAttribute('onclick', 'agregarArticulo()');
         
         document.getElementById('codigoArticulo').value = '';
         document.getElementById('nombreArticulo').value = '';

@@ -58,7 +58,7 @@ $(document).ready(function() {
                 render: function (data, type, row) { // 'row' contiene toda la fila de datos
                     return `<div class="text-center">
                                 <button class="btn btn-xs editar-btn" data-row='${JSON.stringify(row)}'><i class="fa fa-pencil"></i></button>
-                                <button class="btn btn-xs eliminar-btn" data-pk="${row[6]}"><i class="fa fa-trash"></i></button>
+                                <button class="btn btn-xs eliminar-btn" data-pk="${row[4]}"><i class="fa fa-trash"></i></button>
                             </div>`;
                 }
             }
@@ -87,7 +87,7 @@ $(document).ready(function() {
     });
 
     // Eliminar
-    $('#usuarioTable').on('click', '.eliminar-btn', function () {
+    $('#usuarioTable').one('click', '.eliminar-btn', function () {
 
         const pkUsuario = $(this).data('pk');
 
@@ -210,6 +210,7 @@ async function eliminarUsuario(pkUsuario) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ pkUsuario })
         });
+
         const data = await response.json();
 
         if (!response.ok) {

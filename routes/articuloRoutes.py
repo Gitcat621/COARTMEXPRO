@@ -7,12 +7,16 @@ articulo_bp = Blueprint('articulo_bp', __name__)
 def listar_articulos():
     """Endpoint para obtener todos los registros"""
 
+    articulos = Articulo.listar_articulos()
+    return jsonify(articulos), 200
+
+@articulo_bp.route('/inventario', methods=['GET'])
+def listar_inventario():
+    """Endpoint para obtener todos los registros"""
+
     # Obtener parámetros de la URL
     year = request.args.get('year') 
     month = request.args.get('month')
-    grupo = request.args.get('grupo')
-
-    print(f"📥 Petición recibida - Grupo: {grupo}, Año: {year}, Mes: {month}")
 
     if not year:
             year = 'YEAR(CURDATE())'
@@ -20,10 +24,7 @@ def listar_articulos():
     if not month:
         month = 'MONTH(CURDATE())'
 
-    articulos = Articulo.listar_articulos(year, month)
-
-    print(f"🔍 Resultados encontrados: {len(articulos)}")
-
+    articulos = Articulo.listar_inventario(year, month)
     return jsonify(articulos), 200
 
 @articulo_bp.route('/articulos', methods=['POST'])
@@ -32,27 +33,29 @@ def crear_articulo():
     data = request.json
     codigoArticulo = data.get('codigoArticulo')
     nombreArticulo = data.get('nombreArticulo')
-    precioAlmacen = data.get('precioAlmacen')
-    fkProveedor = data.get('fkProveedor')
-    fkCategoriaArticulo = data.get('fkCategoriaArticulo')
+    precioAlmacen = float(data.get('precioAlmacen'))  # Convertir a float
+    fkProveedor = int(data.get('fkProveedor'))  # Convertir a entero
+    fkCategoriaArticulo = int(data.get('fkCategoriaArticulo'))  # Convertir a entero
+
 
 
     if not isinstance(nombreArticulo, str):
         return jsonify({'mensaje': 'nombreArticulo debe ser una cadena de texto'}), 400
 
-    # if not isinstance(precioAlmacen, (int, float)):
-    #     return jsonify({'mensaje': 'precioAlmacen debe ser un número'}), 400
+    if not isinstance(precioAlmacen, (int, float)):
+        return jsonify({'mensaje': 'precioAlmacen debe ser un número'}), 400
 
-    # if not isinstance(fkProveedor, int):
-    #     return jsonify({'mensaje': 'fkProveedor debe ser un entero'}), 400
+    if not isinstance(fkProveedor, int):
+        return jsonify({'mensaje': 'fkProveedor debe ser un entero'}), 400
 
-    # if not isinstance(fkCategoriaArticulo, int):
-    #     return jsonify({'mensaje': 'fkCategoriaArticulo debe ser un entero'}), 400
+    if not isinstance(fkCategoriaArticulo, int):
+        return jsonify({'mensaje': 'fkCategoriaArticulo debe ser un entero'}), 400
 
     if not nombreArticulo or precioAlmacen is None or fkProveedor is None or fkCategoriaArticulo is None:
         return jsonify({'mensaje': 'Faltan datos'}), 400
-
-    if Articulo.crear_articulo(codigoArticulo, nombreArticulo, precioAlmacen, fkProveedor, fkCategoriaArticulo):
+    
+    articulo = Articulo(codigoArticulo=codigoArticulo, nombreArticulo=nombreArticulo, precioAlmacen=precioAlmacen, fkProveedor=fkProveedor, fkCategoriaArticulo=fkCategoriaArticulo)
+    if articulo.crear_articulo():
         return jsonify({'mensaje': 'Articulo insertado correctamente'}), 201
     else:
         return jsonify({'mensaje': 'Error al insertar articulo'}), 500
@@ -64,13 +67,12 @@ def editar_articulo():
         data = request.json
         codigoArticulo = data.get('codigoArticulo')
         nombreArticulo = data.get('nombreArticulo')
-        precioAlmacen = data.get('precioAlmacen')
-        fkProveedor = data.get('fkProveedor')
-        fkCategoriaArticulo = data.get('fkCategoriaArticulo')
+        precioAlmacen = float(data.get('precioAlmacen'))  # Convertir a float
+        fkProveedor = int(data.get('fkProveedor'))  # Convertir a entero
+        fkCategoriaArticulo = int(data.get('fkCategoriaArticulo'))  # Convertir a entero
 
-        print(data)
-
-        if Articulo.editar_articulo(codigoArticulo, nombreArticulo, precioAlmacen, fkProveedor, fkCategoriaArticulo):
+        articulo = Articulo(codigoArticulo=codigoArticulo, nombreArticulo=nombreArticulo, precioAlmacen=precioAlmacen, fkProveedor=fkProveedor, fkCategoriaArticulo=fkCategoriaArticulo)
+        if articulo.editar_articulo():
             return jsonify({'mensaje': 'Articulo editado correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo editar el articulo'}), 500
@@ -85,7 +87,8 @@ def eliminar_articulo():
         data = request.json
         codigoArticulo = data.get('codigoArticulo')
 
-        if Articulo.eliminar_articulo(codigoArticulo):
+        articulo = Articulo(codigoArticulo)
+        if articulo.eliminar_articulo():
             return jsonify({'mensaje': 'Articulo eliminado correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo eliminar el articulo'}), 500

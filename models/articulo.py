@@ -27,7 +27,23 @@ class Articulo:
 
 
     @staticmethod
-    def listar_articulos(year, month):
+    def listar_articulos():
+        """Obtiene todos los registros de la base de datos."""
+        db = Database()
+        consulta = f'''
+        SELECT a.codigoArticulo, a.nombreArticulo, a.precioAlmacen, p.nombreProveedor, ca.nombreCategoriaArticulo, a.fkProveedor, a.fkCategoriaArticulo 
+        FROM articulos a 
+        JOIN categoria_articulos ca ON ca.pkCategoriaArticulo = a.fkCategoriaArticulo 
+        JOIN proveedores p ON p.pkProveedor = a.fkProveedor
+        '''
+
+        print(consulta)
+
+        resultado = db.execute_query(consulta)
+        db.close()
+        return resultado
+    
+    def listar_inventario(year, month):
         """Obtiene todos los registros de la base de datos."""
         db = Database()
         consulta = f'''
@@ -76,12 +92,13 @@ class Articulo:
 
     def editar_articulo(self):
         """Edita un registro en la base de datos."""
-        if not self.codigoArticulo:
-            raise ValueError("El articulo debe tener un ID para ser editado.")
         db = Database()
-        print(self.codigoArticulo)
+        
         query = "UPDATE articulos SET codigoArticulo = %s, nombreArticulo = %s, precioAlmacen = %s, fkProveedor = %s, fkCategoriaArticulo = %s  WHERE codigoArticulo = %s"
         resultado = db.execute_commit(query, (self.codigoArticulo, self.nombreArticulo, self.precioAlmacen, self.fkProveedor, self.fkCategoriaArticulo, self.codigoArticulo))
+
+        print(query)
+
         db.close()
         return resultado
 

@@ -19,14 +19,17 @@ def iniciar_sesion():
     nombreUsuario = data.get('nombreUsuario')
     contrasena = data.get('contrasena')
 
-    # if not datos or 'nombreUsuario' not in datos or 'contrasena' not in datos:
-    #     return jsonify({'mensaje': 'Faltan datos'}), 400  # Devuelve un error si faltan datos
+    if not data or 'nombreUsuario' not in data or 'contrasena' not in data:
+        return jsonify({'mensaje': 'Faltan datos'}), 400  # Devuelve un error si faltan datos
 
 
-    usuario = Usuario.iniciar_sesion(nombreUsuario, contrasena)
+    usuario = Usuario(nombreUsuario=nombreUsuario, contrasena=contrasena)
 
-    if usuario:
-        return jsonify(usuario), 200  # Devuelve los datos del usuario si el inicio de sesión es exitoso
+    if usuario.iniciar_sesion():
+        return jsonify({
+            "nombreUsuario": usuario.nombreUsuario,
+            "nombreDepartamento": usuario.nombreDepartamento
+        }), 200 # Devuelve los datos del usuario si el inicio de sesión es exitoso
     else:
         return jsonify({'mensaje': 'Credenciales inválidas'}), 401  # Devuelve un error si las credenciales son inválidas
 
@@ -37,7 +40,6 @@ def crear_usuario():
     nombreUsuario = data.get('nombreUsuario')
     contrasena = data.get('contrasena')
     fkEmpleado = data.get('fkEmpleado')
-    print(data)
 
     if not nombreUsuario or not contrasena:
         return jsonify({'mensaje': 'Faltan datos'}), 400
@@ -87,11 +89,11 @@ def eliminar_usuario():
     """Endpoint para editar un usuario"""
     try:
         data = request.json
-        pkUsuario = data.get('pkUsuario')
+        pkUsuario = int(data.get('pkUsuario')) 
 
-        # # Validación de ID (debe ser un número entero)
-        # if not isinstance(id, int):
-        #     return jsonify({'mensaje': 'ID inválido'}), 400
+        # Validación de ID (debe ser un número entero)
+        if not isinstance(pkUsuario, int):
+            return jsonify({'mensaje': 'ID inválido'}), 400
 
 
         # Llamar al controlador para actualizar el usuario

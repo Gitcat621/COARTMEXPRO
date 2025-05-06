@@ -64,10 +64,12 @@ async function envio(user,pass){
 
     const datos = await respuesta.json();
 
+    console.log(datos)
+
     // Redirige al usuario a la página principal, guarda el token, etc.
 
-    sessionStorage.setItem("usuario", datos[0].nombreUsuario);
-		sessionStorage.setItem("departamento", datos[0].nombreDepartamento);
+    sessionStorage.setItem("usuario", datos.nombreUsuario);
+		sessionStorage.setItem("departamento", datos.nombreDepartamento);
 
 
     window.location.href = "./index.html"; 
