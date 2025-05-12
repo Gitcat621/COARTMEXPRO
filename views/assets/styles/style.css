@@ -467,6 +467,11 @@ h4 strong {
   line-height: 22px;
   padding: 5px 15px;
 }
+.btn.btn-xsxs {
+  font-size: 12px;
+  line-height: 6px;
+  padding: 5px 6px;
+}
 .btn.btn-icon {
   position: relative;
   overflow: hidden;

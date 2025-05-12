@@ -39,7 +39,7 @@ $("#cerrarSesion").click(function() {
     Swal.fire({
         title: "Cerrar sesión",
         text: "¿Estas seguro de salir?",
-        icon: "warning",
+        icon: "question",
         showCancelButton: true,
         confirmButtonColor: "#3085D6",
         cancelButtonColor: "#C1C0C0",

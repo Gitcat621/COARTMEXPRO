@@ -11,37 +11,39 @@ class Curso:
     def listar_cursos():
         """Obtiene todos los registros de la base de datos."""
         db = Database()
-        resultado = db.execute_query("SELECT * FROM cursos")
+        consulta = "SELECT * FROM cursos"
+        resultado = db.execute_query(consulta)
+        print(consulta)
         db.close()
         return resultado
     
     def crear_curso(self):
         """Guarda un nuevo registro en la base de datos"""
         db = Database()
-        query = "INSERT INTO cursos (nombreCurso) VALUES (%s,%s)"
-        resultado = db.execute_commit(query, (self.nombreCurso))
+        consulta = "INSERT INTO cursos (nombreCurso) VALUES (%s,%s)"
+        valores = (self.nombreCurso,)
+        print(consulta % valores)
+        resultado = db.execute_commit(consulta, valores)
         db.close()
         return resultado
 
     def editar_curso(self):
         """Edita un registro en la base de datos."""
-        if not self.pkCurso:
-            raise ValueError("El curso debe tener un ID para ser editado.")
         db = Database()
-        print(self.pkCurso)
-        query = "UPDATE cursos SET nombreCurso = %s WHERE pkCurso = %s"
-        resultado = db.execute_commit(query, (self.nombreCurso, self.pkCurso))
+        consulta = "UPDATE cursos SET nombreCurso = %s WHERE pkCurso = %s"
+        valores = (self.nombreCurso, self.pkCurso)
+        print (consulta % valores)
+        resultado = db.execute_commit(consulta, valores)
         db.close()
         return resultado
 
     def eliminar_curso(self):
         """Elimina un registro de la base de datos."""
-
-        if not self.pkCurso:
-            raise ValueError("El curso debe tener un ID para ser eliminado.")
         db = Database()
-        query = "DELETE FROM cursos WHERE pkCurso = %s"
-        resultado = db.execute_commit(query, (self.pkCurso,))
+        consulta = "DELETE FROM cursos WHERE pkCurso = %s"
+        valores = (self.pkCurso,)
+        print(consulta % valores)
+        resultado = db.execute_commit(consulta, valores)
         db.close()
         return resultado
 

@@ -188,7 +188,7 @@ $(document).ready(function() {
                 render: function (data, type, row) { // 'row' contiene toda la fila de datos
                     return `<div class="text-center">
                                 <button class="btn btn-xs editar-btn" data-row='${JSON.stringify(row)}'><i class="fa fa-pencil"></i></button>
-                                <button class="btn btn-xs eliminar-btn" data-pk="${row[16]}"><i class="fa fa-trash"></i></button>
+                                <button class="btn btn-xs eliminar-btn" data-pk="${row[16]}" data-nombre="${row[0]}"><i class="fa fa-trash"></i></button>
                             </div>`;
                 }
             }
@@ -223,13 +223,21 @@ $(document).ready(function() {
     $('#proveedorTable').on('click', '.eliminar-btn', function () {
 
         const pkProveedor = $(this).data('pk');
+        const nombreProveedor = $(this).data('nombre');
 
-        var modal = $('[data-remodal-id="remodal"]').remodal();
-
-        modal.open();
-
-        $(document).on("confirmation", ".remodal", function () {
-            eliminarProveedor(pkProveedor);    
+        Swal.fire({
+            title: `¿Eliminar a ${nombreProveedor}?`,
+            text: "No se podrá recuperar",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#B71C1C",
+            cancelButtonColor: "#C1C0C0",
+            confirmButtonText: "Eliminar",
+            cancelButtonText: "Cancelar"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                eliminarProveedor(pkProveedor); 
+            }
         });
         
     });

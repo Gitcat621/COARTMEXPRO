@@ -1,10 +1,6 @@
 $(document).ready(function () {
-    
-    if (sessionStorage.getItem("departamento") !== 'Sistemas' && sessionStorage.getItem("departamento") !== 'Dirección general') {
-        //window.location.href = './index.html';
-        //toastr.warning('Usted no debería estar aquí', 'Atención', { "closeButton": true });
-    }
-    listarDepartamentos();
+
+
     listarEmpleados();
     
 });
@@ -16,46 +12,6 @@ function formatearFecha(fechaString) {
     const mes = String(fecha.getMonth() + 1).padStart(2, '0'); // Los meses van de 0 a 11
     const dia = String(fecha.getDate()).padStart(2, '0');
     return `${año}-${mes}-${dia}`;
-}
-
-//Listar los registros foraneos
-async function listarDepartamentos() {
-
-    try {
-
-        const response = await fetch('http://127.0.0.1:5000/coartmex/departamentos', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-        const data = await response.json();
-
-        if (!response.ok) {
-
-            //manejo de errores
-            if (response.status === 400) {
-      
-              toastr.error('No se pudo obtener los empleados', 'Error', {"closeButton": true,});
-      
-            }
-            return;
-        }
-
-        document.getElementById('departamento_menu').innerHTML = "";
-
-        // Mapear en un select
-        data.forEach(function(dep) {
-            let HTML = `<option value="${dep.pkDepartamento}">${dep.nombreDepartamento}</option>`;
-            // Mapear valor por cada elemento en la consulta 
-            document.getElementById('departamento_menu').innerHTML += HTML;
-        });
-
-    } catch (error) {
-        console.error("Error al cargar los datos:", error);
-
-        toastr.error('La petición de departamentos no se pudo conectar', 'Error', {"closeButton": true,});
-    }
 }
 
 
@@ -80,13 +36,15 @@ $(document).ready(function() {
             { title: "Departamento" },
             {
                 title: "Opciones",
-                render: function (data, type, row) { // 'row' contiene toda la fila de datos
+                render: function (data, type, row) { 
                     return `<div class="text-center">
                                 <button class="btn btn-xs editar-btn" data-row='${JSON.stringify(row)}'><i class="fa fa-pencil"></i></button>
-                                <button class="btn btn-xs eliminar-btn" data-rfc="${row[10]}"><i class="fa fa-trash"></i></button>
+                                <button class="btn btn-xs eliminar-btn" data-rfc="${row[9]}" data-nombre="${row[2]}">
+                                    <i class="fa fa-trash"></i>
+                                </button>
                             </div>`;
                 }
-            }
+            }            
         ],
         scrollX: true,
     });
@@ -96,17 +54,17 @@ $(document).ready(function() {
     // Editar
     $('#empleadoTable').on('click', '.editar-btn', function () {
 
-         // Obtiene la fila de datos desde el atributo data-row
+        // Obtiene la fila de datos desde el atributo data-row
         const rowData = $(this).data('row');
 
-        const numeroEmpleado = rowData[10];
+        const numeroEmpleado = rowData[9];
         const rfc = rowData[1];
         const nombreEmpleado = rowData[2];
         const fechaIngreso = rowData[3];
         const formateada = formatearFecha(fechaIngreso);
         const sueldo = rowData[4];
         const permisosPedidos = rowData[5];
-        const fkDepartamento = rowData[8];
+        const fkDepartamento = rowData[7];
 
         // Asignar valores a los inputs del modal
         document.getElementById('rfc').value = rfc;
@@ -123,18 +81,24 @@ $(document).ready(function() {
     $('#empleadoTable').on('click', '.eliminar-btn', function () {
 
         const rfc = $(this).data('rfc');
-
-        var modal = $('[data-remodal-id="remodal"]').remodal();
-
-        modal.open();
-
-        $(document).on("confirmation", ".remodal", function () {
-
-            eliminarEmpleado(rfc);    
-            
+        const nombreEmpleado = $(this).data('nombre'); // Capturamos el nombre
+    
+        Swal.fire({
+            title: `¿Eliminar a ${nombreEmpleado}?`,
+            text: "No se podrá recuperar",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#B71C1C",
+            cancelButtonColor: "#C1C0C0",
+            confirmButtonText: "Eliminar",
+            cancelButtonText: "Cancelar"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                eliminarEmpleado(rfc);
+            }
         });
-        
     });
+    
 
 });
 
@@ -196,13 +160,21 @@ async function listarEmpleados() {
         let tabla = $('#empleadoTable').DataTable();
         tabla.clear().draw();
         tabla.rows.add(data.map((empleados) => [
-            empleados.numeroEmpleado, empleados.rfc, empleados.nombreEmpleado, toformatearFecha(empleados.fechaIngreso), empleados.sueldo,
-            empleados.permisosPedidos, empleados.cursos, empleados.nombreDepartamento, empleados.pkDepartamento,
-            empleados.pkCurso, empleados.numeroEmpleado
+            empleados.numeroEmpleado, //0
+            empleados.rfc,  //1
+            empleados.nombreEmpleado, //2 
+            toformatearFecha(empleados.fechaIngreso), //3
+            empleados.nomina + empleados.vale, //4
+            empleados.permisos, //5 
+            empleados.cursos, //6
+            empleados.nombreDepartamento, //7
+            empleados.pkDepartamento, //8
+            empleados.pkCurso, //9
+            empleados.numeroEmpleado //10
         ])).draw();
     } catch (error) {
         console.error("Error al cargar los datos:", error);
-        toastr.error('La petición de colaboradores no se pudo conectar', 'Error', {"closeButton": true,});
+        toastr.error('La petición de colaboradores no se pudo concretar', 'Error', {"closeButton": true,});
     }
 }
 

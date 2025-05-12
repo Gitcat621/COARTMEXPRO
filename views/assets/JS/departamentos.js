@@ -1,12 +1,7 @@
 $(document).ready(function () {
 
-    if (sessionStorage.getItem("departamento") !== 'Sistemas' && sessionStorage.getItem("departamento") !== 'Dirección general') {
-        //window.location.href = './index.html';
-        //toastr.warning('Usted no debería estar aquí', 'Atención', { "closeButton": true });
-    }
+    listarDepartamentos();
 
-    listar();
-    
 });
 
 //Asignar funcion al boton de abrir modal
@@ -25,8 +20,8 @@ $(document).ready(function() {
                 title: "Opciones",
                 render: function (data, type, row) { // 'row' contiene toda la fila de datos
                     return `<div class="text-center">
-                                <button class="btn btn-warning btn-sm editar-btn" data-row='${JSON.stringify(row)}'><i class="fa fa-pencil"></i></button>
-                                <button class="btn btn-danger btn-sm eliminar-btn" data-pk="${row[1]}"><i class="fa fa-trash"></i></button>
+                                <button class="btn btn-xs editar-btn" data-row='${JSON.stringify(row)}'><i class="fa fa-pencil"></i></button>
+                                <button class="btn btn-xs eliminar-btn" data-pk="${row[1]}"><i class="fa fa-trash"></i></button>
                             </div>`;
                 }
             }
@@ -68,172 +63,104 @@ $(document).ready(function() {
 
 });
 
-function agregar(){
+async function agregar() {
+    try {
+        const nombreDepartamento = document.getElementById('nombreDepartamento').value.trim();
 
-    // Obtener los datos del formulario
-    const nombreDepartamento = document.getElementById('nombreDepartamento').value.trim();
-
-
-    // Verificar si ambos campos están completos
-    if (!nombreDepartamento) {
-
-
-        toastr.warning('Porfavor completa todos los campos', 'Advertencia', {
-            "closeButton": true,
-        });
-        return;
-
-
-    }
-
-
-    // Enviar los datos al backend (Flask) para insertar
-    fetch('http://127.0.0.1:5000/coartmex/departamentos', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ nombreDepartamento })
-    })
-    .then(response => response.json())
-    .then(data => {
-
-
-        // Mostrar el mensaje de la respuesta de la API
-        toastr.success(`${data.mensaje}`, 'Realizado', {
-            "closeButton": true,
-        });
-
-        //Acciones posteriores(Cerrar modal y mapear datos)
-        $('#boostrapModal-1').modal('hide');
-        listar();
-
-    })
-    .catch(error => {
-        //Imprimir errores
-        console.error('Error:', error);
-
-        toastr.error('Hubo un error al intentar la acción', 'Error', {
-            "closeButton": true,
-        });
-
-        return;
-    });
-}
-
-function listar() {
-
-    //Mapear datos
-    fetch('http://127.0.0.1:5000/coartmex/departamentos', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
+        if (!nombreDepartamento) {
+            toastr.warning('Por favor completa todos los campos', 'Advertencia', { "closeButton": true });
+            return;
         }
-    })
-    .then(response => response.json())
-    .then(data => {
 
-        //Iniciar la datatable y asignarla a una variable
+        const response = await fetch('http://127.0.0.1:5000/coartmex/departamentos', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ nombreDepartamento })
+        });
+
+        const data = await response.json();
+
+        toastr.success(`${data.mensaje}`, 'Realizado', { "closeButton": true });
+
+        // Cerrar modal y actualizar la lista
+        $('#boostrapModal-1').modal('hide');
+        await listar();
+
+    } catch (error) {
+        console.error('Error:', error);
+        toastr.error('Hubo un error al intentar la acción', 'Error', { "closeButton": true });
+    }
+}
+
+async function listarDepartamentos() {
+    try {
+        const response = await fetch('http://127.0.0.1:5000/coartmex/departamentos', {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+        });
+
+        const data = await response.json();
         let tabla = $('#departamentoTable').DataTable();
-        
-        // Limpiar la tabla antes de agregar nuevos datos
+
         tabla.clear().draw();
-
-        // Agregar los nuevos datos
-        tabla.rows.add(data.map((depa) => [
-
-            depa.nombreDepartamento, depa.pkDepartamento
-
-        ])).draw();
-    })
-    .catch(error => console.error("Error al cargar los datos:", error));
-    
-}
-
-function editar(pkDepartamento){
-
-    //Obtener valores del formulario
-    const nombreDepartamento = document.getElementById('nombreDepartamento').value.trim();
-
-    // Verificar que ningún campo esté vacío
-    if (!pkDepartamento || !nombreDepartamento) {
-
-        toastr.warning('Por favor, completa todos los campos', 'Advertencia', {"closeButton": true,});
-        return;
-
-    }
-
-    // Enviar los datos al backend (Flask) para editar
-    fetch('http://127.0.0.1:5000/coartmex/departamentos', {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ pkDepartamento, nombreDepartamento })
-    })
-    .then(response => response.json())
-    .then(data => {
-
-
-        // Mostrar el mensaje de la respuesta de la API
-        listar();
-
-
-        toastr.success(`${data.mensaje}`, 'Realizado', {"closeButton": true,});
-
-    })
-    .catch(error => {
-
-        console.error('Error:', error);
-
-
-        toastr.error('Hubo un error al intentar la acción', 'Error', {"closeButton": true,});
-        return;
-
-    });
-}
-
-function eliminar(pkDepartamento){
-
-    // Verificar si llega el id
-    if (!pkDepartamento) {
-
-        toastr.warning('No se pudo obtener el elemento', 'Advertencia', {"closeButton": true,});
-        return;
-
-    }
-
-    // Enviar los datos al backend (Flask) para eliminar
-    fetch('http://127.0.0.1:5000/coartmex/departamentos', {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ pkDepartamento })
-    })
-    .then(response => response.json())
-    .then(data => {
-
-
-        // Mostrar el mensaje de la respuesta de la API
-        listar();
-
-
-        toastr.success(`${data.mensaje}`, 'Realizado', {"closeButton": true,});
-
-
-    })
-    .catch(error => {
-
-
-        console.error('Error:', error);
-
-        toastr.success(`${data.mensaje}`, 'Error', {"closeButton": true,});
+        tabla.rows.add(data.map(depa => [depa.nombreDepartamento, depa.pkDepartamento])).draw();
 
         
-        return;
-    });
+    } catch (error) {
+        console.error("Error al cargar los datos:", error);
+    }
 }
+
+async function editar(pkDepartamento) {
+    try {
+        const nombreDepartamento = document.getElementById('nombreDepartamento').value.trim();
+
+        if (!pkDepartamento || !nombreDepartamento) {
+            toastr.warning('Por favor, completa todos los campos', 'Advertencia', { "closeButton": true });
+            return;
+        }
+
+        const response = await fetch('http://127.0.0.1:5000/coartmex/departamentos', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ pkDepartamento, nombreDepartamento })
+        });
+
+        const data = await response.json();
+
+        await listar();
+        toastr.success(`${data.mensaje}`, 'Realizado', { "closeButton": true });
+
+    } catch (error) {
+        console.error('Error:', error);
+        toastr.error('Hubo un error al intentar la acción', 'Error', { "closeButton": true });
+    }
+}
+
+async function eliminar(pkDepartamento) {
+    try {
+        if (!pkDepartamento) {
+            toastr.warning('No se pudo obtener el elemento', 'Advertencia', { "closeButton": true });
+            return;
+        }
+
+        const response = await fetch('http://127.0.0.1:5000/coartmex/departamentos', {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ pkDepartamento })
+        });
+
+        const data = await response.json();
+
+        await listar();
+        toastr.success(`${data.mensaje}`, 'Realizado', { "closeButton": true });
+
+    } catch (error) {
+        console.error('Error:', error);
+        toastr.error('Hubo un error al intentar la acción', 'Error', { "closeButton": true });
+    }
+}
+
 
 function abrirModal(modo, pkDepartamento) {
 

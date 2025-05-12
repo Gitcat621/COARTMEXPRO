@@ -1,11 +1,6 @@
 $(document).ready(function () {
 
-    //cargarMetricas();
 
-    if (sessionStorage.getItem("departamento") !== 'Admon. Contable y Fiscal' && sessionStorage.getItem("departamento") !== 'Dirección general') {
-        //window.location.href = './index.html';
-        //toastr.warning('Usted no debería estar aquí', 'Atención', { "closeButton": true });
-    }
     
 });
 
@@ -72,165 +67,131 @@ document.getElementById('filtro').addEventListener('click', () => {
         return;
     }
 
-    cargarMetricas1(mesesSeleccionados);
-
-    cargarMetricas2(mesesSeleccionados);
-    
+    cargarMetricas(mesesSeleccionados, 'year1', '1');
+    cargarMetricas(mesesSeleccionados, 'year2', '2');
 
 });
 
+let metricasYear1 = null;
+let metricasYear2 = null;
 
-//Cargas
-function cargarMetricas1(meses){
-    
-    //console.log("Meses seleccionados:", meses);
-    
-    var year1 = document.getElementById('year1').value;
-    
+
+async function cargarMetricas(meses, yearId, prefix) {
+
+    const year = document.getElementById(yearId).value;
     const params = new URLSearchParams();
-    
-    // Agregar los meses a los parámetros
+
     meses.forEach((mes) => params.append("items[]", mes));
+    params.append("year", year);
     
-    // Agregar los años como parámetros
-    params.append("year", year1);
-    
-    // Realizar la solicitud fetch con los parámetros en la URL
-    fetch(`http://127.0.0.1:5000/coartmex/resumenes?${params.toString()}`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
+
+    try {
+        const response = await fetch(`http://127.0.0.1:5000/coartmex/resumenes?${params.toString()}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        const data = await response.json();
 
         console.log(data);
 
         data.forEach(obj => {
             Object.keys(obj).forEach(key => {
-              if (obj[key] === null) {
-                obj[key] = 0; // Reemplaza null con 0 (puedes usar cualquier otro valor)
-            }
+                if (obj[key] === null) {
+                    obj[key] = 0;
+                }
             });
         });
-          
+
+        const datos = data[0];
+        // Guardar en la variable correspondiente
+        if (prefix === '1') {
+            metricasYear1 = datos;
+        } else if (prefix === '2') {
+            metricasYear2 = datos;
+        }
+
+        // Comparar si ambas están listas
+        if (metricasYear1 && metricasYear2) {
+            compararMetricas(metricasYear1, metricasYear2);
+        }
 
         const formateador = new Intl.NumberFormat('es-MX');
 
         function formatearYMostrar(idElemento, valor, prefijo = '') {
-          const valorFormateado = formateador.format(valor);
-          document.getElementById(idElemento).innerHTML = prefijo + valorFormateado;
+            document.getElementById(idElemento).innerHTML = prefijo + formateador.format(valor);
         }
-        
+
         if (data && data.length > 0) {
-          const datos = data[0];
-        
-          formatearYMostrar('ingresos1', datos.totalIngresos, '$');
-          formatearYMostrar('efectivoUtilizado1', datos.totalEgresos, '$');
-          formatearYMostrar('flujoRemanente1', datos.efectivoRestante, '$');
-          formatearYMostrar('ventas1', datos.totalVenta, '$');
-        
-          const crecimiento = datos.porcentajeCrecimiento;
-          const valorLimitado = Math.round(crecimiento * 10) / 10;
-          document.getElementById('crecimientos1').innerHTML = valorLimitado + "%";
-        
-          formatearYMostrar('articulos1', datos.existencias);
-          formatearYMostrar('compras1', datos.totalComprasMercancia, '$');
-          formatearYMostrar('socios1', datos.sociosNegociados);
-          formatearYMostrar('articulosVendidos1', datos.articulosVendidos);
-          formatearYMostrar('inventarios1', datos.valorInventario, '$');
-          formatearYMostrar('cuentasPorCobrar1', datos.totalCxC, '$');
-          formatearYMostrar('cuentasPorPagar1', datos.totalCxP, '$');
-          formatearYMostrar('gastos1', datos.totalGastos, '$');
+            const datos = data[0];
+
+            formatearYMostrar(`ingresos${prefix}`, datos.totalIngresos, '$');
+            formatearYMostrar(`efectivoUtilizado${prefix}`, datos.totalEgresos, '$');
+            formatearYMostrar(`flujoRemanente${prefix}`, datos.efectivoRestante, '$');
+            formatearYMostrar(`ventas${prefix}`, datos.totalVenta, '$');
+
+            const crecimiento = Math.round(datos.porcentajeCrecimiento * 10) / 10;
+            document.getElementById(`crecimientos${prefix}`).innerHTML = crecimiento + "%";
+
+            formatearYMostrar(`articulos${prefix}`, datos.existencias);
+            formatearYMostrar(`compras${prefix}`, datos.totalComprasMercancia, '$');
+            formatearYMostrar(`socios${prefix}`, datos.sociosNegociados);
+            formatearYMostrar(`articulosVendidos${prefix}`, datos.articulosVendidos);
+            formatearYMostrar(`inventarios${prefix}`, datos.valorInventario, '$');
+            formatearYMostrar(`cuentasPorCobrar${prefix}`, datos.totalCxC, '$');
+            formatearYMostrar(`cuentasPorPagar${prefix}`, datos.totalCxP, '$');
+            formatearYMostrar(`gastos${prefix}`, datos.totalGastos, '$');
+
+           
         } else {
-          console.error("No se encontraron datos en el array 'data'.");
+            console.error("No se encontraron datos en el array 'data'.");
         }
-
-        const fechaISO = data[0].fechaMasRecienteMes; // "2025-01-30"
-        const partes = fechaISO.split("-"); // [ "2025", "01", "30" ]
-        const fechaFormateada = `${partes[2]}/${partes[1]}/${partes[0]}`; // "30/01/2025"
-        
-        //document.getElementById('fechaReciente1').innerHTML = fechaFormateada;
-        
-
-    })
-    .catch(error => console.error("Error al cargar los datos:", error));
+    } catch (error) {
+        console.error("Error al cargar los datos:", error);
+    }
 }
 
-function cargarMetricas2(meses){
-    
-    //console.log("Meses seleccionados:", meses);
+const campoHtmlId = {
+  totalVenta: "Ventas",
+  porcentajeCrecimiento: "Crecimientos",
+  totalIngresos: "Ingresos",
+  totalEgresos: "EfectivoUtilizado",
+  efectivoRestante: "FlujoRemanente",
 
-    var year2 = document.getElementById('year2').value;
-    
-    const params = new URLSearchParams();
-    
-    // Agregar los meses a los parámetros
-    meses.forEach((mes) => params.append("items[]", mes));
-    
-    // Agregar los años como parámetros
-    params.append("year", year2);
-    
-    // Realizar la solicitud fetch con los parámetros en la URL
-    fetch(`http://127.0.0.1:5000/coartmex/resumenes?${params.toString()}`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
+  valorInventario: "Inventarios",
+  totalCxC: "CuentasPorCobrar",
+  totalCxP: "CuentasPorPagar",
+  totalGastos: "Gastos",
+  existencias: "Articulos",
+  totalComprasMercancia: "Compras",
+  sociosNegociados: "Socios",
+  articulosVendidos: "ArticulosVendidos"
+};
 
-        console.log(data);
 
-        data.forEach(obj => {
-            Object.keys(obj).forEach(key => {
-              if (obj[key] === null) {
-                obj[key] = 0; // Reemplaza null con 0 (puedes usar cualquier otro valor)
-            }
-            });
-        });
-          
+function compararMetricas(año1, año2) {
+ 
+  const formateador = new Intl.NumberFormat('es-MX');
 
-        const formateador = new Intl.NumberFormat('es-MX');
+  Object.entries(campoHtmlId).forEach(([campo, idBase]) => {
+    const val1 = Number(año1[campo]) || 0;
+    const val2 = Number(año2[campo]) || 0;
+    const diferencia = val2 - val1;
+    const porcentaje = val1 !== 0 ? ((diferencia / val1) * 100) : null;
 
-        function formatearYMostrar(idElemento, valor, prefijo = '') {
-          const valorFormateado = formateador.format(valor);
-          document.getElementById(idElemento).innerHTML = prefijo + valorFormateado;
-        }
-        
-        if (data && data.length > 0) {
-          const datos = data[0];
-        
-          formatearYMostrar('ingresos2', datos.totalIngresos, '$');
-          formatearYMostrar('efectivoUtilizado2', datos.totalEgresos, '$');
-          formatearYMostrar('flujoRemanente2', datos.efectivoRestante, '$');
-          formatearYMostrar('ventas2', datos.totalVenta, '$');
-        
-          const crecimiento = datos.porcentajeCrecimiento;
-          const valorLimitado = Math.round(crecimiento * 10) / 10;
-          document.getElementById('crecimientos2').innerHTML = valorLimitado + "%";
-        
-          formatearYMostrar('articulos2', datos.existencias);
-          formatearYMostrar('compras2', datos.totalComprasMercancia, '$');
-          formatearYMostrar('socios2', datos.sociosNegociados);
-          formatearYMostrar('articulosVendidos2', datos.articulosVendidos);
-          formatearYMostrar('inventarios2', datos.valorInventario, '$');
-          formatearYMostrar('cuentasPorCobrar2', datos.totalCxC, '$');
-          formatearYMostrar('cuentasPorPagar2', datos.totalCxP, '$');
-          formatearYMostrar('gastos2', datos.totalGastos, '$');
-        } else {
-          console.error("No se encontraron datos en el array 'data'.");
-        }
 
-        const fechaISO = data[0].fechaMasRecienteMes; // "2025-01-30"
-        const partes = fechaISO.split("-"); // [ "2025", "01", "30" ]
-        const fechaFormateada = `${partes[2]}/${partes[1]}/${partes[0]}`; // "30/01/2025"
-        
-        //document.getElementById('fechaReciente2').innerHTML = fechaFormateada;
-        
 
-    })
-    .catch(error => console.error("Error al cargar los datos:", error));
+    // Actualizar HTML
+    const absElem = document.getElementById(`diferenciaAbsoluta${idBase}`);
+    const pctElem = document.getElementById(`diferenciaPorcentual${idBase}`);
+
+    if (absElem) {
+      absElem.innerText = isNaN(diferencia) ? "+/-%" : formateador.format(diferencia);
+    }
+
+    if (pctElem) {
+      pctElem.innerText = porcentaje === null ? "+/-%" : porcentaje.toFixed(2) + "%";
+    }
+  });
 }

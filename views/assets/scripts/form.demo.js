@@ -107,6 +107,21 @@
 			startView: 1,		
 			minViewMode: 1,
 		});
+	if ($("#month1").length)
+		$('#month1').datepicker({
+			format: 'mm',
+			autoclose: true,
+			startView: 1,		
+			minViewMode: 1,
+		});
+	if ($("#month2").length)
+		$('#month2').datepicker({
+			format: 'mm',
+			autoclose: true,
+			startView: 1,		
+			minViewMode: 1,
+		});
+
 
 	if ($("#datepicker-autoclose").length)
 		$('#datepicker-autoclose').datepicker({

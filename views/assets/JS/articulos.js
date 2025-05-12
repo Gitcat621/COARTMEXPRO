@@ -83,7 +83,7 @@ $(document).ready(function() {
                 render: function (data, type, row) { // 'row' contiene toda la fila de datos
                     return `<div class="text-center">
                                 <button class="btn btn-xs editar-btn" data-row='${JSON.stringify(row)}'><i class="fa fa-pencil"></i></button>
-                                <button class="btn btn-xs eliminar-btn" data-pk="${row[0]}"><i class="fa fa-trash"></i></button>
+                                <button class="btn btn-xs eliminar-btn" data-pk="${row[0]}" data-nombre="${row[1]}"><i class="fa fa-trash"></i></button>
                             </div>`;
                 }
             }
@@ -118,14 +118,24 @@ $(document).ready(function() {
 
         const codigoArticulo = $(this).data('pk');
 
-        var modal = $('[data-remodal-id="remodal"]').remodal();
-        
-        modal.open();
-    
-        // Se usa `.one()` en lugar de `.on()`, para que el evento se ejecute solo una vez por apertura del modal
-        $(document).one("confirmation", ".remodal", function () {
-            eliminarUsuario(codigoArticulo);    
+        const nombreArticulo = $(this).data('nombre');
+
+        Swal.fire({
+            title: `¿Eliminar a ${nombreArticulo}?`,
+            text: "No se podrá recuperar",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#B71C1C",
+            cancelButtonColor: "#C1C0C0",
+            confirmButtonText: "Eliminar",
+            cancelButtonText: "Cancelar"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                eliminarUsuario(codigoArticulo);    
+            }
         });
+
+        
     });
     
 

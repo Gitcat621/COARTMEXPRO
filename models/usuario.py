@@ -72,7 +72,8 @@ class Usuario:
         query = "UPDATE usuarios SET nombreUsuario = %s, contrasena = %s, fkEmpleado = %s WHERE pkUsuario = %s"
         valores = (self.nombreUsuario, hashed_password, self.fkEmpleado, self.pkUsuario)
 
-        print(query % valores)
+        print(f"\n{query % valores}\n")
+
 
         resultado = db.execute_commit(query, valores)
         db.close()

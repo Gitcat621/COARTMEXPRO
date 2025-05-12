@@ -33,7 +33,6 @@ $(document).ready(function() {
                 title: "Opciones",
                 render: function (data, type, row) { // 'row' contiene toda la fila de datos
                     return `<div class="text-center">
-    
                                 <button class="btn btn-danger btn-sm eliminar-btn" data-row='${JSON.stringify(row)}'><i class="fa fa-trash"></i></button>
                             </div>`;
                 }
@@ -63,16 +62,23 @@ $(document).ready(function() {
 
         const nombreArchivo = rowData[0];
 
-
-        var modal = $('[data-remodal-id="remodal"]').remodal();
-
-        document.getElementById("itemDelete").textContent = nombreArchivo;
-
-        modal.open();
-
-        $(document).on("confirmation", ".remodal", function () {
-            eliminarArchivo(nombreArchivo);    
+        Swal.fire({
+            title: `¿Eliminar a ${nombreArchivo}?`,
+            text: "No se podrá recuperar",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#B71C1C",
+            cancelButtonColor: "#C1C0C0",
+            confirmButtonText: "Eliminar",
+            cancelButtonText: "Cancelar"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                eliminarArchivo(nombreArchivo);    
+            }
         });
+
+
+       
         
     });
 

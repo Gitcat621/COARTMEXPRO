@@ -28,6 +28,10 @@ from routes.ventaRoutes import venta_bp
 from routes.telefonoRoutes import telefono_bp
 from routes.cuentaBancoRoutes import cuentaBanco_bp
 from routes.paqueteriaRoutes import paqueteria_bp
+from routes.asistenciaRoutes import asistencia_bp
+from routes.puestoRoutes import puesto_bp
+from routes.cursoRoutes import curso_bp
+from routes.oportunidadRoutes import oportunidad_bp
 
 app = Flask(__name__)
 
@@ -59,6 +63,10 @@ app.register_blueprint(venta_bp, url_prefix='/coartmex')
 app.register_blueprint(telefono_bp, url_prefix='/coartmex')
 app.register_blueprint(cuentaBanco_bp, url_prefix='/coartmex')
 app.register_blueprint(paqueteria_bp, url_prefix='/coartmex')
+app.register_blueprint(asistencia_bp, url_prefix='/coartmex')
+app.register_blueprint(puesto_bp, url_prefix='/coartmex')
+app.register_blueprint(curso_bp, url_prefix='/coartmex')
+app.register_blueprint(oportunidad_bp, url_prefix='/coartmex')
 
 @app.route('/')
 def default():

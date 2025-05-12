@@ -28,6 +28,12 @@
     <!-- Table Responsive -->
     <link rel="stylesheet" href="assets/plugin/RWD-table-pattern/css/rwd-table.min.css">
 
+	<!-- Select2 -->
+	<link rel="stylesheet" href="assets/plugin/select2/css/select2.min.css">
+
+	<!-- Datepicker -->
+	<link rel="stylesheet" href="assets/plugin/datepicker/css/bootstrap-datepicker.min.css">
+
     <!-- Remodal -->
     <link rel="stylesheet" href="assets/plugin/modal/remodal/remodal.css">
     <link rel="stylesheet" href="assets/plugin/modal/remodal/remodal-default-theme.css">
@@ -127,15 +133,131 @@
 					<h4 class="box-title">Tabla de colaboradores</h4>
 					<!-- /.box-title -->
 
-					<button type="button" class="btn btn-success btn-xs waves-effect waves-light" data-toggle="modal" data-target="#boostrapModal-1" id="modalAgregar"><i class="fa fa-plus"></i> Agregar</button>
+					<button type="button" class="btn btn-success btn-xs waves-effect waves-light margin-bottom-10" data-toggle="modal" data-target="#boostrapModal-1" id="modalAgregar"><i class="fa fa-plus"></i> Agregar</button>
 					
-
-					<div class="col-xs-12">
-						<h1></h1>
-					</div>
 
 					<table id="empleadoTable" class="table table-small-font table-hover table-bordered display nowrap" style="width:100%">
 
+					</table>
+					
+				</div>
+				<!-- /.box-content -->
+			</div>
+
+			<!-- DEPARTAMENTOS -->
+			<div class="col-xs-6">
+				<div class="box-content">
+					<h4 class="box-title">Tabla de departamentos</h4>
+					<!-- /.box-title -->
+
+					<button type="button" class="btn btn-success btn-xs waves-effect waves-light margin-bottom-10" data-toggle="modal" data-target="#boostrapModal-1" id="modalAgregar"><i class="fa fa-plus"></i> Agregar</button>
+				
+
+					<table id="departamentoTable" class="table table-small-font table-hover table-bordered display nowrap" style="width:100%">
+						
+					</table>
+					
+				</div>
+				<!-- /.box-content -->
+			</div>
+
+			<!-- PUESTOS -->
+			<div class="col-xs-6">
+				<div class="box-content">
+					<h4 class="box-title">Puestos</h4>
+					<!-- /.box-title -->
+
+					<button type="button" class="btn btn-success btn-xs waves-effect waves-light margin-bottom-10" data-toggle="modal" data-target="#boostrapModal-1" id="modalAgregar"><i class="fa fa-plus"></i> Agregar</button>
+				
+					<table id="puestoTable" class="table table-small-font table-hover table-bordered display nowrap" style="width:100%">
+						
+					</table>
+					
+				</div>
+				<!-- /.box-content -->
+			</div>
+
+			<!-- NUMEROS DE EMERGENCIA -->
+			<div class="col-xs-6">
+				<div class="box-content">
+					<h4 class="box-title">Tabla de numeros de emergencia</h4>
+					<!-- /.box-title -->
+
+					<button type="button" class="btn btn-success btn-xs waves-effect waves-light margin-bottom-10" data-toggle="modal" data-target="#boostrapModal-1" id="modalAgregar"><i class="fa fa-plus"></i> Agregar</button>
+				
+
+					<table id="empleadoTable" class="table table-small-font table-hover table-bordered display nowrap" style="width:100%">
+						<thead>
+							<tr>
+								<th>Numero</th>
+								<th>Empleado</th>
+								<th>Opciones</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr data-url="perfil.html">
+								<td>998181423</td>
+								<td>Empelado 1</td>
+								<td>
+									<div class="text-center">
+									<button class="btn btn-xs editar-btn"><i class="fa fa-pencil"></i></button>
+									<button class="btn btn-xs eliminar-btn"><i class="fa fa-trash"></i></button>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					
+				</div>
+				<!-- /.box-content -->
+			</div>
+
+			<!-- PERMISOS -->
+			<div class="col-xs-6">
+				<div class="box-content">
+					<h4 class="box-title">Tabla de permisos</h4>
+					<!-- /.box-title -->
+
+					<button type="button" class="btn btn-success btn-xs waves-effect waves-light margin-bottom-10" data-toggle="modal" data-target="#boostrapModal-1" id="modalAgregar"><i class="fa fa-plus"></i> Agregar</button>
+				
+
+					<table id="empleadoTable" class="table table-small-font table-hover table-bordered display nowrap" style="width:100%">
+						<thead>
+							<tr>
+								<th>Descripcion</th>
+								<th>Empleado</th>
+								<th>Opciones</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr data-url="perfil.html">
+								<td>Falta por cita al dentista</td>
+								<td>Empelado 1</td>
+								<td>
+									<div class="text-center">
+									<button class="btn btn-xs editar-btn"><i class="fa fa-pencil"></i></button>
+									<button class="btn btn-xs eliminar-btn"><i class="fa fa-trash"></i></button>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					
+				</div>
+				<!-- /.box-content -->
+			</div>
+
+			<!-- CURSOS -->
+			<div class="col-xs-6">
+				<div class="box-content">
+					<h4 class="box-title">Tabla de cursos</h4>
+					<!-- /.box-title -->
+
+					<button type="button" class="btn btn-success btn-xs waves-effect waves-light margin-bottom-10" data-toggle="modal" data-target="#boostrapModal-1" id="modalAgregar"><i class="fa fa-plus"></i> Agregar</button>
+				
+
+					<table id="cursoTable" class="table table-small-font table-hover table-bordered display nowrap" style="width:100%">
+						
 					</table>
 					
 				</div>
@@ -160,7 +282,7 @@
 			</div>
 			<div class="modal-body">
 				<div class="form-group">
-					<label>Rfc del empleado</label>
+					<label>RFC del empleado</label>
 					<input type="text" class="form-control" id="rfc">
 				</div>
 				<div class="form-group">
@@ -172,17 +294,58 @@
 					<input type="date" class="form-control" id="fechaIngreso">
 				</div>
 				<div class="form-group">
-					<label>Sueldo</label>
+					<label>Fecha de nacimiento</label>
+					<input type="date" class="form-control" id="fechaNacimiento">
+				</div>
+				<div class="form-group">
+					<label>Sueldo de nomina</label>
+					<input type="number" class="form-control" id="sueldo">
+				</div>
+				<div class="form-group">
+					<label>Sueldo de vales</label>
 					<input type="number" class="form-control" id="sueldo">
 				</div>
 				<div class="form-group">
 					<label>Permisos pedidos que se le han otorgado</label>
-					<input type="number" class="form-control" id="permisosPedidos">
+					<select class="select2_2" multiple="multiple" style="width: 100%;" id="permisosPedidos">
+
+					</select>
 				</div>
 				<div class="form-group">
-					<label>Asignar departamento</label>
-					<select class="form-control" id="departamento_menu" >
+					<label>Asignar puesto</label>
+					<select class="form-control" id="puesto_menu" >
 					</select>
+				</div>
+				<div class="form-group">
+					<label>Asignar cursos</label>
+					<select class="form-control" id="curso_menu" >
+					</select>
+				</div>
+				<div class="form-group">
+					<label>Numeros de emergencia</label><br>
+					<select class="select2_2" multiple="multiple" style="width: 100%;">
+
+					</select>
+					
+				</div>
+				<div class="form-group">
+					<label>Pzas de uniformes otorgados</label>
+					<input type="number" class="form-control" id="sueldo">
+				</div>
+				<div class="form-group">
+					<label>Talla</label>
+					<select class="form-control" id="talla_menu">
+						<option>Pequenia</option>
+						<option>Mediana</option>
+						<option>Grande</option>
+					</select>
+				</div>
+				<div class="form-group">
+					<label>Oportunidades</label><br>
+					<select class="select2_2" multiple="multiple" style="width: 100%;">
+
+					</select>
+					
 				</div>
 			</div>
 			<div class="modal-footer">
@@ -193,18 +356,6 @@
 	</div>
 </div>
 
-
-<div class="remodal" data-remodal-id="remodal" role="dialog" aria-labelledby="modal1Title" aria-describedby="modal1Desc">
-	<button data-remodal-action="close" class="remodal-close" aria-label="Close"></button>
-	<div class="remodal-content">
-		<h2 id="modal1Title">¿Eliminar regsitro?</h2>
-		<p id="modal1Desc">
-			No se podrá recuperar
-		</p>
-	</div>
-	<button data-remodal-action="cancel" class="remodal-cancel">Cancelar</button>
-	<button data-remodal-action="confirm" class="remodal-confirm">Eliminar</button>
-</div>
 
 
 	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -218,6 +369,9 @@
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="assets/JS/empleados.js"></script>
+	<script src="assets/JS/departamentos.js"></script>
+	<script src="assets/JS/puestos.js"></script>
+	<script src="assets/JS/cursos.js"></script>
 	<script src="assets/JS/autenticar.js"></script>
 
 	<!-- <script src="assets/scripts/jquery.min.js"></script> -->
@@ -243,7 +397,16 @@
 
 	<script src="assets/scripts/main.min.js"></script>
 	<script src="assets/scripts/horizontal-menu.min.js"></script>
-	
+
+	<!-- Select2 -->
+	<script src="assets/plugin/select2/js/select2.min.js"></script>	
+
+	<!-- Demo Scripts -->
+	<script src="assets/scripts/form.demo.min.js"></script>
+
+	<!-- Datepicker -->
+	<script src="assets/plugin/datepicker/js/bootstrap-datepicker.js"></script>
+
     <!-- Toastr -->
 	<script src="assets/plugin/toastr/toastr.min.js"></script>
 	<script src="assets/scripts/toastr.demo.min.js"></script>

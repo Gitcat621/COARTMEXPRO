@@ -69,13 +69,13 @@
 					</ul>
 					<!-- /.sub-menu js__content -->
 				</li>
-				<li>
+				<li class="current">
 					<a class="waves-effect parent-item js__control" href="#"><i class="menu-icon fa fa-gear"></i><span>Manager PRO</span><span class="menu-arrow fa fa-angle-down"></span></a>
 					<ul class="sub-menu js__content">
-						<li>
+						<li class="current">
 							<a class="waves-effect parent-item js__control" href="#"><i class="menu-icon fa fa-calculator"></i><span>Contable y fiscal </span><span class="menu-arrow fa fa-angle-down"></span></a>
 							<ul class="sub-menu js__content">
-								<li><a href="fuentes.html"><i class="fa fa-file-excel-o"></i> Interfaz de reportes</a></li>
+								<li class="current"><a href="fuentes.html"><i class="fa fa-file-excel-o"></i> Interfaz de reportes</a></li>
 							</ul>
 		
 						</li>		
@@ -128,11 +128,8 @@
 					
 					<h5 class="position">Fuentes subidas</h5>
 
-					<button type="button" class="btn btn-success btn-xs waves-effect waves-light" data-toggle="modal" data-target="#boostrapModal-1" id="modalAgregar">Subir archivo</button>
+					<button type="button" class="btn btn-success btn-xs waves-effect waves-light margin-bottom-10" data-toggle="modal" data-target="#boostrapModal-1" id="modalAgregar">Subir archivo</button>
 
-					<div class="col-xs-12">
-						<h1></h1>
-					</div>
 
 					<table id="fuenteTable" class="table table-small-font table-hover table-bordered display" style="width:100%">
 						
@@ -178,18 +175,6 @@
 </div>
 
 
-<div class="remodal" data-remodal-id="remodal" role="dialog" aria-labelledby="modal1Title" aria-describedby="modal1Desc">
-	<button data-remodal-action="close" class="remodal-close" aria-label="Close"></button>
-	<div class="remodal-content">
-		<h2 id="modal1Title">¿Eliminar <span id="itemDelete">registro</span>?</h2>
-		<p id="modal1Desc">
-			No se podrá recuperar
-		</p>
-	</div>
-	<button data-remodal-action="cancel" class="remodal-cancel">Cancelar</button>
-	<button data-remodal-action="confirm" class="remodal-confirm">Eliminar</button>
-</div>
-
 
 	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 	<!--[if lt IE 9]>
@@ -234,7 +219,7 @@
 	<!-- Toastr -->
 	<script src="assets/plugin/toastr/toastr.min.js"></script>
 
-	<script src="assets/scripts/main.min.js"></script>
+	<script src="assets/scripts/main.js"></script>
 	<script src="assets/scripts/horizontal-menu.min.js"></script>
 	<script src="assets/color-switcher/color-switcher.min.js"></script>
 </body>

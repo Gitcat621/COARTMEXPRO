@@ -41,10 +41,21 @@
 			Core.module.todo();
 			return false;
 		},
-		accordion: function(){
-			$(".js__accordion").each(function(){
+		accordion: function() {
+			$(".js__accordion").each(function() {
 				var selector = $(this);
-				selector.find(".js__control").on("click", function(event){
+		
+				// Reinicia todos
+				selector.find("li").removeClass("active").children(".js__content").hide();
+		
+				// Expande solo los li.current más profundos
+				selector.find("li.current").each(function() {
+					$(this).addClass("active");
+					$(this).children(".js__content").show();
+				});
+		
+				// Control de click
+				selector.find(".js__control").on("click", function(event) {
 					event.preventDefault();
 		
 					var parentLi = $(this).parent();
@@ -54,12 +65,11 @@
 						parentLi.removeClass("active");
 						subMenu.stop().slideUp(400);
 					} else {
-						// Cerrar solo los submenús de primer nivel
-						if (parentLi.parent().hasClass("js__accordion")) {
-							selector.find("> li.active").removeClass("active").children(".js__content").stop().slideUp(400);
-						}
+						// Cierra todos los hermanos del mismo nivel
+						parentLi.siblings("li.active").removeClass("active").children(".js__content").stop().slideUp(400);
+						
 						parentLi.addClass("active");
-						subMenu.slideDown(400);
+						subMenu.stop().slideDown(400);
 					}
 				});
 			});

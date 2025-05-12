@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<title>Comparativas - COARTMEX-PRO</title>
+
+	<!-- Main Styles -->
+	<link rel="stylesheet" href="assets/styles/styleAnalisis.css">
+
+	<!-- mCustomScrollbar -->
+	<link rel="stylesheet" href="assets/plugin/mCustomScrollbar/jquery.mCustomScrollbar.min.css">
+
+	<!-- Waves Effect -->
+	<link rel="stylesheet" href="assets/plugin/waves/waves.min.css">
+
+	<!-- Sweet Alert -->
+	<link rel="stylesheet" href="assets/plugin/sweet-alert/sweetalert.css">
+	
+	<!-- Percent Circle -->
+	<link rel="stylesheet" href="assets/plugin/percircle/css/percircle.css">
+
+	<!-- Chartist Chart -->
+	<link rel="stylesheet" href="assets/plugin/chart/chartist/chartist.min.css">
+
+	<!-- FullCalendar -->
+	<link rel="stylesheet" href="assets/plugin/fullcalendar/fullcalendar.min.css">
+	<link rel="stylesheet" href="assets/plugin/fullcalendar/fullcalendar.print.css" media='print'>
+
+	<!-- Datepicker -->
+	<link rel="stylesheet" href="assets/plugin/datepicker/css/bootstrap-datepicker.min.css">
+
+	<!-- Toastr -->
+	<link rel="stylesheet" href="assets/plugin/toastr/toastr.css">
+
+	<!-- DateRangepicker -->
+	<link rel="stylesheet" href="assets/plugin/daterangepicker/daterangepicker.css">
+
+	<!-- Fontello Icon -->
+	<link rel="stylesheet" href="assets/fonts/fontello/fontello.css">
+
+	<!-- Material Design Icon -->
+	<link rel="stylesheet" href="assets/fonts/material-design/css/materialdesignicons.css">
+</head>
+
+<body>
+<div class="main-menu">
+	<header class="header">
+		<a href="index.html" class="logo">COARTMEX-PRO</a>
+		<button type="button" class="button-close fa fa-times js__menu_close"></button>
+		<div class="user">
+			<a href="#" class="avatar"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTomPrJLgLq4aZpXJJhxQ5HjtOgBguGXzsJw&s" alt=""><span class="status online"></span></a>
+			<h5 class="name"><a id="usuario" href="#">Usuario</a></h5>
+			<h5 class="position" id="departamento">Departamento</h5>
+			<!-- /.name -->
+		</div>
+		<!-- /.user -->
+	</header>
+	<!-- /.header -->
+	<div class="content">
+
+		<div class="navigation">
+			<h5 class="title">Navegación</h5>
+			<!-- /.title -->
+			<ul class="menu js__accordion">
+				<li>
+					<a class="waves-effect" href="index.html"><i class="menu-icon fa fa-home"></i><span>Bienvenida</span></a>
+				</li>
+				<li class="current active">
+					<a class="waves-effect parent-item js__control" href="#"><i class="menu-icon fa fa-dashboard"></i><span>Análisis de datos</span><span class="menu-arrow fa fa-angle-down"></span></a>
+					<ul class="sub-menu js__content">
+						<li><a href="analisis.html"><i class="fa fa-percent"></i> Dashboard</a></li>
+						<li><a href="analisis_graficas.html"><i class="fa fa-bar-chart"></i> Gráficas</a></li>
+						<li><a href="analisis_tablas.html"><i class="fa fa-table"></i> Tabla de datos</a></li>
+						<li class="current"><a href="comparativas.html"><i class="fa fa-calendar-minus-o"></i> Comparar años</a></li>
+					</ul>
+					<!-- /.sub-menu js__content -->
+				</li>
+				<li>
+					<a class="waves-effect parent-item js__control" href="#"><i class="menu-icon fa fa-gear"></i><span>Manager PRO</span><span class="menu-arrow fa fa-angle-down"></span></a>
+					<ul class="sub-menu js__content">
+						<li>
+							<a class="waves-effect parent-item js__control" href="#"><i class="menu-icon fa fa-calculator"></i><span>Contable y fiscal </span><span class="menu-arrow fa fa-angle-down"></span></a>
+							<ul class="sub-menu js__content">
+								<li><a href="fuentes.html"><i class="fa fa-file-excel-o"></i> Interfaz de reportes</a></li>
+							</ul>
+		
+						</li>		
+						<li>
+							<a class="waves-effect parent-item js__control" href="#"><i class="menu-icon fa fa-laptop"></i><span>Sistemas </span><span class="menu-arrow fa fa-angle-down"></span></a>
+							<ul class="sub-menu js__content">
+								<li><a href="empleados.html"><i class="fa fa-suitcase"></i> Colaboradores</a></li>
+								<li><a href="usuarios.html"><i class="fa fa-user"></i> Usuarios</a></li>
+								<li><a href="proveedores.html"><i class="fa fa-truck"></i> Proveedores</a></li>
+								<li><a href="socios_comerciales.html"><i class="fa fa-star"></i> Socios comerciales</a></li>
+								<li><a href="articulos.html"><i class="fa fa-tag"></i> Articulos</a></li>
+							</ul>
+		
+						</li>
+
+
+					</ul>
+				</li>
+			</ul>
+			
+		</div>
+		<!-- /.navigation -->
+			
+	</div>
+	<!-- /.content -->
+</div>
+<!-- /.main-menu -->
+
+<div class="fixed-navbar">
+	<div class="pull-left">
+		<button type="button" class="menu-mobile-button glyphicon glyphicon-menu-hamburger js__menu_mobile"></button>
+		<h1 class="page-title">Comparativas</h1>
+		<!-- /.page-title -->
+	</div>
+	<!-- /.pull-left -->
+	<div class="pull-right">
+		<a id="cerrarSesion" class="ico-item fa fa-power-off logout"></a>
+	</div>
+	<!-- /.pull-right -->
+</div>
+<!-- /.fixed-navbar -->
+
+<div id="wrapper">
+	<div class="main-content">
+		<div class="row small-spacing">
+
+			<!-- FILTROS -->
+			<div class="col-xs-12">
+				<div class="box-content">
+					<h4 class="box-title text">Rango de fechas</h4>
+					<!-- /.box-title -->
+                    
+					<div class="col-sm-12">
+						<div class="input-daterange input-group margin-bottom-10" id="date-range">
+							<input type="text" class="form-control" name="start" id="month1" placeholder="Mes a comparar 1">
+							<span class="input-group-addon bg-primary text-white">y</span>
+							<input type="text" class="form-control" name="end" id="month2" placeholder="Mes a comparar 2">
+						</div>
+						
+						<div class="limit-width text-center">
+							<button class="btn btn-info btn-bordered btn-xs waves-effect waves-light" id="filtro"><i class="fa fa-search"></i> Aplicar filtro</button>
+						</div>
+						
+					</div>
+
+				</div>
+				<!-- /.box-content -->
+			</div>
+			<!-- /.col-lg-4 col-xs-12 -->
+
+			<!-- VENTAS -->
+			<div class="col-lg-4 col-xs-4">
+				<div class="box-content">
+					<h4 class="text-center box-title text-info">Ventas</h4>
+					<!-- /.box-title -->
+					
+					<div class="col-lg-12 text-center">
+						<h2 class="counter text-info" id="ventas1">---</h2>
+						<p class="text text-info">Acumulado</p>
+					</div>
+				</div>
+				<!-- /.box-content -->
+			</div>
+
+			<div class="col-lg-4 col-xs-4">
+				<div class="box-content">
+					<h4 class="text-center box-title text-info">Diferencia</h4>
+					<!-- /.box-title -->
+
+					
+					<div class="col-lg-6 text-center">
+						<h2 class="counter text-info" id="diferenciaAbsolutaVentas">---</h2>
+						<p class="text text-info">Moneda</p>
+					</div>
+					
+					<div class="col-lg-6 text-center">
+						<h2 class="counter text-info" id="diferenciaPorcentualVentas">---</h2>
+						<p class="text text-info">Porcentaje</p>
+					</div>
+						
+					
+					<!-- /.content widget-stat -->
+				</div>
+				<!-- /.box-content -->
+			</div>
+
+			<div class="col-lg-4 col-xs-4">
+				<div class="box-content">
+					<h4 class="text-center box-title text-info">Ventas</h4>
+					<!-- /.box-title -->
+
+					
+					<div class="col-lg-12 text-center">
+						<h2 class="counter text-info" id="ventas2">---</h2>
+						<p class="text text-info">Acumulado</p>
+					</div>
+				</div>
+				<!-- /.box-content -->
+			</div>
+			<!-- /.col-lg-4 col-xs-12 -->
+
+			<!-- CRECIMIENTO -->
+			<div class="col-lg-4 col-xs-4">
+				<div class="box-content">
+					<h4 class="text-center box-title text-info">Crecimiento vs <span id="lastYear"></span></h4>
+					<!-- /.box-title -->
+					
+					<div class="col-lg-12 text-center">
+						<h2 class="counter text-info" id="crecimientos1">---</h2>
+						<p class="text text-info">De crecimiento</p>
+					</div>
+				</div>
+				<!-- /.box-content -->
+			</div>
+
+			<div class="col-lg-4 col-xs-4">
+				<div class="box-content">
+					<h4 class="text-center box-title text-info">Diferencia</h4>
+					<!-- /.box-title -->
+					<div class="col-lg-6 text-center">
+						<h2 class="counter text-info" id="diferenciaAbsolutaCrecimientos">---</h2>
+						<p class="text text-info">Moneda</p>
+					</div>
+					
+					<div class="col-lg-6 text-center">
+						<h2 class="counter text-info" id="diferenciaPorcentualCrecimientos">---</h2>
+						<p class="text text-info">Porcentaje</p>
+					</div>
+				</div>
+				<!-- /.box-content -->
+			</div>
+
+			<div class="col-lg-4 col-xs-4">
+				<div class="box-content">
+					<h4 class="text-center box-title text-info">Crecimiento vs <span id="lastYear"></span></h4>
+					<!-- /.box-title -->
+					
+					<div class="col-lg-12 text-center">
+						<h2 class="counter text-info" id="crecimientos2">---</h2>
+						<p class="text text-info">De crecimiento</p>
+					</div>
+				</div>
+				<!-- /.box-content -->
+			</div>
+			<!-- /.col-lg-4 col-xs-12 -->
+
+			<!-- INGRESOS -->
+			<div class="col-lg-4 col-xs-4">
+				<div class="box-content">
+					<h4 class="text-center box-title text-info">Ingresos</h4>
+					<!-- /.box-title -->
+					
+					<div class="col-lg-12 text-center">
+						<h2 class="counter text-info" id="ingresos1">---</h2>
+						<p class="text text-info">Acumulados</p>
+					</div>
+				</div>
+				<!-- /.box-content -->
+			</div>
+
+			<div class="col-lg-4 col-xs-4">
+				<div class="box-content">
+					<h4 class="text-center box-title text-info">Diferencia</h4>
+					<!-- /.box-title -->
+					<div class="col-lg-6 text-center">
+						<h2 class="counter text-info" id="diferenciaAbsolutaIngresos">---</h2>
+						<p class="text text-info">Moneda</p>
+					</div>
+					
+					<div class="col-lg-6 text-center">
+						<h2 class="counter text-info" id="diferenciaPorcentualIngresos">---</h2>
+						<p class="text text-info">Porcentaje</p>
+					</div>
+				</div>
+				<!-- /.box-content -->
+			</div>
+
+			<div class="col-lg-4 col-xs-4">
+				<div class="box-content">
+					<h4 class="text-center box-title text-info">Ingresos</h4>
+					<!-- /.box-title -->
+					
+					<div class="col-lg-12 text-center">
+						<h2 class="counter text-info" id="ingresos2">---</h2>
+						<p class="text text-info">Acumulados</p>
+					</div>
+				</div>
+				<!-- /.box-content -->
+			</div>
+			<!-- /.col-lg-4 col-xs-12 -->
+
+			<!-- EGRESOS -->
+			<div class="col-lg-4 col-xs-4">
+				<div class="box-content">
+					<h4 class="text-center box-title text-info">Egresos</h4>
+					<!-- /.box-title -->
+					
+					<div class="col-lg-12 text-center">
+						<h2 class="counter text-info" id="efectivoUtilizado1">---</h2>
+						<p class="text text-info">Gastos y compras</p>
+					</div>
+				</div>
+				<!-- /.box-content -->
+			</div>
+
+			<div class="col-lg-4 col-xs-4">
+				<div class="box-content">
+					<h4 class="text-center box-title text-info">Diferencia</h4>
+					<!-- /.box-title -->
+					<div class="col-lg-6 text-center">
+						<h2 class="counter text-info" id="diferenciaAbsolutaEfectivoUtilizado">---</h2>
+						<p class="text text-info">Moneda</p>
+					</div>
+					
+					<div class="col-lg-6 text-center">
+						<h2 class="counter text-info" id="diferenciaPorcentualEfectivoUtilizado">---</h2>
+						<p class="text text-info">Porcentaje</p>
+					</div>
+				</div>
+				<!-- /.box-content -->
+			</div>
+
+			<div class="col-lg-4 col-xs-4">
+				<div class="box-content">
+					<h4 class="text-center box-title text-info">Egresos</h4>
+					<!-- /.box-title -->
+					
+					<div class="col-lg-12 text-center">
+						<h2 class="counter text-info" id="efectivoUtilizado2">---</h2>
+						<p class="text text-info">Gastos y compras</p>
+					</div>
+					
+					<!-- /.content widget-stat -->
+				</div>
+				<!-- /.box-content -->
+			</div>
+			<!-- /.col-lg-4 col-xs-12 -->
+
+			<!-- FLUJO DISPONIBLE -->
+			<div class="col-lg-4 col-xs-4">
+				<div class="box-content">
+					<h4 class="text-center box-title text-info">Flujo de efectivo disponible</h4>
+					<!-- /.box-title -->
+					
+					<div class="col-lg-12 text-center">
+						<h2 class="counter text-info" id="flujoRemanente1">---</h2>
+						<p class="text text-info">Efectivo restante</p>
+					</div>
+					
+				</div>
+				<!-- /.box-content -->
+			</div>
+
+			<div class="col-lg-4 col-xs-4">
+				<div class="box-content">
+					<h4 class="text-center box-title text-info">Diferencia</h4>
+					<!-- /.box-title -->
+					<div class="col-lg-6 text-center">
+						<h2 class="counter text-info" id="diferenciaAbsolutaFlujoRemanente">---</h2>
+						<p class="text text-info">Moneda</p>
+					</div>
+					
+					<div class="col-lg-6 text-center">
+						<h2 class="counter text-info" id="diferenciaPorcentualFlujoRemanente">---</h2>
+						<p class="text text-info">Porcentaje</p>
+					</div>
+				</div>
+				<!-- /.box-content -->
+			</div>
+
+			<div class="col-lg-4 col-xs-4">
+				<div class="box-content">
+					<h4 class="text-center box-title text-info">Flujo de efectivo disponible</h4>
+					<!-- /.box-title -->
+					
+					<div class="col-lg-12 text-center">
+						<h2 class="counter text-info" id="flujoRemanente2">---</h2>
+						<p class="text text-info">Efectivo restante</p>
+					</div>
+				</div>
+				<!-- /.box-content -->
+			</div>
+			<!-- /.col-lg-4 col-xs-12 -->
+
+			<!-- VAlOR INVENTARIO -->
+			<div class="col-lg-4 col-md-4 col-xs-4">
+				<div class="box-content">
+					<div class="statistics-box with-icon">
+						<i class="ico small fa fa-tag text-info"></i><!-- text-inverse -->
+						<p class="text text-center text-info">$ INVENTARIO</p>
+						<h2 class="counter text-center text-info" id="inventarios1">---</h2>
+					</div>
+				</div>
+				<!-- /.box-content -->
+			</div>
+
+			<div class="col-lg-4 col-md-4 col-xs-4">
+				<div class="box-content">
+					<div class="statistics-box">
+						<p class="text text-center text-info">DIFERENCIA</p>
+						<div class="col-lg-6">
+							<h2 class="counter text-center text-info" id="diferenciaAbsolutaInventarios">---</h2>
+						</div>
+
+						<div class="col-lg-6">
+							<h2 class="counter text-center text-info" id="diferenciaPorcentualInventarios">---</h2>
+						</div>
+						
+					</div>
+				</div>
+				<!-- /.box-content -->
+			</div>
+
+			<div class="col-lg-4 col-md-4 col-xs-4">
+				<div class="box-content">
+					<div class="statistics-box with-icon">
+						<i class="ico small fa fa-tag text-info"></i><!-- text-inverse -->
+						<p class="text text-center text-info">$ INVENTARIO</p>
+						<h2 class="counter text-center text-info" id="inventarios2">---</h2>
+					</div>
+				</div>
+				<!-- /.box-content -->
+			</div>
+			<!-- /.col-lg-3 col-md-6 col-xs-12 -->
+
+			<!-- CUENTAS POR COBRAR -->
+			<div class="col-lg-4 col-md-4 col-xs-4">
+				<div class="box-content">
+					<div class="statistics-box with-icon text-info">
+						<i class="ico small icon-money-2"></i>
+						<p class="text text-center text-info">CxC</p>
+						<h2 class="counter text-center text-info" id="cuentasPorCobrar1">---</h2>
+					</div>
+				</div>
+				<!-- /.box-content -->
+			</div>
+
+			<div class="col-lg-4 col-md-4 col-xs-4">
+				<div class="box-content">
+					<div class="statistics-box text-info">
+						<p class="text text-center text-info">DIFERENCIA</p>
+						<div class="col-lg-6">
+							<h2 class="counter text-center text-info" id="diferenciaAbsolutaCuentasPorCobrar">---</h2>
+						</div>
+
+						<div class="col-lg-6">
+							<h2 class="counter text-center text-info" id="diferenciaPorcentualCuentasPorCobrar">---</h2>
+						</div>
+					</div>
+				</div>
+				<!-- /.box-content -->
+			</div>
+
+			<div class="col-lg-4 col-md-4 col-xs-4">
+				<div class="box-content">
+					<div class="statistics-box with-icon text-info">
+						<i class="ico small icon-money-2"></i>
+						<p class="text text-center text-info">CxC</p>
+						<h2 class="counter text-center text-info" id="cuentasPorCobrar2">---</h2>
+					</div>
+				</div>
+				<!-- /.box-content -->
+			</div>
+			<!-- /.col-lg-3 col-md-6 col-xs-12 -->
+
+			<!-- CUENTAS POR PAGAR -->
+			<div class="col-lg-4 col-md-4 col-xs-4">
+				<div class="box-content">
+					<div class="statistics-box with-icon">
+						<i class="ico small fa fa-calculator text-info"></i>
+						<p class="text text-center text-info">CxP</p>
+						<h2 class="counter text-center text-info" id="cuentasPorPagar1">---</h2>
+					</div>
+				</div>
+				<!-- /.box-content -->
+			</div>
+
+			<div class="col-lg-4 col-md-4 col-xs-4">
+				<div class="box-content">
+					<div class="statistics-box">
+						<p class="text text-center text-info">DIFERENCIA</p>
+						<div class="col-lg-6">
+							<h2 class="counter text-center text-info" id="diferenciaAbsolutaCuentasPorPagar">---</h2>
+						</div>
+
+						<div class="col-lg-6">
+							<h2 class="counter text-center text-info" id="diferenciaPorcentualCuentasPorPagar">---</h2>
+						</div>
+					</div>
+				</div>
+				<!-- /.box-content -->
+			</div>
+
+			<div class="col-lg-4 col-md-4 col-xs-4">
+				<div class="box-content">
+					<div class="statistics-box with-icon">
+						<i class="ico small fa fa-calculator text-info"></i>
+						<p class="text text-center text-info">CxP</p>
+						<h2 class="counter text-center text-info" id="cuentasPorPagar2">---</h2>
+					</div>
+				</div>
+				<!-- /.box-content -->
+			</div>
+			<!-- /.col-lg-3 col-md-6 col-xs-12 -->
+
+			<!-- GASTOS -->
+			<div class="col-lg-4 col-md-4 col-xs-4">
+				<div class="box-content">
+					<div class="statistics-box with-icon">
+						<i class="ico small fa fa-wrench text-info"></i>
+						<p class="text text-center text-info">GASTOS</p>
+						<h2 class="counter text-center text-info" id="gastos1">---</h2>
+					</div>
+				</div>
+				<!-- /.box-content -->
+			</div>
+
+			<div class="col-lg-4 col-md-4 col-xs-4">
+				<div class="box-content">
+					<div class="statistics-box">
+						<p class="text text-center text-info">DIFERENCIA</p>
+						<div class="col-lg-6">
+							<h2 class="counter text-center text-info" id="diferenciaAbsolutaGastos">---</h2>
+						</div>
+
+						<div class="col-lg-6">
+							<h2 class="counter text-center text-info" id="diferenciaPorcentualGastos">---</h2>
+						</div>
+					</div>
+				</div>
+				<!-- /.box-content -->
+			</div>
+
+			<div class="col-lg-4 col-md-4 col-xs-4">
+				<div class="box-content">
+					<div class="statistics-box with-icon">
+						<i class="ico small fa fa-wrench text-info"></i>
+						<p class="text text-center text-info">GASTOS</p>
+						<h2 class="counter text-center text-info" id="gastos2">---</h2>
+					</div>
+				</div>
+				<!-- /.box-content -->
+			</div>
+
+			<!-- EXISTENCIAS -->
+			<div class="col-lg-4 col-md-4 col-xs-4">
+				<div class="box-content">
+					<div class="statistics-box with-icon">
+						<p class="text-center text-info">PZAS EXIST INV</p>
+						<i class="ico small mdi mdi-package-variant text-info"></i>
+						<h2 class="counter text-center text-info" id="articulos1">---</h2>						
+					</div>
+				</div>
+				<!-- /.box-content -->
+			</div>
+
+			<div class="col-lg-4 col-md-4 col-xs-4">
+				<div class="box-content">
+					<div class="statistics-box">
+						<p class="text-center text-info">DIFERENCIA</p>
+						<div class="col-lg-6">
+							<h2 class="counter text-center text-info" id="diferenciaAbsolutaArticulos">---</h2>
+						</div>
+
+						<div class="col-lg-6">
+							<h2 class="counter text-center text-info" id="diferenciaPorcentualArticulos">---</h2>
+						</div>				
+					</div>
+				</div>
+				<!-- /.box-content -->
+			</div>
+
+			<div class="col-lg-4 col-md-4 col-xs-4">
+				<div class="box-content">
+					<div class="statistics-box with-icon">
+						<p class="text-center text-info">PZAS EXIST INV</p>
+						<i class="ico small mdi mdi-package-variant text-info"></i>
+						<h2 class="counter text-center text-info" id="articulos2">---</h2>						
+					</div>
+				</div>
+				<!-- /.box-content -->
+			</div>
+			<!-- /.col-lg-3 col-md-6 col-xs-12 -->
+
+			<!-- COMPRAS DE MERCANCIA -->
+			<div class="col-lg-4 col-md-4 col-xs-4">
+				<div class="box-content">
+					<div class="statistics-box with-icon">
+						<p class="text-center text-info">COMPRAS MCIA</p>
+						<i class="ico small fa fa-credit-card text-info"></i>
+						<h2 class="counter text-center text-info" id="compras1">---</h2>					
+					</div>
+				</div>
+				<!-- /.box-content -->
+			</div>
+
+			<div class="col-lg-4 col-md-4 col-xs-4">
+				<div class="box-content">
+					<div class="statistics-box">
+						<p class="text-center text-info">DIFERENCIA</p>
+						<div class="col-lg-6">
+							<h2 class="counter text-center text-info" id="diferenciaAbsolutaCompras">---</h2>
+						</div>
+
+						<div class="col-lg-6">
+							<h2 class="counter text-center text-info" id="diferenciaPorcentualCompras">---</h2>
+						</div>					
+					</div>
+				</div>
+				<!-- /.box-content -->
+			</div>
+
+			<div class="col-lg-4 col-md-4 col-xs-4">
+				<div class="box-content">
+					<div class="statistics-box with-icon">
+						<p class="text-center text-info">COMPRAS MCIA</p>
+						<i class="ico small fa fa-credit-card text-info"></i>
+						<h2 class="counter text-center text-info" id="compras2">---</h2>					
+					</div>
+				</div>
+				<!-- /.box-content -->
+			</div>
+			<!-- /.col-lg-3 col-md-6 col-xs-12 -->
+
+			<!-- CLIENTES -->
+			<div class="col-lg-4 col-md-4 col-xs-4">
+				<div class="box-content">
+					<div class="statistics-box with-icon">
+						<p class="text-center text-info">CLIENTES/VTA</p>
+						<i class="ico small fa fa-users text-info"></i>
+						<h2 class="counter text-center text-info" id="socios1">---</h2>
+					</div>
+				</div>
+				<!-- /.box-content -->
+			</div>
+
+			<div class="col-lg-4 col-md-4 col-xs-4">
+				<div class="box-content">
+					<div class="statistics-box">
+						<p class="text-center text-info">DIFERENCIA</p>
+						<div class="col-lg-6">
+							<h2 class="counter text-center text-info" id="diferenciaAbsolutaSocios">---</h2>
+						</div>
+
+						<div class="col-lg-6">
+							<h2 class="counter text-center text-info" id="diferenciaPorcentualSocios">---</h2>
+						</div>	
+					</div>
+				</div>
+				<!-- /.box-content -->
+			</div>
+
+			<div class="col-lg-4 col-md-4 col-xs-4">
+				<div class="box-content">
+					<div class="statistics-box with-icon">
+						<p class="text-center text-info">CLIENTES/VTA</p>
+						<i class="ico small fa fa-users text-info"></i>
+						<h2 class="counter text-center text-info" id="socios2">---</h2>
+					</div>
+				</div>
+				<!-- /.box-content -->
+			</div>
+			<!-- /.col-lg-3 col-md-6 col-xs-12 -->
+
+			<!-- ARTICULOS VENDIDOS -->
+			<div class="col-lg-4 col-md-4 col-xs-4" >
+				<div class="box-content ">
+					<div class="statistics-box with-icon">
+						<p class="text-center text-info">ART VENDIDOS</p>
+						<i class="ico small icon-basket text-info"></i>
+						<h2 class="counter text-center text-info" id="articulosVendidos1">---</h2>
+					</div>
+				</div>
+				<!-- /.box-content -->
+			</div>
+
+			<div class="col-lg-4 col-md-4 col-xs-4" >
+				<div class="box-content ">
+					<div class="statistics-box">
+						<p class="text-center text-info">DIFERENCIA</p>
+						<div class="col-lg-6">
+							<h2 class="counter text-center text-info" id="diferenciaAbsolutaArticulosVendidos">---</h2>
+						</div>
+
+						<div class="col-lg-6">
+							<h2 class="counter text-center text-info" id="diferenciaPorcentualArticulosVendidos">---</h2>
+						</div>	
+					</div>
+				</div>
+				<!-- /.box-content -->
+			</div>
+
+			<div class="col-lg-4 col-md-4 col-xs-4" >
+				<div class="box-content ">
+					<div class="statistics-box with-icon">
+						<p class="text-center text-info">ART VENDIDOS</p>
+						<i class="ico small icon-basket text-info"></i>
+						<h2 class="counter text-center text-info" id="articulosVendidos2">---</h2>
+					</div>
+				</div>
+				<!-- /.box-content -->
+			</div>
+			<!-- /.col-lg-3 col-md-6 col-xs-12 -->
+
+			
+			
+		</div>
+		<!-- /.row small-spacing -->
+			
+	</div>
+	<!-- /.main-content -->
+</div><!--/#wrapper -->
+
+	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+	<!--[if lt IE 9]>
+		<script src="assets/script/html5shiv.min.js"></script>
+		<script src="assets/script/respond.min.js"></script>
+	<![endif]-->
+	<!-- 
+	================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="assets/JS/comparativas_mes.js"></script> 
+	<script src="assets/JS/autenticar.js"></script>
+
+	<!-- <script src="assets/scripts/jquery.min.js"></script> -->
+	<script src="assets/scripts/modernizr.min.js"></script>
+	<script src="assets/plugin/bootstrap/js/bootstrap.min.js"></script>
+	<script src="assets/plugin/mCustomScrollbar/jquery.mCustomScrollbar.concat.min.js"></script>
+	<script src="assets/plugin/nprogress/nprogress.js"></script>
+	<script src="assets/plugin/waves/waves.min.js"></script>
+
+	<!-- Percent Circle -->
+	<script src="assets/plugin/percircle/js/percircle.js"></script>
+
+	<!-- Datepicker -->
+	<script src="assets/plugin/datepicker/js/bootstrap-datepicker.js"></script>
+
+	<!-- Moment -->
+	<script src="assets/plugin/moment/moment.js"></script>
+
+	<!-- DateRangepicker -->
+	<script src="assets/plugin/daterangepicker/daterangepicker.js"></script>
+
+	<!-- Demo Scripts -->
+	<script src="assets/scripts/form.demo.js"></script>
+
+	<!-- Toastr -->
+	<script src="assets/plugin/toastr/toastr.min.js"></script>
+
+	<script src="assets/scripts/main.min.js"></script>
+
+</body>
+</html>

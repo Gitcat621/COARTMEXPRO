@@ -39,7 +39,7 @@ def crear_usuario():
     data = request.json
     nombreUsuario = data.get('nombreUsuario')
     contrasena = data.get('contrasena')
-    fkEmpleado = data.get('fkEmpleado')
+    fkEmpleado = int(data.get('fkEmpleado')) 
 
     if not nombreUsuario or not contrasena:
         return jsonify({'mensaje': 'Faltan datos'}), 400
@@ -55,24 +55,25 @@ def editar_usuario():
     """Endpoint para editar un usuario"""
     try:
         data = request.json
-        pkUsuario = data.get('pkUsuario')
+        pkUsuario = int(data.get('pkUsuario')) 
         nombreUsuario = data.get('nombreUsuario')
         contrasena = data.get('contrasena')
-        fkEmpleado = data.get('fkEmpleado')
+        fkEmpleado = data.get('fkEmpleado') 
 
-        # # Validación de ID (debe ser un número entero)
-        # if not isinstance(id, int):
-        #     return jsonify({'mensaje': 'ID inválido'}), 400
+        # Validación de ID (debe ser un número entero)
+        if not isinstance(pkUsuario, int):
+            return jsonify({'mensaje': 'ID inválido'}), 400
 
-        # # Validación de Nombre (que no esté vacío)
-        # if not nombre or not nombre.strip():
-        #     return jsonify({'mensaje': 'El nombre es obligatorio'}), 400
+        # Validación de Nombre (que no esté vacío)
+        if not nombreUsuario or not nombreUsuario.strip():
+            return jsonify({'mensaje': 'El nombre es obligatorio'}), 400
+        
+        if not contrasena or not contrasena.strip():
+            return jsonify({'mensaje': 'La contraseña es obligatorio'}), 400
 
-        # Validación de Correo (expresión regular para emails)
-        # email_regex = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
-        # if not correo or not re.match(email_regex, correo):
-        #     return jsonify({'mensaje': 'Correo inválido'}), 400
-
+        if not fkEmpleado or not fkEmpleado.strip():
+            return jsonify({'mensaje': 'El ID del empleado es obligatorio'}), 400
+        
         # Llamar al controlador para actualizar el usuario
         
         usuario = Usuario(pkUsuario=pkUsuario, nombreUsuario=nombreUsuario, contrasena=contrasena, fkEmpleado=fkEmpleado)
