@@ -186,26 +186,8 @@
 					<button type="button" class="btn btn-success btn-xs waves-effect waves-light margin-bottom-10" data-toggle="modal" data-target="#boostrapModal-1" id="modalAgregar"><i class="fa fa-plus"></i> Agregar</button>
 				
 
-					<table id="empleadoTable" class="table table-small-font table-hover table-bordered display nowrap" style="width:100%">
-						<thead>
-							<tr>
-								<th>Numero</th>
-								<th>Empleado</th>
-								<th>Opciones</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr data-url="perfil.html">
-								<td>998181423</td>
-								<td>Empelado 1</td>
-								<td>
-									<div class="text-center">
-									<button class="btn btn-xs editar-btn"><i class="fa fa-pencil"></i></button>
-									<button class="btn btn-xs eliminar-btn"><i class="fa fa-trash"></i></button>
-									</div>
-								</td>
-							</tr>
-						</tbody>
+					<table id="numerosEmergenciaTable" class="table table-small-font table-hover table-bordered display nowrap" style="width:100%">
+						
 					</table>
 					
 				</div>
@@ -221,26 +203,8 @@
 					<button type="button" class="btn btn-success btn-xs waves-effect waves-light margin-bottom-10" data-toggle="modal" data-target="#boostrapModal-1" id="modalAgregar"><i class="fa fa-plus"></i> Agregar</button>
 				
 
-					<table id="empleadoTable" class="table table-small-font table-hover table-bordered display nowrap" style="width:100%">
-						<thead>
-							<tr>
-								<th>Descripcion</th>
-								<th>Empleado</th>
-								<th>Opciones</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr data-url="perfil.html">
-								<td>Falta por cita al dentista</td>
-								<td>Empelado 1</td>
-								<td>
-									<div class="text-center">
-									<button class="btn btn-xs editar-btn"><i class="fa fa-pencil"></i></button>
-									<button class="btn btn-xs eliminar-btn"><i class="fa fa-trash"></i></button>
-									</div>
-								</td>
-							</tr>
-						</tbody>
+					<table id="permisoTable" class="table table-small-font table-hover table-bordered display nowrap" style="width:100%">
+						
 					</table>
 					
 				</div>
@@ -306,46 +270,14 @@
 					<input type="number" class="form-control" id="sueldo">
 				</div>
 				<div class="form-group">
-					<label>Permisos pedidos que se le han otorgado</label>
-					<select class="select2_2" multiple="multiple" style="width: 100%;" id="permisosPedidos">
-
-					</select>
-				</div>
-				<div class="form-group">
 					<label>Asignar puesto</label>
 					<select class="form-control" id="puesto_menu" >
 					</select>
 				</div>
 				<div class="form-group">
-					<label>Asignar cursos</label>
-					<select class="form-control" id="curso_menu" >
+					<label>Seleccionar nivel de estudios</label>
+					<select class="form-control" id="puesto_menu" >
 					</select>
-				</div>
-				<div class="form-group">
-					<label>Numeros de emergencia</label><br>
-					<select class="select2_2" multiple="multiple" style="width: 100%;">
-
-					</select>
-					
-				</div>
-				<div class="form-group">
-					<label>Pzas de uniformes otorgados</label>
-					<input type="number" class="form-control" id="sueldo">
-				</div>
-				<div class="form-group">
-					<label>Talla</label>
-					<select class="form-control" id="talla_menu">
-						<option>Pequenia</option>
-						<option>Mediana</option>
-						<option>Grande</option>
-					</select>
-				</div>
-				<div class="form-group">
-					<label>Oportunidades</label><br>
-					<select class="select2_2" multiple="multiple" style="width: 100%;">
-
-					</select>
-					
 				</div>
 			</div>
 			<div class="modal-footer">
@@ -369,9 +301,11 @@
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="assets/JS/empleados.js"></script>
-	<script src="assets/JS/departamentos.js"></script>
+	<!-- <script src="assets/JS/departamentos.js"></script>
 	<script src="assets/JS/puestos.js"></script>
 	<script src="assets/JS/cursos.js"></script>
+	<script src="assets/JS/numeros_emergencia.js"></script>
+	<script src="assets/JS/permisos.js"></script> -->
 	<script src="assets/JS/autenticar.js"></script>
 
 	<!-- <script src="assets/scripts/jquery.min.js"></script> -->

@@ -22,6 +22,23 @@ def crear_curso():
         return jsonify({'mensaje': 'Curso insertado correctamente'}), 201
     else:
         return jsonify({'mensaje': 'Error al insertar curso'}), 500
+    
+@curso_bp.route('/asistencia_cursos', methods=['POST'])
+def crear_asistencia_curso():
+    """Endpoint para insertar un registro"""
+    data = request.json
+
+    fkEmpleado = str(data.get('numeroEmpleado', '')).strip()
+    fkCurso = int(data.get('fkCurso'))
+    fechaAsistencia = str(data.get('fechaAsistencia', '')).strip()
+
+    if not fechaAsistencia:
+        return jsonify({'mensaje': 'Faltan datos'}), 200
+
+    if Curso.crear_asistencia_curso(fkEmpleado, fkCurso, fechaAsistencia):
+        return jsonify({'mensaje': 'Curso insertado correctamente'}), 201
+    else:
+        return jsonify({'mensaje': 'Error al insertar curso'}), 500
 
 @curso_bp.route('/cursos', methods=['PUT'])
 def editar_curso():

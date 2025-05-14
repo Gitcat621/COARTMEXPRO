@@ -77,6 +77,7 @@
 						<li><a href="analisis_graficas.html"><i class="fa fa-bar-chart"></i> Gráficas</a></li>
 						<li><a href="analisis_tablas.html"><i class="fa fa-table"></i> Tabla de datos</a></li>
 						<li class="current"><a href="comparativas.html"><i class="fa fa-calendar-minus-o"></i> Comparar años</a></li>
+						<li><a href="comparativas_mes.html"><i class="fa fa-calendar-o"></i> Comparar meses</a></li>
 					</ul>
 					<!-- /.sub-menu js__content -->
 				</li>
@@ -118,7 +119,7 @@
 <div class="fixed-navbar">
 	<div class="pull-left">
 		<button type="button" class="menu-mobile-button glyphicon glyphicon-menu-hamburger js__menu_mobile"></button>
-		<h1 class="page-title">Comparativas</h1>
+		<h1 class="page-title">Comparativa entre años</h1>
 		<!-- /.page-title -->
 	</div>
 	<!-- /.pull-left -->
@@ -220,7 +221,7 @@
 			<!-- VENTAS -->
 			<div class="col-lg-4 col-xs-4">
 				<div class="box-content">
-					<h4 class="text-center box-title text-info">Ventas</h4>
+					<h4 class="text-center box-title text-info">Ventas <span class="fecha1"></span></h4>
 					<!-- /.box-title -->
 					
 					<div class="col-lg-12 text-center">
@@ -255,7 +256,7 @@
 
 			<div class="col-lg-4 col-xs-4">
 				<div class="box-content">
-					<h4 class="text-center box-title text-info">Ventas</h4>
+					<h4 class="text-center box-title text-info">Ventas <span class="fecha2"></span></h4>
 					<!-- /.box-title -->
 
 					
@@ -271,7 +272,7 @@
 			<!-- CRECIMIENTO -->
 			<div class="col-lg-4 col-xs-4">
 				<div class="box-content">
-					<h4 class="text-center box-title text-info">Crecimiento vs <span id="lastYear"></span></h4>
+					<h4 class="text-center box-title text-info">Crecimiento vs <span id="lastYear1"></span></h4>
 					<!-- /.box-title -->
 					
 					<div class="col-lg-12 text-center">
@@ -301,7 +302,7 @@
 
 			<div class="col-lg-4 col-xs-4">
 				<div class="box-content">
-					<h4 class="text-center box-title text-info">Crecimiento vs <span id="lastYear"></span></h4>
+					<h4 class="text-center box-title text-info">Crecimiento vs <span id="lastYear2"></span></h4>
 					<!-- /.box-title -->
 					
 					<div class="col-lg-12 text-center">
@@ -316,7 +317,7 @@
 			<!-- INGRESOS -->
 			<div class="col-lg-4 col-xs-4">
 				<div class="box-content">
-					<h4 class="text-center box-title text-info">Ingresos</h4>
+					<h4 class="text-center box-title text-info">Ingresos <span class="fecha1"></span></h4>
 					<!-- /.box-title -->
 					
 					<div class="col-lg-12 text-center">
@@ -346,7 +347,7 @@
 
 			<div class="col-lg-4 col-xs-4">
 				<div class="box-content">
-					<h4 class="text-center box-title text-info">Ingresos</h4>
+					<h4 class="text-center box-title text-info">Ingresos <span class="fecha2"></span></h4>
 					<!-- /.box-title -->
 					
 					<div class="col-lg-12 text-center">
@@ -361,7 +362,7 @@
 			<!-- EGRESOS -->
 			<div class="col-lg-4 col-xs-4">
 				<div class="box-content">
-					<h4 class="text-center box-title text-info">Egresos</h4>
+					<h4 class="text-center box-title text-info">Egresos <span class="fecha1"></span></h4>
 					<!-- /.box-title -->
 					
 					<div class="col-lg-12 text-center">
@@ -391,7 +392,7 @@
 
 			<div class="col-lg-4 col-xs-4">
 				<div class="box-content">
-					<h4 class="text-center box-title text-info">Egresos</h4>
+					<h4 class="text-center box-title text-info">Egresos <span class="fecha2"></span></h4>
 					<!-- /.box-title -->
 					
 					<div class="col-lg-12 text-center">
@@ -408,7 +409,7 @@
 			<!-- FLUJO DISPONIBLE -->
 			<div class="col-lg-4 col-xs-4">
 				<div class="box-content">
-					<h4 class="text-center box-title text-info">Flujo de efectivo disponible</h4>
+					<h4 class="text-center box-title text-info">Efectivo disponible <span class="fecha1"></span></h4>
 					<!-- /.box-title -->
 					
 					<div class="col-lg-12 text-center">
@@ -439,7 +440,7 @@
 
 			<div class="col-lg-4 col-xs-4">
 				<div class="box-content">
-					<h4 class="text-center box-title text-info">Flujo de efectivo disponible</h4>
+					<h4 class="text-center box-title text-info">Efectivo disponible <span class="fecha2"></span></h4>
 					<!-- /.box-title -->
 					
 					<div class="col-lg-12 text-center">
@@ -456,7 +457,7 @@
 				<div class="box-content">
 					<div class="statistics-box with-icon">
 						<i class="ico small fa fa-tag text-info"></i><!-- text-inverse -->
-						<p class="text text-center text-info">$ INVENTARIO</p>
+						<p class="text text-center text-info">$ INVENTARIO <span class="fecha1"></span></p>
 						<h2 class="counter text-center text-info" id="inventarios1">---</h2>
 					</div>
 				</div>
@@ -484,7 +485,7 @@
 				<div class="box-content">
 					<div class="statistics-box with-icon">
 						<i class="ico small fa fa-tag text-info"></i><!-- text-inverse -->
-						<p class="text text-center text-info">$ INVENTARIO</p>
+						<p class="text text-center text-info">$ INVENTARIO <span class="fecha2"></span></p>
 						<h2 class="counter text-center text-info" id="inventarios2">---</h2>
 					</div>
 				</div>
@@ -497,7 +498,7 @@
 				<div class="box-content">
 					<div class="statistics-box with-icon text-info">
 						<i class="ico small icon-money-2"></i>
-						<p class="text text-center text-info">CxC</p>
+						<p class="text text-center text-info">CxC <span class="fecha1"></span></p>
 						<h2 class="counter text-center text-info" id="cuentasPorCobrar1">---</h2>
 					</div>
 				</div>
@@ -524,7 +525,7 @@
 				<div class="box-content">
 					<div class="statistics-box with-icon text-info">
 						<i class="ico small icon-money-2"></i>
-						<p class="text text-center text-info">CxC</p>
+						<p class="text text-center text-info">CxC <span class="fecha2"></span></p>
 						<h2 class="counter text-center text-info" id="cuentasPorCobrar2">---</h2>
 					</div>
 				</div>
@@ -537,7 +538,7 @@
 				<div class="box-content">
 					<div class="statistics-box with-icon">
 						<i class="ico small fa fa-calculator text-info"></i>
-						<p class="text text-center text-info">CxP</p>
+						<p class="text text-center text-info">CxP <span class="fecha1"></span></p>
 						<h2 class="counter text-center text-info" id="cuentasPorPagar1">---</h2>
 					</div>
 				</div>
@@ -564,7 +565,7 @@
 				<div class="box-content">
 					<div class="statistics-box with-icon">
 						<i class="ico small fa fa-calculator text-info"></i>
-						<p class="text text-center text-info">CxP</p>
+						<p class="text text-center text-info">CxP <span class="fecha2"></span></p>
 						<h2 class="counter text-center text-info" id="cuentasPorPagar2">---</h2>
 					</div>
 				</div>
@@ -577,7 +578,7 @@
 				<div class="box-content">
 					<div class="statistics-box with-icon">
 						<i class="ico small fa fa-wrench text-info"></i>
-						<p class="text text-center text-info">GASTOS</p>
+						<p class="text text-center text-info">GASTOS <span class="fecha1"></span></p>
 						<h2 class="counter text-center text-info" id="gastos1">---</h2>
 					</div>
 				</div>
@@ -604,7 +605,7 @@
 				<div class="box-content">
 					<div class="statistics-box with-icon">
 						<i class="ico small fa fa-wrench text-info"></i>
-						<p class="text text-center text-info">GASTOS</p>
+						<p class="text text-center text-info">GASTOS <span class="fecha2"></span></p>
 						<h2 class="counter text-center text-info" id="gastos2">---</h2>
 					</div>
 				</div>
@@ -615,7 +616,7 @@
 			<div class="col-lg-4 col-md-4 col-xs-4">
 				<div class="box-content">
 					<div class="statistics-box with-icon">
-						<p class="text-center text-info">PZAS EXIST INV</p>
+						<p class="text-center text-info">PZAS EXIST INV <span class="fecha1"></span></p>
 						<i class="ico small mdi mdi-package-variant text-info"></i>
 						<h2 class="counter text-center text-info" id="articulos1">---</h2>						
 					</div>
@@ -642,7 +643,7 @@
 			<div class="col-lg-4 col-md-4 col-xs-4">
 				<div class="box-content">
 					<div class="statistics-box with-icon">
-						<p class="text-center text-info">PZAS EXIST INV</p>
+						<p class="text-center text-info">PZAS EXIST INV <span class="fecha2"></span></p>
 						<i class="ico small mdi mdi-package-variant text-info"></i>
 						<h2 class="counter text-center text-info" id="articulos2">---</h2>						
 					</div>
@@ -655,7 +656,7 @@
 			<div class="col-lg-4 col-md-4 col-xs-4">
 				<div class="box-content">
 					<div class="statistics-box with-icon">
-						<p class="text-center text-info">COMPRAS MCIA</p>
+						<p class="text-center text-info">COMPRAS MCIA <span class="fecha1"></span></p>
 						<i class="ico small fa fa-credit-card text-info"></i>
 						<h2 class="counter text-center text-info" id="compras1">---</h2>					
 					</div>
@@ -682,7 +683,7 @@
 			<div class="col-lg-4 col-md-4 col-xs-4">
 				<div class="box-content">
 					<div class="statistics-box with-icon">
-						<p class="text-center text-info">COMPRAS MCIA</p>
+						<p class="text-center text-info">COMPRAS MCIA <span class="fecha2"></span></p>
 						<i class="ico small fa fa-credit-card text-info"></i>
 						<h2 class="counter text-center text-info" id="compras2">---</h2>					
 					</div>
@@ -695,7 +696,7 @@
 			<div class="col-lg-4 col-md-4 col-xs-4">
 				<div class="box-content">
 					<div class="statistics-box with-icon">
-						<p class="text-center text-info">CLIENTES/VTA</p>
+						<p class="text-center text-info">CLIENTES/VTA <span class="fecha1"></span></p>
 						<i class="ico small fa fa-users text-info"></i>
 						<h2 class="counter text-center text-info" id="socios1">---</h2>
 					</div>
@@ -722,7 +723,7 @@
 			<div class="col-lg-4 col-md-4 col-xs-4">
 				<div class="box-content">
 					<div class="statistics-box with-icon">
-						<p class="text-center text-info">CLIENTES/VTA</p>
+						<p class="text-center text-info">CLIENTES/VTA <span class="fecha2"></span></p>
 						<i class="ico small fa fa-users text-info"></i>
 						<h2 class="counter text-center text-info" id="socios2">---</h2>
 					</div>
@@ -735,7 +736,7 @@
 			<div class="col-lg-4 col-md-4 col-xs-4" >
 				<div class="box-content ">
 					<div class="statistics-box with-icon">
-						<p class="text-center text-info">ART VENDIDOS</p>
+						<p class="text-center text-info">ART VENDIDOS <span class="fecha1"></span></p>
 						<i class="ico small icon-basket text-info"></i>
 						<h2 class="counter text-center text-info" id="articulosVendidos1">---</h2>
 					</div>
@@ -762,7 +763,7 @@
 			<div class="col-lg-4 col-md-4 col-xs-4" >
 				<div class="box-content ">
 					<div class="statistics-box with-icon">
-						<p class="text-center text-info">ART VENDIDOS</p>
+						<p class="text-center text-info">ART VENDIDOS <span class="fecha2"></span></p>
 						<i class="ico small icon-basket text-info"></i>
 						<h2 class="counter text-center text-info" id="articulosVendidos2">---</h2>
 					</div>

@@ -30,10 +30,15 @@ $(document).ready(function() {
             { title: "RFC" },
             { title: "Nombre del empleado" },
             { title: "Fecha de ingreso" },
-            { title: "Sueldo" },
-            { title: "Permisos" },
-            { title: "Cursos tomados" },
+            { title: "Fecha de Nacimiento" },
+            { title: "Nomina" },
+            { title: "Vales" },
+            { title: "Sueldo" }, 
+            { title: "Puesto" },
             { title: "Departamento" },
+            { title: "Nivel educacion" },
+            { title: "Lugar de nacimiento" },
+            { title: "Estado" },
             {
                 title: "Opciones",
                 render: function (data, type, row) { 
@@ -164,13 +169,15 @@ async function listarEmpleados() {
             empleados.rfc,  //1
             empleados.nombreEmpleado, //2 
             toformatearFecha(empleados.fechaIngreso), //3
-            empleados.nomina + empleados.vale, //4
-            empleados.permisos, //5 
-            empleados.cursos, //6
-            empleados.nombreDepartamento, //7
-            empleados.pkDepartamento, //8
-            empleados.pkCurso, //9
-            empleados.numeroEmpleado //10
+            toformatearFecha(empleados.fechaNacimiento), //4
+            '$' + empleados.nomina,
+            '$' + empleados.vale,
+            '$' + (parseFloat(empleados.nomina) + parseFloat(empleados.vale)),
+            empleados.nombrePuesto,
+            empleados.nombreDepartamento, //
+            empleados.nombreNivel,
+            empleados.ubicacion,
+            empleados.estado,
         ])).draw();
     } catch (error) {
         console.error("Error al cargar los datos:", error);
@@ -243,7 +250,6 @@ async function eliminarEmpleado(numeroEmpleado) {
     }
 }
 
-
 function abrirModal(modo, rfc) {
 
     //Obtener el valor de los elementos del modal
@@ -271,7 +277,6 @@ function abrirModal(modo, rfc) {
     }
 
 }
-
 
 function toformatearFecha(fechaString) {
     const fecha = new Date(fechaString);

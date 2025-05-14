@@ -143,6 +143,21 @@ async function cargarMetricas(meses, yearId, prefix) {
             formatearYMostrar(`cuentasPorPagar${prefix}`, datos.totalCxP, '$');
             formatearYMostrar(`gastos${prefix}`, datos.totalGastos, '$');
 
+            // Obtener todos los elementos con la clase "fecha"
+            if (prefix === '1') {
+                elementos = document.querySelectorAll(".fecha1");
+                document.getElementById("lastYear1").textContent = year - 1
+            } else if (prefix === '2') {
+                elementos = document.querySelectorAll(".fecha2");
+                document.getElementById("lastYear2").textContent = year - 1
+            }
+
+            // Asignar la fecha a cada elemento
+            elementos.forEach(elemento => {
+                elemento.textContent = year;
+            });
+
+
            
         } else {
             console.error("No se encontraron datos en el array 'data'.");

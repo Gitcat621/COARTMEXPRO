@@ -19,6 +19,14 @@ document.getElementById('filtro').addEventListener('click', () => {
         return;
     }
 
+    var year = document.getElementById('datepicker').value;
+    if(year == ""){
+         toastr.warning(`No hay año seleccionado`, 'Filtro', {
+            "closeButton": true,
+        });
+        return;
+    }
+
     let meses1 = [];
     meses1.push(month1);
 
@@ -37,7 +45,7 @@ let metricasYear2 = null;
 
 async function cargarMetricas(meses, yearId, prefix) {
 
-    const year = new Date().getFullYear();
+    const year = document.getElementById('datepicker').value;
     const params = new URLSearchParams();
 
     meses.forEach((mes) => params.append("items[]", mes));
@@ -101,6 +109,30 @@ async function cargarMetricas(meses, yearId, prefix) {
             formatearYMostrar(`cuentasPorCobrar${prefix}`, datos.totalCxC, '$');
             formatearYMostrar(`cuentasPorPagar${prefix}`, datos.totalCxP, '$');
             formatearYMostrar(`gastos${prefix}`, datos.totalGastos, '$');
+
+            mes = meses[0] - 1;
+
+            // Definir los nombres abreviados de los meses
+            const nombresMeses = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
+
+            // Convertir el número del mes en su abreviación
+            let mesAbreviado = nombresMeses[mes];
+
+
+            // Obtener todos los elementos con la clase "fecha"
+            if (prefix === '1') {
+                elementos = document.querySelectorAll(".mes1");
+                document.getElementById("lastYear1").textContent = mesAbreviado + " "+ (year - 1)
+            } else if (prefix === '2') {
+                elementos = document.querySelectorAll(".mes2");
+                document.getElementById("lastYear2").textContent = mesAbreviado + " "+ (year - 1)
+            }
+
+            
+            // Asignar la fecha a cada elemento
+            elementos.forEach(elemento => {
+                elemento.textContent = mesAbreviado + " "+ year;
+            });
 
            
         } else {

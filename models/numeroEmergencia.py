@@ -12,7 +12,7 @@ class NumeroEmergencia:
     def listar_numeros_emergencia():
         """Obtiene todos los registros de la base de datos."""
         db = Database()
-        consulta = "SELECT * FROM numeros_emergencia"
+        consulta = "SELECT * FROM numeros_emergencia ne JOIN empleados e ON e.numeroEmpleado = ne.fkEmpleado;"
         resultado = db.execute_query(consulta)
         print(consulta)
         db.close()

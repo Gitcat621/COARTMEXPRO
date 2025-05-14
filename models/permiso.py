@@ -13,7 +13,7 @@ class Permiso:
     def listar_permisos():
         """Obtiene todos los registros de la base de datos."""
         db = Database()
-        consulta = "SELECT * FROM permisos"
+        consulta = "SELECT * FROM permisos p JOIN empleados e ON e.numeroEmpleado = p.fkEmpleado"
         resultado = db.execute_query(consulta)
         print(consulta)
         db.close()

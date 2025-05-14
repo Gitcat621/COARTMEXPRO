@@ -15,9 +15,9 @@ def listar_permisos():
 def crear_permiso():
     """Endpoint para insertar un registro"""
     data = request.json
-    descripcionPermiso = data.get('descripcionPermiso')
-    fechaPermiso = data.get('fechaPermiso')
-    fkEmpleado = data.get('fkEmpleado')
+    descripcionPermiso = str(data.get('descripcionPermiso', '')).strip()
+    fechaPermiso = str(data.get('fechaPermiso', '')).strip()
+    fkEmpleado = str(data.get('numeroEmpleado', '')).strip()
 
     if not descripcionPermiso or not fechaPermiso or not fkEmpleado:
         return jsonify({'mensaje': 'Faltan datos'}), 400
@@ -27,7 +27,7 @@ def crear_permiso():
         return jsonify({'mensaje': 'Permiso insertado correctamente'}), 201
     else:
         return jsonify({'mensaje': 'Error al insertar permiso'}), 500
-
+    
 # Ruta para editar un permiso
 @permiso_bp.route('/permisos', methods=['PUT'])
 def editar_permiso():

@@ -32,6 +32,9 @@ from routes.asistenciaRoutes import asistencia_bp
 from routes.puestoRoutes import puesto_bp
 from routes.cursoRoutes import curso_bp
 from routes.oportunidadRoutes import oportunidad_bp
+from routes.numeroEmergenciaRoutes import numero_emergencia_bp
+from routes.permisoRoutes import permiso_bp
+from routes.nivelEstudioRoutes import nivel_estudio_bp
 
 app = Flask(__name__)
 
@@ -67,6 +70,9 @@ app.register_blueprint(asistencia_bp, url_prefix='/coartmex')
 app.register_blueprint(puesto_bp, url_prefix='/coartmex')
 app.register_blueprint(curso_bp, url_prefix='/coartmex')
 app.register_blueprint(oportunidad_bp, url_prefix='/coartmex')
+app.register_blueprint(numero_emergencia_bp, url_prefix='/coartmex')
+app.register_blueprint(permiso_bp, url_prefix='/coartmex')
+app.register_blueprint(nivel_estudio_bp, url_prefix='/coartmex')
 
 @app.route('/')
 def default():

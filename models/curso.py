@@ -20,9 +20,26 @@ class Curso:
     def crear_curso(self):
         """Guarda un nuevo registro en la base de datos"""
         db = Database()
-        consulta = "INSERT INTO cursos (nombreCurso) VALUES (%s,%s)"
+        consulta = "INSERT INTO cursos (nombreCurso) VALUES (%s)"
         valores = (self.nombreCurso,)
         print(consulta % valores)
+        resultado = db.execute_commit(consulta, valores)
+        db.close()
+        return resultado
+    
+    def crear_asistencia_curso(fkEmpleado, fkCurso, fechaAsistencia):
+        """Guarda un nuevo registro en la base de datos de manera segura"""
+        db = Database()
+        
+        consulta = """
+            INSERT INTO asistencias_cursos (fkEmpleado, fkCurso, fechaAsistencia) 
+            VALUES (%s, %s, %s)
+        """
+        valores = (fkEmpleado, fkCurso, fechaAsistencia)
+
+        print("Consulta:", consulta)
+        print("Valores:", valores)
+        
         resultado = db.execute_commit(consulta, valores)
         db.close()
         return resultado

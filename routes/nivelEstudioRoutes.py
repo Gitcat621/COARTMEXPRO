@@ -4,14 +4,14 @@ from models.nivelEstudio import NivelEstudio
 nivel_estudio_bp = Blueprint('nivel_estudio_bp', __name__)
 
 # Ruta para obtener todos los niveles de estudio
-@nivel_estudio_bp.route('/niveles-estudio', methods=['GET'])
+@nivel_estudio_bp.route('/niveles_estudio', methods=['GET'])
 def listar_niveles_estudio():
     """Endpoint para obtener todos los registros"""
     niveles_estudio = NivelEstudio.listar_niveles_estudio()
     return jsonify(niveles_estudio), 200
 
 # Ruta para insertar un nuevo nivel de estudio
-@nivel_estudio_bp.route('/niveles-estudio', methods=['POST'])
+@nivel_estudio_bp.route('/niveles_estudio', methods=['POST'])
 def crear_nivel_estudio():
     """Endpoint para insertar un registro"""
     data = request.json
@@ -27,7 +27,7 @@ def crear_nivel_estudio():
         return jsonify({'mensaje': 'Error al insertar nivel de estudio'}), 500
 
 # Ruta para editar un nivel de estudio
-@nivel_estudio_bp.route('/niveles-estudio', methods=['PUT'])
+@nivel_estudio_bp.route('/niveles_estudio', methods=['PUT'])
 def editar_nivel_estudio():
     """Endpoint para editar un registro"""
     try:
@@ -48,7 +48,7 @@ def editar_nivel_estudio():
         return jsonify({'mensaje': f'Error en el servidor: {str(e)}'}), 500
 
 # Ruta para eliminar un nivel de estudio
-@nivel_estudio_bp.route('/niveles-estudio', methods=['DELETE'])
+@nivel_estudio_bp.route('/niveles_estudio', methods=['DELETE'])
 def eliminar_nivel_estudio():
     """Endpoint para eliminar un registro"""
     try:
