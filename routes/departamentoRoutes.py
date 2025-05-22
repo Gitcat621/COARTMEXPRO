@@ -20,8 +20,9 @@ def crear_departamento():
 
     if not nombreDepartamento:
         return jsonify({'mensaje': 'Faltan datos'}), 400
-
-    if Departamento.crear_departamento(nombreDepartamento):
+    
+    departamento = Departamento(nombreDepartamento=nombreDepartamento)
+    if departamento.crear_departamento():
         return jsonify({'mensaje': 'Departamento insertado correctamente'}), 201
     else:
         return jsonify({'mensaje': 'Error al insertar departamento'}), 500
@@ -34,7 +35,8 @@ def editar_departamento():
         pkDepartamento = data.get('pkDepartamento')
         nombreDepartamento = data.get('nombreDepartamento')
 
-        if Departamento.editar_departamento(pkDepartamento, nombreDepartamento):
+        departamento = Departamento(pkDepartamento, nombreDepartamento)
+        if departamento.editar_departamento():
             return jsonify({'mensaje': 'Departamento editado correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo editar el departamento'}), 500
@@ -49,7 +51,8 @@ def eliminar_departamento():
         data = request.json
         pkDepartamento = data.get('pkDepartamento')
 
-        if Departamento.eliminar_departamento(pkDepartamento):
+        departamento = Departamento(pkDepartamento=pkDepartamento)
+        if departamento.eliminar_departamento():
             return jsonify({'mensaje': 'Departamento eliminado correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo eliminar el departamento'}), 500

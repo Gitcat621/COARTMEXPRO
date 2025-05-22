@@ -1,9 +1,47 @@
 $(document).ready(function () {
 
-
     listarEmpleados();
+    listarNivelesEstudio();
     
 });
+
+
+async function listarNivelesEstudio() {
+    try {
+        const response = await fetch(`http://127.0.0.1:5000/coartmex/niveles_estudio`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+        });
+        const data = await response.json();
+
+        if (!response.ok) {
+
+            //manejo de errores
+            toastr.error(`${data.mensaje}`, 'Error', {"closeButton": true,});
+            return;
+        }
+
+        //console.log(data);
+
+        const select = document.getElementById('niveles_menu');
+        select.innerHTML = "";
+
+
+        data.forEach(niveles => {
+
+            let option = document.createElement('option');
+            option.value = niveles.pkNivelEstudio;
+            option.textContent = niveles.nombreNivel;
+            select.appendChild(option);
+
+        });
+
+       
+    } catch (error) {
+        console.error("Error al cargar los datos:", error);
+        toastr.error('La petición de niveles de estudio no se pudo concretar', 'Error', {"closeButton": true,});
+    }
+}
 
 //Formatea las fecha para tener un formato YYYY/MM/DD
 function formatearFecha(fechaString) {
@@ -13,7 +51,6 @@ function formatearFecha(fechaString) {
     const dia = String(fecha.getDate()).padStart(2, '0');
     return `${año}-${mes}-${dia}`;
 }
-
 
 //Asignar funcion al boton de abrir modal
 $("#modalAgregar").click(function() {
@@ -162,6 +199,8 @@ async function listarEmpleados() {
             return;
         }
 
+        console.log(data);
+
         let tabla = $('#empleadoTable').DataTable();
         tabla.clear().draw();
         tabla.rows.add(data.map((empleados) => [
@@ -170,9 +209,9 @@ async function listarEmpleados() {
             empleados.nombreEmpleado, //2 
             toformatearFecha(empleados.fechaIngreso), //3
             toformatearFecha(empleados.fechaNacimiento), //4
-            '$' + empleados.nomina,
-            '$' + empleados.vale,
-            '$' + (parseFloat(empleados.nomina) + parseFloat(empleados.vale)),
+            '$' + empleados.nomina.toLocaleString('es-MX'),
+            '$' + empleados.vale.toLocaleString('es-MX'),
+            '$' + (parseFloat(empleados.nomina) + parseFloat(empleados.vale)).toLocaleString('es-MX'),
             empleados.nombrePuesto,
             empleados.nombreDepartamento, //
             empleados.nombreNivel,
@@ -267,7 +306,8 @@ function abrirModal(modo, rfc) {
         document.getElementById('fechaIngreso').value = '';
         document.getElementById('sueldo').value = '';
         document.getElementById('permisosPedidos').value = '';
-        document.getElementById('departamento_menu').value = '';
+        document.getElementById('puesto_menu').value = '';
+        document.getElementById('niveles_menu').value = '';
 
     } else if (modo === 2) {
         

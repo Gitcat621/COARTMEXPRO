@@ -397,6 +397,7 @@
 							<option value="WV">West Virginia</option>
 						</optgroup>
 					</select>
+
 					<p class="margin-top-20">Tagging support</p>
 					<select class="select2_2 form-control" multiple="multiple" id="select2">
 						<option selected="selected">orange</option>
@@ -404,7 +405,48 @@
 						<option selected="selected">purple</option>
 						<option value="red">red</option><option value="blue">blue</option><option value="green">green</option>
 					</select>
-					<button type="button" class="btn btn-info btn-xs waves-effect waves-light margin-top-20" id="obtener">Changuitos</button>
+
+					<p class="margin-top-20">Seleccion multiple con sugerencias</p>
+					<select class="select2_2 form-control" multiple="multiple" id="dreamingSelect">
+						<option selected="selected">acanijo</option>
+						
+					</select>
+					<button type="button" class="btn btn-info btn-xs waves-effect waves-light margin-top-20" id="obtener">OMG</button>
+					<button type="button" class="btn btn-danger btn-xs waves-effect waves-light margin-top-20" id="dreaming">DREAMING</button>
+
+					<div class="form-group">
+						<label>Fecha de ingreso</label>
+						<input type="text" class="form-control" placeholder="año" id="fechaIngreso" autocomplete="off">
+					</div>
+					<div class="form-group">
+						<label>Fecha de ingreso</label>
+						<input type="date" class="form-control" placeholder="año" id="fi" autocomplete="off">
+					</div>
+					<button type="button" class="btn btn-danger btn-xs waves-effect waves-light margin-top-20" id="compare">Compare</button>
+
+					<div class="form-group">
+						<label for="opcion">Selecciona o escribe una opción:</label>
+						<input list="opciones" id="opcion" name="opcion" class="form-control">
+						<datalist id="opciones">
+							<option>chamoy</option>
+						</datalist>
+					</div>
+					<button type="button" class="btn btn-danger btn-xs waves-effect waves-light margin-top-20" id="aver">AVER</button>
+
+					<p>Using data from <code>&lt;datalist&gt;</code> as a suggestion (the standard behavior).</p>
+					<input type="text" placeholder="Programming language name" class="form-control flexdatalist" data-min-length="1" list="languages" name="language">
+					<datalist id="languages">
+						<!-- <option value="PHP">PHP</option>
+						<option value="JavaScript">JavaScript</option>
+						<option value="Cobol">Cobol</option>
+						<option value="C#">C#</option>
+						<option value="C++">C++</option>
+						<option value="Java">Java</option>
+						<option value="Pascal">Pascal</option>
+						<option value="FORTRAN">FORTRAN</option>
+						<option value="Lisp">Lisp</option>
+						<option value="Swift">Swift</option> -->
+					</datalist>
 				</div>
 				<!-- /.box-content -->
 			</div>
@@ -432,11 +474,17 @@
 	<script src="assets/plugin/sweet-alert/sweetalert.min.js"></script>
 	<script src="assets/plugin/waves/waves.min.js"></script>
 
+	<!-- Flex Datalist -->
+	<script src="assets/plugin/flexdatalist/jquery.flexdatalist.js"></script>
+
 	<!-- Select2 -->
 	<script src="assets/plugin/select2/js/select2.min.js"></script>
 
+	<!-- Datepicker -->
+	<script src="assets/plugin/datepicker/js/bootstrap-datepicker.js"></script>
+
 	<!-- Demo Scripts -->
-	<script src="assets/scripts/form.demo.min.js"></script>
+	<script src="assets/scripts/form.demo.js"></script>
 
 	<script src="assets/scripts/main.min.js"></script>
 	<script src="assets/color-switcher/color-switcher.min.js"></script>

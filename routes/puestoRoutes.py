@@ -21,7 +21,7 @@ def crear_puesto():
 
     puesto = Puesto(nombrePuesto=nombrePuesto, fkDepartamento=fkDepartamento)
 
-    if puesto.crear_puesto():  # Parece que el método debería llamarse crear_puesto
+    if puesto.crear_puesto(): 
         return jsonify({'mensaje': 'Puesto creado correctamente'}), 201
     else:
         return jsonify({'mensaje': 'Error al crear puesto'}), 500
@@ -40,7 +40,7 @@ def editar_puesto():
 
         puesto = Puesto(pkPuesto=pkPuesto, nombrePuesto=nombrePuesto, fkDepartamento=fkDepartamento)
 
-        if puesto.editar_puestos():  # Parece que el método debería llamarse editar_puesto
+        if puesto.editar_puestos():
             return jsonify({'mensaje': 'Puesto editado correctamente'}), 200
         else:
             return jsonify({'mensaje': 'Error al editar puesto'}), 500

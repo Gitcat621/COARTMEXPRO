@@ -1,11 +1,10 @@
 from database import Database
 
 class Beneficio:
-    def __init__(self, pkBeneficio=None, nombreBeneficio=None, fkServicioPac=None):
+    def __init__(self, pkBeneficio=None, nombreBeneficio=None):
         """Inicializa un objeto"""
         self.pkBeneficio = pkBeneficio
         self.nombreBeneficio = nombreBeneficio
-        self.fkServicioPac = fkServicioPac
 
 
     @staticmethod
@@ -21,8 +20,8 @@ class Beneficio:
     def crear_beneficio(self):
         """Guarda un nuevo registro en la base de datos"""
         db = Database()
-        consulta = "INSERT INTO beneficios (nombreBeneficio,fkServicioPac) VALUES (%s,%s)"
-        valores = (self.nombreBeneficio,self.fkServicioPac)
+        consulta = "INSERT INTO beneficios (nombreBeneficio) VALUES (%s)"
+        valores = (self.nombreBeneficio)
         print(consulta % valores)
         resultado = db.execute_commit(consulta, valores)
         db.close()
@@ -31,8 +30,8 @@ class Beneficio:
     def editar_beneficios(self):
         """Edita un registro en la base de datos."""
         db = Database()
-        consulta = "UPDATE beneficios SET nombreBeneficio = %s, fkServicioPac = %s WHERE pkBeneficio = %s"
-        valores = (self.nombreBeneficio, self.fkServicioPac, self.pkBeneficio)
+        consulta = "UPDATE beneficios SET nombreBeneficio = %s WHERE pkBeneficio = %s"
+        valores = (self.nombreBeneficio, self.pkBeneficio)
         print(consulta % valores)
         resultado = db.execute_commit(consulta, valores)
         db.close()

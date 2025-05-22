@@ -12,7 +12,7 @@ class Puesto:
     def listar_puestos():
         """Obtiene todos los registros de la base de datos."""
         db = Database()
-        consulta = "SELECT * FROM puestos"
+        consulta = "SELECT p.nombrePuesto, d.nombreDepartamento, p.fkDepartamento, p.pkPuesto FROM puestos p JOIN departamentos d ON d.pkDepartamento = p.fkDepartamento"
         print(consulta)
         resultado = db.execute_query(consulta)
         db.close()
@@ -21,7 +21,7 @@ class Puesto:
     def crear_puesto(self):
         """Guarda un nuevo registro en la base de datos"""
         db = Database()
-        consulta = "INSERT INTO puestos (nombrePuesto, fkDepartamento) VALUES (%s)"
+        consulta = "INSERT INTO puestos (nombrePuesto, fkDepartamento) VALUES (%s,%s)"
         valores = (self.nombrePuesto, self.fkDepartamento)
         print(consulta % valores)
         resultado = db.execute_commit(consulta, valores)

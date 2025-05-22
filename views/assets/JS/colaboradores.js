@@ -145,6 +145,7 @@ async function agregarColaborador() {
             toastr.warning('Por favor completa todos los campos', 'Advertencia', {"closeButton": true});
             return;
         }
+        
 
         const response = await fetch('http://127.0.0.1:5000/coartmex/empleados', {
             method: 'POST',

@@ -30,7 +30,7 @@ def listar_ingresos():
     except (TypeError, ValueError):
         grupo = 0
 
-    if grupo is 0:
+    if grupo == 0:
         grupo = ""
     else:
         grupo = f"AND gs.pkGrupoSocio = {grupo}"
@@ -189,3 +189,65 @@ def obtener_todos_las_graficas():
         'grafica2': grafica2,
         'grafica3': grafica3,
     })
+
+
+
+@resumen_bp.route('/infoEmpleado', methods=['POST'])
+def agregar_info_empleado():
+    data = request.json
+    nombreEmpleado = data.get('nombreEmpleado')
+    fechaIngreso = data.get('fechaIngreso')
+    nomina = data.get('nomina')
+    vale = data.get('vale')
+    fkPuesto = data.get('fkPuesto')
+    state = data.get('state')
+
+    numeroEmpleado = data.get('numeroEmpleado')
+    rfc = data.get('rfc')
+    fechaNacimiento = data.get('fechaNacimiento')
+    pkNumerosEmergencia = data.get('pkNumerosEmergencia')
+    numerosEmergencia = data.get('numerosSeleccionados')
+    pkUniformeEmpleado = data.get('pkUniformeEmpleado')
+    tallaUniforme = data.get('tallaUniforme')
+    pzasUniforme = data.get('pzasUniforme')
+    fkNivelEstudio = data.get('fkNivelEstudio')
+    fkUbicacion = data.get('fkUbicacion')
+    puebloCiudad = data.get('puebloCiudad')
+    estado = data.get('estado')
+    pais = data.get('pais')
+
+    print(nombreEmpleado)
+    print(fechaIngreso)
+    print(nomina)
+    print(vale)
+    print(fkPuesto)
+    print(state)
+
+    print('--------------------')
+
+    print(numeroEmpleado)
+    print(rfc)
+    print(fechaNacimiento)
+    print(pkNumerosEmergencia)
+    print(numerosEmergencia)
+    print(pkUniformeEmpleado)
+    print(tallaUniforme)
+    print(pzasUniforme)
+    print(fkNivelEstudio)
+    print(fkUbicacion)
+    print(puebloCiudad)
+    print(estado)
+    print(pais)
+
+    # return jsonify({'mensaje': 'HEYYYY'}), 400
+
+
+    if not nombreEmpleado or not fechaIngreso or not nomina or not vale or not fkPuesto or not state or not numeroEmpleado or not rfc or not fechaNacimiento or not numerosEmergencia or not tallaUniforme or not pzasUniforme or not fkNivelEstudio or not puebloCiudad or not estado or not pais:
+        return jsonify({'mensaje': 'Faltan datos'}), 400
+    
+    if Resumen.agregar_info_empleado(nombreEmpleado,fechaIngreso,nomina,vale,fkPuesto,state,numeroEmpleado,rfc,fechaNacimiento, pkNumerosEmergencia, numerosEmergencia, pkUniformeEmpleado,tallaUniforme,pzasUniforme,fkNivelEstudio,fkUbicacion,puebloCiudad,estado,pais):
+        return jsonify({'mensaje': 'Empleado actualizado correctamente'}), 200
+    else:
+        return jsonify({'mensaje': 'Error al actualizar la informacion del empleado'}), 500
+
+    

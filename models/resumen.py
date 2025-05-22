@@ -1,13 +1,10 @@
 from database import Database
 
 class Resumen:
-    def __init__(self, foreingKey=None, fecha=None, montoVenta=None, fechaVenta=None, fkSocioComercial=None):
+    def __init__(self, foreingKey=None, fecha=None):
         """Inicializa un objeto"""
         self.foreingKey = foreingKey
         self.fecha = fecha
-        self.montoVenta =montoVenta
-        self.fechaVenta =fechaVenta
-        self.fkSocioComercial = fkSocioComercial
 
 
     @staticmethod
@@ -520,3 +517,111 @@ class Resumen:
         db.close()
 
         return resultado
+    
+
+
+
+    @staticmethod
+    def es_entero(valor):
+        """Verifica si un valor puede convertirse a entero."""
+        try:
+            int(valor)
+            return True
+        except (ValueError, TypeError):
+            return False
+
+
+    @staticmethod
+    def agregar_info_empleado(nombreEmpleado, fechaIngreso, nomina, vale, fkPuesto, state, numeroEmpleado, rfc, fechaNacimiento, pkNumerosEmergencia, 
+                        numerosEmergencia, pkUniformeEmpleado, tallaUniforme, pzasUniforme, fkNivelEstudio, fkUbicacion, puebloCiudad, estado, pais):
+    
+        db = Database()
+
+        try:
+            if pkNumerosEmergencia is None:
+                # --- Insertar números de emergencia ---
+                consultaNumeros = 'INSERT INTO numeros_emergencia (numeroEmergencia, fkEmpleado) VALUES (%s, %s)'
+                valoresNumeros = [(numero, numeroEmpleado) for numero in numerosEmergencia]
+                db.cursor.executemany(consultaNumeros, valoresNumeros)
+            else:
+                # Convertir las cadenas en conjuntos de enteros
+                pk_numeros_set = set(map(int, pkNumerosEmergencia.split("-")))
+                numeros_emergencia_set = set(map(int, numerosEmergencia))
+
+                # Identificar números eliminados y nuevos
+                eliminados = pk_numeros_set - numeros_emergencia_set
+                nuevos = numeros_emergencia_set - pk_numeros_set
+
+                # --- Eliminar números que ya no están ---
+                if eliminados:
+                    consultaEliminar = 'DELETE FROM numeros_emergencia WHERE pkNumeroEmergencia IN (%s)'
+                    valoresEliminar = ", ".join(map(str, eliminados))
+                    db.cursor.execute(consultaEliminar % valoresEliminar)
+
+                # --- Insertar nuevos números ---
+                if nuevos:
+                    consultaInsertar = 'INSERT INTO numeros_emergencia (numeroEmergencia, fkEmpleado) VALUES (%s, %s)'
+                    valoresInsertar = [(numero, numeroEmpleado) for numero in nuevos]
+                    db.cursor.executemany(consultaInsertar, valoresInsertar)
+            
+
+            # --- Insertar uniforme ---
+            if pkUniformeEmpleado is None:
+                consultaUniformes = 'INSERT INTO uniformes_empleados (tallaUniforme, pzasUniforme, fkEmpleado) VALUES (%s,%s,%s)'
+                valoresUniforme = (tallaUniforme, pzasUniforme, numeroEmpleado)
+                db.cursor.execute(consultaUniformes, valoresUniforme)
+            else:
+                consultaUniformes = 'UPDATE uniformes_empleados set tallaUniforme = %s, pzasUniforme = %s WHERE pkUniformeEmpleado = %s'
+                valoresUniforme = (tallaUniforme, pzasUniforme, pkUniformeEmpleado)
+                db.cursor.execute(consultaUniformes, valoresUniforme)
+
+            # --- Insertar o recuperar ID de pueblo ---
+            if Resumen.es_entero(puebloCiudad):
+                puebloCiudad = int(puebloCiudad)
+            else:
+                db.cursor.execute('INSERT INTO pueblos_ciudades (nombrePuebloCiudad) VALUES (%s)', (puebloCiudad,))
+                db.cursor.execute('SELECT LAST_INSERT_ID()')
+                puebloCiudad = db.cursor.fetchone()['LAST_INSERT_ID()']
+
+            # --- Insertar o recuperar ID de estado ---
+            if Resumen.es_entero(estado):
+                estado = int(estado)
+            else:
+                db.cursor.execute('INSERT INTO estados (nombreEstado) VALUES (%s)', (estado,))
+                db.cursor.execute('SELECT LAST_INSERT_ID()')
+                estado = db.cursor.fetchone()['LAST_INSERT_ID()']
+
+            # --- Insertar o recuperar ID de país ---
+            if Resumen.es_entero(pais):
+                pais = int(pais)
+            else:
+                db.cursor.execute('INSERT INTO paises (nombrePais) VALUES (%s)', (pais,))
+                db.cursor.execute('SELECT LAST_INSERT_ID()')
+                pais = db.cursor.fetchone()['LAST_INSERT_ID()']
+
+            # --- Insertar ubicación ---
+            if fkUbicacion is None:
+                db.cursor.execute('INSERT INTO ubicaciones (fkPuebloCiudad, fkEstado, fkPais) VALUES (%s, %s, %s)', (puebloCiudad, estado, pais))
+                db.cursor.execute('SELECT LAST_INSERT_ID()')
+                fkUbicacion = db.cursor.fetchone()['LAST_INSERT_ID()']
+            else:
+                db.cursor.execute('UPDATE ubicaciones set fkPuebloCiudad = %s, fkEstado = %s, fkPais =%s WHERE pkUbicacion = %s', (puebloCiudad, estado, pais, fkUbicacion))
+                
+            # --- Actualizar empleado ---
+            consultaEmpleado = "UPDATE empleados SET nombreEmpleado = %s, fechaIngreso = %s, nomina = %s, vale = %s, fkPuesto = %s, estado = %s,rfc = %s, fechaNacimiento = %s, fkNivelEstudio = %s, fkUbicacion = %s WHERE numeroEmpleado = %s"
+            valoresEmpleado = (nombreEmpleado, fechaIngreso, nomina, vale, fkPuesto, state, rfc, fechaNacimiento, fkNivelEstudio, fkUbicacion, numeroEmpleado)
+            db.cursor.execute(consultaEmpleado, valoresEmpleado)
+
+            # ✅ Confirmar transacción
+            db.connection.commit()
+            print("✅ Transacción completada con éxito.")
+            return True
+
+        except Exception as e:
+            # ❌ Cancelar cambios si ocurre error
+            db.connection.rollback()
+            print("❌ Transacción cancelada por error:", e)
+            return False
+
+        finally:
+            db.close()

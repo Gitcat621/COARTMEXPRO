@@ -1,13 +1,16 @@
 from database import Database
 
 class ServicioPac:
-    def __init__(self, pkServicioPac=None, numeroSesion=None, fechaSesion=None, costoSesion=None, montoApoyo=None):
+    def __init__(self, pkServicioPac=None, numeroSesion=None, fechaSesion=None, costoSesion=None, montoApoyo=None, fkEmpleado=None, fkBeneficio=None, fkClinica=None):
         """Inicializa un objeto"""
         self.pkServicioPac = pkServicioPac
         self.numeroSesion = numeroSesion
         self.fechaSesion = fechaSesion
         self.costoSesion = costoSesion
         self.montoApoyo = montoApoyo
+        self.fkEmpelado = fkEmpleado
+        self.fkBeneficio = fkBeneficio
+        self.fkClinica = fkClinica
 
 
     @staticmethod
@@ -22,8 +25,8 @@ class ServicioPac:
     def crear_servicio_pac(self):
         """Guarda un nuevo registro en la base de datos"""
         db = Database()
-        consulta = "INSERT INTO servicio_pac (numeroSesion, fechaSesion, costoSesion, montoApoyo) VALUES (%s,%s,%s,%s)"
-        valores = (self.numeroSesion,self.fechaSesion,self.costoSesion,self.montoApoyo)
+        consulta = "INSERT INTO servicio_pac (numeroSesion, fechaSesion, costoSesion, montoApoyo, fkEmpleado, fkBeneficio, fkClinica) VALUES (%s,%s,%s,%s,%s,%s,%s)"
+        valores = (self.numeroSesion,self.fechaSesion,self.costoSesion,self.montoApoyo, self.fkEmpelado, self.fkBeneficio, self.fkClinica)
         print(consulta % valores)
         resultado = db.execute_commit(consulta, valores)
         db.close()
@@ -32,8 +35,8 @@ class ServicioPac:
     def editar_servicio_pac(self):
         """Edita un registro en la base de datos."""
         db = Database()
-        consulta = "UPDATE servicio_pac SET numeroSesion = %s, fechaSesion = %s, costoSesion = %s, montoApoyo = %s WHERE pkServicioPac = %s"
-        valores = (self.numeroSesion, self.fechaSesion, self.costoSesion, self.montoApoyo, self.pkServicioPac)
+        consulta = "UPDATE servicio_pac SET numeroSesion = %s, fechaSesion = %s, costoSesion = %s, montoApoyo = %s, fkBeneficio = %s, fkClinica = %s WHERE pkServicioPac = %s"
+        valores = (self.numeroSesion, self.fechaSesion, self.costoSesion, self.montoApoyo, self.fkBeneficio, self.fkClinica, self.pkServicioPac)
         print(consulta % valores)
         resultado = db.execute_commit(consulta, valores)
         db.close()

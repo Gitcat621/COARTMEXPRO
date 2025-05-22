@@ -16,12 +16,11 @@ def crear_beneficio():
     """Endpoint para insertar un registro"""
     data = request.json
     nombreBeneficio = data.get('nombreBeneficio')
-    fkServicioPac = data.get('fkServicioPac')
 
-    if not nombreBeneficio or not fkServicioPac:
+    if not nombreBeneficio:
         return jsonify({'mensaje': 'Faltan datos'}), 400
     
-    beneficio = Beneficio(None, nombreBeneficio, fkServicioPac)
+    beneficio = Beneficio(None, nombreBeneficio)
     if beneficio.crear_beneficio():
         return jsonify({'mensaje': 'Beneficio insertado correctamente'}), 201
     else:
@@ -35,12 +34,11 @@ def editar_beneficio():
         data = request.json
         pkBeneficio = data.get('pkBeneficio')
         nombreBeneficio = data.get('nombreBeneficio')
-        fkServicioPac = data.get('fkServicioPac')
 
-        if not pkBeneficio or not nombreBeneficio or not fkServicioPac:
+        if not pkBeneficio or not nombreBeneficio:
             return jsonify({'mensaje': 'Faltan datos'}), 400
 
-        beneficio = Beneficio(pkBeneficio, nombreBeneficio, fkServicioPac)
+        beneficio = Beneficio(pkBeneficio, nombreBeneficio)
         if beneficio.editar_beneficios():
             return jsonify({'mensaje': 'Beneficio editado correctamente'}), 200
         else:

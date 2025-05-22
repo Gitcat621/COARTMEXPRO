@@ -12,7 +12,7 @@ class FuncionPuesto:
     def listar_funciones_puesto():
         """Obtiene todos los registros de la base de datos."""
         db = Database()
-        consulta = "SELECT * FROM funciones_puesto"
+        consulta = "SELECT * FROM funciones_puesto fp JOIN puestos p ON p.pkPuesto = fp.fkPuesto"
         print(consulta)
         resultado = db.execute_query(consulta)
         db.close()

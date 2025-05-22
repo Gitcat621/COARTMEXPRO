@@ -122,6 +122,62 @@
 			minViewMode: 1,
 		});
 
+	if ($("#fechaIngreso").length)
+	$('#fechaIngreso').datepicker({
+		format: "yyyy-mm-dd",
+		autoclose: true,
+		startView: 2,		
+		minViewMode: 0,
+	});
+	$('#fechaNacimiento').datepicker({
+		format: "yyyy-mm-dd",
+		autoclose: true,
+		startView: 2,		
+		minViewMode: 0,
+	});
+	$('#fechaAsistencia').datepicker({
+		format: "yyyy-mm-dd",
+		autoclose: true,
+		startView: 2,		
+		minViewMode: 0,
+	});
+	$('#fechaAsistencia').datepicker({
+		format: "yyyy-mm-dd",
+		autoclose: true,
+		startView: 2,		
+		minViewMode: 0,
+	});
+	$('#fechaPermiso').datepicker({
+		format: "yyyy-mm-dd",
+		autoclose: true,
+		startView: 2,		
+		minViewMode: 0,
+	});
+	$('#fechaPrestamo').datepicker({
+		format: "yyyy-mm-dd",
+		autoclose: true,
+		startView: 2,		
+		minViewMode: 0,
+	});
+	$('#fechaTerminoPago').datepicker({
+		format: "yyyy-mm-dd",
+		autoclose: true,
+		startView: 2,		
+		minViewMode: 0,
+	});
+	$('#fechaSesion').datepicker({
+		format: "yyyy-mm-dd",
+		autoclose: true,
+		startView: 2,		
+		minViewMode: 0,
+	});
+	$('#fechaAsistenciaRI').datepicker({
+		format: "yyyy-mm-dd",
+		autoclose: true,
+		startView: 2,		
+		minViewMode: 0,
+	});
+
 
 	if ($("#datepicker-autoclose").length)
 		$('#datepicker-autoclose').datepicker({

@@ -127,6 +127,8 @@ async function agregarUsuario() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ nombreUsuario, contrasena, fkEmpleado })
         });
+        
+        const data = await response.json();
 
         if (!response.ok) {
 
@@ -134,8 +136,6 @@ async function agregarUsuario() {
             toastr.error(`${data.mensaje}`, 'Error', {"closeButton": true,});
             return;
         }
-        
-        const data = await response.json();
 
         toastr.success(`${data.mensaje}`, 'Realizado', { "closeButton": true });
         $('#boostrapModal-1').modal('hide');

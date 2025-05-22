@@ -5,8 +5,8 @@ $(document).ready(function () {
 });
 
 //Asignar funcion al boton de abrir modal
-$("#modalAgregar").click(function() {
-    abrirModal(1);
+$("#agregarDepartamento").click(function() {
+    modalDepartamento(1);
 });
 
 //Inicializar datatable
@@ -20,8 +20,8 @@ $(document).ready(function() {
                 title: "Opciones",
                 render: function (data, type, row) { // 'row' contiene toda la fila de datos
                     return `<div class="text-center">
-                                <button class="btn btn-xs editar-btn" data-row='${JSON.stringify(row)}'><i class="fa fa-pencil"></i></button>
-                                <button class="btn btn-xs eliminar-btn" data-pk="${row[1]}"><i class="fa fa-trash"></i></button>
+                                <button class="btn btn-xs editarDepartamento-btn" data-row='${JSON.stringify(row)}'><i class="fa fa-pencil"></i></button>
+                                <button class="btn btn-xs eliminarDepartamento-btn" data-pk="${row[1]}" data-nombre="${row[0]}"><i class="fa fa-trash"></i></button>
                             </div>`;
                 }
             }
@@ -29,11 +29,9 @@ $(document).ready(function() {
         scrollX: true,
     });
 
-    
-
-// Event listeners para los botones
+    // Event listeners para los botones
     // Editar
-    $('#departamentoTable').on('click', '.editar-btn', function () {
+    $('#departamentoTable').on('click', '.editarDepartamento-btn', function () {
 
         const rowData = $(this).data('row'); 
 
@@ -43,27 +41,37 @@ $(document).ready(function() {
 
         document.getElementById('nombreDepartamento').value = nombreDepartamento;
 
-        abrirModal(2,pkDepartamento);
+        modalDepartamento(2,pkDepartamento);
     });
 
     // Eliminar
-    $('#departamentoTable').on('click', '.eliminar-btn', function () {
+    $('#departamentoTable').on('click', '.eliminarDepartamento-btn', function () {
 
         const pkDepartamento = $(this).data('pk');
+        const nombreDepartamento = $(this).data('nombre');
 
-        var modal = $('[data-remodal-id="remodal"]').remodal();
-
-        modal.open();
-
-        $(document).on("confirmation", ".remodal", function () {
-            eliminar(pkDepartamento);    
+        Swal.fire({
+            title: `¿Eliminar a ${nombreDepartamento}?`,
+            text: "No se podrá recuperar",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#B71C1C",
+            cancelButtonColor: "#C1C0C0",
+            confirmButtonText: "Eliminar",
+            cancelButtonText: "Cancelar"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                eliminarDepartamento(pkDepartamento);    
+            }
         });
+       
+
         
     });
 
 });
 
-async function agregar() {
+async function agregarDepartamento() {
     try {
         const nombreDepartamento = document.getElementById('nombreDepartamento').value.trim();
 
@@ -80,11 +88,18 @@ async function agregar() {
 
         const data = await response.json();
 
+        if (!response.ok) {
+
+            //manejo de errores
+            toastr.error(`${data.mensaje}`, 'Error', {"closeButton": true,});
+            return;
+        }
+
         toastr.success(`${data.mensaje}`, 'Realizado', { "closeButton": true });
 
         // Cerrar modal y actualizar la lista
         $('#boostrapModal-1').modal('hide');
-        await listar();
+        await listarDepartamentos();
 
     } catch (error) {
         console.error('Error:', error);
@@ -105,13 +120,30 @@ async function listarDepartamentos() {
         tabla.clear().draw();
         tabla.rows.add(data.map(depa => [depa.nombreDepartamento, depa.pkDepartamento])).draw();
 
+        try{
+            
+            const select = document.getElementById('departamento_menu');
+            document.getElementById('departamento_menu').innerHTML = "";
+
+            data.forEach(depar => {
+
+                let option = document.createElement('option');
+                option.value = depar.pkDepartamento;
+                option.textContent = depar.nombreDepartamento;
+                select.appendChild(option);
+            });
+
+        }catch{
+            console.log('no existe este elemento')
+        }
         
     } catch (error) {
         console.error("Error al cargar los datos:", error);
+        toastr.error(`Error al listar los departamentos`, 'Error', {"closeButton": true,});
     }
 }
 
-async function editar(pkDepartamento) {
+async function editarDepartamento(pkDepartamento) {
     try {
         const nombreDepartamento = document.getElementById('nombreDepartamento').value.trim();
 
@@ -128,7 +160,14 @@ async function editar(pkDepartamento) {
 
         const data = await response.json();
 
-        await listar();
+        if (!response.ok) {
+
+            //manejo de errores
+            toastr.error(`${data.mensaje}`, 'Error', {"closeButton": true,});
+            return;
+        }
+
+        await listarDepartamentos();
         toastr.success(`${data.mensaje}`, 'Realizado', { "closeButton": true });
 
     } catch (error) {
@@ -137,7 +176,7 @@ async function editar(pkDepartamento) {
     }
 }
 
-async function eliminar(pkDepartamento) {
+async function eliminarDepartamento(pkDepartamento) {
     try {
         if (!pkDepartamento) {
             toastr.warning('No se pudo obtener el elemento', 'Advertencia', { "closeButton": true });
@@ -152,7 +191,14 @@ async function eliminar(pkDepartamento) {
 
         const data = await response.json();
 
-        await listar();
+        if (!response.ok) {
+
+            //manejo de errores
+            toastr.error(`${data.mensaje}`, 'Error', {"closeButton": true,});
+            return;
+        }
+
+        await listarDepartamentos();
         toastr.success(`${data.mensaje}`, 'Realizado', { "closeButton": true });
 
     } catch (error) {
@@ -161,25 +207,24 @@ async function eliminar(pkDepartamento) {
     }
 }
 
-
-function abrirModal(modo, pkDepartamento) {
-
+function modalDepartamento(modo, pkDepartamento) {
+    
     //Obtener el valor de los elementos del modal
     const modalTitle = document.getElementById('myModalLabel');
-    const modalButton = document.querySelector('#boostrapModal-1 .modal-footer .btn-primary');
+    const modalButton = document.querySelector('#guardarDepartamento');
 
     //Asignar diseño y comportamiento del modal dependiendo de la accion(Agregar o Editar)
     if (modo === 1) {
 
         modalTitle.textContent = 'Agregar departamento';
-        modalButton.setAttribute('onclick', 'agregar()');
+        modalButton.setAttribute('onclick', 'agregarDepartamento()');
 
         document.getElementById('nombreDepartamento').value = '';
     } else if (modo === 2) {
 
         $('#boostrapModal-1').modal('show');
         modalTitle.textContent = 'Editar departamento';
-        modalButton.setAttribute('onclick', `editar(${pkDepartamento})`);
+        modalButton.setAttribute('onclick', `editarDepartamento(${pkDepartamento})`);
 
     }
 

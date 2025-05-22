@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<title>Cursos - COARTMEX-PRO</title>
+
+	<!-- Main Styles -->
+	<link rel="stylesheet" href="assets/styles/style.css">
+
+    <!-- mCustomScrollbar -->
+    <link rel="stylesheet" href="assets/plugin/mCustomScrollbar/jquery.mCustomScrollbar.min.css">
+
+    <!-- Waves Effect -->
+    <link rel="stylesheet" href="assets/plugin/waves/waves.min.css">
+
+    <!-- Sweet Alert -->
+    <link rel="stylesheet" href="assets/plugin/sweet-alert/sweetalert.css">
+
+    <!-- Data Tables -->
+    <link rel="stylesheet" href="assets/plugin/datatables/media/css/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" href="assets/plugin/datatables/extensions/Responsive/css/responsive.bootstrap.min.css">
+        
+    <!-- Table Responsive -->
+    <link rel="stylesheet" href="assets/plugin/RWD-table-pattern/css/rwd-table.min.css">
+
+    <!-- Remodal -->
+    <link rel="stylesheet" href="assets/plugin/modal/remodal/remodal.css">
+    <link rel="stylesheet" href="assets/plugin/modal/remodal/remodal-default-theme.css">
+	
+    <!-- Toastr -->
+    <link rel="stylesheet" href="assets/plugin/toastr/toastr.css">
+
+    <!-- Select2 -->
+	<link rel="stylesheet" href="assets/plugin/select2/css/select2.min.css">
+
+	<!-- Datepicker -->
+	<link rel="stylesheet" href="assets/plugin/datepicker/css/bootstrap-datepicker.min.css">
+</head>
+
+<body>
+<div class="main-menu">
+	<header class="header">
+		<a href="index.html" class="logo">COARTMEX-PRO</a>
+		<button type="button" class="button-close fa fa-times js__menu_close"></button>
+		<div class="user">
+			<a href="#" class="avatar"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTomPrJLgLq4aZpXJJhxQ5HjtOgBguGXzsJw&s" alt=""><span class="status online"></span></a>
+			<h5 class="name"><a id="usuario" href="#">Curso</a></h5>
+			<h5 class="position" id="departamento">Departamento</h5>
+			<!-- /.name -->
+		</div>
+		<!-- /.user -->
+	</header>
+	<!-- /.header -->
+	<div class="content">
+
+		<div class="navigation">
+			<h5 class="title">Navegación</h5>
+			<!-- /.title -->
+			<ul class="menu js__accordion">
+				<li>
+					<a class="waves-effect" href="index.html"><i class="menu-icon fa fa-home"></i><span>Bienvenida</span></a>
+				</li>
+				<li>
+					<a class="waves-effect parent-item js__control" href="#"><i class="menu-icon fa fa-dashboard"></i><span>Análisis de datos</span><span class="menu-arrow fa fa-angle-down"></span></a>
+					<ul class="sub-menu js__content">
+						<li><a href="analisis.html"><i class="fa fa-percent"></i> Dashboard</a></li>
+						<li><a href="analisis_graficas.html"><i class="fa fa-bar-chart"></i> Gráficas</a></li>
+						<li><a href="analisis_tablas.html"><i class="fa fa-table"></i> Tabla de datos</a></li>
+						<li><a href="comparativas.html"><i class="fa fa-calendar-minus-o"></i> Comparar años</a></li>
+					</ul>
+					<!-- /.sub-menu js__content -->
+				</li>
+				<li>
+					<a class="waves-effect parent-item js__control" href="#"><i class="menu-icon fa fa-gear"></i><span>Manager PRO</span><span class="menu-arrow fa fa-angle-down"></span></a>
+					<ul class="sub-menu js__content">
+						<li>
+							<a class="waves-effect parent-item js__control" href="#"><i class="menu-icon fa fa-calculator"></i><span>Contable y fiscal </span><span class="menu-arrow fa fa-angle-down"></span></a>
+							<ul class="sub-menu js__content">
+								<li><a href="fuentes.html"><i class="fa fa-file-excel-o"></i> Interfaz de reportes</a></li>
+							</ul>
+		
+						</li>		
+						<li>
+							<a class="waves-effect parent-item js__control" href="#"><i class="menu-icon fa fa-laptop"></i><span>Sistemas </span><span class="menu-arrow fa fa-angle-down"></span></a>
+							<ul class="sub-menu js__content">
+								<li><a href="empleados.html"><i class="fa fa-suitcase"></i> Colaboradores</a></li>
+								<li><a href="cursos.html"><i class="fa fa-user"></i> Cursos</a></li>
+								<li><a href="proveedores.html"><i class="fa fa-truck"></i> Proveedores</a></li>
+								<li><a href="socios_comerciales.html"><i class="fa fa-star"></i> Socios comerciales</a></li>
+								<li><a href="articulos.html"><i class="fa fa-tag"></i> Articulos</a></li>
+							</ul>
+		
+						</li>
+
+
+					</ul>
+				</li>
+			</ul>
+			
+		</div>
+		<!-- /.navigation -->
+			
+	</div>
+	<!-- /.content -->
+</div>
+<!-- /.main-menu -->
+
+<div class="fixed-navbar">
+	<div class="pull-left">
+		<button type="button" class="menu-mobile-button glyphicon glyphicon-menu-hamburger js__menu_mobile"></button>
+		<h1 class="page-title">Cursos</h1>
+		<!-- /.page-title -->
+	</div>
+	<!-- /.pull-left -->
+	<div class="pull-right">
+		<a id="cerrarSesion" class="ico-item fa fa-power-off logout"></a>
+	</div>
+	<!-- /.pull-right -->
+</div>
+<!-- /.fixed-navbar -->
+
+
+<div id="wrapper">
+	<div class="main-content">
+		<div class="row small-spacing">
+			<div class="col-xs-12">
+				<div class="box-content">
+					<h4 class="box-title">Tabla de cursos</h4>
+					<!-- /.box-title -->
+
+					<button type="button" class="btn btn-success btn-xs waves-effect waves-light" data-toggle="modal" data-target="#boostrapModal-1" id="modalAgregar"><i class="fa fa-plus"></i> Agregar</button>
+
+					<div class="col-xs-12">
+						<h1></h1>
+					</div>
+
+					<table id="cursoTable" class="table table-small-font table-hover table-bordered display nowrap" style="width:100%">
+						
+					</table>
+
+
+					
+				</div>
+				<!-- /.box-content -->
+			</div>
+			
+		</div>
+		<!-- /.row -->		
+	</div>
+	<!-- /.main-content -->
+</div><!--/#wrapper -->
+
+
+<!-- AQUI ESTAN LOS MODALES -->
+<!-- Modal -->
+<div class="modal fade" id="boostrapModal-1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel">Titulo dinamico</h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<label>Nombre del curso</label>
+					<input type="text" placeholder="" class="form-control" id="nombreCurso">
+				</div>
+				<div class="form-group">
+					<label>Documento o beneficio a obtener</label>
+					<select class="form-control" id="documento_menu">
+                        <option value="1">Certificado</option>
+                        <option value="2">Diploma</option>
+                        <option value="3">Constancia</option>
+                        <option value="4">Reconocimiento</option>
+                        <option value="5">Solo horas adquiridas</option>
+                    </select>
+				</div>
+
+                <div class="form-group">
+                    <label>Duracion del curso</label>
+                    <ul class="list-inline">
+                        <li class="form-group col-xs-4">
+                            <input type="number" placeholder="dias" class="form-control" id="dias">
+                        </li>
+                        <li class="form-group col-xs-4">
+                            <input type="number" placeholder="horas" min="0" max="60" class="form-control" id="horas">
+                        </li>
+                        <li class="form-group col-xs-4">
+                            <input type="number" placeholder="minutos" min="0" max="60" class="form-control" id="minutos">
+                        </li>
+                    </ul>
+                </div>
+				<div class="form-group">
+					<label>Asignar presentador</label>
+					<select class="select2_2 form-control" multiple="multiple" style="width: 100%;" id="presentador_menu">
+
+					</select>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default btn-xs waves-effect waves-light" data-dismiss="modal">Cerrar</button>
+				<button type="button" class="btn btn-primary btn-xs waves-effect waves-light">Guardar</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+	<!--[if lt IE 9]>
+		<script src="assets/script/html5shiv.min.js"></script>
+		<script src="assets/script/respond.min.js"></script>
+	<![endif]-->
+	<!-- 
+	================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+
+	<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<script src="assets/JS/cursos.js"></script>
+	<script src="assets/JS/autenticar.js"></script>
+
+	<!-- <script src="assets/scripts/jquery.min.js"></script> -->
+	<script src="assets/scripts/modernizr.min.js"></script>
+	<script src="assets/plugin/bootstrap/js/bootstrap.min.js"></script>
+	<script src="assets/plugin/mCustomScrollbar/jquery.mCustomScrollbar.concat.min.js"></script>
+	<script src="assets/plugin/nprogress/nprogress.js"></script>
+	<script src="assets/plugin/waves/waves.min.js"></script>
+
+	
+	<!-- Data Tables -->
+	<script src="assets/plugin/datatables/media/js/jquery.dataTables.min.js"></script>
+	<script src="assets/plugin/datatables/media/js/dataTables.bootstrap.min.js"></script>
+	<script src="assets/plugin/datatables/extensions/Responsive/js/dataTables.responsive.min.js"></script>
+	<script src="assets/plugin/datatables/extensions/Responsive/js/responsive.bootstrap.min.js"></script>
+	<script src="assets/scripts/datatables.demo.min.js"></script>
+
+	<!-- Responsive Table -->
+	<script src="assets/plugin/RWD-table-pattern/js/rwd-table.min.js"></script>
+	<script src="assets/scripts/rwd.demo.min.js"></script>
+
+
+	<script src="assets/scripts/main.min.js"></script>
+	<script src="assets/scripts/horizontal-menu.min.js"></script>
+
+	<!-- Datepicker -->
+	<script src="assets/plugin/datepicker/js/bootstrap-datepicker.js"></script>
+
+	<!-- Toastr -->
+	<script src="assets/plugin/toastr/toastr.min.js"></script>
+
+	<!-- Select2 -->
+	<script src="assets/plugin/select2/js/select2.min.js"></script>	
+
+	<!-- Demo Scripts -->
+	<script src="assets/scripts/form.demo.js"></script>
+
+</body>
+</html>

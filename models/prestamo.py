@@ -8,7 +8,7 @@ class Prestamo:
                 motivoPrestamo=None,
                 montoPrestamo=None,
                 montoApoyo=None,
-                tiempoCobro=None,
+                fechaTerminoPago=None,
                 fkEmpleado=None):
         """Inicializa un objeto"""
         self.pkPrestamo = pkPrestamo
@@ -17,7 +17,7 @@ class Prestamo:
         self.motivoPrestamo = motivoPrestamo
         self.montoPrestamo = montoPrestamo
         self.montoApoyo = montoApoyo
-        self.tiempoCobro = tiempoCobro
+        self.fechaTerminoPago = fechaTerminoPago
         self.fkEmpleado = fkEmpleado
 
 
@@ -31,11 +31,11 @@ class Prestamo:
         db.close()
         return resultado
     
-    def crear_beneficio(self):
+    def crear_prestamo(self):
         """Guarda un nuevo registro en la base de datos"""
         db = Database()
-        consulta = "INSERT INTO prestamos (formaPago, fechaPrestamo, motivoPrestamo, montoPrestamo, montoApoyo, tiempoCobro, fkEmpleado) VALUES (%s,%s,%s,%s,%s,%s,%s)"
-        valores = (self.formaPago, self.motivoPrestamo, self.montoPrestamo, self.montoApoyo, self.tiempoCobro, self.fkEmpleado)
+        consulta = "INSERT INTO prestamos (formaPago, fechaPrestamo, motivoPrestamo, montoPrestamo, montoApoyo, fechaTerminoPago, fkEmpleado) VALUES (%s,%s,%s,%s,%s,%s,%s)"
+        valores = (self.formaPago, self.fechaPrestamo, self.motivoPrestamo, self.montoPrestamo, self.montoApoyo, self.fechaTerminoPago, self.fkEmpleado)
         print(consulta % valores)
         resultado = db.execute_commit(consulta, valores)
         db.close()
@@ -44,8 +44,8 @@ class Prestamo:
     def editar_prestamos(self):
         """Edita un registro en la base de datos."""
         db = Database()
-        consulta = "UPDATE prestamos SET formaPago = %s, fechaPrestamo = %s, motivoPrestamo = %s, montoPrestamo = %s, montoApoyo = %s, tiempoCobro = %s, fkEmpleado = %s WHERE pkPrestamo = %s"
-        valores = (self.formaPago, self.motivoPrestamo, self.montoPrestamo, self.montoApoyo, self.tiempoCobro, self.fkEmpleado, self.pkPrestamo)
+        consulta = "UPDATE prestamos SET formaPago = %s, fechaPrestamo = %s, motivoPrestamo = %s, montoPrestamo = %s, montoApoyo = %s, fechaTerminoPago = %s WHERE pkPrestamo = %s"
+        valores = (self.formaPago, self.fechaPrestamo, self.motivoPrestamo, self.montoPrestamo, self.montoApoyo, self.fechaTerminoPago, self.pkPrestamo)
         print(consulta % valores)
         resultado = db.execute_commit(consulta, valores)
         db.close()

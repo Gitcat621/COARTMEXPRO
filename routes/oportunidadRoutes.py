@@ -25,19 +25,6 @@ def crear_oportunidad():
     else:
         return jsonify({'mensaje': 'Error al crear oportunidad'}), 500
 
-@oportunidad_bp.route('/oportunidad_empleado', methods=['POST'])
-def crear_oportunidad_empleado():
-    """Endpoint para insertar un registro"""
-    data = request.json
-
-    fkEmpleado = str(data.get('numeroEmpleado', '')).strip()
-    fkOportunidad = int(data.get('fkOportunidad'))
-
-    if Oportunidad.crear_oportunidad_empleado(fkEmpleado, fkOportunidad):
-        return jsonify({'mensaje': 'Curso insertado correctamente'}), 201
-    else:
-        return jsonify({'mensaje': 'Error al insertar oportunidad'}), 500
-
 @oportunidad_bp.route('/oportunidades', methods=['PUT'])
 def editar_oportunidad():
     """Endpoint para editar un registro"""

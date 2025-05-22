@@ -27,23 +27,6 @@ class Oportunidad:
         db.close()
         return resultado
 
-    def crear_oportunidad_empleado(fkEmpleado, fkOportunidad):
-        """Guarda un nuevo registro en la base de datos de manera segura"""
-        db = Database()
-        
-        consulta = """
-            INSERT INTO empleados_oportunidades (fkEmpleado, fkOportunidad) 
-            VALUES (%s, %s)
-        """
-        valores = (fkEmpleado, fkOportunidad)
-
-        print("Consulta:", consulta)
-        print("Valores:", valores)
-        
-        resultado = db.execute_commit(consulta, valores)
-        db.close()
-        return resultado
-
     def editar_oportunidad(self):
         """Edita un registro en la base de datos."""
 

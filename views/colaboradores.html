@@ -34,6 +34,9 @@
 
     <!-- Toastr -->
     <link rel="stylesheet" href="assets/plugin/toastr/toastr.css">
+
+	<!-- Datepicker -->
+	<link rel="stylesheet" href="assets/plugin/datepicker/css/bootstrap-datepicker.min.css">
 </head>
 
 <body>
@@ -162,19 +165,19 @@
 			<div class="modal-body">
 				<div class="form-group">
 					<label>Nombre del empleado</label>
-					<input type="text" class="form-control" id="nombreEmpleado">
+					<input type="text" placeholder="Ej. Armando Esteban Quito" class="form-control" id="nombreEmpleado">
 				</div>
 				<div class="form-group">
 					<label>Fecha de ingreso</label>
-					<input type="date" class="form-control" id="fechaIngreso">
+					<input type="text" class="form-control" placeholder="aaaa-mm-dd" id="fechaIngreso" autocomplete="off">
 				</div>
 				<div class="form-group">
 					<label>Sueldo de nomina</label>
-					<input type="number" class="form-control" id="nomina">
+					<input type="number" placeholder="0.00" class="form-control" id="nomina">
 				</div>
 				<div class="form-group">
 					<label>Sueldo de vales</label>
-					<input type="number" class="form-control" id="vale">
+					<input type="number" placeholder="0.00" class="form-control" id="vale">
 				</div>
 				<div class="form-group">
 					<label>Asignar puesto</label>
@@ -226,6 +229,12 @@
 
 	<script src="assets/scripts/main.min.js"></script>
 	<script src="assets/scripts/horizontal-menu.min.js"></script>
+
+	<!-- Datepicker -->
+	<script src="assets/plugin/datepicker/js/bootstrap-datepicker.js"></script>
+
+	<!-- Demo Scripts -->
+	<script src="assets/scripts/form.demo.js"></script>
 	
     <!-- Toastr -->
 	<script src="assets/plugin/toastr/toastr.min.js"></script>
