@@ -73,6 +73,47 @@ $(document).ready(function() {
 
 });
 
+async function listarfuncionesPuesto() {
+
+    try {
+
+        const response = await fetch('http://127.0.0.1:5000/coartmex/funciones_puesto', {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+        });
+
+        const data = await response.json();
+        let tabla = $('#funcionPuestoTable').DataTable();
+
+        tabla.clear().draw();
+        tabla.rows.add(data.map(funcionesPuesto => [funcionesPuesto.descripcionFuncion, funcionesPuesto.nombrePuesto, funcionesPuesto.fkPuesto, funcionesPuesto.pkFuncionPuesto])).draw();
+
+        try{
+            const select = document.getElementById('funcionesPuesto_menu');
+            document.getElementById('funcionesPuesto_menu').innerHTML = "";
+
+            data.forEach(niveles => {
+
+                let option = document.createElement('option');
+                option.value = niveles.pkFuncionPuesto;
+                option.textContent = niveles.descripcionFuncion;
+                select.appendChild(option);
+
+            });
+
+        }catch{
+            console.log('no existe este elemento: Funciones de puesto')
+        }
+
+    } catch (error) {
+
+        console.error("Error al cargar los datos:", error);
+
+        toastr.error(`Error al listar los funciones_puesto`, 'Error', {"closeButton": true,});
+
+    }
+}
+
 async function agregarfuncionesPuesto() {
     try {
         const descripcionFuncion = document.getElementById('descripcionFuncion').value.trim();
@@ -107,41 +148,6 @@ async function agregarfuncionesPuesto() {
     } catch (error) {
         console.error('Error:', error);
         toastr.error('Hubo un error al intentar la acción', 'Error', { "closeButton": true });
-    }
-}
-
-async function listarfuncionesPuesto() {
-    try {
-        const response = await fetch('http://127.0.0.1:5000/coartmex/funciones_puesto', {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' }
-        });
-
-        const data = await response.json();
-        let tabla = $('#funcionPuestoTable').DataTable();
-
-        tabla.clear().draw();
-        tabla.rows.add(data.map(funcionesPuesto => [funcionesPuesto.descripcionFuncion, funcionesPuesto.nombrePuesto, funcionesPuesto.fkPuesto, funcionesPuesto.pkFuncionPuesto])).draw();
-
-        try{
-            const select = document.getElementById('funcionesPuesto_menu');
-            document.getElementById('funcionesPuesto_menu').innerHTML = "";
-
-            data.forEach(niveles => {
-
-                let option = document.createElement('option');
-                option.value = niveles.pkFuncionPuesto;
-                option.textContent = niveles.descripcionFuncion;
-                select.appendChild(option);
-            });
-
-        }catch{
-            console.log('no existe este elemento')
-        }
-
-    } catch (error) {
-        console.error("Error al cargar los datos:", error);
-        toastr.error(`Error al listar los funciones_puesto`, 'Error', {"closeButton": true,});
     }
 }
 

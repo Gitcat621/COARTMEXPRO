@@ -18,7 +18,8 @@ def crear_estado():
     if not isinstance(nombreEstado, str):
         return jsonify({'mensaje': 'nombreEstado debe ser una cadena de texto'}), 400
 
-    if Estado.crear_estado(nombreEstado):
+    estado = Estado(nombreEstado=nombreEstado)
+    if estado.crear_estado():
         return jsonify({'mensaje': 'Estado insertado correctamente'}), 201
     else:
         return jsonify({'mensaje': 'Error al insertar estado'}), 500
@@ -31,7 +32,8 @@ def editar_estado():
         pkEstado = data.get('pkEstado')
         nombreEstado = data.get('nombreEstado')
 
-        if Estado.editar_estado(pkEstado, nombreEstado):
+        estado = Estado(pkEstado, nombreEstado)
+        if estado.editar_estado():
             return jsonify({'mensaje': 'Estado editado correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo editar el estado'}), 500
@@ -46,7 +48,8 @@ def eliminar_estado():
         data = request.json
         pkEstado = data.get('pkEstado')
 
-        if Estado.eliminar_estado(pkEstado):
+        estado = Estado(pkEstado)
+        if estado.eliminar_estado():
             return jsonify({'mensaje': 'Estado eliminado correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo eliminar el estado'}), 500

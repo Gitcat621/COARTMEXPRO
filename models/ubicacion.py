@@ -27,7 +27,7 @@ class Ubicacion:
             JOIN paises p ON p.pkPais = u.fkPais
         """
         print(consulta)
-        resultado = db.execute_consulta(consulta)
+        resultado = db.execute_query(consulta)
         db.close()
         return resultado
     

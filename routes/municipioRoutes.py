@@ -21,7 +21,8 @@ def crear_municipio():
     if not nombreMunicipio:
         return jsonify({'mensaje': 'Faltan datos'}), 400
 
-    if Municipio.crear_municipio(nombreMunicipio):
+    municipio = Municipio(nombreMunicipio=nombreMunicipio)
+    if municipio.crear_municipio():
         return jsonify({'mensaje': 'Municipio insertado correctamente'}), 201
     else:
         return jsonify({'mensaje': 'Error al insertar municipio'}), 500
@@ -34,7 +35,8 @@ def editar_municipio():
         pkMunicipio = data.get('pkMunicipio')
         nombreMunicipio = data.get('nombreMunicipio')
 
-        if Municipio.editar_municipio(pkMunicipio, nombreMunicipio):
+        municipio = Municipio(pkMunicipio, nombreMunicipio)
+        if municipio.editar_municipio():
             return jsonify({'mensaje': 'Municipio editado correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo editar el municipio'}), 500
@@ -49,7 +51,8 @@ def eliminar_municipio():
         data = request.json
         pkMunicipio = data.get('pkMunicipio')
 
-        if Municipio.eliminar_municipio(pkMunicipio):
+        municipio = Municipio(pkMunicipio)
+        if municipio.eliminar_municipio():
             return jsonify({'mensaje': 'Municipio eliminado correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo eliminar el municipio'}), 500

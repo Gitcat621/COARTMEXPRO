@@ -13,27 +13,19 @@ def listar_ubicaciones():
 def crear_ubicacion():
     """Endpoint para insertar un registro"""
     data = request.json
-    fkPuebloCiudad = data.get('fkPuebloCiudad')
-    fkCodigoPostal = data.get('fkCodigoPostal')
-    fkMunicipio = data.get('fkMunicipio')
-    fkEstado = data.get('fkEstado')
-    fkPais = data.get('fkPais')
+    fkPuebloCiudad = int(data.get('fkPuebloCiudad'))
+    fkCodigoPostal = int(data.get('fkCodigoPostal'))
+    fkMunicipio = int(data.get('fkMunicipio'))
+    fkEstado = int(data.get('fkEstado'))
+    fkPais = int(data.get('fkPais'))
 
-    # if not isinstance(fkPuebloCiudad, int):
-    #     return jsonify({'mensaje': 'fkPuebloCiudad debe ser un entero'}), 400
-    # if not isinstance(fkCodigoPostal, int):
-    #     return jsonify({'mensaje': 'fkCodigoPostal debe ser un entero'}), 400
-    # if not isinstance(fkMunicipio, int):
-    #     return jsonify({'mensaje': 'fkMunicipio debe ser un entero'}), 400
-    # if not isinstance(fkEstado, int):
-    #     return jsonify({'mensaje': 'fkEstado debe ser un entero'}), 400
-    # if not isinstance(fkPais, int):
-    #     return jsonify({'mensaje': 'fkPais debe ser un entero'}), 400
+    
 
     if not fkPuebloCiudad or not fkCodigoPostal or not fkMunicipio or not fkEstado or not fkPais:
         return jsonify({'mensaje': 'Faltan datos'}), 400
 
-    if Ubicacion.crear_ubicacion(fkPuebloCiudad, fkCodigoPostal, fkMunicipio, fkEstado, fkPais):
+    ubicacion = Ubicacion(None,fkPuebloCiudad, fkCodigoPostal, fkMunicipio, fkEstado, fkPais)
+    if ubicacion.crear_ubicacion():
         return jsonify({'mensaje': 'Ubicación insertada correctamente'}), 201
     else:
         return jsonify({'mensaje': 'Error al insertar ubicación'}), 500
@@ -43,14 +35,26 @@ def editar_ubicacion():
     """Endpoint para editar un registro"""
     try:
         data = request.json
-        pkUbicacion = data.get('pkUbicacion')
-        fkPuebloCiudad = data.get('fkPuebloCiudad')
-        fkCodigoPostal = data.get('fkCodigoPostal')
-        fkMunicipio = data.get('fkMunicipio')
-        fkEstado = data.get('fkEstado')
-        fkPais = data.get('fkPais')
+        pkUbicacion = int(data.get('pkUbicacion'))
+        fkPuebloCiudad = int(data.get('fkPuebloCiudad'))
+        fkCodigoPostal = int(data.get('fkCodigoPostal'))
+        fkMunicipio = int(data.get('fkMunicipio'))
+        fkEstado = int(data.get('fkEstado'))
+        fkPais = int(data.get('fkPais'))
 
-        if Ubicacion.editar_ubicacion(pkUbicacion, fkPuebloCiudad, fkCodigoPostal, fkMunicipio, fkEstado, fkPais):
+        if not isinstance(fkPuebloCiudad, int):
+            return jsonify({'mensaje': 'fkPuebloCiudad debe ser un entero'}), 400
+        if not isinstance(fkCodigoPostal, int):
+            return jsonify({'mensaje': 'fkCodigoPostal debe ser un entero'}), 400
+        if not isinstance(fkMunicipio, int):
+            return jsonify({'mensaje': 'fkMunicipio debe ser un entero'}), 400
+        if not isinstance(fkEstado, int):
+            return jsonify({'mensaje': 'fkEstado debe ser un entero'}), 400
+        if not isinstance(fkPais, int):
+            return jsonify({'mensaje': 'fkPais debe ser un entero'}), 400
+
+        ubicacion = Ubicacion(pkUbicacion, fkPuebloCiudad, fkCodigoPostal, fkMunicipio, fkEstado, fkPais)
+        if ubicacion.editar_ubicacion():
             return jsonify({'mensaje': 'Ubicación editada correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo editar la ubicación'}), 500
@@ -63,9 +67,13 @@ def eliminar_ubicacion():
     """Endpoint para eliminar un registro"""
     try:
         data = request.json
-        pkUbicacion = data.get('pkUbicacion')
+        pkUbicacion = int(data.get('pkUbicacion'))
 
-        if Ubicacion.eliminar_ubicacion(pkUbicacion):
+        if not isinstance(pkUbicacion, int):
+            return jsonify({'mensaje': 'fkPuebloCiudad debe ser un entero'}), 400
+
+        ubicacion = Ubicacion(pkUbicacion)
+        if ubicacion.eliminar_ubicacion():
             return jsonify({'mensaje': 'Ubicación eliminada correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo eliminar la ubicación'}), 500

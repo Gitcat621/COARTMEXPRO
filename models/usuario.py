@@ -16,9 +16,19 @@ class Usuario:
         db = Database()
 
         consulta = '''
-            SELECT u.pkUsuario, u.nombreUsuario, u.contrasena, e.nombreEmpleado, d.nombreDepartamento ,u.fkEmpleado, e.numeroEmpleado FROM usuarios u 
-            JOIN empleados e ON e.numeroEmpleado = u.fkEmpleado
-            JOIN departamentos d ON d.pkDepartamento = e.fkDepartamento
+        SELECT 
+        u.pkUsuario, 
+        u.nombreUsuario, 
+        u.contrasena, 
+        e.nombreEmpleado, 
+        p.nombrePuesto,
+        d.nombreDepartamento,
+        u.fkEmpleado, 
+        e.numeroEmpleado 
+        FROM usuarios u
+        JOIN empleados e ON e.numeroEmpleado = u.fkEmpleado
+        JOIN puestos p ON p.pkPuesto = e.fkPuesto
+        JOIN departamentos d ON d.pkDepartamento = p.fkDepartamento;
         '''
 
         print (consulta) 

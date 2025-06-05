@@ -21,7 +21,8 @@ def crear_puebloCiudad():
     if not nombrePuebloCiudad:
         return jsonify({'mensaje': 'Faltan datos'}), 400
 
-    if PuebloCiudad.crear_puebloCiudad(nombrePuebloCiudad):
+    puebloCiudad = PuebloCiudad(nombrePuebloCiudad=nombrePuebloCiudad)
+    if puebloCiudad.crear_puebloCiudad():
         return jsonify({'mensaje': 'Pueblo/Ciudad insertado correctamente'}), 201
     else:
         return jsonify({'mensaje': 'Error al insertar pueblo/ciudad'}), 500
@@ -33,8 +34,9 @@ def editar_puebloCiudad():
         data = request.json
         pkPuebloCiudad = data.get('pkPuebloCiudad')
         nombrePuebloCiudad = data.get('nombrePuebloCiudad')
-
-        if PuebloCiudad.editar_puebloCiudad(pkPuebloCiudad, nombrePuebloCiudad):
+        
+        puebloCiudad = PuebloCiudad(pkPuebloCiudad, nombrePuebloCiudad)
+        if puebloCiudad.editar_puebloCiudad():
             return jsonify({'mensaje': 'Pueblo/Ciudad editado correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo editar el pueblo/ciudad'}), 500
@@ -49,7 +51,8 @@ def eliminar_puebloCiudad():
         data = request.json
         pkPuebloCiudad = data.get('pkPuebloCiudad')
 
-        if PuebloCiudad.eliminar_puebloCiudad(pkPuebloCiudad):
+        puebloCiudad = PuebloCiudad(pkPuebloCiudad)
+        if puebloCiudad.eliminar_puebloCiudad():
             return jsonify({'mensaje': 'Pueblo/Ciudad eliminado correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo eliminar el pueblo/ciudad'}), 500

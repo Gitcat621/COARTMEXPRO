@@ -73,6 +73,48 @@ $(document).ready(function() {
 
 });
 
+async function listarPuesto() {
+
+    try {
+
+        const response = await fetch('http://127.0.0.1:5000/coartmex/puestos', {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+        });
+
+        const data = await response.json();
+        let tabla = $('#puestoTable').DataTable();
+
+        tabla.clear().draw();
+        tabla.rows.add(data.map(puesto => [puesto.nombrePuesto, puesto.nombreDepartamento, puesto.fkDepartamento, puesto.pkPuesto])).draw();
+
+        try{
+            
+            const select = document.getElementById('puesto_menu');
+            document.getElementById('puesto_menu').innerHTML = "";
+
+            data.forEach(niveles => {
+
+                let option = document.createElement('option');
+                option.value = niveles.pkPuesto;
+                option.textContent = niveles.nombrePuesto;
+                select.appendChild(option);
+
+            });
+
+        }catch{
+            console.log('no existe este elemento: Puestos');
+        }
+
+    } catch (error) {
+
+        console.error("Error al cargar los datos:", error);
+
+        toastr.error(`Error al listar los puestos`, 'Error', {"closeButton": true,});
+
+    }
+}
+
 async function agregarPuesto() {
     try {
         const nombrePuesto = document.getElementById('nombrePuesto').value.trim();
@@ -110,40 +152,6 @@ async function agregarPuesto() {
     }
 }
 
-async function listarPuesto() {
-    try {
-        const response = await fetch('http://127.0.0.1:5000/coartmex/puestos', {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' }
-        });
-
-        const data = await response.json();
-        let tabla = $('#puestoTable').DataTable();
-
-        tabla.clear().draw();
-        tabla.rows.add(data.map(puesto => [puesto.nombrePuesto, puesto.nombreDepartamento, puesto.fkDepartamento, puesto.pkPuesto])).draw();
-
-        try{
-            const select = document.getElementById('puesto_menu');
-            document.getElementById('puesto_menu').innerHTML = "";
-
-            data.forEach(niveles => {
-
-                let option = document.createElement('option');
-                option.value = niveles.pkPuesto;
-                option.textContent = niveles.nombrePuesto;
-                select.appendChild(option);
-            });
-
-        }catch{
-            console.log('no existe este elemento')
-        }
-
-    } catch (error) {
-        console.error("Error al cargar los datos:", error);
-        toastr.error(`Error al listar los puestos`, 'Error', {"closeButton": true,});
-    }
-}
 
 async function editarPuesto(pkPuesto) {
     try {

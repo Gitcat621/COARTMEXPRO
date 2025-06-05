@@ -1,12 +1,33 @@
 from flask import Blueprint, request, jsonify
 from models.asistencia import Asistencia
+from datetime import datetime
 
 asistencia_bp = Blueprint('asistencia_bp', __name__)
 
 @asistencia_bp.route('/asistencias', methods=['GET'])
 def listar_asistencias():
     """Endpoint para obtener todos los registros"""
-    asistencias = Asistencia.listar_asistencias()
+    year = request.args.get('year')
+    month = request.args.get('month')
+    fortnight = int(request.args.get('fortnight'))
+    
+    asistencias = Asistencia.listar_asistencias(year, month, fortnight)
+
+    return jsonify(asistencias), 200
+
+@asistencia_bp.route('/resumen_asistencias', methods=['GET'])
+def listar_resumen_asistencias():
+    """Endpoint para obtener todos los registros"""
+    year = request.args.get('year')
+    month = request.args.get('month')
+    fortnight = int(request.args.get('fortnight'))
+
+    print(year)
+    print(month)
+    print(fortnight)
+    
+    asistencias = Asistencia.listar_resumen_asistencias(year, month, fortnight)
+
     return jsonify(asistencias), 200
 
 @asistencia_bp.route('/asistencias', methods=['POST'])

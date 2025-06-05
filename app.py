@@ -11,7 +11,7 @@ from routes.categoriaArticuloRoutes import categoriaArticulo_bp
 from routes.articuloRoutes import articulo_bp
 from routes.grupoSocioRoutes import grupoSocioComercial_bp
 from routes.socioComercialRoutes import socioComercial_bp
-from routes.archivoRoutes import archivo_bp
+from routes.reporteMetricasRoutes import reporteMetrica_bp
 from routes.paisRoutes import pais_bp
 from routes.estadoRoutes import estado_bp
 from routes.municipioRoutes import municipio_bp
@@ -41,6 +41,7 @@ from routes.servicioPacRoutes import servicio_pac_bp
 from routes.funcionPuestoRoutes import funcion_puesto_bp
 from routes.presentadorRoutes import presentador_bp
 from routes.clinicaRoutes import clinica_bp
+from routes.relojChecadorRoutes import relojChecador_bp
 
 app = Flask(__name__)
 
@@ -57,7 +58,7 @@ app.register_blueprint(categoriaArticulo_bp, url_prefix='/coartmex')
 app.register_blueprint(articulo_bp, url_prefix='/coartmex')  
 app.register_blueprint(grupoSocioComercial_bp, url_prefix='/coartmex')  
 app.register_blueprint(socioComercial_bp, url_prefix='/coartmex')  
-app.register_blueprint(archivo_bp, url_prefix='/coartmex')  
+app.register_blueprint(reporteMetrica_bp, url_prefix='/coartmex')  
 app.register_blueprint(pais_bp, url_prefix='/coartmex')  
 app.register_blueprint(estado_bp, url_prefix='/coartmex')  
 app.register_blueprint(municipio_bp, url_prefix='/coartmex')  
@@ -85,6 +86,8 @@ app.register_blueprint(servicio_pac_bp, url_prefix='/coartmex')
 app.register_blueprint(funcion_puesto_bp, url_prefix='/coartmex')
 app.register_blueprint(presentador_bp, url_prefix='/coartmex')
 app.register_blueprint(clinica_bp, url_prefix='/coartmex')
+app.register_blueprint(relojChecador_bp, url_prefix='/coartmex')
+
 
 @app.route('/')
 def default():

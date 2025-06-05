@@ -1,33 +1,32 @@
 from flask import Blueprint, request, jsonify
 import os
 import pandas as pd
-from datetime import datetime
-from models.archivo import Archivo
+
 from models.compraMercancia import CompraMercancia
 from models.ordenCompra import OrdenCompra
 from models.factura import Factura
 from models.motivoGasto import MotivoGasto
 from models.gasto import Gasto
 from models.articulo import Articulo
-from models.resumen import Resumen
 from models.venta import Venta
+
 from database import Database
 import time
 
-archivo_bp = Blueprint('archivo_bp', __name__)
+reporteMetrica_bp = Blueprint('reporteMetrica_bp', __name__)
 
 # Carpeta donde se guardarán los archivos
-UPLOAD_FOLDER = 'uploads/'
+UPLOAD_FOLDER = 'reportes_metricas/'
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
 
 
-@archivo_bp.route('/archivos', methods=['GET'])
+@reporteMetrica_bp.route('/archivos', methods=['GET'])
 def listar_archivos():
     """Endpoint para obtener todos los registros"""
 
-    print("🔍 Se listaron los archivos")
+    print("🔍 Se listaron los reportes de metricas")
     archivos = []
 
     for idx, archivo in enumerate(os.listdir(UPLOAD_FOLDER), start=1):
@@ -50,8 +49,6 @@ def listar_archivos():
     return jsonify(archivos), 200
 
 # ------------------ FUNCIONES DE LIMPIEZA ------------------
-
-import pandas as pd
 
 def procesar_archivo(ruta_archivo):
     mensajes = []  # Aquí guardamos todos los mensajes de resultado
@@ -232,7 +229,6 @@ def procesar_ordenes(df):
                 if resultado is None or resultado is False:
                     raise Exception(f"Error al insertar orden {fila['No. OC']}")
 
-        
         with db.connection.cursor() as cursor:
             for _, fila in df.iterrows():
                 ordenCompra = OrdenCompra(
@@ -240,19 +236,7 @@ def procesar_ordenes(df):
                     numeroOrdenCompra=fila["No. OC"],
                     fechaOrdenCompra=fila["Fecha OC"],
                     fkSocioComercial=fila["Socio comercial"],
-                    cantidadOrden=fila["Cant en OC"]
-                )
-                resultado = ordenCompra.crear_articulosEnOrden(cursor)  # Pasamos la conexión activa
-                if resultado is None or resultado is False:
-                    raise Exception(f"Error al insertar orden {fila['No. OC']}")
-
-        with db.connection.cursor() as cursor:
-            for _, fila in df.iterrows():
-                ordenCompra = OrdenCompra(
-                    codigoArticulo=fila["Codigo de articulo"],
-                    numeroOrdenCompra=fila["No. OC"],
-                    fechaOrdenCompra=fila["Fecha OC"],
-                    fkSocioComercial=fila["Socio comercial"],
+                    cantidadOrden=fila["Cant en OC"],
                     cantidadVenta=fila["Cant vendida"],
                     precioVenta=fila["Precio de venta"]
                 )
@@ -494,10 +478,10 @@ def procesar_inventario(df):
 
 # ------------------ FIN FUNCIONES AUXILIARES ------------------
 
-@archivo_bp.route('/archivos', methods=['POST'])
+@reporteMetrica_bp.route('/archivos', methods=['POST'])
 def crear_archivo():
 
-    print("💽 Se ha subido un archivo")
+    print("💽 Se ha subido un reporte de metrica")
 
     if 'archivo' not in request.files:
         return jsonify({'mensaje': 'No se ha enviado ningún archivo'}), 400
@@ -529,18 +513,18 @@ def crear_archivo():
         return jsonify({'mensaje': 'Error al procesar el archivo', 'detalles': ''}), 500
 
 
-@archivo_bp.route('/archivos', methods=['PUT'])
+@reporteMetrica_bp.route('/archivos', methods=['PUT'])
 def editar_archivo():
     """Endpoint para actualizar un archivo"""
 
     #Sin edicion
 
 
-@archivo_bp.route('/archivos', methods=['DELETE'])
+@reporteMetrica_bp.route('/archivos', methods=['DELETE'])
 def eliminar_archivo():
     """Endpoint para eliminar un archivo tanto del servidor como de la base de datos"""
 
-    print("🗑️ Se ha eliminado un archivo")
+    print("🗑️ Se ha eliminado un reporte de metrica")
 
     data = request.json
     nombreArchivo = data.get('nombreArchivo')

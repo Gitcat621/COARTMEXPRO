@@ -71,6 +71,48 @@ $(document).ready(function() {
 
 });
 
+async function listarDepartamentos() {
+
+    try {
+
+        const response = await fetch('http://127.0.0.1:5000/coartmex/departamentos', {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+        });
+
+        const data = await response.json();
+        let tabla = $('#departamentoTable').DataTable();
+
+        tabla.clear().draw();
+        tabla.rows.add(data.map(depa => [depa.nombreDepartamento, depa.pkDepartamento])).draw();
+
+        try{
+            
+            const select = document.getElementById('departamento_menu');
+            document.getElementById('departamento_menu').innerHTML = "";
+
+            data.forEach(depar => {
+
+                let option = document.createElement('option');
+                option.value = depar.pkDepartamento;
+                option.textContent = depar.nombreDepartamento;
+                select.appendChild(option);
+
+            });
+
+        }catch{
+            console.log('no existe este elemento: Departamentos');
+        }
+        
+    } catch (error) {
+
+        console.error("Error al cargar los datos:", error);
+
+        toastr.error(`Error al listar los departamentos`, 'Error', {"closeButton": true,});
+        
+    }
+}
+
 async function agregarDepartamento() {
     try {
         const nombreDepartamento = document.getElementById('nombreDepartamento').value.trim();
@@ -104,42 +146,6 @@ async function agregarDepartamento() {
     } catch (error) {
         console.error('Error:', error);
         toastr.error('Hubo un error al intentar la acción', 'Error', { "closeButton": true });
-    }
-}
-
-async function listarDepartamentos() {
-    try {
-        const response = await fetch('http://127.0.0.1:5000/coartmex/departamentos', {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' }
-        });
-
-        const data = await response.json();
-        let tabla = $('#departamentoTable').DataTable();
-
-        tabla.clear().draw();
-        tabla.rows.add(data.map(depa => [depa.nombreDepartamento, depa.pkDepartamento])).draw();
-
-        try{
-            
-            const select = document.getElementById('departamento_menu');
-            document.getElementById('departamento_menu').innerHTML = "";
-
-            data.forEach(depar => {
-
-                let option = document.createElement('option');
-                option.value = depar.pkDepartamento;
-                option.textContent = depar.nombreDepartamento;
-                select.appendChild(option);
-            });
-
-        }catch{
-            console.log('no existe este elemento')
-        }
-        
-    } catch (error) {
-        console.error("Error al cargar los datos:", error);
-        toastr.error(`Error al listar los departamentos`, 'Error', {"closeButton": true,});
     }
 }
 

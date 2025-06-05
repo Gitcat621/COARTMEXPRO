@@ -372,7 +372,7 @@ function mostrarServicio(data) {
     let htmlBuffer = "";
 
     Object.entries(grupos).forEach(([grupoNombre, { registros, ordenesUnicas }]) => {
-        const grupoClase = `grupo${index}`;
+        const grupoClase = `grupo-servicio-${index}`;
         let totalGrupoOrdenadas = 0;
         let totalGrupoVendidas = 0;
         let totalGrupoPorcentaje = 0;
@@ -475,7 +475,7 @@ function mostrarSociosEnVentas(data) {
   
     
     gruposOrdenados.forEach((grupo, index) => {
-        const grupoClase = `grupo${index}`;
+        const grupoClase = `grupo-socios-${index}`;
         const porcentajeGrupo = ((grupo.totalGrupo / totalGeneral) * 100).toFixed(2);
       
         // Fila principal del grupo

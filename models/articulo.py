@@ -33,7 +33,7 @@ class Articulo:
         consulta = f'''
         SELECT a.codigoArticulo, a.nombreArticulo, a.precioAlmacen, p.nombreProveedor, ca.nombreCategoriaArticulo, a.fkProveedor, a.fkCategoriaArticulo 
         FROM articulos a 
-        JOIN categoria_articulos ca ON ca.pkCategoriaArticulo = a.fkCategoriaArticulo 
+        LEFT JOIN categoria_articulos ca ON ca.pkCategoriaArticulo = a.fkCategoriaArticulo 
         JOIN proveedores p ON p.pkProveedor = a.fkProveedor
         '''
 
@@ -49,7 +49,7 @@ class Articulo:
         consulta = f'''
         SELECT a.codigoArticulo, a.nombreArticulo, a.precioAlmacen, p.nombreProveedor, ca.nombreCategoriaArticulo, e.cantidadExistencia, a.fkProveedor, a.fkCategoriaArticulo 
         FROM articulos a 
-        JOIN categoria_articulos ca ON ca.pkCategoriaArticulo = a.fkCategoriaArticulo 
+        LEFT JOIN categoria_articulos ca ON ca.pkCategoriaArticulo = a.fkCategoriaArticulo 
         JOIN proveedores p ON p.pkProveedor = a.fkProveedor
         JOIN existencias e ON e.fkCodigoArticulo = a.codigoArticulo
         WHERE YEAR(e.fechaExistencia) = {year} AND MONTH(e.fechaExistencia) = {month}

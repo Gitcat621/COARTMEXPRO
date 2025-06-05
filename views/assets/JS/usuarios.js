@@ -66,7 +66,6 @@ $(document).ready(function() {
         scrollX: true,
     });
 
-
     // Event listeners para los botones
     // Editar
     $('#usuarioTable').on('click', '.editar-btn', function () {

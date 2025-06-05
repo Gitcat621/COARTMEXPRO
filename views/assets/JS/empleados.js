@@ -1,10 +1,48 @@
 $(document).ready(function () {
 
     listarEmpleados();
+    listarPuestos();
     listarNivelesEstudio();
     
 });
 
+async function listarPuestos() {
+
+    try {
+
+        const response = await fetch('http://127.0.0.1:5000/coartmex/puestos', {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+        });
+
+        const data = await response.json();
+
+        try{
+            
+            const select = document.getElementById('puesto_menu');
+            document.getElementById('puesto_menu').innerHTML = "";
+
+            data.forEach(niveles => {
+
+                let option = document.createElement('option');
+                option.value = niveles.pkPuesto;
+                option.textContent = niveles.nombrePuesto;
+                select.appendChild(option);
+
+            });
+
+        }catch{
+            console.log('no existe este elemento: Puestos');
+        }
+
+    } catch (error) {
+
+        console.error("Error al cargar los datos:", error);
+
+        toastr.error(`Error al listar los puestos`, 'Error', {"closeButton": true,});
+
+    }
+}
 
 async function listarNivelesEstudio() {
     try {
@@ -43,14 +81,6 @@ async function listarNivelesEstudio() {
     }
 }
 
-//Formatea las fecha para tener un formato YYYY/MM/DD
-function formatearFecha(fechaString) {
-    const fecha = new Date(fechaString);
-    const año = fecha.getFullYear();
-    const mes = String(fecha.getMonth() + 1).padStart(2, '0'); // Los meses van de 0 a 11
-    const dia = String(fecha.getDate()).padStart(2, '0');
-    return `${año}-${mes}-${dia}`;
-}
 
 //Asignar funcion al boton de abrir modal
 $("#modalAgregar").click(function() {
@@ -70,7 +100,7 @@ $(document).ready(function() {
             { title: "Fecha de Nacimiento" },
             { title: "Nomina" },
             { title: "Vales" },
-            { title: "Sueldo" }, 
+            { title: "nomina" }, 
             { title: "Puesto" },
             { title: "Departamento" },
             { title: "Nivel educacion" },
@@ -91,7 +121,6 @@ $(document).ready(function() {
         scrollX: true,
     });
 
-
     // Event listeners para los botones
     // Editar
     $('#empleadoTable').on('click', '.editar-btn', function () {
@@ -104,17 +133,17 @@ $(document).ready(function() {
         const nombreEmpleado = rowData[2];
         const fechaIngreso = rowData[3];
         const formateada = formatearFecha(fechaIngreso);
-        const sueldo = rowData[4];
-        const permisosPedidos = rowData[5];
-        const fkDepartamento = rowData[7];
+        const nomina = rowData[4];
+        const vale = rowData[5];
+        const fkPuesto = rowData[7];
 
         // Asignar valores a los inputs del modal
         document.getElementById('rfc').value = rfc;
         document.getElementById('nombreEmpleado').value = nombreEmpleado;
         document.getElementById('fechaIngreso').value = formateada;
-        document.getElementById('sueldo').value = sueldo;
-        document.getElementById('permisosPedidos').value = permisosPedidos;
-        document.getElementById('departamento_menu').value = fkDepartamento;
+        document.getElementById('nomina').value = nomina;
+        document.getElementById('vale').value = vale;
+        document.getElementById('puesto_menu').value = fkPuesto;
 
         abrirModal(2,numeroEmpleado)
     });
@@ -143,46 +172,6 @@ $(document).ready(function() {
     
 
 });
-
-async function agregarEmpleado() {
-    try {
-        const rfc = document.getElementById('rfc').value.trim();
-        const nombreEmpleado = document.getElementById('nombreEmpleado').value.trim();
-        const fechaIngreso = document.getElementById('fechaIngreso').value.trim();
-        const sueldo = document.getElementById('sueldo').value.trim();
-        const permisosPedidos = document.getElementById('permisosPedidos').value.trim();
-        const Menu = document.getElementById('departamento_menu');
-        const fkDepartamento = Menu.value;
-        const partes = fechaIngreso.split("-");
-        const numeroEmpleado = partes[2] + partes[1] + partes[0].slice(2);
-
-        if (!numeroEmpleado || !rfc || !nombreEmpleado || !fechaIngreso || !sueldo || !permisosPedidos || !fkDepartamento) {
-            toastr.warning('Por favor completa todos los campos', 'Advertencia', {"closeButton": true});
-            return;
-        }
-
-        const response = await fetch('http://127.0.0.1:5000/coartmex/empleados', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ numeroEmpleado, rfc, nombreEmpleado, fechaIngreso, sueldo, permisosPedidos, fkDepartamento })
-        });
-        const data = await response.json();
-
-        if (!response.ok) {
-
-            //manejo de errores
-            toastr.error(`${data.mensaje}`, 'Error', {"closeButton": true,});
-            return;
-        }
-
-        toastr.success(`${data.mensaje}`, 'Realizado', {"closeButton": true});
-        $('#boostrapModal-1').modal('hide');
-        listarEmpleados();
-    } catch (error) {
-        console.error('Error:', error);
-        toastr.error('Hubo un error al intentar la acción', 'Error', {"closeButton": true});
-    }
-}
 
 async function listarEmpleados() {
     try {
@@ -224,16 +213,75 @@ async function listarEmpleados() {
     }
 }
 
+async function agregarEmpleado() {
+    try {
+
+        const rfc = document.getElementById('rfc').value.trim();
+
+        const nombreEmpleado = document.getElementById('nombreEmpleado').value.trim();
+
+        const fechaIngreso = document.getElementById('fechaIngreso').value.trim();
+
+        const fechaNacimiento = document.getElementById('fechaNacimiento').value.trim();
+
+        const nomina = document.getElementById('nomina').value.trim();
+
+        const vale = document.getElementById('vale').value.trim();
+
+        const puesto_menu = document.getElementById('puesto_menu');
+        const fkPuesto = puesto_menu.value;
+
+        const niveles_menu = document.getElementById('niveles_menu');
+        const fkNivelEstudio = niveles_menu.value;
+
+        const estado = document.getElementById('estado').value;
+
+        const partes = fechaIngreso.split("-");
+        const numeroEmpleado = partes[2] + partes[1] + partes[0].slice(2);
+
+        if (!numeroEmpleado || !rfc || !nombreEmpleado || !fechaIngreso || !fechaNacimiento || !nomina || !vale  || !estado || !fkPuesto || !fkNivelEstudio) {
+            toastr.warning('Por favor completa todos los campos', 'Advertencia', {"closeButton": true});
+            return;
+        }
+
+        const response = await fetch('http://127.0.0.1:5000/coartmex/empleados', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ numeroEmpleado, rfc, nombreEmpleado, fechaIngreso, fechaNacimiento, nomina, vale, estado, fkPuesto, fkNivelEstudio })
+        });
+        const data = await response.json();
+
+        if (!response.ok) {
+
+            //manejo de errores
+            toastr.error(`${data.mensaje}`, 'Error', {"closeButton": true,});
+            return;
+        }
+
+        toastr.success(`${data.mensaje}`, 'Realizado', {"closeButton": true});
+        
+        $('#boostrapModal-1').modal('hide');
+
+        listarEmpleados();
+
+    } catch (error) {
+
+        console.error('Error:', error);
+
+        toastr.error('Hubo un error al intentar la acción', 'Error', {"closeButton": true});
+    }
+}
+
 async function editarEmpleado(numeroEmpleado) {
     try {
         const rfc = document.getElementById('rfc').value.trim();
         const nombreEmpleado = document.getElementById('nombreEmpleado').value.trim();
         const fechaIngreso = document.getElementById('fechaIngreso').value.trim();
-        const sueldo = document.getElementById('sueldo').value.trim();
-        const permisosPedidos = document.getElementById('permisosPedidos').value.trim();
-        const fkDepartamento = document.getElementById('departamento_menu').value;
+        const nomina = document.getElementById('nomina').value.trim();
+        const vale = document.getElementById('vale').value.trim();
+        const fkPuesto = document.getElementById('puesto_menu').value;
 
-        if (!numeroEmpleado || !rfc || !nombreEmpleado || !fechaIngreso || !sueldo || !permisosPedidos || !fkDepartamento) {
+        if (!numeroEmpleado || !rfc || !nombreEmpleado || !fechaIngreso || !nomina || !vale || !fkPuesto) {
             toastr.warning('Por favor completa todos los campos', 'Advertencia', {"closeButton": true});
             return;
         }
@@ -241,7 +289,7 @@ async function editarEmpleado(numeroEmpleado) {
         const response = await fetch('http://127.0.0.1:5000/coartmex/empleados', {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ numeroEmpleado, rfc, nombreEmpleado, fechaIngreso, sueldo, permisosPedidos, fkDepartamento })
+            body: JSON.stringify({ numeroEmpleado, rfc, nombreEmpleado, fechaIngreso, nomina, vale, fkPuesto })
         });
         const data = await response.json();
 
@@ -304,8 +352,8 @@ function abrirModal(modo, rfc) {
         document.getElementById('rfc').value = '';
         document.getElementById('nombreEmpleado').value = '';
         document.getElementById('fechaIngreso').value = '';
-        document.getElementById('sueldo').value = '';
-        document.getElementById('permisosPedidos').value = '';
+        document.getElementById('nomina').value = '';
+        document.getElementById('vale').value = '';
         document.getElementById('puesto_menu').value = '';
         document.getElementById('niveles_menu').value = '';
 
@@ -316,6 +364,15 @@ function abrirModal(modo, rfc) {
         modalButton.setAttribute('onclick', `editarEmpleado('${rfc}')`);
     }
 
+}
+
+//Formatea las fecha para tener un formato YYYY/MM/DD
+function formatearFecha(fechaString) {
+    const fecha = new Date(fechaString);
+    const año = fecha.getFullYear();
+    const mes = String(fecha.getMonth() + 1).padStart(2, '0'); // Los meses van de 0 a 11
+    const dia = String(fecha.getDate()).padStart(2, '0');
+    return `${año}-${mes}-${dia}`;
 }
 
 function toformatearFecha(fechaString) {

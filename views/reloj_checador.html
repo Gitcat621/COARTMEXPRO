@@ -37,6 +37,12 @@
     <!-- Remodal -->
     <link rel="stylesheet" href="assets/plugin/modal/remodal/remodal.css">
     <link rel="stylesheet" href="assets/plugin/modal/remodal/remodal-default-theme.css">
+
+	<!-- Material Design Icon -->
+	<link rel="stylesheet" href="assets/fonts/material-design/css/materialdesignicons.css">
+
+	<!-- Fontello Icon -->
+	<link rel="stylesheet" href="assets/fonts/fontello/fontello.css">
 </head>
 
 <body>
@@ -81,28 +87,30 @@
 								<li><a href="fuentes.html"><i class="fa fa-file-excel-o"></i> Interfaz de reportes</a></li>
 							</ul>
 		
-						</li>	
+						</li>
 						<li>
 							<a class="waves-effect parent-item js__control" href="#"><i class="menu-icon fa fa-user"></i><span>Recursos humanos </span><span class="menu-arrow fa fa-angle-down"></span></a>
 							<ul class="sub-menu js__content">
+								<li><a href="perfiles_puesto.html"><i class="fa icon-vcard"></i> Perfiles de puesto</a></li>
 								<li><a href="colaboradores.html"><i class="fa fa-suitcase"></i> Colaboradores</a></li>
 								<li><a href="reloj_checador.html"><i class="fa fa-clock-o"></i> Reloj checador</a></li>
+								<li><a href="datos_rh.html"><i class="fa fa-wrench"></i> Herramientas de datos</a></li>
 							</ul>
-		
-						</li>	
+						</li>		
 						<li>
 							<a class="waves-effect parent-item js__control" href="#"><i class="menu-icon fa fa-laptop"></i><span>Sistemas </span><span class="menu-arrow fa fa-angle-down"></span></a>
 							<ul class="sub-menu js__content">
+								<li><a href="departamentos.html"><i class="fa fa-building"></i> Departamentos</a></li>
+								<li><a href="cursos.html"><i class="fa fa-graduation-cap"></i> Cursos</a></li>
+								<li><a href="beneficios.html"><i class="fa fa-heartbeat"></i> PAC</a></li>
 								<li><a href="empleados.html"><i class="fa fa-suitcase"></i> Colaboradores</a></li>
 								<li><a href="usuarios.html"><i class="fa fa-user"></i> Usuarios</a></li>
 								<li><a href="proveedores.html"><i class="fa fa-truck"></i> Proveedores</a></li>
 								<li><a href="socios_comerciales.html"><i class="fa fa-star"></i> Socios comerciales</a></li>
 								<li><a href="articulos.html"><i class="fa fa-tag"></i> Articulos</a></li>
+								<li><a href="ubicaciones.html"><i class="fa fa-globe"></i> Ubicaciones</a></li>
 							</ul>
-		
 						</li>
-
-
 					</ul>
 				</li>
 			</ul>
@@ -134,51 +142,6 @@
 <div id="wrapper">
 	<div class="main-content">
 		<div class="row small-spacing">
-			
-			<div class="col-xs-12">
-				<div class="box-content">
-					
-					<h5 class="position">Reportes de reloj subidas</h5>
-
-					<button type="button" class="btn btn-success btn-xs waves-effect waves-light margin-bottom-10" data-toggle="modal" data-target="#boostrapModal-1" id="modalAgregar">Subir archivo</button>
-					
-					<table id="fuenteTable" class="table table-small-font table-hover table-bordered display" style="width:100%">
-						<thead>
-							<tr>
-								<th>Nombre</th>
-								<th>Peso / Tamaño</th>
-								<th>Fecha de subida</th>
-								<th>Ruta de almacenamiento</th>
-								<th>Opcioness</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr data-url="perfil.html">
-								<td>Asistencia febrero 1.xlsx</td>
-								<td>1.20(Mbs)</td>
-								<td>16/02/2025</td>
-								<td>C:\Users\PC 600\Desktop\coartmex</td>
-								<td>
-									<div class="text-center">
-										<button class="btn btn-danger btn-sm eliminar-btn" data-row='${JSON.stringify(row)}'><i class="fa fa-trash"></i></button>
-									</div>
-								</td>
-							</tr>
-							<tr data-url="perfil.html">
-								<td>Asistencia febrero 2.xlsx</td>
-								<td>1.18(Mbs)</td>
-								<td>02/03/2025</td>
-								<td>C:\Users\PC 600\Desktop\coartmex</td>
-								<td>
-									<div class="text-center">
-										<button class="btn btn-danger btn-sm eliminar-btn" data-row='${JSON.stringify(row)}'><i class="fa fa-trash"></i></button>
-									</div>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-			</div>
 
 			<div class="col-xs-12">
 				<div class="box-content">
@@ -202,65 +165,54 @@
 						</div> 
 					</div>
 					
-					<p>Periodo <span style="color: rgb(42, 147, 165);">2025-05-01</span> al <span style="color: rgb(42, 147, 165);">2025-05-15</span></p>
-					
-					<table id="colaboradores" class="table table-small-font table-hover table-bordered display nowrap" style="width:100%">
+					<p id="periodo">Periodo <span id="fechaInicio" style="color: rgb(42, 147, 165);"></span> al <span id="fechaFin" style="color: rgb(42, 147, 165);"></span></p>
+
+					<h5>Reporte de asistencia</h5>
+					<div class="table-responsive">
+						<table id="tablaAsistencia" class="display nowrap table table-hover table-bordered" style="width:100%">
+							<thead></thead>
+							<tbody></tbody>
+						</table>
+					</div>
+
+					<h5>Reporte de estadistico</h5>
+					<table id="resumen_asistencia" class="table table-small-font table-hover table-bordered display nowrap margin-top-20" style="width:100%">
 						<thead>
 							<tr>
 								<th>No. empleado</th>
 								<th>Empleado</th>
 								<th>Departamento</th>
-								<th>Horas laborales normales</th>
-								<th>Horas laborales reales</th>
-                                <th>Cantidad de retardos</th>
-                                <th>Retardo en minutos</th>
+								<th>Dias laborados</th>
+								<th>Numero de faltas</th>
+								<th>Numero de retardos</th>
+								<th>Minutos de retardo</th>
+								<th>Horas extra</th>
+
 							</tr>
 						</thead>
-						<tbody>
-							<tr data-url="perfil.html">
-								<td>010101</td>
-								<td>Sebastian</td>
-								<td>Ventas</td>
-								<td>60:00</td>
-								<td>50:00</td>
-								<td>2</td>
-								<td>15</td>
-							</tr>
-							<tr data-url="perfil.html">
-								<td>02516</td>
-								<td>Veronica</td>
-								<td>Sistemas</td>
-								<td>60:00</td>
-								<td>58:00</td>
-								<td>1</td>
-								<td>5</td>
-							</tr>
-							<tr data-url="perfil.html">
-								<td>004561</td>
-								<td>Gerardo</td>
-								<td>Almacen</td>
-								<td>60:00</td>
-								<td>56:00</td>
-								<td>0</td>
-								<td>0</td>
-							</tr>
-							<tr data-url="perfil.html">
-								<td>122560</td>
-								<td>Kenia</td>
-								<td>Compras</td>
-								<td>50:00</td>
-								<td>50:00</td>
-								<td>1</td>
-								<td>1</td>
-							</tr>
-                            
-						</tbody>
+						<tbody></tbody> <!-- 🔹 Aquí se insertarán los datos -->
 					</table>
+
 
 					
 				</div>
 			</div>
 			<!-- /.box-content -->
+			
+			<div class="col-xs-12">
+				<div class="box-content">
+					
+					<h5 class="position">Reportes de reloj subidas</h5>
+
+					<button type="button" class="btn btn-success btn-xs waves-effect waves-light margin-bottom-10" data-toggle="modal" data-target="#boostrapModal-1" id="modalAgregar">Subir archivo</button>
+					
+					<table id="relojTable" class="table table-small-font table-hover table-bordered display" style="width:100%">
+					</table>
+						
+				</div>
+			</div>
+
+			
 		</div>
 		<!-- /.col-xs-12 -->
 			
@@ -310,7 +262,8 @@
 	<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 	<script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
 
-	<!-- <script src="assets/JS/fuentes.js"></script> -->
+	<script src="assets/JS/asistencias.js"></script>
+	<script src="assets/JS/reloj_checador.js"></script>
 	<script src="assets/JS/autenticar.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 

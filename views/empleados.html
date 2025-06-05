@@ -40,6 +40,12 @@
 
     <!-- Toastr -->
     <link rel="stylesheet" href="assets/plugin/toastr/toastr.css">
+
+	<!-- Fontello Icon -->
+	<link rel="stylesheet" href="assets/fonts/fontello/fontello.css">
+
+	<!-- Material Design Icon -->
+	<link rel="stylesheet" href="assets/fonts/material-design/css/materialdesignicons.css">
 </head>
 
 <body>
@@ -84,20 +90,30 @@
 								<li><a href="fuentes.html"><i class="fa fa-file-excel-o"></i> Interfaz de reportes</a></li>
 							</ul>
 		
+						</li>
+						<li>
+							<a class="waves-effect parent-item js__control" href="#"><i class="menu-icon fa fa-user"></i><span>Recursos humanos </span><span class="menu-arrow fa fa-angle-down"></span></a>
+							<ul class="sub-menu js__content">
+								<li><a href="perfiles_puesto.html"><i class="fa icon-vcard"></i> Perfiles de puesto</a></li>
+								<li><a href="colaboradores.html"><i class="fa fa-suitcase"></i> Colaboradores</a></li>
+								<li><a href="reloj_checador.html"><i class="fa fa-clock-o"></i> Reloj checador</a></li>
+								<li><a href="datos_rh.html"><i class="fa fa-wrench"></i> Herramientas de datos</a></li>
+							</ul>
 						</li>		
 						<li>
 							<a class="waves-effect parent-item js__control" href="#"><i class="menu-icon fa fa-laptop"></i><span>Sistemas </span><span class="menu-arrow fa fa-angle-down"></span></a>
 							<ul class="sub-menu js__content">
+								<li><a href="departamentos.html"><i class="fa fa-building"></i> Departamentos</a></li>
+								<li><a href="cursos.html"><i class="fa fa-graduation-cap"></i> Cursos</a></li>
+								<li><a href="beneficios.html"><i class="fa fa-heartbeat"></i> PAC</a></li>
 								<li><a href="empleados.html"><i class="fa fa-suitcase"></i> Colaboradores</a></li>
 								<li><a href="usuarios.html"><i class="fa fa-user"></i> Usuarios</a></li>
 								<li><a href="proveedores.html"><i class="fa fa-truck"></i> Proveedores</a></li>
 								<li><a href="socios_comerciales.html"><i class="fa fa-star"></i> Socios comerciales</a></li>
 								<li><a href="articulos.html"><i class="fa fa-tag"></i> Articulos</a></li>
+								<li><a href="ubicaciones.html"><i class="fa fa-globe"></i> Ubicaciones</a></li>
 							</ul>
-		
 						</li>
-
-
 					</ul>
 				</li>
 			</ul>
@@ -128,6 +144,7 @@
 <div id="wrapper">
 	<div class="main-content">
 		<div class="row small-spacing">
+			<!-- EMPLEADOS -->
 			<div class="col-xs-12">
 				<div class="box-content">
 					<h4 class="box-title">Tabla de colaboradores</h4>
@@ -138,39 +155,6 @@
 
 					<table id="empleadoTable" class="table table-small-font table-hover table-bordered display nowrap" style="width:100%">
 
-					</table>
-					
-				</div>
-				<!-- /.box-content -->
-			</div>
-
-			<!-- DEPARTAMENTOS -->
-			<div class="col-xs-6">
-				<div class="box-content">
-					<h4 class="box-title">Tabla de departamentos</h4>
-					<!-- /.box-title -->
-
-					<button type="button" class="btn btn-success btn-xs waves-effect waves-light margin-bottom-10" data-toggle="modal" data-target="#boostrapModal-1" id="modalAgregar"><i class="fa fa-plus"></i> Agregar</button>
-				
-
-					<table id="departamentoTable" class="table table-small-font table-hover table-bordered display nowrap" style="width:100%">
-						
-					</table>
-					
-				</div>
-				<!-- /.box-content -->
-			</div>
-
-			<!-- PUESTOS -->
-			<div class="col-xs-6">
-				<div class="box-content">
-					<h4 class="box-title">Puestos</h4>
-					<!-- /.box-title -->
-
-					<button type="button" class="btn btn-success btn-xs waves-effect waves-light margin-bottom-10" data-toggle="modal" data-target="#boostrapModal-1" id="modalAgregar"><i class="fa fa-plus"></i> Agregar</button>
-				
-					<table id="puestoTable" class="table table-small-font table-hover table-bordered display nowrap" style="width:100%">
-						
 					</table>
 					
 				</div>
@@ -204,23 +188,6 @@
 				
 
 					<table id="permisoTable" class="table table-small-font table-hover table-bordered display nowrap" style="width:100%">
-						
-					</table>
-					
-				</div>
-				<!-- /.box-content -->
-			</div>
-
-			<!-- CURSOS -->
-			<div class="col-xs-6">
-				<div class="box-content">
-					<h4 class="box-title">Tabla de cursos</h4>
-					<!-- /.box-title -->
-
-					<button type="button" class="btn btn-success btn-xs waves-effect waves-light margin-bottom-10" data-toggle="modal" data-target="#boostrapModal-1" id="modalAgregar"><i class="fa fa-plus"></i> Agregar</button>
-				
-
-					<table id="cursoTable" class="table table-small-font table-hover table-bordered display nowrap" style="width:100%">
 						
 					</table>
 					
@@ -263,11 +230,11 @@
 				</div>
 				<div class="form-group">
 					<label>Sueldo de nomina</label>
-					<input type="number" class="form-control" id="sueldo">
+					<input type="number" class="form-control" id="nomina">
 				</div>
 				<div class="form-group">
 					<label>Sueldo de vales</label>
-					<input type="number" class="form-control" id="sueldo">
+					<input type="number" class="form-control" id="vale">
 				</div>
 				<div class="form-group">
 					<label>Asignar puesto</label>
@@ -278,6 +245,14 @@
 					<label>Seleccionar nivel de estudios</label>
 					<select class="form-control" id="niveles_menu" >
 					</select>
+				</div>
+				<div class="form-group">
+					<label>Estado del empleado</label><br>
+					<select class="form-control" style="width: 100%;" id="estado">
+						<option value="1">Activo</option>
+						<option value="2">Inactivo</option>
+					</select>
+					
 				</div>
 			</div>
 			<div class="modal-footer">
@@ -302,12 +277,8 @@
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="assets/JS/empleados.js"></script>
 	<script src="assets/JS/puestos.js"></script>
-
-	<!-- <script src="assets/JS/departamentos.js"></script>
-	
-	<script src="assets/JS/cursos.js"></script>
 	<script src="assets/JS/numeros_emergencia.js"></script>
-	<script src="assets/JS/permisos.js"></script> -->
+	<script src="assets/JS/permisos.js"></script>
 	<script src="assets/JS/autenticar.js"></script>
 
 	<!-- <script src="assets/scripts/jquery.min.js"></script> -->

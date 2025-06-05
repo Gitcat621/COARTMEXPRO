@@ -10,7 +10,7 @@
 	<title>Articulos - COARTMEX-PRO</title>
 
 	<!-- Main Styles -->
-	<link rel="stylesheet" href="assets/styles/style.min.css">
+	<link rel="stylesheet" href="assets/styles/style.css">
 
 	<!-- mCustomScrollbar -->
 	<link rel="stylesheet" href="assets/plugin/mCustomScrollbar/jquery.mCustomScrollbar.min.css">
@@ -41,7 +41,7 @@
     <link rel="stylesheet" href="assets/plugin/datatables/extensions/Responsive/css/responsive.bootstrap.min.css">
         
     <!-- Table Responsive -->
-    <link rel="stylesheet" href="assets/plugin/RWD-table-pattern/css/rwd-table.min.css">>
+    <link rel="stylesheet" href="assets/plugin/RWD-table-pattern/css/rwd-table.min.css">
 
     <!-- Remodal -->
     <link rel="stylesheet" href="assets/plugin/modal/remodal/remodal.css">
@@ -49,6 +49,12 @@
 
     <!-- Toastr -->
     <link rel="stylesheet" href="assets/plugin/toastr/toastr.css">
+
+	<!-- Fontello Icon -->
+	<link rel="stylesheet" href="assets/fonts/fontello/fontello.css">
+
+	<!-- Material Design Icon -->
+	<link rel="stylesheet" href="assets/fonts/material-design/css/materialdesignicons.css">
 
 </head>
 
@@ -94,20 +100,30 @@
 								<li><a href="fuentes.html"><i class="fa fa-file-excel-o"></i> Interfaz de reportes</a></li>
 							</ul>
 		
+						</li>
+						<li>
+							<a class="waves-effect parent-item js__control" href="#"><i class="menu-icon fa fa-user"></i><span>Recursos humanos </span><span class="menu-arrow fa fa-angle-down"></span></a>
+							<ul class="sub-menu js__content">
+								<li><a href="perfiles_puesto.html"><i class="fa icon-vcard"></i> Perfiles de puesto</a></li>
+								<li><a href="colaboradores.html"><i class="fa fa-suitcase"></i> Colaboradores</a></li>
+								<li><a href="reloj_checador.html"><i class="fa fa-clock-o"></i> Reloj checador</a></li>
+								<li><a href="datos_rh.html"><i class="fa fa-wrench"></i> Herramientas de datos</a></li>
+							</ul>
 						</li>		
 						<li>
 							<a class="waves-effect parent-item js__control" href="#"><i class="menu-icon fa fa-laptop"></i><span>Sistemas </span><span class="menu-arrow fa fa-angle-down"></span></a>
 							<ul class="sub-menu js__content">
+								<li><a href="departamentos.html"><i class="fa fa-building"></i> Departamentos</a></li>
+								<li><a href="cursos.html"><i class="fa fa-graduation-cap"></i> Cursos</a></li>
+								<li><a href="beneficios.html"><i class="fa fa-heartbeat"></i> PAC</a></li>
 								<li><a href="empleados.html"><i class="fa fa-suitcase"></i> Colaboradores</a></li>
 								<li><a href="usuarios.html"><i class="fa fa-user"></i> Usuarios</a></li>
 								<li><a href="proveedores.html"><i class="fa fa-truck"></i> Proveedores</a></li>
 								<li><a href="socios_comerciales.html"><i class="fa fa-star"></i> Socios comerciales</a></li>
 								<li><a href="articulos.html"><i class="fa fa-tag"></i> Articulos</a></li>
+								<li><a href="ubicaciones.html"><i class="fa fa-globe"></i> Ubicaciones</a></li>
 							</ul>
-		
 						</li>
-
-
 					</ul>
 				</li>
 			</ul>
@@ -138,22 +154,35 @@
 <div id="wrapper">
 	<div class="main-content">
 		<div class="row small-spacing">
+			<!-- ARTICULOS -->
 			<div class="col-xs-12">
 				<div class="box-content">
 					<h4 class="box-title">Tabla de artículos </h4>
 					<!-- /.box-title -->
 					
-
-					<ul class="list-inline">
-						<li class="margin-bottom-10"><button type="button" class="btn btn-success btn-xs waves-effect waves-light" data-toggle="modal" data-target="#boostrapModal-1" id="modalAgregar"><i class="fa fa-plus"></i> Agregar</button></li>
-						
-					</ul>
-
-					
-					
-					
+					<button type="button" class="btn btn-success btn-xs waves-effect waves-light margin-bottom-10" data-toggle="modal" data-target="#boostrapModal-1" id="modalAgregar">
+						<i class="fa fa-plus"></i> Agregar
+					</button>
 
 					<table id="articuloTable" class="table table-small-font table-hover table-bordered display nowrap" style="width:100%">
+
+					</table>
+					
+				</div>
+				<!-- /.box-content -->
+			</div>
+
+			<!-- CATEGORIA ARTICULOS -->
+			<div class="col-xs-12">
+				<div class="box-content">
+					<h4 class="box-title">Tabla de categoria de los artículos</h4>
+					<!-- /.box-title -->
+					
+					<button type="button" class="btn btn-success btn-xs waves-effect waves-light margin-bottom-10" data-toggle="modal" data-target="#boostrapModal-1" id="modalAgregar">
+						<i class="fa fa-plus"></i> Agregar
+					</button>
+
+					<table id="categoriaTable" class="table table-small-font table-hover table-bordered display nowrap" style="width:100%">
 
 					</table>
 					

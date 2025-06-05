@@ -19,7 +19,7 @@ class Proveedor:
         SELECT 
             p.nombreProveedor, 
             p.correoProveedor, 
-            GROUP_CONCAT(DISTINCT t.numeroTelefono SEPARATOR ', ') AS telefonos, 
+            GROUP_CONCAT(DISTINCT tp.telefonoProveedor SEPARATOR ', ') AS telefonos, 
             GROUP_CONCAT(DISTINCT mp.nombreMetodoPago SEPARATOR ', ') AS metodosPago,
             p.diasCredito, 
             p.facturaNota,
@@ -36,8 +36,7 @@ class Proveedor:
             p.fkUbicacion,
             p.pkProveedor
         FROM proveedores p
-        LEFT JOIN proveedores_telefonos pt ON pt.fkProveedor = p.pkProveedor
-        LEFT JOIN telefonos t ON t.pkTelefono = pt.fkTelefono
+        LEFT JOIN telefonos_proveedores tp ON tp.fkProveedor = p.pkProveedor
         LEFT JOIN proveedores_metodos pm ON pm.fkProveedor = p.pkProveedor
         LEFT JOIN metodos_pago mp ON mp.pkMetodoPago = pm.fkMetodoPago
         LEFT JOIN proveedores_paqueterias pp ON pp.fkProveedor = p.pkProveedor
@@ -49,7 +48,7 @@ class Proveedor:
         LEFT JOIN pueblos_ciudades upc ON upc.pkPuebloCiudad = u.fkPuebloCiudad
         LEFT JOIN municipios m ON m.pkMunicipio = u.fkMunicipio
         LEFT JOIN estados e ON e.pkEstado = u.fkEstado
-        GROUP BY p.pkProveedor
+        GROUP BY p.pkProveedor;
         '''
         resultado = db.execute_query(consulta)
         db.close()

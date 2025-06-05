@@ -454,31 +454,13 @@ class Resumen:
             gs.nombreGrupoSocio,
             a.codigoArticulo,
             a.nombreArticulo,
-            ao.cantidadOrden AS cantidadOrdenada,
+            av.cantidadOrden AS cantidadOrdenada,
             COALESCE(av.cantidadVenta, 0) AS cantidadVendida,
             COALESCE(av.precioVenta, 0) AS precioVenta,
-            av.cantidadVenta / ao.cantidadOrden * 100 AS porcentajePromedioServicio
+            av.cantidadVenta / av.cantidadOrden * 100 AS porcentajePromedioServicio
         FROM ordenes_compra oc
-        LEFT JOIN (
-            SELECT 
-                fkOrdenCompra, 
-                fkCodigoArticulo, 
-                SUM(cantidadOrden) AS cantidadOrden
-            FROM articulos_ordenes
-            GROUP BY fkOrdenCompra, fkCodigoArticulo
-        ) ao ON ao.fkOrdenCompra = oc.pkOrdenCompra
-        JOIN articulos a 
-            ON a.codigoArticulo = ao.fkCodigoArticulo
-        LEFT JOIN (
-            SELECT 
-                fkOrdenCompra, 
-                fkCodigoArticulo, 
-                SUM(cantidadVenta) AS cantidadVenta,
-                AVG(precioVenta) AS precioVenta  -- si el precio varía, puedes ajustar esto
-            FROM articulos_ventas
-            GROUP BY fkOrdenCompra, fkCodigoArticulo
-        ) av ON av.fkOrdenCompra = oc.pkOrdenCompra AND av.fkCodigoArticulo = ao.fkCodigoArticulo
-            AND av.fkCodigoArticulo = ao.fkCodigoArticulo
+     	JOIN articulos_ventas av ON av.fkOrdenCompra = oc.pkOrdenCompra
+        JOIN articulos a ON a.codigoArticulo = av.fkCodigoArticulo
         JOIN socios_comerciales sc ON sc.pkSocioComercial = oc.fkSocioComercial 
         JOIN grupos_socio gs ON gs.pkGrupoSocio = sc.fkGrupoSocio
         JOIN respuestas_almacen ra ON ra.fkOrdenCompra = oc.pkOrdenCompra

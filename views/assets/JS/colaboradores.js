@@ -98,7 +98,7 @@ async function listarColaboradores() {
 
             empleados.nombreEmpleado, //1
 
-            '$' + (parseFloat(empleados.nomina) + parseFloat(empleados.vale)),//
+            '$' + (parseFloat(empleados.nomina) + parseFloat(empleados.vale)).toLocaleString(),//
 
             empleados.nombrePuesto, //
 

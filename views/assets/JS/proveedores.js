@@ -5,156 +5,9 @@ $(document).ready(function () {
         //toastr.warning('Usted no debería estar aquí', 'Atención', { "closeButton": true });
     }
     listarProveedores();
-    listarUbicaciones();
-    listarTelefonos();
-    listarCuentas();
-    listarPaqueterias();
     
 });
 
-//Listar los registros foraneos
-function listarUbicaciones(){
-
-    fetch('http://127.0.0.1:5000/coartmex/ubicaciones', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-
-
-        document.getElementById('ubicacion_menu').innerHTML = "";
-
-        //Mapear en un select
-        data.forEach(function(data) {
-            
-        
-            let HTML = `<option value="${data.pkUbicacion}">${data.codigoPostal} - ${data.nombreMunicipio} - ${data.nombreEstado}</option>`;
-        
-            //Mapear valor por cada elemento en la consulta 
-            document.getElementById('ubicacion_menu').innerHTML += HTML;
-
-
-        });
-    })
-    .catch(error => console.error("Error al cargar los datos:", error));
-}
-
-async function listarTelefonos() {
-    try {
-        const response = await fetch('http://127.0.0.1:5000/coartmex/telefonos', { // Cambia la URL según tu API
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-        const data = await response.json();
-
-        if (!response.ok) {
-            console.error("Error al obtener los datos:", response.status);
-            return;
-        }
-
-
-        const select = document.getElementById('telefono_menu');
-        select.innerHTML = ""; // Limpiar contenido previo
-
-        option = document.createElement('option');
-        option.value = '0';
-        option.textContent = '1234567890';
-        option.selected = true;
-        select.appendChild(option);
-
-        data.forEach(telefono => {
-
-            let option = document.createElement('option');
-            option.value = telefono.pkTelefono; // Asignar el nombre del telefono
-            option.textContent = telefono.numeroTelefono;
-            select.appendChild(option);
-        });
-
-    } catch (error) {
-        console.error("Error al conectar con la API:", error);
-    }
-}
-
-async function listarCuentas() {
-    try {
-        const response = await fetch('http://127.0.0.1:5000/coartmex/cuentasBanco', { // Cambia la URL según tu API
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-        const data = await response.json();
-
-        if (!response.ok) {
-            console.error("Error al obtener los datos:", response.status);
-            return;
-        }
-
-
-        const select = document.getElementById('banco_menu');
-        select.innerHTML = ""; // Limpiar contenido previo
-
-        option = document.createElement('option');
-        option.value = '0';
-        option.textContent = 'Cuenta de banco';
-        option.selected = true;
-        select.appendChild(option);
-
-        data.forEach(telefono => {
-
-            let option = document.createElement('option');
-            option.value = telefono.pkCuentaBanco; // Asignar el nombre del telefono
-            option.textContent = telefono.numeroCuenta;
-            select.appendChild(option);
-        });
-
-    } catch (error) {
-        console.error("Error al conectar con la API:", error);
-    }
-}
-
-async function listarPaqueterias() {
-    try {
-        const response = await fetch('http://127.0.0.1:5000/coartmex/paqueterias', { // Cambia la URL según tu API
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-        const data = await response.json();
-
-        if (!response.ok) {
-            console.error("Error al obtener los datos:", response.status);
-            return;
-        }
-
-
-        const select = document.getElementById('paqueteria_menu');
-        select.innerHTML = ""; // Limpiar contenido previo
-
-        option = document.createElement('option');
-        option.value = '0';
-        option.textContent = 'Paqueteria';
-        option.selected = true;
-        select.appendChild(option);
-
-        data.forEach(telefono => {
-
-            let option = document.createElement('option');
-            option.value = telefono.pkPaqueteria; // Asignar el nombre del telefono
-            option.textContent = telefono.nombrePaqueteria;
-            select.appendChild(option);
-        });
-
-    } catch (error) {
-        console.error("Error al conectar con la API:", error);
-    }
-}
 
 //Asignar funcion al boton de abrir modal
 $("#modalAgregar").click(function() {
@@ -195,7 +48,6 @@ $(document).ready(function() {
         ],
         scrollX: true,
     });
-
 
     // Event listeners para los botones
     // Editar

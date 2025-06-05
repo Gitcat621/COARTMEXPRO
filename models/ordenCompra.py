@@ -68,52 +68,20 @@ class OrdenCompra:
             return None
 
 
-    def crear_articulosEnOrden(self, db):
-        """Guarda un nuevo registro en la base de datos"""
-
-        query = '''
-            INSERT INTO articulos_ordenes (fkOrdenCompra, fkCodigoArticulo, cantidadOrden) 
-            VALUES (
-                (SELECT oc.pkOrdenCompra 
-                FROM ordenes_compra oc 
-                JOIN socios_comerciales sc ON oc.fkSocioComercial = sc.pkSocioComercial 
-                WHERE oc.numeroOrdenCompra = %s AND oc.fechaOrdenCompra = %s AND sc.nombreSocio = %s),
-                %s,
-                %s
-            )
-            '''
-            
-        valores = (self.numeroOrdenCompra, self.fechaOrdenCompra, self.fkSocioComercial, self.codigoArticulo, self.cantidadOrden)
-
-        try:
-           
-            log_query = query.replace("%s", "'{}'").format(*valores)
-            guardar_en_log(f"Consulta ejecutada: {log_query}")
-            
-            resultado = db.execute(query, valores)  # Ejecutar la consulta
-
-            return resultado
-        
-        except Exception as e:
-
-            guardar_en_log(f"❌ Error al insertar compra {self.numeroOrdenCompra}: {e}")
-            return None
-
-
     def crear_venta(self, db):
         """Guarda un nuevo registro en la base de datos"""
 
         query = '''
-        INSERT INTO articulos_ventas (fkCodigoArticulo, fkOrdenCompra, cantidadVenta, precioVenta) VALUES
+        INSERT INTO articulos_ventas (fkCodigoArticulo, fkOrdenCompra, cantidadOrden, cantidadVenta, precioVenta) VALUES
         (%s, 
         (SELECT oc.pkOrdenCompra 
         FROM ordenes_compra oc 
         JOIN socios_comerciales sc ON sc.pkSocioComercial = oc.fkSocioComercial 
         WHERE oc.numeroOrdenCompra = %s AND oc.fechaOrdenCompra = %s AND sc.nombreSocio = %s),
-        %s, %s)
+        %s, %s, %s)
         '''
 
-        valores = (self.codigoArticulo, self.numeroOrdenCompra, self.fechaOrdenCompra, self.fkSocioComercial , self.cantidadVenta, self.precioVenta)
+        valores = (self.codigoArticulo, self.numeroOrdenCompra, self.fechaOrdenCompra, self.fkSocioComercial , self.cantidadOrden, self.cantidadVenta, self.precioVenta)
 
         try:
 

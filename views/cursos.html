@@ -40,6 +40,12 @@
 
 	<!-- Datepicker -->
 	<link rel="stylesheet" href="assets/plugin/datepicker/css/bootstrap-datepicker.min.css">
+
+	<!-- Fontello Icon -->
+	<link rel="stylesheet" href="assets/fonts/fontello/fontello.css">
+
+	<!-- Material Design Icon -->
+	<link rel="stylesheet" href="assets/fonts/material-design/css/materialdesignicons.css">
 </head>
 
 <body>
@@ -49,7 +55,7 @@
 		<button type="button" class="button-close fa fa-times js__menu_close"></button>
 		<div class="user">
 			<a href="#" class="avatar"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTomPrJLgLq4aZpXJJhxQ5HjtOgBguGXzsJw&s" alt=""><span class="status online"></span></a>
-			<h5 class="name"><a id="usuario" href="#">Curso</a></h5>
+			<h5 class="name"><a id="usuario" href="#">Usuario</a></h5>
 			<h5 class="position" id="departamento">Departamento</h5>
 			<!-- /.name -->
 		</div>
@@ -84,20 +90,30 @@
 								<li><a href="fuentes.html"><i class="fa fa-file-excel-o"></i> Interfaz de reportes</a></li>
 							</ul>
 		
+						</li>
+						<li>
+							<a class="waves-effect parent-item js__control" href="#"><i class="menu-icon fa fa-user"></i><span>Recursos humanos </span><span class="menu-arrow fa fa-angle-down"></span></a>
+							<ul class="sub-menu js__content">
+								<li><a href="perfiles_puesto.html"><i class="fa icon-vcard"></i> Perfiles de puesto</a></li>
+								<li><a href="colaboradores.html"><i class="fa fa-suitcase"></i> Colaboradores</a></li>
+								<li><a href="reloj_checador.html"><i class="fa fa-clock-o"></i> Reloj checador</a></li>
+								<li><a href="datos_rh.html"><i class="fa fa-wrench"></i> Herramientas de datos</a></li>
+							</ul>
 						</li>		
 						<li>
 							<a class="waves-effect parent-item js__control" href="#"><i class="menu-icon fa fa-laptop"></i><span>Sistemas </span><span class="menu-arrow fa fa-angle-down"></span></a>
 							<ul class="sub-menu js__content">
+								<li><a href="departamentos.html"><i class="fa fa-building"></i> Departamentos</a></li>
+								<li><a href="cursos.html"><i class="fa fa-graduation-cap"></i> Cursos</a></li>
+								<li><a href="beneficios.html"><i class="fa fa-heartbeat"></i> PAC</a></li>
 								<li><a href="empleados.html"><i class="fa fa-suitcase"></i> Colaboradores</a></li>
-								<li><a href="cursos.html"><i class="fa fa-user"></i> Cursos</a></li>
+								<li><a href="usuarios.html"><i class="fa fa-user"></i> Usuarios</a></li>
 								<li><a href="proveedores.html"><i class="fa fa-truck"></i> Proveedores</a></li>
 								<li><a href="socios_comerciales.html"><i class="fa fa-star"></i> Socios comerciales</a></li>
 								<li><a href="articulos.html"><i class="fa fa-tag"></i> Articulos</a></li>
+								<li><a href="ubicaciones.html"><i class="fa fa-globe"></i> Ubicaciones</a></li>
 							</ul>
-		
 						</li>
-
-
 					</ul>
 				</li>
 			</ul>
@@ -128,25 +144,41 @@
 <div id="wrapper">
 	<div class="main-content">
 		<div class="row small-spacing">
+
+			<!-- CURSOS -->
 			<div class="col-xs-12">
 				<div class="box-content">
-					<h4 class="box-title">Tabla de cursos</h4>
+					<h4 class="box-title">Cursos</h4>
 					<!-- /.box-title -->
 
-					<button type="button" class="btn btn-success btn-xs waves-effect waves-light" data-toggle="modal" data-target="#boostrapModal-1" id="modalAgregar"><i class="fa fa-plus"></i> Agregar</button>
-
-					<div class="col-xs-12">
-						<h1></h1>
-					</div>
+					<button type="button" class="btn btn-success btn-xs waves-effect waves-light margin-bottom-10" data-toggle="modal" data-target="#boostrapModal-5" id="agregarCurso"><i class="fa fa-plus"></i> Agregar</button>
 
 					<table id="cursoTable" class="table table-small-font table-hover table-bordered display nowrap" style="width:100%">
 						
 					</table>
-
-
 					
 				</div>
 				<!-- /.box-content -->
+
+                
+			</div>
+
+			<!-- PRESENTADORES -->
+            <div class="col-xs-12">
+				<div class="box-content">
+					<h4 class="box-title">Presentadores</h4>
+					<!-- /.box-title -->
+
+					<button type="button" class="btn btn-success btn-xs waves-effect waves-light margin-bottom-10" data-toggle="modal" data-target="#boostrapModal-4" id="agregarPresentador"><i class="fa fa-plus"></i> Agregar</button>
+
+					<table id="presentadorTable" class="table table-small-font table-hover table-bordered display nowrap" style="width:100%">
+						
+					</table>
+					
+				</div>
+				<!-- /.box-content -->
+
+                
 			</div>
 			
 		</div>
@@ -158,12 +190,33 @@
 
 <!-- AQUI ESTAN LOS MODALES -->
 <!-- Modal -->
-<div class="modal fade" id="boostrapModal-1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal fade" id="boostrapModal-4" tabindex="-4" role="dialog" aria-labelledby="myModalLabel">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<h4 class="modal-title" id="myModalLabel">Titulo dinamico</h4>
+				<h4 class="modal-title" id="myModalLabel4">Titulo dinamico</h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<label>Nombre del presentador de curso</label>
+					<input type="text" placeholder="" class="form-control" id="nombrePresentador">
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default btn-xs waves-effect waves-light" data-dismiss="modal">Cerrar</button>
+				<button type="button" class="btn btn-primary btn-xs waves-effect waves-light" id="guardarPresentador">Guardar</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="boostrapModal-5" tabindex="-5" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel5">Titulo dinamico</h4>
 			</div>
 			<div class="modal-body">
 				<div class="form-group">
@@ -197,14 +250,14 @@
                 </div>
 				<div class="form-group">
 					<label>Asignar presentador</label>
-					<select class="select2_2 form-control" multiple="multiple" style="width: 100%;" id="presentador_menu">
+					<select class="select2 form-control" style="width: 100%;" id="presentador_menu">
 
 					</select>
 				</div>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default btn-xs waves-effect waves-light" data-dismiss="modal">Cerrar</button>
-				<button type="button" class="btn btn-primary btn-xs waves-effect waves-light">Guardar</button>
+				<button type="button" class="btn btn-primary btn-xs waves-effect waves-light" id="guardarCurso">Guardar</button>
 			</div>
 		</div>
 	</div>
@@ -222,6 +275,7 @@
 
 	<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<script src="assets/JS/presentadores.js"></script>
 	<script src="assets/JS/cursos.js"></script>
 	<script src="assets/JS/autenticar.js"></script>
 

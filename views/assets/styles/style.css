@@ -72,6 +72,12 @@ body {
 }
 
 /* HOVER PARA DIVS */
+.hover:hover {
+    background-color: #f0f0f0; /* Cambia el fondo al pasar el cursor */
+    color: #333; /* Cambia el color del texto */
+    transition: all 0.3s ease-in-out; /* Agrega una transición suave */
+}
+
 
 .divSize {
   transition: background-color 0.3s ease;
@@ -909,6 +915,39 @@ h4 strong {
 .table > thead > tr > td.warning,
 .table > thead > tr > th.warning {
   background: #fbbc05;
+}
+
+
+.table > tbody > tr.marine > td,
+.table > tbody > tr.marine > th,
+.table > tbody > tr > td.marine,
+.table > tbody > tr > th.marine,
+.table > tfoot > tr.marine > td,
+.table > tfoot > tr.marine > th,
+.table > tfoot > tr > td.marine,
+.table > tfoot > tr > th.marine,
+.table > thead > tr.marine > td,
+.table > thead > tr.marine > th,
+.table > thead > tr > td.marine,
+.table > thead > tr > th.marine {
+  color: white;
+  background: #00056095;
+}
+
+.table > tbody > tr.green > td,
+.table > tbody > tr.green > th,
+.table > tbody > tr > td.green,
+.table > tbody > tr > th.green,
+.table > tfoot > tr.green > td,
+.table > tfoot > tr.green > th,
+.table > tfoot > tr > td.green,
+.table > tfoot > tr > th.green,
+.table > thead > tr.green > td,
+.table > thead > tr.green > th,
+.table > thead > tr > td.green,
+.table > thead > tr > th.green {
+  color: white;
+  background: #009e3daf;
 }
 /*---------------------------------------------------------------------*/
 /* Header */
@@ -2627,6 +2666,10 @@ table.focus-on tbody tr.focused td {
 .notice-danger {
   color: #ffffff;
   background: #ff1744;
+}
+.notice-success {
+  color: #ffffff;
+  background: #00a532;
 }
 /* Notice List */
 .notice-list {

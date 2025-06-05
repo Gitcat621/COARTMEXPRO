@@ -39,7 +39,7 @@ def crear_usuario():
     data = request.json
     nombreUsuario = data.get('nombreUsuario')
     contrasena = data.get('contrasena')
-    fkEmpleado = int(data.get('fkEmpleado')) 
+    fkEmpleado = data.get('fkEmpleado') 
 
     if not nombreUsuario or not contrasena:
         return jsonify({'mensaje': 'Faltan datos'}), 400

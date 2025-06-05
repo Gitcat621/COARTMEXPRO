@@ -21,7 +21,8 @@ def crear_pais():
     if not nombrePais:
         return jsonify({'mensaje': 'Faltan datos'}), 400
 
-    if Pais.crear_pais(nombrePais):
+    pais = Pais(nombrePais=nombrePais)
+    if pais.crear_pais():
         return jsonify({'mensaje': 'País insertado correctamente'}), 201
     else:
         return jsonify({'mensaje': 'Error al insertar país'}), 500
@@ -34,7 +35,8 @@ def editar_pais():
         pkPais = data.get('pkPais')
         nombrePais = data.get('nombrePais')
 
-        if Pais.editar_pais(pkPais, nombrePais):
+        pais = Pais(pkPais, nombrePais)
+        if pais.editar_pais():
             return jsonify({'mensaje': 'País editado correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo editar el país'}), 500
@@ -49,7 +51,8 @@ def eliminar_pais():
         data = request.json
         pkPais = data.get('pkPais')
 
-        if Pais.eliminar_pais(pkPais):
+        pais = Pais(pkPais)
+        if pais.eliminar_pais():
             return jsonify({'mensaje': 'País eliminado correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo eliminar el país'}), 500

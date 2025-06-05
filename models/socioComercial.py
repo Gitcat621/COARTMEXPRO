@@ -17,12 +17,12 @@ class SocioComercial:
         consulta = """ 
         SELECT sc.nombreSocio, sc.razonSocial, gs.nombreGrupoSocio, cp.codigoPostal, pc.nombrePuebloCiudad, m.nombreMunicipio, e.nombreEstado, p.nombrePais, sc.fkGrupoSocio, sc.fkUbicacion, cp.pkCodigoPostal, pc.pkPuebloCiudad, m.pkMunicipio, e.pkEstado, p.pkPais ,sc.pkSocioComercial FROM socios_comerciales sc 
         JOIN grupos_socio gs ON gs.pkGrupoSocio = sc.fkGrupoSocio 
-        JOIN ubicaciones u ON u.pkUbicacion = sc.fkUbicacion
-        JOIN codigos_postales cp ON cp.pkCodigoPostal = u.fkCodigoPostal
-        JOIN pueblos_ciudades pc ON pc.pkPuebloCiudad = u.fkPuebloCiudad
-        JOIN municipios m ON m.pkMunicipio = u.fkMunicipio
-        JOIN estados e ON e.pkEstado = u.fkEstado
-        JOIN paises p ON p.pkPais = u.fkPais
+        LEFT JOIN ubicaciones u ON u.pkUbicacion = sc.fkUbicacion
+        LEFT JOIN codigos_postales cp ON cp.pkCodigoPostal = u.fkCodigoPostal
+        LEFT JOIN pueblos_ciudades pc ON pc.pkPuebloCiudad = u.fkPuebloCiudad
+        LEFT JOIN municipios m ON m.pkMunicipio = u.fkMunicipio
+        LEFT JOIN estados e ON e.pkEstado = u.fkEstado
+        LEFT JOIN paises p ON p.pkPais = u.fkPais
         """
         resultado = db.execute_query(consulta)
         db.close()

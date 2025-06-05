@@ -17,7 +17,9 @@ def crear_codigoPostal():
     if not isinstance(codigoPostal, str):
         return jsonify({'mensaje': 'codigoPostal debe ser una cadena de texto'}), 400
 
-    if CodigoPostal.crear_codigoPostal(codigoPostal):
+    codigoPostal = CodigoPostal(codigoPostal=codigoPostal)
+
+    if codigoPostal.crear_codigoPostal():
         return jsonify({'mensaje': 'Código postal insertado correctamente'}), 201
     else:
         return jsonify({'mensaje': 'Error al insertar código postal'}), 500
@@ -30,7 +32,8 @@ def editar_codigoPostal():
         pkCodigoPostal = data.get('pkCodigoPostal')
         codigoPostal = data.get('codigoPostal')
 
-        if CodigoPostal.editar_codigoPostal(pkCodigoPostal, codigoPostal):
+        codigoPostal = CodigoPostal(pkCodigoPostal,codigoPostal)
+        if codigoPostal.editar_codigoPostal():
             return jsonify({'mensaje': 'Código postal editado correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo editar el código postal'}), 500
@@ -45,7 +48,8 @@ def eliminar_codigoPostal():
         data = request.json
         pkCodigoPostal = data.get('pkCodigoPostal')
 
-        if CodigoPostal.eliminar_codigoPostal(pkCodigoPostal):
+        codigoPostal = CodigoPostal(pkCodigoPostal)
+        if codigoPostal.eliminar_codigoPostal():
             return jsonify({'mensaje': 'Código postal eliminado correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo eliminar el código postal'}), 500

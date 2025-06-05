@@ -40,6 +40,12 @@
 
 	<!-- FlexDatalist -->
 	<link rel="stylesheet" href="assets/plugin/flexdatalist/jquery.flexdatalist.min.css">
+
+	<!-- Fontello Icon -->
+	<link rel="stylesheet" href="assets/fonts/fontello/fontello.css">
+
+	<!-- Material Design Icon -->
+	<link rel="stylesheet" href="assets/fonts/material-design/css/materialdesignicons.css">
 </head>
 
 <body>
@@ -84,20 +90,30 @@
 								<li><a href="fuentes.html"><i class="fa fa-file-excel-o"></i> Interfaz de reportes</a></li>
 							</ul>
 		
+						</li>
+						<li>
+							<a class="waves-effect parent-item js__control" href="#"><i class="menu-icon fa fa-user"></i><span>Recursos humanos </span><span class="menu-arrow fa fa-angle-down"></span></a>
+							<ul class="sub-menu js__content">
+								<li><a href="perfiles_puesto.html"><i class="fa icon-vcard"></i> Perfiles de puesto</a></li>
+								<li><a href="colaboradores.html"><i class="fa fa-suitcase"></i> Colaboradores</a></li>
+								<li><a href="reloj_checador.html"><i class="fa fa-clock-o"></i> Reloj checador</a></li>
+								<li><a href="datos_rh.html"><i class="fa fa-wrench"></i> Herramientas de datos</a></li>
+							</ul>
 						</li>		
 						<li>
 							<a class="waves-effect parent-item js__control" href="#"><i class="menu-icon fa fa-laptop"></i><span>Sistemas </span><span class="menu-arrow fa fa-angle-down"></span></a>
 							<ul class="sub-menu js__content">
+								<li><a href="departamentos.html"><i class="fa fa-building"></i> Departamentos</a></li>
+								<li><a href="cursos.html"><i class="fa fa-graduation-cap"></i> Cursos</a></li>
+								<li><a href="beneficios.html"><i class="fa fa-heartbeat"></i> PAC</a></li>
 								<li><a href="empleados.html"><i class="fa fa-suitcase"></i> Colaboradores</a></li>
 								<li><a href="usuarios.html"><i class="fa fa-user"></i> Usuarios</a></li>
 								<li><a href="proveedores.html"><i class="fa fa-truck"></i> Proveedores</a></li>
 								<li><a href="socios_comerciales.html"><i class="fa fa-star"></i> Socios comerciales</a></li>
 								<li><a href="articulos.html"><i class="fa fa-tag"></i> Articulos</a></li>
+								<li><a href="ubicaciones.html"><i class="fa fa-globe"></i> Ubicaciones</a></li>
 							</ul>
-		
 						</li>
-
-
 					</ul>
 				</li>
 			</ul>
@@ -128,22 +144,55 @@
 <div id="wrapper">
 	<div class="main-content">
 		<div class="row small-spacing">
+			<!-- PROVEEDORES -->
 			<div class="col-xs-12">
 				<div class="box-content">
 					<h4 class="box-title">Tabla de proveeedores</h4>
 					<!-- /.box-title -->
 
-					<button type="button" class="btn btn-success btn-xs waves-effect waves-light" data-toggle="modal" data-target="#boostrapModal-1" id="modalAgregar"><i class="fa fa-plus"></i> Agregar</button>
+					<button type="button" class="btn btn-success btn-xs waves-effect waves-light" data-toggle="modal" data-target="#boostrapModal-1" id="agregarProveedor"><i class="fa fa-plus"></i> Agregar</button>
 
-					<div class="text-right">
+					<div class="text-right margin-bottom-10">
 						<button type="button" class="btn btn-info btn-xs waves-effect waves-light" id="info"><i class="fa fa-info"></i> Como moverse en la tabla</button>
 					</div>
+
+					<table id="proveedorTable" class="table table-small-font table-bordered table-hover display nowrap" style="width:100%"></table>
 					
+				</div>
+				<!-- /.box-content -->
+			</div>
+
+			<!-- PAQUETERIAS -->
+			<div class="col-xs-12">
+				<div class="box-content">
+					<h4 class="box-title">Tabla de paqueterias</h4>
+					<!-- /.box-title -->
+
+					<button type="button" class="btn btn-success btn-xs waves-effect waves-light margin-bottom-10" data-toggle="modal" data-target="#boostrapModal-2" id="agregarPaqueteria"><i class="fa fa-plus"></i> Agregar</button>
+
+					<table id="paqueteriaTable" class="table table-striped table-bordered display" style="width:100%">
+						
+					</table>
+					
+				</div>
+				<!-- /.box-content -->
+			</div>
+
+			<!-- BANCOS -->
+			<div class="col-xs-12">
+				<div class="box-content">
+					<h4 class="box-title">Tabla de bancos</h4>
+					<!-- /.box-title -->
+
+					<button type="button" class="btn btn-success btn-xs waves-effect waves-light" data-toggle="modal" data-target="#boostrapModal-2" id="agregarBanco"><i class="fa fa-plus"></i> Agregar</button>
+
 					<div class="col-xs-12">
 						<h1></h1>
 					</div>
 
-					<table id="proveedorTable" class="table table-small-font table-bordered table-hover display nowrap" style="width:100%"></table>
+					<table id="bancoTable" class="table table-striped table-bordered display" style="width:100%">
+						
+					</table>
 					
 				</div>
 				<!-- /.box-content -->
@@ -199,23 +248,54 @@
 					</select>
 				</div>
 				<div class="form-group">
-					<label>Asignar ubicación</label>
-					<select class="form-control" id="ubicacion_menu" >
+					<label>Codigo postal</label><br>
+					<select class="select2_2 form-control" multiple="multiple" style="width: 100%;" id="ciudad_menu">
+
 					</select>
+					
+				</div>
+				<div class="form-group">
+					<label>Municipio</label><br>
+					<select class="select2_2 form-control" multiple="multiple" style="width: 100%;" id="ciudad_menu">
+
+					</select>
+					
+				</div>
+				<div class="form-group">
+					<label>Ciudad o pueblo</label><br>
+					<select class="select2_2 form-control" multiple="multiple" style="width: 100%;" id="ciudad_menu">
+
+					</select>
+					
+				</div>
+				<div class="form-group">
+					<label>Estado</label><br>
+					<select class="select2_2 form-control" multiple="multiple" style="width: 100%;" id="estado_menu">
+
+					</select>
+					
+				</div>
+				<div class="form-group">
+					<label>Pais</label><br>
+					<select class="select2_2 form-control" multiple="multiple" style="width: 100%;" id="pais_menu">
+
+					</select>
+					
 				</div>
 				<div class="form-group">
 					<label>Asignar telefonos</label><br>
-					<select class="form-control select2_1" multiple="multiple" id="telefono_menu" >
+					<select class="select2_2" multiple="multiple" style="width: 100%;" id="telefono_menu">
+
 					</select>
 				</div>
 				<div class="form-group">
 					<label>Asignar cuentas de bancos</label><br>
-					<select class="form-control select2_1" multiple="multiple" id="banco_menu" >
+					<select class="select2_2" multiple="multiple" style="width: 100%;" id="banco_menu"></select>
 					</select>
 				</div>
 				<div class="form-group">
 					<label>Asignar paqueterias</label><br>
-					<select class="form-control select2_1" multiple="multiple" id="paqueteria_menu" >
+					<select class="select2_1" multiple="multiple" style="width: 100%;" id="paqueteria_menu" >
 					</select>
 				</div>
 			</div>
@@ -227,6 +307,26 @@
 	</div>
 </div>
 
+<div class="modal fade" id="boostrapModal-1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel">Titulo dinamico</h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<label>Nombre del Paqueteria</label>
+					<input type="text" class="form-control" id="nombrePaqueteria">
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default btn-xs waves-effect waves-light" data-dismiss="modal">Cerrar</button>
+				<button type="button" class="btn btn-primary btn-xs waves-effect waves-light">Guardar</button>
+			</div>
+		</div>
+	</div>
+</div>
 
 	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 	<!--[if lt IE 9]>
@@ -239,6 +339,8 @@
 	<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	<script src="assets/JS/proveedores.js"></script>
+	<script src="assets/JS/paqueterias.js"></script>
+	<script src="assets/JS/bancos.js"></script>
 	<script src="assets/JS/autenticar.js"></script>
 
 	<!-- <script src="assets/scripts/jquery.min.js"></script> -->
