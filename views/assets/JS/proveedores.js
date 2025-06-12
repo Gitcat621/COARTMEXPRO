@@ -10,8 +10,8 @@ $(document).ready(function () {
 
 
 //Asignar funcion al boton de abrir modal
-$("#modalAgregar").click(function() {
-    abrirModal(1);
+$("#agregarProveedor").click(function() {
+    abrirModalProveedor(1);
 });
 
 //Inicializar datatable
@@ -68,7 +68,7 @@ $(document).ready(function() {
         document.getElementById('ubicacion_menu').value = fkUbicacion;
 
 
-        abrirModal(2,pkProveedor);
+        abrirModalProveedor(2,pkProveedor);
     });
 
     // Eliminar
@@ -96,213 +96,159 @@ $(document).ready(function() {
 
 });
 
-function agregarProveedor(){
+async function agregarProveedor() {
+    const nombreProveedor = document.getElementById('nombreProveedor').value.trim();
+    const correoProveedor = document.getElementById('correoProveedor').value.trim();
+    const diasCredito = document.getElementById('diasCredito').value.trim();
+    const facturaNota = document.getElementById('fn_menu').value;
+    const diasEntrega = document.getElementById('diasEntrega').value.trim();
+    const flete = document.getElementById('flete_menu').value;
 
-    // Obtener los datos del formulario
-    const nombreProveedor = document.getElementById('nombreProveedor').value;
+    const codigoPostal = document.getElementById('codigosPostales_menu').value;
+    const puebloCiudad = document.getElementById('pueblosCiudades_menu').value;
+    const municipio = document.getElementById('municipios_menu').value;
+    const estado = document.getElementById('estados_menu').value;
 
+    const numerosSeleccionados = Array.from(document.getElementById('telefono_menu').selectedOptions).map(o => o.value);
+    const paqueteriasSeleccionadas = Array.from(document.getElementById('paqueteria_menu').selectedOptions).map(o => o.value);
 
-    const correoProveedor = document.getElementById('correoProveedor').value;
+    if (!numerosSeleccionados.every(num => /^\d+$/.test(num))) {
+        toastr.warning('Se ha escrito texto como número de emergencia', 'Atención', { "closeButton": true });
+        return;
+    }
 
-    
-    const diasCredito = document.getElementById('diasCredito').value;
-
-
-    const fnMenu = document.getElementById('fn_menu');
-
-
-    const facturaNota = fnMenu.value;
-
-
-    const ubicacionMenu = document.getElementById('ubicacion_menu');
-
-
-    const fkUbicacion = ubicacionMenu.value;
-
-
-    // Verificar si ambos campos están completos
-    if (!nombreProveedor || !correoProveedor || !diasCredito || !facturaNota || !fkUbicacion) {
-
-
-        toastr.warning('Porfavor completa todos los campos', 'Advertencia', {"closeButton": true,});
-
-
+    if (codigoPostal && codigoPostal.length === 5) {
+        console.log("Cadena válida");
+    } else {
+        toastr.warning('EL codigo postal debe tener 5 caracteres', 'Atención', { "closeButton": true });
         return;
     }
 
 
-    // Enviar los datos al backend (Flask) para insertar
-    fetch('http://127.0.0.1:5000/coartmex/proveedores', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ nombreProveedor, correoProveedor, diasCredito, facturaNota, fkUbicacion })
-    })
-    .then(response => response.json())
-    .then(data => {
 
+    if (!nombreProveedor || !correoProveedor || !diasCredito || !facturaNota || !diasEntrega || !flete ||
+        !codigoPostal || !puebloCiudad || !municipio || !estado ||
+        numerosSeleccionados.length === 0 || paqueteriasSeleccionadas.length === 0) {
+        toastr.warning('Por favor completa todos los campos', 'Advertencia', { "closeButton": true });
+        return;
+    }
 
-        // Mostrar el mensaje de la respuesta de la API
-        toastr.success(`${data.mensaje}`, 'Realizado', {
-            "closeButton": true,
+    try {
+        const response = await fetch('http://127.0.0.1:5000/coartmex/proveedores', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                nombreProveedor, correoProveedor, diasCredito, facturaNota, diasEntrega, flete,
+                codigoPostal, puebloCiudad, municipio, estado, numerosSeleccionados, paqueteriasSeleccionadas
+            })
         });
 
+        const data = await response.json();
 
-        // Acciones posteriores(Cerrar modal y mapear datos)
+        if (!response.ok) {
+            toastr.error(`${data.mensaje}`, 'Error', {"closeButton": true,});
+            return;
+        }
+
+        toastr.success(`${data.mensaje}`, 'Realizado', { "closeButton": true });
         $('#boostrapModal-1').modal('hide');
         listarProveedores();
-
-
-    })
-    .catch(error => {
-
-
+    } catch (error) {
         console.error('Error:', error);
-
-        toastr.error('Hubo un error al intentar la acción', 'Error', {"closeButton": true,});
-        return;
-
-    });
+        toastr.error('Hubo un error al intentar la acción', 'Error', { "closeButton": true });
+    }
 }
 
-function listarProveedores() {
 
-    //Peticion GET al servidor
-    fetch('http://127.0.0.1:5000/coartmex/proveedores', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
+async function listarProveedores() {
+    try {
+        const response = await fetch('http://127.0.0.1:5000/coartmex/proveedores', {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+        });
 
-        //Iniciar la datatable y asignarla a una variable
-        let tabla = $('#proveedorTable').DataTable();
-        
-        // Limpiar la tabla antes de agregar nuevos datos
+        if (!response.ok) throw new Error('Error al obtener los datos');
+        const data = await response.json();
+
+        const tabla = $('#proveedorTable').DataTable();
         tabla.clear().draw();
-
-        // Agregar los nuevos datos
-        tabla.rows.add(data.map((proveedores) => [
-
-            //           0                           1                           2                       3                       4
-            proveedores.nombreProveedor, proveedores.correoProveedor, proveedores.telefonos, proveedores.metodosPago, proveedores.diasCredito, 
-            //          5                           6                   7                       8                           9   
-            proveedores.facturaNota, proveedores.bancos, proveedores.numerosCuenta, proveedores.beneficiarios, proveedores.diasEntrega,
-            //          10                    11                          12                      13                      14 
-            proveedores.flete, proveedores.paqueterias,  proveedores.codigoPostal, proveedores.nombreMunicipio, proveedores.nombreEstado,
-            //          15                      16
-            proveedores.fkUbicacion ,proveedores.pkProveedor
-
+        tabla.rows.add(data.map(p => [
+            p.nombreProveedor, p.correoProveedor, p.telefonos, p.metodosPago, p.diasCredito,
+            p.facturaNota, p.bancos, p.numerosCuenta, p.beneficiarios, p.diasEntrega,
+            p.flete, p.paqueterias, p.codigoPostal, p.nombreMunicipio, p.nombreEstado,
+            p.fkUbicacion, p.pkCodigoPostal, p.pkPuebloCiudad, p.pkMunicipio, p.pkEstado, p.pkProveedor
         ])).draw();
-    })
-    .catch(error => console.error("Error al cargar los datos:", error));
-    
+    } catch (error) {
+        console.error("Error al cargar los datos:", error);
+    }
 }
 
-function editarProveedor(pkProveedor){
 
-    // Obtener los datos del formulario
+async function editarProveedor(pkProveedor) {
     const nombreProveedor = document.getElementById('nombreProveedor').value.trim();
-
     const correoProveedor = document.getElementById('correoProveedor').value.trim();
-
     const diasCredito = document.getElementById('diasCredito').value.trim();
+    const facturaNota = document.getElementById('fn_menu').value;
+    const fkUbicacion = document.getElementById('ubicacion_menu').value;
 
-    const fnMenu = document.getElementById('fn_menu');
-
-    const facturaNota = fnMenu.value;
-
-    const ubicacionMenu = document.getElementById('ubicacion_menu');
-
-    const fkUbicacion = ubicacionMenu.value;
-
-    const infopMenu = document.getElementById('infop_menu');
-
-    // Verificar que ningún campo esté vacío
-    if (!pkProveedor || !nombreProveedor || !correoProveedor || !diasCredito|| !facturaNota || !fkUbicacion) {
-
-
-        toastr.warning('Porfavor completa todos los campos', 'Advertencia', {"closeButton": true,});
+    if (!pkProveedor || !nombreProveedor || !correoProveedor || !diasCredito || !facturaNota || !fkUbicacion) {
+        toastr.warning('Por favor completa todos los campos', 'Advertencia', { "closeButton": true });
         return;
-
-
     }
 
-    // Enviar los datos al backend (Flask) para editar
-    fetch('http://127.0.0.1:5000/coartmex/proveedores', {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ pkProveedor, nombreProveedor, correoProveedor, diasCredito, facturaNota ,fkUbicacion })
-    })
-    .then(response => response.json())
-    .then(data => {
+    try {
+        const response = await fetch('http://127.0.0.1:5000/coartmex/proveedores', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ pkProveedor, nombreProveedor, correoProveedor, diasCredito, facturaNota, fkUbicacion })
+        });
 
+        const data = await response.json();
 
-        // Mostrar el mensaje de la respuesta de la API
+        if (!response.ok) {
+            toastr.error(`${data.mensaje}`, 'Error', {"closeButton": true,});
+            return;
+        }
+
         listarProveedores();
-        
-        toastr.success(`${data.mensaje}`, 'Realizado', {"closeButton": true,});
-
-
-    })
-    .catch(error => {
-
-
+        toastr.success(`${data.mensaje}`, 'Realizado', { "closeButton": true });
+    } catch (error) {
         console.error('Error:', error);
-
-        toastr.error('Hubo un error al intentar la acción', 'Error', {"closeButton": true,});
-        return;
-    });
+        toastr.error('Hubo un error al intentar la acción', 'Error', { "closeButton": true });
+    }
 }
 
-function eliminarProveedor(pkProveedor){
 
-    // Verificar si llega el id
+async function eliminarProveedor(pkProveedor) {
     if (!pkProveedor) {
-
-
-        toastr.warning('No se pudo obtener el elemento', 'Advertencia', {"closeButton": true,});
+        toastr.warning('No se pudo obtener el elemento', 'Advertencia', { "closeButton": true });
         return;
-
-
     }
 
-    // Enviar los datos al backend (Flask) para insertar
-    fetch('http://127.0.0.1:5000/coartmex/proveedores', {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ pkProveedor })
-    })
-    .then(response => response.json())
-    .then(data => {
+    try {
+        const response = await fetch('http://127.0.0.1:5000/coartmex/proveedores', {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ pkProveedor })
+        });
 
+        const data = await response.json();
 
-        // Mostrar el mensaje de la respuesta de la API
+        if (!response.ok) {
+            toastr.error(`${data.mensaje}`, 'Error', {"closeButton": true,});
+            return;
+        }
+
         listarProveedores();
-
-        toastr.success(`${data.mensaje}`, 'Realizado', {"closeButton": true,});
-
-
-    })
-    .catch(error => {
-
-
+        toastr.success(`${data.mensaje}`, 'Realizado', { "closeButton": true });
+    } catch (error) {
         console.error('Error:', error);
-
-        toastr.success(`${data.mensaje}`, 'Error', {"closeButton": true,});
-        return;
-
-    });
+        toastr.error('Hubo un error al intentar la acción', 'Error', { "closeButton": true });
+    }
 }
 
-function abrirModal(modo, pkProveedor) {
+
+function abrirModalProveedor(modo, pkProveedor) {
 
     //Obtener el valor de los elementos del modal
     const modalTitle = document.getElementById('myModalLabel');
@@ -314,12 +260,12 @@ function abrirModal(modo, pkProveedor) {
         modalTitle.textContent = 'Agregar proveedor';
         modalButton.setAttribute('onclick', 'agregarProveedor()');
         
-        document.getElementById('nombreProveedor').value = '';
-        document.getElementById('correoProveedor').value = '';
-        document.getElementById('diasCredito').value = '';
-        document.getElementById('fn_menu').value = '';
-        document.getElementById('ubicacion_menu').value = '';
-        document.getElementById('telefono_menu').value = '';
+        // document.getElementById('nombreProveedor').value = '';
+        // document.getElementById('correoProveedor').value = '';
+        // document.getElementById('diasCredito').value = '';
+        // document.getElementById('fn_menu').value = '';
+        // document.getElementById('ubicacion_menu').value = '';
+        // document.getElementById('telefono_menu').value = '';
 
     } else if (modo === 2) {
 

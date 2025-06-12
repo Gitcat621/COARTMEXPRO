@@ -56,6 +56,9 @@
 	<!-- Material Design Icon -->
 	<link rel="stylesheet" href="assets/fonts/material-design/css/materialdesignicons.css">
 
+	<!-- DataTables Buttons -->
+	<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
+
 </head>
 
 <body>
@@ -154,23 +157,6 @@
 <div id="wrapper">
 	<div class="main-content">
 		<div class="row small-spacing">
-			<!-- ARTICULOS -->
-			<div class="col-xs-12">
-				<div class="box-content">
-					<h4 class="box-title">Tabla de artículos </h4>
-					<!-- /.box-title -->
-					
-					<button type="button" class="btn btn-success btn-xs waves-effect waves-light margin-bottom-10" data-toggle="modal" data-target="#boostrapModal-1" id="modalAgregar">
-						<i class="fa fa-plus"></i> Agregar
-					</button>
-
-					<table id="articuloTable" class="table table-small-font table-hover table-bordered display nowrap" style="width:100%">
-
-					</table>
-					
-				</div>
-				<!-- /.box-content -->
-			</div>
 
 			<!-- CATEGORIA ARTICULOS -->
 			<div class="col-xs-12">
@@ -178,11 +164,29 @@
 					<h4 class="box-title">Tabla de categoria de los artículos</h4>
 					<!-- /.box-title -->
 					
-					<button type="button" class="btn btn-success btn-xs waves-effect waves-light margin-bottom-10" data-toggle="modal" data-target="#boostrapModal-1" id="modalAgregar">
+					<button type="button" class="btn btn-success btn-xs waves-effect waves-light margin-bottom-10" data-toggle="modal" data-target="#boostrapModal-2" id="agregarCategoriaArticulo">
 						<i class="fa fa-plus"></i> Agregar
 					</button>
 
-					<table id="categoriaTable" class="table table-small-font table-hover table-bordered display nowrap" style="width:100%">
+					<table id="categoriaArticuloTable" class="table table-small-font table-hover table-bordered display nowrap" style="width:100%">
+
+					</table>
+					
+				</div>
+				<!-- /.box-content -->
+			</div>
+
+			<!-- ARTICULOS -->
+			<div class="col-xs-12">
+				<div class="box-content">
+					<h4 class="box-title">Tabla de artículos </h4>
+					<!-- /.box-title -->
+					
+					<button type="button" class="btn btn-success btn-xs waves-effect waves-light margin-bottom-10" data-toggle="modal" data-target="#boostrapModal-1" id="agregarArticulo">
+						<i class="fa fa-plus"></i> Agregar
+					</button>
+
+					<table id="articuloTable" class="table table-small-font table-hover table-bordered display nowrap" style="width:100%">
 
 					</table>
 					
@@ -242,6 +246,27 @@
 	</div>
 </div>
 
+<div class="modal fade" id="boostrapModal-2" tabindex="-2" role="dialog" aria-labelledby="myModalLabel2">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel2">Titulo dinamico</h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<label>Nombre de la categoría</label>
+					<input type="text" class="form-control" id="nombreCategoriaArticulo">
+				</div>
+				
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default btn-xs waves-effect waves-light" data-dismiss="modal">Cerrar</button>
+				<button type="button" class="btn btn-primary btn-xs waves-effect waves-light">Guardar</button>
+			</div>
+		</div>
+	</div>
+</div>
 
 
 	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -254,6 +279,7 @@
 	<!-- Placed at the end of the document so the pages load faster -->
 	<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 	<script src="assets/JS/articulos.js"></script>
+	<script src="assets/JS/categoria_articulos.js"></script>
 	<script src="assets/JS/autenticar.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -294,6 +320,12 @@
 
 	<script src="assets/scripts/main.min.js"></script>
 	<script src="assets/scripts/horizontal-menu.min.js"></script>
+
+	<script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+
+	<!-- Excel Export (JSZip) -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+	<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
 
 	
 </body>

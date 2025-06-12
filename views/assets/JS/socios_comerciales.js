@@ -6,8 +6,6 @@ $(document).ready(function () {
     }
     listarSociosComerciales();
     listarGrupos();
-    listarUbicaciones();
-    
 });
 
 //Listar los registros foraneos
@@ -40,35 +38,6 @@ function listarGrupos(){
     .catch(error => console.error("Error al cargar los datos:", error));
 }
 
-function listarUbicaciones(){
-
-    fetch('http://127.0.0.1:5000/coartmex/ubicaciones', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-
-
-        document.getElementById('ubicacion_menu').innerHTML = "";
-
-        //Mapear en un select
-        data.forEach(function(data) {
-            
-        
-            let HTML = `<option value="${data.pkUbicacion}">${data.nombrePuebloCiudad} - ${data.nombreMunicipio} - ${data.nombreEstado} </option>`;
-        
-            //Mapear valor por cada elemento en la consulta 
-            document.getElementById('ubicacion_menu').innerHTML += HTML;
-
-
-        });
-    })
-    .catch(error => console.error("Error al cargar los datos:", error));
-}
-
 //Asignar funcion al boton de abrir modal
 $("#modalAgregar").click(function() {
     abrirModal(1);
@@ -83,24 +52,21 @@ $(document).ready(function() {
             { title: "Nombre del socio" },
             { title: "Razon social" },
             { title: "Grupo" },
-            // { title: "Codigo postal" },
-            // { title: "Pueblo / Ciudad" },
-            // { title: "Municipio" },
-            // { title: "Estado" },
-            // { title: "Pais" },
+            { title: "Pueblo / Ciudad" },
+            { title: "Estado" },
+            { title: "Pais" },
             {
                 title: "Opciones",
                 render: function (data, type, row) { // 'row' contiene toda la fila de datos
                     return `<div class="text-center">
                                 <button class="btn btn-xs editar-btn" data-row='${JSON.stringify(row)}'><i class="fa fa-pencil"></i></button>
-                                <button class="btn btn-xs eliminar-btn" data-pk="${row[15]}" data-nombre="${row[0]}"><i class="fa fa-trash"></i></button>
+                                <button class="btn btn-xs eliminar-btn" data-pk="${row[11]}" data-nombre="${row[0]}"><i class="fa fa-trash"></i></button>
                             </div>`;
                 }
             }
         ],
         scrollX: true,
     });
-
 
     // Event listeners para los botones
     // Editar
@@ -110,14 +76,43 @@ $(document).ready(function() {
 
         const nombreSocio = rowData[0];
         const razonSocial = rowData[1];
-        const fkGrupoSocio = rowData[8];
-        const fkUbicacion = rowData[9];
-        const pkSocioComercial = rowData[15];
+        const nombrePuebloCiudad = rowData[3];
+        const nombreEstado = rowData[4];
+        const nombrePais = rowData[5];
+        const fkGrupoSocio = rowData[6];
+        const fkUbicacion = rowData[7];
+        const pkPuebloCiudad = rowData[8];
+        const pkEstado = rowData[9];
+        const pkPais = rowData[10];
+        const pkSocioComercial = rowData[11];
+
+        console.log(pkPuebloCiudad);
+        console.log(pkEstado);
+        console.log(pkPais);
 
         document.getElementById('nombreSocio').value = nombreSocio;
         document.getElementById('razonSocial').value = razonSocial;
         document.getElementById('grupo_menu').value = fkGrupoSocio;
+
         document.getElementById('ubicacion_menu').value = fkUbicacion;
+
+const asignarOpcion = (idMenu, indice, valor) => {
+    if (valor == null || indice == null) return;
+
+    const menu = document.getElementById(idMenu);
+
+    // 🔎 Verificar si la opción ya existe
+    const yaExiste = Array.from(menu.options).some(opt => opt.value == indice);
+    if (yaExiste) return;
+
+    const opcion = document.createElement("option");
+    opcion.value = indice;
+    opcion.textContent = valor;
+    opcion.selected = true;
+
+    menu.appendChild(opcion);
+};
+      
 
         abrirModal(2,pkSocioComercial);
     });
@@ -147,204 +142,174 @@ $(document).ready(function() {
 
 });
 
-function agregarSocioComercial(){
-
+async function agregarSocioComercial() {
     // Obtener los datos del formulario
-    const nombreSocio = document.getElementById('nombreSocio').value;
+    const nombreSocio = document.getElementById('nombreSocio').value.trim();
+    const razonSocial = document.getElementById('razonSocial').value.trim();
+    const fkGrupoSocio = document.getElementById('grupo_menu').value;
+    const fkUbicacion = null;
 
+    const ciudad_menu = document.getElementById('pueblosCiudades_menu');
+    const ciudadSeleccionada = Array.from(ciudad_menu.selectedOptions).map(option => option.value);
 
-    const razonSocial = document.getElementById('razonSocial').value;
+    const estado_menu = document.getElementById('estados_menu');
+    const estadoSeleccionada = Array.from(estado_menu.selectedOptions).map(option => option.value);
 
+    const pais_menu = document.getElementById('paises_menu');
+    const paisSeleccionado = Array.from(pais_menu.selectedOptions).map(option => option.value);
 
-    const grupoMenu = document.getElementById('grupo_menu');
+    if (ciudadSeleccionada.length > 1 || estadoSeleccionada.length > 1 || paisSeleccionado.length > 1) {
+        let mensaje = ciudadSeleccionada.length > 1 
+            ? "Selecciona solo una ciudad o pueblo" 
+            : estadoSeleccionada.length > 1 
+            ? "Selecciona solo un estado" 
+            : "Selecciona solo un país";
 
-
-    const fkGrupoSocio = grupoMenu.value;
-
-
-    const ubicacionMenu = document.getElementById('ubicacion_menu');
-
-
-    const fkUbicacion = ubicacionMenu.value;
-
-
-    // Verificar si ambos campos están completos
-    if (!nombreSocio || !razonSocial || !fkGrupoSocio || !fkUbicacion) {
-
-
-        toastr.warning('Porfavor completa todos los campos', 'Advertencia', {"closeButton": true,});
-
-
+        toastr.warning(mensaje, 'Atención', {"closeButton": true});
         return;
     }
 
+    puebloCiudad = ciudadSeleccionada[0];
+    estado = estadoSeleccionada[0];
+    pais = paisSeleccionado[0];    
 
-    // Enviar los datos al backend (Flask) para insertar
-    fetch('http://127.0.0.1:5000/coartmex/sociosComerciales', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ nombreSocio, razonSocial, fkGrupoSocio, fkUbicacion })
-    })
-    .then(response => response.json())
-    .then(data => {
+    // Verificar si los campos están completos
+    if (!nombreSocio || !razonSocial || !fkGrupoSocio || !puebloCiudad  || !estado  || !pais ) {
+        toastr.warning('Por favor completa todos los campos', 'Advertencia', { "closeButton": true });
+        return;
+    }
 
-
-        // Mostrar el mensaje de la respuesta de la API
-        toastr.success(`${data.mensaje}`, 'Realizado', {
-            "closeButton": true,
+    try {
+        // Enviar los datos al backend (Flask) para insertar
+        const response = await fetch('http://127.0.0.1:5000/coartmex/sociosComerciales', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ nombreSocio, razonSocial, fkGrupoSocio, fkUbicacion, puebloCiudad, estado, pais })
         });
 
+        if (!response.ok) throw new Error('Error en la solicitud');
 
-        // Acciones posteriores(Cerrar modal y mapear datos)
+        const data = await response.json();
+        toastr.success(`${data.mensaje}`, 'Realizado', { "closeButton": true });
+
         $('#boostrapModal-1').modal('hide');
         listarSociosComerciales();
 
 
-    })
-    .catch(error => {
-
-
+    } catch (error) {
         console.error('Error:', error);
-
-        toastr.error('Hubo un error al intentar la acción', 'Error', {"closeButton": true,});
-        return;
-
-    });
+        toastr.error('Hubo un error al intentar la acción', 'Error', { "closeButton": true });
+    }
 }
 
-function listarSociosComerciales() {
+async function listarSociosComerciales() {
+    try {
+        const response = await fetch('http://127.0.0.1:5000/coartmex/sociosComerciales', {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+        });
 
-    //Peticion GET al servidor
-    fetch('http://127.0.0.1:5000/coartmex/sociosComerciales', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
+        if (!response.ok) throw new Error('Error al obtener los datos');
 
-        //Iniciar la datatable y asignarla a una variable
+        const data = await response.json();
+
         let tabla = $('#socioTable').DataTable();
-        
-        // Limpiar la tabla antes de agregar nuevos datos
         tabla.clear().draw();
 
-        // Agregar los nuevos datos
-        tabla.rows.add(data.map((sc) => [
-//                  0               1               2                   3                   4                   5                   6               7
-            sc.nombreSocio, sc.razonSocial, sc.nombreGrupoSocio, sc.codigoPostal, sc.nombrePuebloCiudad, sc.nombreMunicipio, sc.nombreEstado, sc.nombrePais,
-//                      8           9               10                  11              12              13          14              15
-            sc.fkGrupoSocio, sc.fkUbicacion, sc.pkCodigoPostal, sc.pkPuebloCiudad, sc.pkMunicipio, sc.pkEstado, sc.pkPais, sc.pkSocioComercial
-
+        tabla.rows.add(data.map(sc => [
+            sc.nombreSocio, //0 
+            sc.razonSocial, //1
+            sc.nombreGrupoSocio, //2 
+            sc.nombrePuebloCiudad, //3
+            sc.nombreEstado, //4
+            sc.nombrePais, //5
+            sc.fkGrupoSocio, //6
+            sc.fkUbicacion, //7
+            sc.pkPuebloCiudad, //8
+            sc.pkEstado, //9
+            sc.pkPais, //10
+            sc.pkSocioComercial //11
         ])).draw();
-    })
-    .catch(error => console.error("Error al cargar los datos:", error));
-    
+    } catch (error) {
+        console.error("Error al cargar los datos:", error);
+    }
 }
 
-function editarSocioComercial(pkSocioComercial){
+async function editarSocioComercial(pkSocioComercial) {
+    const nombreSocio = document.getElementById('nombreSocio').value.trim();
+    const razonSocial = document.getElementById('razonSocial').value.trim();
+    const fkGrupoSocio = document.getElementById('grupo_menu').value;
+    const fkUbicacion = document.getElementById('ubicacion_menu').value;
 
-    // Obtener los datos del formulario
-    const nombreSocio = document.getElementById('nombreSocio').value;
+    const ciudad_menu = document.getElementById('pueblosCiudades_menu');
+    const ciudadSeleccionada = Array.from(ciudad_menu.selectedOptions).map(option => option.value);
 
+    const estado_menu = document.getElementById('estados_menu');
+    const estadoSeleccionada = Array.from(estado_menu.selectedOptions).map(option => option.value);
 
-    const razonSocial = document.getElementById('razonSocial').value;
+    const pais_menu = document.getElementById('paises_menu');
+    const paisSeleccionado = Array.from(pais_menu.selectedOptions).map(option => option.value);
 
+    if (ciudadSeleccionada.length > 1 || estadoSeleccionada.length > 1 || paisSeleccionado.length > 1) {
+        let mensaje = ciudadSeleccionada.length > 1 
+            ? "Selecciona solo una ciudad o pueblo" 
+            : estadoSeleccionada.length > 1 
+            ? "Selecciona solo un estado" 
+            : "Selecciona solo un país";
 
-    const grupoMenu = document.getElementById('grupo_menu');
-
-
-    const fkGrupoSocio = grupoMenu.value;
-
-
-    const ubicacionMenu = document.getElementById('ubicacion_menu');
-
-
-    const fkUbicacion = ubicacionMenu.value;
-
-
-    // Verificar si ambos campos están completos
-    if (!pkSocioComercial || !nombreSocio || !razonSocial || !fkGrupoSocio || !fkUbicacion) {
-
-
-        toastr.warning('Porfavor completa todos los campos', 'Advertencia', {"closeButton": true,});
+        toastr.warning(mensaje, 'Atención', {"closeButton": true});
         return;
-
-
     }
 
-    // Enviar los datos al backend (Flask) para editar
-    fetch('http://127.0.0.1:5000/coartmex/sociosComerciales', {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ pkSocioComercial, nombreSocio, razonSocial, fkGrupoSocio, fkUbicacion })
-    })
-    .then(response => response.json())
-    .then(data => {
+    puebloCiudad = ciudadSeleccionada[0];
+    estado = estadoSeleccionada[0];
+    pais = paisSeleccionado[0];
 
-
-        // Mostrar el mensaje de la respuesta de la API
-        listarSociosComerciales();
-        
-        toastr.success(`${data.mensaje}`, 'Realizado', {"closeButton": true,});
-
-
-    })
-    .catch(error => {
-
-
-        console.error('Error:', error);
-
-        toastr.error('Hubo un error al intentar la acción', 'Error', {"closeButton": true,});
+    if (!pkSocioComercial || !nombreSocio || !razonSocial || !fkGrupoSocio || !puebloCiudad || !estado || !pais) {
+        toastr.warning('Por favor completa todos los campos', 'Advertencia', { "closeButton": true });
         return;
-    });
+    }
+
+    try {
+        const response = await fetch('http://127.0.0.1:5000/coartmex/sociosComerciales', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ pkSocioComercial, nombreSocio, razonSocial, fkGrupoSocio, fkUbicacion, puebloCiudad, estado, pais })
+        });
+
+        if (!response.ok) throw new Error('Error en la solicitud');
+
+        const data = await response.json();
+        listarSociosComerciales();
+        toastr.success(`${data.mensaje}`, 'Realizado', { "closeButton": true });
+    } catch (error) {
+        console.error('Error:', error);
+        toastr.error('Hubo un error al intentar la acción', 'Error', { "closeButton": true });
+    }
 }
 
-function eliminarSocioComercial(pkSocioComercial){
-
-    // Verificar si llega el id
+async function eliminarSocioComercial(pkSocioComercial) {
     if (!pkSocioComercial) {
-
-
-        toastr.warning('No se pudo obtener el elemento', 'Advertencia', {"closeButton": true,});
+        toastr.warning('No se pudo obtener el elemento', 'Advertencia', { "closeButton": true });
         return;
-
-
     }
 
-    // Enviar los datos al backend (Flask) para insertar
-    fetch('http://127.0.0.1:5000/coartmex/sociosComerciales', {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ pkSocioComercial })
-    })
-    .then(response => response.json())
-    .then(data => {
+    try {
+        const response = await fetch('http://127.0.0.1:5000/coartmex/sociosComerciales', {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ pkSocioComercial })
+        });
 
+        if (!response.ok) throw new Error('Error en la solicitud');
 
-        // Mostrar el mensaje de la respuesta de la API
+        const data = await response.json();
         listarSociosComerciales();
-
-        toastr.success(`${data.mensaje}`, 'Realizado', {"closeButton": true,});
-
-
-    })
-    .catch(error => {
-
-
+        toastr.success(`${data.mensaje}`, 'Realizado', { "closeButton": true });
+    } catch (error) {
         console.error('Error:', error);
-
-        toastr.success(`${data.mensaje}`, 'Error', {"closeButton": true,});
-        return;
-
-    });
+        toastr.error('Hubo un error al intentar la acción', 'Error', { "closeButton": true });
+    }
 }
 
 function abrirModal(modo, pkSocioComercial) {
@@ -362,7 +327,11 @@ function abrirModal(modo, pkSocioComercial) {
         document.getElementById('nombreSocio').value = '';
         document.getElementById('razonSocial').value = '';
         document.getElementById('grupo_menu').value = '';
-        document.getElementById('ubicacion_menu').value = '';
+
+        $('#pueblosCiudades_menu').val(null).trigger('change');
+        $('#estados_menu').val(null).trigger('change');
+        $('#paises_menu').val(null).trigger('change');
+
 
     } else if (modo === 2) {
 

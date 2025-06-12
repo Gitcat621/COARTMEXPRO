@@ -27,8 +27,8 @@ class Usuario:
         e.numeroEmpleado 
         FROM usuarios u
         JOIN empleados e ON e.numeroEmpleado = u.fkEmpleado
-        JOIN puestos p ON p.pkPuesto = e.fkPuesto
-        JOIN departamentos d ON d.pkDepartamento = p.fkDepartamento;
+        LEFT JOIN puestos p ON p.pkPuesto = e.fkPuesto
+        LEFT JOIN departamentos d ON d.pkDepartamento = p.fkDepartamento;
         '''
 
         print (consulta) 
@@ -39,12 +39,17 @@ class Usuario:
     
     def iniciar_sesion(self):
         db = Database()
-        query = "SELECT u.nombreUsuario, u.contrasena, d.nombreDepartamento FROM usuarios u JOIN empleados e ON e.numeroEmpleado = u.fkEmpleado JOIN departamentos d ON d.pkDepartamento = e.fkDepartamento WHERE u.nombreUsuario = %s"
+
+        consulta = '''
+        SELECT u.nombreUsuario, u.contrasena, d.nombreDepartamento FROM usuarios u 
+        JOIN empleados e ON e.numeroEmpleado = u.fkEmpleado 
+        JOIN departamentos d ON d.pkDepartamento = e.fkDepartamento WHERE u.nombreUsuario = %s
+        '''
         valores = (self.nombreUsuario,)
 
-        print(query % valores)
+        print(consulta % valores)
 
-        resultado = db.execute_query(query, valores)
+        resultado = db.execute_query(consulta, valores)
         db.close()
 
         if resultado:

@@ -224,7 +224,7 @@ function modalPresentador(modo, pkPresentador) {
         modalTitle.textContent = 'Agregar presentador';
         modalButton.setAttribute('onclick', 'agregarPresentador()');
 
-        document.getElementById('oportunidad').value = '';
+        document.getElementById('nombrePresentador').value = '';
 
         
     } else if (modo === 2) {

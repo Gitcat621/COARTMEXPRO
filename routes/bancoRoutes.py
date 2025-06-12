@@ -18,7 +18,8 @@ def crear_banco():
     if not isinstance(nombreBanco, str):
         return jsonify({'mensaje': 'nombreBanco debe ser una cadena de texto'}), 400
 
-    if Banco.crear_banco(nombreBanco):
+    banco = Banco(nombreBanco=nombreBanco)
+    if banco.crear_banco():
         return jsonify({'mensaje': 'Banco insertado correctamente'}), 201
     else:
         return jsonify({'mensaje': 'Error al insertar banco'}), 500
@@ -31,7 +32,8 @@ def editar_banco():
         pkBanco = data.get('pkBanco')
         nombreBanco = data.get('nombreBanco')
 
-        if Banco.editar_banco(pkBanco, nombreBanco):
+        banco = Banco(pkBanco, nombreBanco)
+        if banco.editar_banco():
             return jsonify({'mensaje': 'Banco editado correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo editar el banco'}), 500
@@ -46,7 +48,8 @@ def eliminar_banco():
         data = request.json
         pkBanco = data.get('pkBanco')
 
-        if Banco.eliminar_banco(pkBanco):
+        banco = Banco(pkBanco)
+        if banco.eliminar_banco():
             return jsonify({'mensaje': 'Banco eliminado correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo eliminar el banco'}), 500

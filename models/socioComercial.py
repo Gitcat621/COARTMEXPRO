@@ -28,21 +28,99 @@ class SocioComercial:
         db.close()
         return resultado
     
-    def crear_socioComercial(self):
+    @staticmethod
+    def es_entero(valor):
+        """Verifica si un valor puede convertirse a entero."""
+        print("el valor es: ", valor)
+
+        try:
+            int(valor)
+            print("Si es un numero")
+            return True
+        except (ValueError, TypeError):
+            print("NO es un numero")
+            return False
+
+    def crear_socioComercial(nombreSocio,razonSocial,fkGrupoSocio,fkUbicacion,puebloCiudad,estado,pais):
         """Guarda un nuevo registro en la base de datos"""
         db = Database()
+
+        # --- Insertar o recuperar ID de pueblo ---
+        if SocioComercial.es_entero(puebloCiudad):
+            puebloCiudad = int(puebloCiudad)
+        else:
+            db.cursor.execute('INSERT INTO pueblos_ciudades (nombrePuebloCiudad) VALUES (%s)', (puebloCiudad,))
+            db.cursor.execute('SELECT LAST_INSERT_ID()')
+            puebloCiudad = db.cursor.fetchone()['LAST_INSERT_ID()']
+
+        # --- Insertar o recuperar ID de estado ---
+        if SocioComercial.es_entero(estado):
+            estado = int(estado)
+        else:
+            db.cursor.execute('INSERT INTO estados (nombreEstado) VALUES (%s)', (estado,))
+            db.cursor.execute('SELECT LAST_INSERT_ID()')
+            estado = db.cursor.fetchone()['LAST_INSERT_ID()']
+
+        # --- Insertar o recuperar ID de país ---
+        if SocioComercial.es_entero(pais):
+            pais = int(pais)
+        else:
+            db.cursor.execute('INSERT INTO paises (nombrePais) VALUES (%s)', (pais,))
+            db.cursor.execute('SELECT LAST_INSERT_ID()')
+            pais = db.cursor.fetchone()['LAST_INSERT_ID()']
+
+        # --- Insertar ubicación ---
+        if fkUbicacion is None:
+            db.cursor.execute('INSERT INTO ubicaciones (fkPuebloCiudad, fkEstado, fkPais) VALUES (%s, %s, %s)', (puebloCiudad, estado, pais))
+            db.cursor.execute('SELECT LAST_INSERT_ID()')
+            fkUbicacion = db.cursor.fetchone()['LAST_INSERT_ID()']
+        else:
+            db.cursor.execute('UPDATE ubicaciones set fkPuebloCiudad = %s, fkEstado = %s, fkPais =%s WHERE pkUbicacion = %s', (puebloCiudad, estado, pais, fkUbicacion))
+
         query = "INSERT INTO socios_comerciales (nombreSocio, razonSocial, fkGrupoSocio, fkUbicacion) VALUES (%s,%s,%s,%s)"
-        resultado = db.execute_commit(query, (self.nombreSocio,self.razonSocial,self.fkGrupoSocio, self.fkUbicacion))
+        resultado = db.execute_commit(query, (nombreSocio,razonSocial,fkGrupoSocio,fkUbicacion))
         db.close()
         return resultado
 
-    def editar_socioComercial(self):
+    def editar_socioComercial(pkSocioComercial,nombreSocio, razonSocial, fkGrupoSocio, fkUbicacion, puebloCiudad, estado, pais):
         """Edita un registro en la base de datos."""
-        if not self.pkSocioComercial:
-            raise ValueError("El socio debe tener un ID para ser editado.")
+
         db = Database()
+
+        # --- Insertar o recuperar ID de pueblo ---
+        if SocioComercial.es_entero(puebloCiudad):
+            puebloCiudad = int(puebloCiudad)
+        else:
+            db.cursor.execute('INSERT INTO pueblos_ciudades (nombrePuebloCiudad) VALUES (%s)', (puebloCiudad,))
+            db.cursor.execute('SELECT LAST_INSERT_ID()')
+            puebloCiudad = db.cursor.fetchone()['LAST_INSERT_ID()']
+
+        # --- Insertar o recuperar ID de estado ---
+        if SocioComercial.es_entero(estado):
+            estado = int(estado)
+        else:
+            db.cursor.execute('INSERT INTO estados (nombreEstado) VALUES (%s)', (estado,))
+            db.cursor.execute('SELECT LAST_INSERT_ID()')
+            estado = db.cursor.fetchone()['LAST_INSERT_ID()']
+
+        # --- Insertar o recuperar ID de país ---
+        if SocioComercial.es_entero(pais):
+            pais = int(pais)
+        else:
+            db.cursor.execute('INSERT INTO paises (nombrePais) VALUES (%s)', (pais,))
+            db.cursor.execute('SELECT LAST_INSERT_ID()')
+            pais = db.cursor.fetchone()['LAST_INSERT_ID()']
+
+        # --- Insertar ubicación ---
+        if fkUbicacion is None:
+            db.cursor.execute('INSERT INTO ubicaciones (fkPuebloCiudad, fkEstado, fkPais) VALUES (%s, %s, %s)', (puebloCiudad, estado, pais))
+            db.cursor.execute('SELECT LAST_INSERT_ID()')
+            fkUbicacion = db.cursor.fetchone()['LAST_INSERT_ID()']
+        else:
+            db.cursor.execute('UPDATE ubicaciones set fkPuebloCiudad = %s, fkEstado = %s, fkPais =%s WHERE pkUbicacion = %s', (puebloCiudad, estado, pais, fkUbicacion))
+        
         query = "UPDATE socios_comerciales SET nombreSocio = %s, razonSocial = %s, fkGrupoSocio = %s, fkUbicacion = %s WHERE pkSocioComercial = %s"
-        resultado = db.execute_commit(query, (self.nombreSocio, self.razonSocial, self.fkGrupoSocio, self.fkUbicacion, self.pkSocioComercial))
+        resultado = db.execute_commit(query, (nombreSocio, razonSocial, fkGrupoSocio, fkUbicacion, pkSocioComercial))
         db.close()
         return resultado
 

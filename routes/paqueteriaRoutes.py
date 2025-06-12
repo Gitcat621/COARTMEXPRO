@@ -21,7 +21,8 @@ def crear_paqueteria():
     if not nombrePaqueteria:
         return jsonify({'mensaje': 'Faltan datos'}), 400
 
-    if Paqueteria.crear_paqueteria(nombrePaqueteria):
+    paqueteria = Paqueteria(nombrePaqueteria=nombrePaqueteria)
+    if paqueteria.crear_paqueteria():
         return jsonify({'mensaje': 'Paquetería insertada correctamente'}), 201
     else:
         return jsonify({'mensaje': 'Error al insertar paquetería'}), 500
@@ -34,7 +35,8 @@ def editar_paqueteria():
         pkPaqueteria = data.get('pkPaqueteria')
         nombrePaqueteria = data.get('nombrePaqueteria')
 
-        if Paqueteria.editar_paqueteria(pkPaqueteria, nombrePaqueteria):
+        paqueteria = Paqueteria(pkPaqueteria, nombrePaqueteria)
+        if paqueteria.editar_paqueteria():
             return jsonify({'mensaje': 'Paquetería editada correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo editar la paquetería'}), 500
@@ -49,7 +51,8 @@ def eliminar_paqueteria():
         data = request.json
         pkPaqueteria = data.get('pkPaqueteria')
 
-        if Paqueteria.eliminar_paqueteria(pkPaqueteria):
+        paqueteria =Paqueteria(pkPaqueteria)
+        if paqueteria.eliminar_paqueteria():
             return jsonify({'mensaje': 'Paquetería eliminada correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo eliminar la paquetería'}), 500

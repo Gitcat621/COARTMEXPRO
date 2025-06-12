@@ -9,7 +9,7 @@ import re
 relojChecador_bp = Blueprint('relojChecador_bp', __name__)
 
 # Carpeta donde se guardarán los archivos
-UPLOAD_FOLDER = 'reportes_asistencia'
+UPLOAD_FOLDER = 'reportes_asistencias'
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 

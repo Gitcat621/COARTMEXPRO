@@ -15,13 +15,16 @@ def crear_categoriaArticulo():
     data = request.json
     nombreCategoriaArticulo = data.get('nombreCategoriaArticulo')
 
+    print('aqui', nombreCategoriaArticulo)
+
     if not isinstance(nombreCategoriaArticulo, str):
         return jsonify({'mensaje': 'nombreCategoriaArticulo debe ser una cadena de texto'}), 400
 
     if not nombreCategoriaArticulo:
         return jsonify({'mensaje': 'Faltan datos'}), 400
 
-    if CategoriaArticulo.crear_categoriaArticulo(nombreCategoriaArticulo):
+    categoriaArticulo = CategoriaArticulo(nombreCategoriaArticulo=nombreCategoriaArticulo)
+    if categoriaArticulo.crear_categoriaArticulo():
         return jsonify({'mensaje': 'Categoria de articulo insertada correctamente'}), 201
     else:
         return jsonify({'mensaje': 'Error al insertar categoria de articulo'}), 500
@@ -34,7 +37,8 @@ def editar_categoriaArticulo():
         pkCategoriaArticulo = data.get('pkCategoriaArticulo')
         nombreCategoriaArticulo = data.get('nombreCategoriaArticulo')
 
-        if CategoriaArticulo.editar_categoriaArticulo(pkCategoriaArticulo, nombreCategoriaArticulo):
+        categoriaArticulo = CategoriaArticulo(pkCategoriaArticulo, nombreCategoriaArticulo)
+        if categoriaArticulo.editar_categoriaArticulo():
             return jsonify({'mensaje': 'Categoria de articulo editada correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo editar la categoria de articulo'}), 500
@@ -49,7 +53,8 @@ def eliminar_categoriaArticulo():
         data = request.json
         pkCategoriaArticulo = data.get('pkCategoriaArticulo')
 
-        if CategoriaArticulo.eliminar_categoriaArticulo(pkCategoriaArticulo):
+        categoriaArticulo = CategoriaArticulo(pkCategoriaArticulo)
+        if categoriaArticulo.eliminar_categoriaArticulo():
             return jsonify({'mensaje': 'Categoria de articulo eliminada correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo eliminar la categoria de articulo'}), 500

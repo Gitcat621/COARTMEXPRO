@@ -63,7 +63,7 @@ async function listarCategoriaArticulos() {
 }
 
 //Asignar funcion al boton de abrir modal
-$("#modalAgregar").click(function() {
+$("#agregarArticulo").click(function() {
     abrirModal(1);
 });
 
@@ -89,6 +89,15 @@ $(document).ready(function() {
             }
         ],
         scrollX: true,
+        dom: 'Bfrtip', // 🔹 Activa la barra de botones
+        buttons: [
+            {
+                extend: 'excelHtml5',
+                text: 'Descargar Excel',
+                className: 'btn btn-success',
+                title: 'Listado de Artículos' // Nombre del archivo
+            }
+        ]
     });
 
 
@@ -131,7 +140,7 @@ $(document).ready(function() {
             cancelButtonText: "Cancelar"
         }).then((result) => {
             if (result.isConfirmed) {
-                eliminarUsuario(codigoArticulo);    
+                eliminarArticulo(codigoArticulo);    
             }
         });
 
@@ -217,7 +226,6 @@ async function agregarArticulo() {
     }
 }
 
-
 async function listarArticulos() {
 
     try {
@@ -256,8 +264,7 @@ async function listarArticulos() {
     }
 }
 
-
-async function editarUsuario(codigoArticuloOriginal) {
+async function editarArticulo(codigoArticuloOriginal) {
     try {
         // Obtener los datos del formulario
         const codigoArticulo = document.getElementById('codigoArticulo').value.trim();
@@ -313,7 +320,7 @@ async function editarUsuario(codigoArticuloOriginal) {
     }
 }
 
-async function eliminarUsuario(codigoArticulo) {
+async function eliminarArticulo(codigoArticulo) {
     try {
         // Verificar si llega el id
         if (!codigoArticulo) {
@@ -372,7 +379,7 @@ function abrirModal(modo, codigoArticulo) {
 
         $('#boostrapModal-1').modal('show');
         modalTitle.textContent = 'Editar articulo';
-        modalButton.setAttribute('onclick', `editarUsuario('${codigoArticulo}')`);
+        modalButton.setAttribute('onclick', `editarArticulo('${codigoArticulo}')`);
 
     }
 

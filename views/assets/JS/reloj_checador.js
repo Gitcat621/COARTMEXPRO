@@ -32,6 +32,15 @@ $(document).ready(function() {
             }
         ],
         scrollX: true,
+        dom: 'Bfrtip', // 🔹 Activa la barra de botones
+        buttons: [
+            {
+                extend: 'excelHtml5',
+                text: 'Descargar Excel',
+                className: 'btn btn-success',
+                title: 'Listado de Artículos' // Nombre del archivo
+            }
+        ]
     });
 
     // Event listeners para los botones

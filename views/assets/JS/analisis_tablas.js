@@ -237,7 +237,16 @@ function inicializarTabla(data, endpoint){
             document.getElementById('tableTitle').innerHTML = "Ingresos";
 
             $('#dataTable').DataTable({
-                scrollX: true, // Activa el scroll horizontal
+                scrollX: true,
+                dom: 'Bfrtip', // 🔹 Activa la barra de botones
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: 'Descargar Excel',
+                        className: 'btn btn-success',
+                        title: 'Listado de Artículos' // Nombre del archivo
+                    }
+                ],
                 columns: [
                     { title: "Socio comercial" },
                     { title: "Ene" },
@@ -317,7 +326,16 @@ function inicializarTabla(data, endpoint){
             console.log(data);
 
             $('#dataTable').DataTable({
-                scrollX: true, // Activa el scroll horizontal
+               scrollX: true,
+                dom: 'Bfrtip', // 🔹 Activa la barra de botones
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: 'Descargar Excel',
+                        className: 'btn btn-success',
+                        title: 'Listado de Artículos' // Nombre del archivo
+                    }
+                ],
                 columns: [
                     { title: "Concepto" },
                     { title: "Tipo" },
@@ -420,7 +438,16 @@ function inicializarTabla(data, endpoint){
 
                 //Código si expresion === valor3
                 $('#dataTable').DataTable({
-                    scrollX: true, // Activa el scroll horizontal
+                    scrollX: true,
+                    dom: 'Bfrtip', // 🔹 Activa la barra de botones
+                    buttons: [
+                        {
+                            extend: 'excelHtml5',
+                            text: 'Descargar Excel',
+                            className: 'btn btn-success',
+                            title: 'Listado de Artículos' // Nombre del archivo
+                        }
+                    ],
                     columns: [
                         { title: "Socio comercial" },
                         { title: "Ene" },
@@ -502,6 +529,15 @@ function inicializarTabla(data, endpoint){
             // Iniciar la datatable
             var tabla = $('#dataTable').DataTable({
                 scrollX: true,
+                dom: 'Bfrtip', // 🔹 Activa la barra de botones
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: 'Descargar Excel',
+                        className: 'btn btn-success',
+                        title: 'Listado de Artículos' // Nombre del archivo
+                    }
+                ],
                 columns: [
                     { title: "Código de articulo" },
                     { title: "Descripción" },
@@ -578,7 +614,16 @@ function inicializarTabla(data, endpoint){
 
             // Código si expresion === valor3
             $('#dataTable').DataTable({
-                scrollX: true, // Activa el scroll horizontal
+                scrollX: true,
+                dom: 'Bfrtip', // 🔹 Activa la barra de botones
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: 'Descargar Excel',
+                        className: 'btn btn-success',
+                        title: 'Listado de Artículos' // Nombre del archivo
+                    }
+                ],
                 columns: [
                     { title: "Proveedor" },
                     //{ title: "Folio de EL Eventa" },
@@ -629,7 +674,16 @@ function inicializarTabla(data, endpoint){
 
             // Código si expresion === valor3
             $('#dataTable').DataTable({
-                scrollX: true, // Activa el scroll horizontal
+                scrollX: true,
+                dom: 'Bfrtip', // 🔹 Activa la barra de botones
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: 'Descargar Excel',
+                        className: 'btn btn-success',
+                        title: 'Listado de Artículos' // Nombre del archivo
+                    }
+                ],
                 columns: [
                     { title: "Socio comercial" },
                     { title: "Fecha" },
@@ -666,7 +720,16 @@ function inicializarTabla(data, endpoint){
 
             
             $('#dataTable').DataTable({
-                scrollX: true, // Activa el scroll horizontal
+                scrollX: true,
+                dom: 'Bfrtip', // 🔹 Activa la barra de botones
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: 'Descargar Excel',
+                        className: 'btn btn-success',
+                        title: 'Listado de Artículos' // Nombre del archivo
+                    }
+                ],
                 columns: [
                     { title: "Proveedor" },
                     { title: "Ene" },
@@ -737,7 +800,16 @@ function inicializarTabla(data, endpoint){
             document.getElementById('tableTitle').innerHTML = "Facturas";
             // Código si expresion === valor3
             $('#dataTable').DataTable({
-                scrollX: true, // Activa el scroll horizontal
+                scrollX: true,
+                dom: 'Bfrtip', // 🔹 Activa la barra de botones
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        text: 'Descargar Excel',
+                        className: 'btn btn-success',
+                        title: 'Listado de Artículos' // Nombre del archivo
+                    }
+                ],
                 columns: [
                     { title: "Numero de factura" },
                     { title: "Socio por cobrar" },

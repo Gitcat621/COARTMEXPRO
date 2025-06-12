@@ -1,12 +1,12 @@
 $(document).ready(function () {
 
-    listar();
+    listarPaqueterias();
     
 });
 
 //Asignar funcion al boton de abrir modal
-$("#modalAgregar").click(function() {
-    abrirModal(1);
+$("#agregarPaqueteria").click(function() {
+    abrirModalPaqueteria(1);
 });
 
 //Inicializar datatable
@@ -20,16 +20,14 @@ $(document).ready(function() {
                 title: "Opciones",
                 render: function (data, type, row) { // 'row' contiene toda la fila de datos
                     return `<div class="text-center">
-                                <button class="btn btn-warning btn-sm editar-btn" data-row='${JSON.stringify(row)}'><i class="fa fa-pencil"></i></button>
-                                <button class="btn btn-danger btn-sm eliminar-btn" data-pk="${row[1]}"><i class="fa fa-trash"></i></button>
+                                <button class="btn btn-xs editar-btn" data-row='${JSON.stringify(row)}'><i class="fa fa-pencil"></i></button>
+                                <button class="btn btn-xs eliminar-btn" data-pk="${row[1]}" data-nombre="${row[0]}"><i class="fa fa-trash"></i></button>
                             </div>`;
                 }
             }
         ],
         scrollX: true,
     });
-
-    
 
     // Event listeners para los botones 
     // Editar
@@ -44,7 +42,7 @@ $(document).ready(function() {
         document.getElementById('nombrePaqueteria').value = nombrePaqueteria;
 
 
-        abrirModal(2,pkPaqueteria)
+        abrirModalPaqueteria(2,pkPaqueteria)
 
     });
 
@@ -54,23 +52,28 @@ $(document).ready(function() {
 
         const pkPaqueteria = $(this).data('pk');
 
+        const nombrePaqueteria = $(this).data('nombre');
 
-        //Activar y escuchar la confirmacion del remodal
-        var modal = $('[data-remodal-id="remodal"]').remodal();
-
-
-        modal.open();
-
-
-        $(document).on("confirmation", ".remodal", function () {
-            eliminar(pkPaqueteria);
+        Swal.fire({
+            title: `¿Eliminar a ${nombrePaqueteria}?`,
+            text: "No se podrá recuperar",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#B71C1C",
+            cancelButtonColor: "#C1C0C0",
+            confirmButtonText: "Eliminar",
+            cancelButtonText: "Cancelar"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                eliminarPaqueterias(pkPaqueteria);
+            }
         });
-        
+
     });
 
 });
 
-function agregar(){
+function agregarPaqueteria(){
 
     // Obtener los datos del formulario
     const nombrePaqueteria = document.getElementById('nombrePaqueteria').value.trim();
@@ -107,8 +110,8 @@ function agregar(){
         });
 
         //Acciones posteriores(Cerrar modal y mapear datos)
-        $('#boostrapModal-1').modal('hide');
-        listar();
+        $('#boostrapModal-2').modal('hide');
+        listarPaqueterias();
 
     })
     .catch(error => {
@@ -123,7 +126,7 @@ function agregar(){
     });
 }
 
-function listar() {
+function listarPaqueterias() {
 
     //Mapear datos
     fetch('http://127.0.0.1:5000/coartmex/paqueterias', {
@@ -135,24 +138,49 @@ function listar() {
     .then(response => response.json())
     .then(data => {
 
-        //Iniciar la datatable y asignarla a una variable
-        let tabla = $('#paqueteriaTable').DataTable();
-        
-        // Limpiar la tabla antes de agregar nuevos datos
-        tabla.clear().draw();
+        try{
 
-        // Agregar los nuevos datos
-        tabla.rows.add(data.map((banco) => [
+            //Iniciar la datatable y asignarla a una variable
+            let tabla = $('#paqueteriaTable').DataTable();
+            
+            // Limpiar la tabla antes de agregar nuevos datos
+            tabla.clear().draw();
 
-            banco.nombrePaqueteria, banco.pkPaqueteria
+            // Agregar los nuevos datos
+            tabla.rows.add(data.map((banco) => [
 
-        ])).draw();
+                banco.nombrePaqueteria, banco.pkPaqueteria
+
+            ])).draw();
+
+        }catch{
+            console.log('No hay tabla para: Paqueterias')
+        }
+
+        try{
+            const select = document.getElementById('paqueteria_menu');
+            select.innerHTML = "";
+
+            data.forEach(paq => {
+
+                let option = document.createElement('option');
+                option.value = paq.pkPaqueteria;
+                option.textContent = paq.nombrePaqueteria;
+                select.appendChild(option);
+
+            });
+
+        }catch{
+            console.log('No hay menu para: Paqueterias')
+        }
+
+       
     })
     .catch(error => console.error("Error al cargar los datos:", error));
     
 }
 
-function editar(pkPaqueteria){
+function editarPaqueterias(pkPaqueteria){
 
     //Obtener valores del formulario
     const nombrePaqueteria = document.getElementById('nombrePaqueteria').value.trim();
@@ -178,7 +206,7 @@ function editar(pkPaqueteria){
 
 
         // Mostrar el mensaje de la respuesta de la API
-        listar();
+        listarPaqueterias();
 
 
         toastr.success(`${data.mensaje}`, 'Realizado', {"closeButton": true,});
@@ -195,7 +223,7 @@ function editar(pkPaqueteria){
     });
 }
 
-function eliminar(pkPaqueteria){
+function eliminarPaqueterias(pkPaqueteria){
 
     // Verificar si llega el id
     if (!pkPaqueteria) {
@@ -218,7 +246,7 @@ function eliminar(pkPaqueteria){
 
 
         // Mostrar el mensaje de la respuesta de la API
-        listar();
+        listarPaqueterias();
 
 
         toastr.success(`${data.mensaje}`, 'Realizado', {"closeButton": true,});
@@ -237,24 +265,24 @@ function eliminar(pkPaqueteria){
     });
 }
 
-function abrirModal(modo, pkPaqueteria) {
+function abrirModalPaqueteria(modo, pkPaqueteria) {
 
     //Obtener el valor de los elementos del modal
-    const modalTitle = document.getElementById('myModalLabel');
-    const modalButton = document.querySelector('#boostrapModal-1 .modal-footer .btn-primary');
+    const modalTitle = document.getElementById('myModalLabel2');
+    const modalButton = document.querySelector('#boostrapModal-2 .modal-footer .btn-primary');
 
     //Asignar diseño y comportamiento del modal dependiendo de la accion(Agregar o Editar)
     if (modo === 1) {
 
         modalTitle.textContent = 'Agregar banco';
-        modalButton.setAttribute('onclick', 'agregar()');
+        modalButton.setAttribute('onclick', 'agregarPaqueteria()');
 
         document.getElementById('nombrePaqueteria').value = '';
     } else if (modo === 2) {
 
-        $('#boostrapModal-1').modal('show');
+        $('#boostrapModal-2').modal('show');
         modalTitle.textContent = 'Editar banco';
-        modalButton.setAttribute('onclick', `editar(${pkPaqueteria})`);
+        modalButton.setAttribute('onclick', `editarPaqueterias(${pkPaqueteria})`);
 
     }
 

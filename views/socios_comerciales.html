@@ -40,6 +40,9 @@
 
 	<!-- Material Design Icon -->
 	<link rel="stylesheet" href="assets/fonts/material-design/css/materialdesignicons.css">
+
+	<!-- Select2 -->
+	<link rel="stylesheet" href="assets/plugin/select2/css/select2.min.css">
 </head>
 
 <body>
@@ -188,12 +191,30 @@
 
 					</select>
 				</div>
+				<div class="form-group">
+					<h4 id="ubicacion_menu">Ubicacion de la tienda</h4>
+				</div>
 
 				<div class="form-group">
-					<label>Asignar ubicación</label>
-					<select class="form-control" id="ubicacion_menu" >
+					<label>Ciudad donde se ubica</label><br>
+					<select class="select2_2 form-control" multiple="multiple" style="width: 100%;" id="pueblosCiudades_menu">
 
 					</select>
+					
+				</div>
+				<div class="form-group">
+					<label>Estado donde se ubica</label><br>
+					<select class="select2_2 form-control" multiple="multiple" style="width: 100%;" id="estados_menu">
+
+					</select>
+					
+				</div>
+				<div class="form-group">
+					<label>Pais donde se ubica</label><br>
+					<select class="select2_2 form-control" multiple="multiple" style="width: 100%;" id="paises_menu">
+
+					</select>
+					
 				</div>
 			</div>
 			<div class="modal-footer">
@@ -216,6 +237,9 @@
 	<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	<script src="assets/JS/socios_comerciales.js"></script>
+	<script src="assets/JS/pueblos_ciudades.js"></script>
+	<script src="assets/JS/estados.js"></script>
+	<script src="assets/JS/paises.js"></script>
 	<script src="assets/JS/autenticar.js"></script>
 
 	<!-- <script src="assets/scripts/jquery.min.js"></script> -->
@@ -245,6 +269,15 @@
 
 	<script src="assets/scripts/main.min.js"></script>
 	<script src="assets/scripts/horizontal-menu.min.js"></script>
+
+	<!-- Select2 -->
+	<script src="assets/plugin/select2/js/select2.min.js"></script>	
+
+	<!-- Datepicker -->
+	<script src="assets/plugin/datepicker/js/bootstrap-datepicker.js"></script>
+
+	<!-- Demo Scripts -->
+	<script src="assets/scripts/form.demo.js"></script>
 
 </body>
 </html>

@@ -184,7 +184,7 @@
 					<h4 class="box-title">Tabla de bancos</h4>
 					<!-- /.box-title -->
 
-					<button type="button" class="btn btn-success btn-xs waves-effect waves-light" data-toggle="modal" data-target="#boostrapModal-2" id="agregarBanco"><i class="fa fa-plus"></i> Agregar</button>
+					<button type="button" class="btn btn-success btn-xs waves-effect waves-light" data-toggle="modal" data-target="#boostrapModal-3" id="agregarBanco"><i class="fa fa-plus"></i> Agregar</button>
 
 					<div class="col-xs-12">
 						<h1></h1>
@@ -241,7 +241,7 @@
 				</div>
 				<div class="form-group">
 					<label>Asignar tipo de flete</label>
-					<select class="form-control" id="fn_menu" >
+					<select class="form-control" id="flete_menu" >
 						<option value="1">Pagado</option>
 						<option value="2">Prepagado</option>
 						<option value="3">Desconocido</option>
@@ -249,35 +249,28 @@
 				</div>
 				<div class="form-group">
 					<label>Codigo postal</label><br>
-					<select class="select2_2 form-control" multiple="multiple" style="width: 100%;" id="ciudad_menu">
-
-					</select>
-					
-				</div>
-				<div class="form-group">
-					<label>Municipio</label><br>
-					<select class="select2_2 form-control" multiple="multiple" style="width: 100%;" id="ciudad_menu">
+					<select class="select2_2 form-control" multiple="multiple" style="width: 100%;" id="codigosPostales_menu">
 
 					</select>
 					
 				</div>
 				<div class="form-group">
 					<label>Ciudad o pueblo</label><br>
-					<select class="select2_2 form-control" multiple="multiple" style="width: 100%;" id="ciudad_menu">
+					<select class="select2_2 form-control" multiple="multiple" style="width: 100%;" id="pueblosCiudades_menu">
+
+					</select>
+					
+				</div>
+				<div class="form-group">
+					<label>Municipio</label><br>
+					<select class="select2_2 form-control" multiple="multiple" style="width: 100%;" id="municipios_menu">
 
 					</select>
 					
 				</div>
 				<div class="form-group">
 					<label>Estado</label><br>
-					<select class="select2_2 form-control" multiple="multiple" style="width: 100%;" id="estado_menu">
-
-					</select>
-					
-				</div>
-				<div class="form-group">
-					<label>Pais</label><br>
-					<select class="select2_2 form-control" multiple="multiple" style="width: 100%;" id="pais_menu">
+					<select class="select2_2 form-control" multiple="multiple" style="width: 100%;" id="estados_menu">
 
 					</select>
 					
@@ -288,11 +281,11 @@
 
 					</select>
 				</div>
-				<div class="form-group">
+				<!-- <div class="form-group">
 					<label>Asignar cuentas de bancos</label><br>
 					<select class="select2_2" multiple="multiple" style="width: 100%;" id="banco_menu"></select>
 					</select>
-				</div>
+				</div> -->
 				<div class="form-group">
 					<label>Asignar paqueterias</label><br>
 					<select class="select2_1" multiple="multiple" style="width: 100%;" id="paqueteria_menu" >
@@ -307,17 +300,38 @@
 	</div>
 </div>
 
-<div class="modal fade" id="boostrapModal-1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal fade" id="boostrapModal-2" tabindex="-2" role="dialog" aria-labelledby="myModalLabel">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<h4 class="modal-title" id="myModalLabel">Titulo dinamico</h4>
+				<h4 class="modal-title" id="myModalLabel2">Titulo dinamico</h4>
 			</div>
 			<div class="modal-body">
 				<div class="form-group">
 					<label>Nombre del Paqueteria</label>
 					<input type="text" class="form-control" id="nombrePaqueteria">
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default btn-xs waves-effect waves-light" data-dismiss="modal">Cerrar</button>
+				<button type="button" class="btn btn-primary btn-xs waves-effect waves-light">Guardar</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="boostrapModal-3" tabindex="-3" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel3">Titulo dinamico</h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<label>Nombre del Banco</label>
+					<input type="text" class="form-control" id="nombreBanco">
 				</div>
 			</div>
 			<div class="modal-footer">
@@ -339,6 +353,10 @@
 	<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	<script src="assets/JS/proveedores.js"></script>
+	<script src="assets/JS/codigos_postales.js"></script>
+	<script src="assets/JS/pueblos_ciudades.js"></script>
+	<script src="assets/JS/municipios.js"></script>
+	<script src="assets/JS/estados.js"></script>
 	<script src="assets/JS/paqueterias.js"></script>
 	<script src="assets/JS/bancos.js"></script>
 	<script src="assets/JS/autenticar.js"></script>

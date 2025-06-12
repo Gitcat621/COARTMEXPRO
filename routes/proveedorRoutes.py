@@ -17,7 +17,28 @@ def crear_proveedor():
     correoProveedor = data.get('correoProveedor')
     diasCredito = data.get('diasCredito')
     facturaNota = data.get('facturaNota')
-    fkUbicacion = data.get('fkUbicacion')
+    diasEntrega = data.get('diasEntrega')
+    flete = data.get('flete')
+    codigoPostal = data.get('codigoPostal')
+    puebloCiudad = data.get('puebloCiudad')
+    municipio = data.get('municipio')
+    estado = data.get('estado')
+    numerosTelfono = data.get('numerosSeleccionados')
+    paqueterias = data.get('paqueteriasSeleccionadas')
+
+    print(nombreProveedor)
+    print(correoProveedor)
+    print(diasCredito)
+    print(facturaNota)
+    print(diasEntrega)
+    print(flete)
+    print(codigoPostal)
+    print(puebloCiudad)
+    print(municipio)
+    print(estado)
+    print(numerosTelfono)
+    print(paqueterias)
+
 
     if not isinstance(nombreProveedor, str):
         return jsonify({'mensaje': 'nombreProveedor debe ser una cadena de texto'}), 400
@@ -25,21 +46,16 @@ def crear_proveedor():
     if not isinstance(correoProveedor, str):
         return jsonify({'mensaje': 'correoProveedor debe ser una cadena de texto'}), 400
 
-    # if not isinstance(diasCredito, int):
-    #     return jsonify({'mensaje': 'diasCredito debe ser un entero'}), 400
 
     if not isinstance(facturaNota, str):
         return jsonify({'mensaje': 'facturaNota debe ser una cadena de texto'}), 400
 
-    # if not isinstance(fkUbicacion, int):
-    #     return jsonify({'mensaje': 'fkUbicacion debe ser un entero'}), 400
 
 
-    if not nombreProveedor or not correoProveedor or diasCredito is None or not facturaNota or fkUbicacion is None:
+    if not nombreProveedor or not correoProveedor or diasCredito is None or not facturaNota:
         return jsonify({'mensaje': 'Faltan datos'}), 400
 
-    proveedor = Proveedor(nombreProveedor=nombreProveedor, correoProveedor=correoProveedor, diasCredito=diasCredito, facturaNota=facturaNota, fkUbicacion=fkUbicacion)
-    if proveedor.crear_proveedor():
+    if Proveedor.crear_proveedor(nombreProveedor, correoProveedor, diasCredito, facturaNota, diasEntrega,flete, codigoPostal, puebloCiudad, municipio, estado, numerosTelfono, paqueterias):
         return jsonify({'mensaje': 'Proveedor insertado correctamente'}), 201
     else:
         return jsonify({'mensaje': 'Error al insertar proveedor'}), 500

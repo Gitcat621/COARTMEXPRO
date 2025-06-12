@@ -1,12 +1,12 @@
 $(document).ready(function () {
 
-    listar();
+    listarBancos();
     
 });
 
 //Asignar funcion al boton de abrir modal
-$("#modalAgregar").click(function() {
-    abrirModal(1);
+$("#agregarBanco").click(function() {
+    abrirModalBanco(1);
 });
 
 //Inicializar datatable
@@ -20,17 +20,15 @@ $(document).ready(function() {
                 title: "Opciones",
                 render: function (data, type, row) { // 'row' contiene toda la fila de datos
                     return `<div class="text-center">
-                                <button class="btn btn-warning btn-sm editar-btn" data-row='${JSON.stringify(row)}'><i class="fa fa-pencil"></i></button>
-                                <button class="btn btn-danger btn-sm eliminar-btn" data-pk="${row[1]}"><i class="fa fa-trash"></i></button>
+                                <button class="btn btn-xs editar-btn" data-row='${JSON.stringify(row)}'><i class="fa fa-pencil"></i></button>
+                                <button class="btn btn-xs eliminar-btn" data-pk="${row[1]}" data-nombre="${row[0]}"><i class="fa fa-trash"></i></button>
                             </div>`;
                 }
             }
         ],
         scrollX: true,
     });
-
     
-
     // Event listeners para los botones 
     // Editar
     $('#bancoTable').on('click', '.editar-btn', function () {
@@ -44,7 +42,7 @@ $(document).ready(function() {
         document.getElementById('nombreBanco').value = nombreBanco;
 
 
-        abrirModal(2,pkBanco)
+        abrirModalBanco(2,pkBanco)
 
     });
 
@@ -54,23 +52,28 @@ $(document).ready(function() {
 
         const pkBanco = $(this).data('pk');
 
+        const nombreBanco = $(this).data('nombre');
 
-        //Activar y escuchar la confirmacion del remodal
-        var modal = $('[data-remodal-id="remodal"]').remodal();
-
-
-        modal.open();
-
-
-        $(document).on("confirmation", ".remodal", function () {
-            eliminar(pkBanco);
+        Swal.fire({
+            title: `¿Eliminar a ${nombreBanco}?`,
+            text: "No se podrá recuperar",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#B71C1C",
+            cancelButtonColor: "#C1C0C0",
+            confirmButtonText: "Eliminar",
+            cancelButtonText: "Cancelar"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                eliminarrBanco(pkBanco);
+            }
         });
         
     });
 
 });
 
-function agregar(){
+function agregarBanco(){
 
     // Obtener los datos del formulario
     const nombreBanco = document.getElementById('nombreBanco').value.trim();
@@ -107,8 +110,8 @@ function agregar(){
         });
 
         //Acciones posteriores(Cerrar modal y mapear datos)
-        $('#boostrapModal-1').modal('hide');
-        listar();
+        $('#boostrapModal-3').modal('hide');
+        listarBancos();
 
     })
     .catch(error => {
@@ -123,7 +126,7 @@ function agregar(){
     });
 }
 
-function listar() {
+function listarBancos() {
 
     //Mapear datos
     fetch('http://127.0.0.1:5000/coartmex/bancos', {
@@ -152,7 +155,7 @@ function listar() {
     
 }
 
-function editar(pkBanco){
+function editarBanco(pkBanco){
 
     //Obtener valores del formulario
     const nombreBanco = document.getElementById('nombreBanco').value.trim();
@@ -178,7 +181,7 @@ function editar(pkBanco){
 
 
         // Mostrar el mensaje de la respuesta de la API
-        listar();
+        listarBancos();
 
 
         toastr.success(`${data.mensaje}`, 'Realizado', {"closeButton": true,});
@@ -195,7 +198,7 @@ function editar(pkBanco){
     });
 }
 
-function eliminar(pkBanco){
+function eliminarrBanco(pkBanco){
 
     // Verificar si llega el id
     if (!pkBanco) {
@@ -218,7 +221,7 @@ function eliminar(pkBanco){
 
 
         // Mostrar el mensaje de la respuesta de la API
-        listar();
+        listarBancos();
 
 
         toastr.success(`${data.mensaje}`, 'Realizado', {"closeButton": true,});
@@ -237,24 +240,24 @@ function eliminar(pkBanco){
     });
 }
 
-function abrirModal(modo, pkBanco) {
+function abrirModalBanco(modo, pkBanco) {
 
     //Obtener el valor de los elementos del modal
-    const modalTitle = document.getElementById('myModalLabel');
-    const modalButton = document.querySelector('#boostrapModal-1 .modal-footer .btn-primary');
+    const modalTitle = document.getElementById('myModalLabel3');
+    const modalButton = document.querySelector('#boostrapModal-3 .modal-footer .btn-primary');
 
     //Asignar diseño y comportamiento del modal dependiendo de la accion(Agregar o Editar)
     if (modo === 1) {
 
         modalTitle.textContent = 'Agregar banco';
-        modalButton.setAttribute('onclick', 'agregar()');
+        modalButton.setAttribute('onclick', 'agregarBanco()');
 
         document.getElementById('nombreBanco').value = '';
     } else if (modo === 2) {
 
-        $('#boostrapModal-1').modal('show');
+        $('#boostrapModal-3').modal('show');
         modalTitle.textContent = 'Editar banco';
-        modalButton.setAttribute('onclick', `editar(${pkBanco})`);
+        modalButton.setAttribute('onclick', `editarBanco(${pkBanco})`);
 
     }
 
