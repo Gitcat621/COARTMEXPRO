@@ -52,8 +52,8 @@ class Asistencia:
 
         # Determinar el rango de fechas según la quincena
         if fortnight == 1:
-            date_start = f"{year}-{month}-01"
-            date_end = f"{year}-{month}-15"
+            date_start = f"{year}-{month}-15"
+            date_end = f"{year}-{month}-01"
         elif fortnight == 2:
             _, last_day = monthrange(int(year), int(month))
             date_start = f"{year}-{month}-{last_day}"

@@ -96,22 +96,10 @@ $(document).ready(function() {
 
         document.getElementById('ubicacion_menu').value = fkUbicacion;
 
-const asignarOpcion = (idMenu, indice, valor) => {
-    if (valor == null || indice == null) return;
+        $('#pueblosCiudades_menu').val([pkPuebloCiudad]).trigger('change');
+        $('#estados_menu').val([pkEstado]).trigger('change');
+        $('#paises_menu').val([pkPais]).trigger('change');
 
-    const menu = document.getElementById(idMenu);
-
-    // 🔎 Verificar si la opción ya existe
-    const yaExiste = Array.from(menu.options).some(opt => opt.value == indice);
-    if (yaExiste) return;
-
-    const opcion = document.createElement("option");
-    opcion.value = indice;
-    opcion.textContent = valor;
-    opcion.selected = true;
-
-    menu.appendChild(opcion);
-};
       
 
         abrirModal(2,pkSocioComercial);
@@ -187,13 +175,20 @@ async function agregarSocioComercial() {
             body: JSON.stringify({ nombreSocio, razonSocial, fkGrupoSocio, fkUbicacion, puebloCiudad, estado, pais })
         });
 
-        if (!response.ok) throw new Error('Error en la solicitud');
-
         const data = await response.json();
+
+        if (!response.ok) {
+            toastr.error(`${data.mensaje}`, 'Error', {"closeButton": true,});
+            return;
+        }
+
         toastr.success(`${data.mensaje}`, 'Realizado', { "closeButton": true });
 
         $('#boostrapModal-1').modal('hide');
         listarSociosComerciales();
+        listarPueblosCiudades();
+        listarEstados();
+        listarPaises();
 
 
     } catch (error) {
@@ -277,11 +272,22 @@ async function editarSocioComercial(pkSocioComercial) {
             body: JSON.stringify({ pkSocioComercial, nombreSocio, razonSocial, fkGrupoSocio, fkUbicacion, puebloCiudad, estado, pais })
         });
 
-        if (!response.ok) throw new Error('Error en la solicitud');
-
         const data = await response.json();
+
+        if (!response.ok) {
+            toastr.error(`${data.mensaje}`, 'Error', {"closeButton": true,});
+            return;
+        }
+
+        $('#boostrapModal-1').modal('hide');
+
         listarSociosComerciales();
+        listarPueblosCiudades();
+        listarEstados();
+        listarPaises();
+
         toastr.success(`${data.mensaje}`, 'Realizado', { "closeButton": true });
+
     } catch (error) {
         console.error('Error:', error);
         toastr.error('Hubo un error al intentar la acción', 'Error', { "closeButton": true });
@@ -301,11 +307,17 @@ async function eliminarSocioComercial(pkSocioComercial) {
             body: JSON.stringify({ pkSocioComercial })
         });
 
-        if (!response.ok) throw new Error('Error en la solicitud');
-
         const data = await response.json();
+
+        if (!response.ok) {
+            toastr.error(`${data.mensaje}`, 'Error', {"closeButton": true,});
+            return;
+        }
+
         listarSociosComerciales();
+
         toastr.success(`${data.mensaje}`, 'Realizado', { "closeButton": true });
+
     } catch (error) {
         console.error('Error:', error);
         toastr.error('Hubo un error al intentar la acción', 'Error', { "closeButton": true });

@@ -49,7 +49,7 @@ def procesar_archivo(ruta_archivo):
     try:
         # Leer la celda B2 de la hoja "Reporte Estadístico"
         try:
-            getFecha = pd.read_excel(ruta_archivo, sheet_name="Reporte Estadístico", header=None)
+            getFecha = pd.read_excel(ruta_archivo, sheet_name="Reporte Estadístico", header=None, engine='xlrd')
             valor_b2 = getFecha.iloc[1, 1]
             fecha_inicio, fecha_final = valor_b2.split(" ~ ")
             mensajes.append(f"✅ Fechas extraídas: {fecha_inicio} a {fecha_final}")
