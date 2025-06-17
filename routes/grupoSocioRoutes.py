@@ -21,7 +21,8 @@ def crear_grupoSocio():
     if not nombreGrupoSocio:
         return jsonify({'mensaje': 'Faltan datos'}), 400
 
-    if GrupoSocioComercial.crear_grupoSocio(nombreGrupoSocio):
+    grupoSocioComercial = GrupoSocioComercial(nombreGrupoSocio=nombreGrupoSocio)
+    if grupoSocioComercial.crear_grupoSocio():
         return jsonify({'mensaje': 'Grupo de socio insertado correctamente'}), 201
     else:
         return jsonify({'mensaje': 'Error al insertar grupo de socio'}), 500
@@ -34,7 +35,8 @@ def editar_grupoSocio():
         pkGrupoSocio = data.get('pkGrupoSocio')
         nombreGrupoSocio = data.get('nombreGrupoSocio')
 
-        if GrupoSocioComercial.editar_grupoSocio(pkGrupoSocio, nombreGrupoSocio):
+        grupoSocioComercial = GrupoSocioComercial(pkGrupoSocio, nombreGrupoSocio)
+        if grupoSocioComercial.editar_grupoSocio():
             return jsonify({'mensaje': 'Grupo de socio editado correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo editar el grupo de socio'}), 500
@@ -49,7 +51,8 @@ def eliminar_grupoSocio():
         data = request.json
         pkGrupoSocio = data.get('pkGrupoSocio')
 
-        if GrupoSocioComercial.eliminar_grupoSocio(pkGrupoSocio):
+        grupoSocioComercial = GrupoSocioComercial(pkGrupoSocio)
+        if grupoSocioComercial.eliminar_grupoSocio():
             return jsonify({'mensaje': 'Grupo de socio eliminado correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo eliminar el grupo de socio'}), 500

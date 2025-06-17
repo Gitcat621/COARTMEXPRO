@@ -257,7 +257,7 @@ function abrirModal(modo, pkNumeroEmergencia) {
 
         $('#boostrapModal-1').modal('show');
         modalTitle.textContent = 'Editar país';
-        modalButton.setAttribute('onclick', `editar(${pkNumeroEmergencia})`);
+        modalButton.setAttribute('onclick', `editarNumerosEmergencia(${pkNumeroEmergencia})`);
 
     }
 

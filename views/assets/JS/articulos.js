@@ -1,66 +1,8 @@
 $(document).ready(function () {
 
     listarArticulos();
-    listarProveedores();
-    listarCategoriaArticulos();
     
 });
-
-
-//Listar los registros foraneos
-async function listarProveedores() {
-    try {
-        const response = await fetch('http://127.0.0.1:5000/coartmex/proveedores', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error(`Error HTTP: ${response.status}`);
-        }
-
-        const data = await response.json();
-        document.getElementById('proveedor_menu').innerHTML = "";
-
-        // Mapear en un select
-        data.forEach((proveedor) => {
-            let HTML = `<option value="${proveedor.pkProveedor}">${proveedor.nombreProveedor}</option>`;
-            document.getElementById('proveedor_menu').innerHTML += HTML;
-        });
-
-    } catch (error) {
-        console.error("Error al cargar los datos:", error);
-    }
-}
-
-async function listarCategoriaArticulos() {
-    try {
-        const response = await fetch('http://127.0.0.1:5000/coartmex/categoriaArticulos', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error(`Error HTTP: ${response.status}`);
-        }
-
-        const data = await response.json();
-        document.getElementById('categoria_menu').innerHTML = "";
-
-        // Mapear en un select
-        data.forEach((categoria) => {
-            let HTML = `<option value="${categoria.pkCategoriaArticulo}">${categoria.nombreCategoriaArticulo}</option>`;
-            document.getElementById('categoria_menu').innerHTML += HTML;
-        });
-
-    } catch (error) {
-        console.error("Error al cargar los datos:", error);
-    }
-}
 
 //Asignar funcion al boton de abrir modal
 $("#agregarArticulo").click(function() {
@@ -69,7 +11,6 @@ $("#agregarArticulo").click(function() {
 
 //Inicializar datatable
 $(document).ready(function() {
-
 
     $('#articuloTable').DataTable({
         columns: [
@@ -99,7 +40,6 @@ $(document).ready(function() {
             }
         ]
     });
-
 
     // Event listeners para los botones
     // Editar
@@ -152,7 +92,6 @@ $(document).ready(function() {
 
 async function agregarArticulo() {
     try {
-
 
         // Obtener los datos del formulario
         const codigoArticulo = document.getElementById('codigoArticulo').value.trim();

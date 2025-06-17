@@ -35,7 +35,7 @@ $(document).ready(function() {
                 extend: 'excelHtml5',
                 text: 'Descargar Excel',
                 className: 'btn btn-success',
-                title: 'Listado de Artículos' // Nombre del archivo
+                title: 'Lista de colaboradores' // Nombre del archivo
             }
         ]
     });

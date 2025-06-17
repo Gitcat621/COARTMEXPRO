@@ -126,6 +126,8 @@ async function listarCategoriaArticulos() {
             }
         });
 
+        const data = await response.json();
+
         if (!response.ok) {
 
             //manejo de errores
@@ -135,19 +137,45 @@ async function listarCategoriaArticulos() {
 
         }
 
-        const data = await response.json();
+        try{
 
-        // Iniciar la datatable y asignarla a una variable
-        let tabla = $('#categoriaArticuloTable').DataTable();
+            // Iniciar la datatable y asignarla a una variable
+            let tabla = $('#categoriaArticuloTable').DataTable();
 
-        // Limpiar la tabla antes de agregar nuevos datos
-        tabla.clear().draw();
+            // Limpiar la tabla antes de agregar nuevos datos
+            tabla.clear().draw();
 
-        // Agregar los nuevos datos
-        tabla.rows.add(data.map((categoriaArticulos) => [
-            categoriaArticulos.nombreCategoriaArticulo, 
-            categoriaArticulos.pkCategoriaArticulo
-        ])).draw();
+            // Agregar los nuevos datos
+            tabla.rows.add(data.map((categoriaArticulos) => [
+                categoriaArticulos.nombreCategoriaArticulo, 
+                categoriaArticulos.pkCategoriaArticulo
+            ])).draw();
+
+        }catch{
+            console.log('No existe una tabla para: Categoria de articulos')
+        }
+
+        try{
+
+            const select = document.getElementById('categoria_menu');
+            select.innerHTML = "";
+
+            data.forEach(cat => {
+
+                let option = document.createElement('option');
+                option.value = cat.pkCategoriaArticulo;
+                option.textContent = cat.nombreCategoriaArticulo;
+                select.appendChild(option);
+
+            });
+
+        }catch{
+            console.log('No existe un menu para: Categoria de articulos')
+        }
+
+        
+
+        
     } catch (error) {
         console.error("Error al cargar los datos:", error);
     }

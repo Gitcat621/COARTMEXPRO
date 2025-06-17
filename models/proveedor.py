@@ -38,6 +38,8 @@ class Proveedor:
             upc.pkPuebloCiudad,
             m.pkMunicipio,
             e.pkEstado,
+            COALESCE(GROUP_CONCAT(DISTINCT tp.pkTelefonoProveedor SEPARATOR '-')) AS pkTelefonos,
+            COALESCE(GROUP_CONCAT(DISTINCT pa.pkPaqueteria SEPARATOR '-')) AS pkPaqueterias,
             p.pkProveedor
         FROM proveedores p
         LEFT JOIN telefonos_proveedores tp ON tp.fkProveedor = p.pkProveedor
@@ -75,7 +77,8 @@ class Proveedor:
             if len(codigoPostal) == 5:
                 db.cursor.execute('INSERT INTO codigos_postales (codigoPostal) VALUES (%s)', (codigoPostal,))
                 db.cursor.execute('SELECT LAST_INSERT_ID()')
-                codigoPostal_id = db.cursor.fetchone()['LAST_INSERT_ID()']
+                codigoPostal = db.cursor.fetchone()['LAST_INSERT_ID()']
+
                 
 
             # --- Insertar o recuperar ID de pueblo ---
@@ -105,7 +108,7 @@ class Proveedor:
             # --- Insertar ubicación ---
             db.cursor.execute(
                 'INSERT INTO ubicaciones (fkCodigoPostal, fkPuebloCiudad, fkMunicipio, fkEstado) VALUES (%s, %s, %s, %s)',
-                (codigoPostal_id, puebloCiudad_id, municipio_id, estado_id)
+                (codigoPostal, puebloCiudad_id, municipio_id, estado_id)
             )
             db.cursor.execute('SELECT LAST_INSERT_ID()')
             fkUbicacion = db.cursor.fetchone()['LAST_INSERT_ID()']
@@ -122,9 +125,9 @@ class Proveedor:
 
             # --- Insertar teléfonos ---
             if numerosTelfono:
-                consultaNumeros = 'INSERT INTO telefonos_proveedores (telefonoProveedor, fkProveedor) VALUES (%s, %s)'
+                consultaTelefonos = 'INSERT INTO telefonos_proveedores (telefonoProveedor, fkProveedor) VALUES (%s, %s)'
                 valoresNumeros = [(numero, pkProveedor) for numero in numerosTelfono]
-                db.cursor.executemany(consultaNumeros, valoresNumeros)
+                db.cursor.executemany(consultaTelefonos, valoresNumeros)
 
             # --- Insertar paqueterías ---
             if paqueterias:
@@ -144,15 +147,136 @@ class Proveedor:
         finally:
             db.close()
 
-    def editar_proveedor(self):
+    def editar_proveedor(pkProveedor, nombreProveedor, correoProveedor, diasCredito, facturaNota, diasEntrega, flete, fkUbicacion, codigoPostal, puebloCiudad, municipio, estado, numerosTelfono, pkTelefonos, paqueterias):
         """Edita un registro en la base de datos."""
-        if not self.pkProveedor:
-            raise ValueError("El proveedor debe tener un ID para ser editado.")
         db = Database()
-        query = "UPDATE proveedores SET nombreProveedor = %s, correoProveedor = %s, diasCredito = %s, facturaNota = %s, fkUbicacion = %s WHERE pkProveedor = %s"
-        resultado = db.execute_commit(query, (self.nombreProveedor, self.correoProveedor, self.diasCredito, self.facturaNota, self.fkUbicacion, self.pkProveedor))
-        db.close()
-        return resultado
+        try:
+
+            if not pkTelefonos:
+                # --- Insertar todos los números porque no hay registros anteriores ---
+                consultaTelefonos = 'INSERT INTO telefonos_proveedores (telefonoProveedor, fkProveedor) VALUES (%s, %s)'
+                valoresNumeros = [(numero, pkProveedor) for numero in numerosTelfono]
+                db.cursor.executemany(consultaTelefonos, valoresNumeros)
+            else:
+                # Recuperar los números existentes asociados a esos pkTelefonos desde la BD
+                consultaExistentes = f'''
+                    SELECT pkTelefonoProveedor, telefonoProveedor
+                    FROM telefonos_proveedores
+                    WHERE pkTelefonoProveedor IN ({','.join(pkTelefonos)})
+                '''
+                db.cursor.execute(consultaExistentes)
+                telefonos_existentes = db.cursor.fetchall()  # Lista de tuplas (pk, telefono)
+                print('telefonos existentes ',telefonos_existentes)
+
+
+                # Crear diccionario {telefono: pk}
+                tel_existentes_dict = {
+                    dato['telefonoProveedor']: dato['pkTelefonoProveedor']
+                    for dato in telefonos_existentes
+                }
+
+                # Crear sets
+                set_nuevos = set(numerosTelfono)
+                set_actuales = set(tel_existentes_dict.keys())
+
+                # --- Identificar eliminados y nuevos ---
+                eliminados = set_actuales - set_nuevos
+                nuevos = set_nuevos - set_actuales
+
+                # --- Eliminar teléfonos obsoletos ---
+                if eliminados:
+                    pks_a_eliminar = [str(tel_existentes_dict[num]) for num in eliminados]
+                    consultaEliminar = f'''
+                        DELETE FROM telefonos_proveedores
+                        WHERE pkTelefonoProveedor IN ({','.join(pks_a_eliminar)})
+                    '''
+                    db.cursor.execute(consultaEliminar)
+
+                # --- Insertar nuevos números ---
+                if nuevos:
+                    consultaInsertar = 'INSERT INTO telefonos_proveedores (telefonoProveedor, fkProveedor) VALUES (%s, %s)'
+                    valoresInsertar = [(numero, pkProveedor) for numero in nuevos]
+                    db.cursor.executemany(consultaInsertar, valoresInsertar)
+
+            #Paqueterias
+            # Paso 1: Obtener las paqueterías actualmente relacionadas
+            db.cursor.execute('SELECT fkPaqueteria FROM proveedores_paqueterias WHERE fkProveedor = %s', (pkProveedor,))
+            existentes = set(str(row['fkPaqueteria']) for row in db.cursor.fetchall())
+
+            # Paso 2: Convertir la lista recibida en set
+            recibidas = set(str(p) for p in paqueterias)
+
+            # Paso 3: Determinar diferencias
+            nuevas = recibidas - existentes       # Para insertar
+            eliminadas = existentes - recibidas  # Para eliminar
+
+            # Paso 4: Insertar nuevas relaciones
+            if nuevas:
+                insertar = [(int(p), pkProveedor) for p in nuevas]
+                db.cursor.executemany('INSERT INTO proveedores_paqueterias (fkPaqueteria, fkProveedor) VALUES (%s, %s)', insertar)
+
+            # Paso 5: Eliminar relaciones que ya no se enviaron
+            if eliminadas:
+                db.cursor.executemany(
+                    'DELETE FROM proveedores_paqueterias WHERE fkProveedor = %s AND fkPaqueteria = %s',
+                    [(pkProveedor, int(p)) for p in eliminadas]
+            )
+
+            # --- Insertar o recuperar ID del codigo postal ---
+            if len(codigoPostal) == 5:
+                db.cursor.execute('INSERT INTO codigos_postales (codigoPostal) VALUES (%s)', (codigoPostal,))
+                db.cursor.execute('SELECT LAST_INSERT_ID()')
+                codigoPostal = db.cursor.fetchone()['LAST_INSERT_ID()']
+
+            # --- Insertar o recuperar ID de pueblo ---
+            if Proveedor.es_entero(puebloCiudad):
+                puebloCiudad = int(puebloCiudad)
+            else:
+                db.cursor.execute('INSERT INTO pueblos_ciudades (nombrePuebloCiudad) VALUES (%s)', (puebloCiudad,))
+                db.cursor.execute('SELECT LAST_INSERT_ID()')
+                puebloCiudad = db.cursor.fetchone()['LAST_INSERT_ID()']
+
+            # --- Insertar o recuperar ID de municipio ---
+            if Proveedor.es_entero(municipio):
+                municipio = int(municipio)
+            else:
+                db.cursor.execute('INSERT INTO municipios (nombreMunicipio) VALUES (%s)', (municipio,))
+                db.cursor.execute('SELECT LAST_INSERT_ID()')
+                municipio = db.cursor.fetchone()['LAST_INSERT_ID()']
+
+            # --- Insertar o recuperar ID de estado ---
+            if Proveedor.es_entero(estado):
+                estado = int(estado)
+            else:
+                db.cursor.execute('INSERT INTO estados (nombreEstado) VALUES (%s)', (estado,))
+                db.cursor.execute('SELECT LAST_INSERT_ID()')
+                estado = db.cursor.fetchone()['LAST_INSERT_ID()']
+
+            # --- Insertar ubicación ---
+            if fkUbicacion is None:
+                db.cursor.execute('INSERT INTO ubicaciones (fkCodigoPostal, fkPuebloCiudad, fkMunicipio, fkEstado) VALUES (%s, %s, %s, %s)', (codigoPostal, puebloCiudad, municipio, estado))
+                db.cursor.execute('SELECT LAST_INSERT_ID()')
+                fkUbicacion = db.cursor.fetchone()['LAST_INSERT_ID()']
+            else:
+                db.cursor.execute('UPDATE ubicaciones set fkCodigoPostal = %s, fkPuebloCiudad = %s, fkMunicipio = %s, fkEstado = %s WHERE pkUbicacion = %s', (codigoPostal, puebloCiudad, municipio, estado, fkUbicacion))
+
+            # --- editar proveedor ---
+            db.cursor.execute(
+                "UPDATE proveedores set nombreProveedor = %s, correoProveedor = %s, diasCredito = %s, facturaNota = %s, diasEntrega = %s, flete = %s, fkUbicacion = %s WHERE pkProveedor = %s",
+                (nombreProveedor, correoProveedor, diasCredito, facturaNota, diasEntrega, flete, fkUbicacion, pkProveedor)
+            )
+
+            # ✅ Confirmar transacción
+            db.connection.commit()
+            print("✅ Transacción completada con éxito.")
+            return True
+            
+        except Exception as e:
+            db.connection.rollback()
+            print("❌ Error al editar proveedor:", e)
+            return False
+        finally:
+            db.close()
 
     def eliminar_proveedor(self):
         """Elimina un registro de la base de datos."""

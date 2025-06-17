@@ -5,38 +5,8 @@ $(document).ready(function () {
         //toastr.warning('Usted no debería estar aquí', 'Atención', { "closeButton": true });
     }
     listarSociosComerciales();
-    listarGrupos();
+    
 });
-
-//Listar los registros foraneos
-function listarGrupos(){
-
-    fetch('http://127.0.0.1:5000/coartmex/gruposSocio', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-
-
-        document.getElementById('grupo_menu').innerHTML = "";
-
-        //Mapear en un select
-        data.forEach(function(data) {
-            
-        
-            let HTML = `<option value="${data.pkGrupoSocio}">${data.nombreGrupoSocio}</option>`;
-        
-            //Mapear valor por cada elemento en la consulta 
-            document.getElementById('grupo_menu').innerHTML += HTML;
-
-
-        });
-    })
-    .catch(error => console.error("Error al cargar los datos:", error));
-}
 
 //Asignar funcion al boton de abrir modal
 $("#modalAgregar").click(function() {

@@ -70,10 +70,36 @@ def editar_proveedor():
         correoProveedor = data.get('correoProveedor')
         diasCredito = data.get('diasCredito')
         facturaNota = data.get('facturaNota')
+        diasEntrega = data.get('diasEntrega')
+        flete = data.get('flete')
         fkUbicacion = data.get('fkUbicacion')
+        codigoPostal = data.get('codigoPostal')
+        puebloCiudad = data.get('puebloCiudad')
+        municipio = data.get('municipio')
+        estado = data.get('estado')
+        numerosTelfono = data.get('numerosSeleccionados')
+        pkTelefonos = data.get('pkTelefonos')
+        paqueterias = data.get('paqueteriasSeleccionadas')
 
-        proveedor = Proveedor(pkProveedor=pkProveedor,nombreProveedor=nombreProveedor, correoProveedor=correoProveedor, diasCredito=diasCredito, facturaNota=facturaNota, fkUbicacion=fkUbicacion)
-        if proveedor.editar_proveedor():
+        print("pkProveedor ", pkProveedor)
+        print("nombreProveedor ", nombreProveedor)
+        print("correoProveedor ", correoProveedor)
+        print("diasCredito ", diasCredito)
+        print("facturaNota ", facturaNota)
+        print("diasEntrega ", diasEntrega)
+        print("flete ", flete)
+        print("fkUbicacion ", fkUbicacion)
+        print("codigoPostal ", codigoPostal)
+        print("puebloCiudad ", puebloCiudad)
+        print("municipio ", municipio)
+        print("estado ", estado)
+        print("numerosTelfono ", numerosTelfono)
+        print("pkTelefonos ", pkTelefonos)
+        print("Paqueterías ", paqueterias)
+
+
+
+        if Proveedor.editar_proveedor(pkProveedor, nombreProveedor, correoProveedor, diasCredito, facturaNota, diasEntrega, flete, fkUbicacion, codigoPostal, puebloCiudad, municipio, estado, numerosTelfono, pkTelefonos, paqueterias):
             return jsonify({'mensaje': 'Proveedor editado correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo editar el proveedor'}), 500

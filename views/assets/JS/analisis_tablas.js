@@ -100,7 +100,7 @@ async function cargarTablas(endpoint, grupo, anio, mes) {
         endpoint = endpoint.charAt(0).toLowerCase() + endpoint.slice(1);
     }
     if(endpoint == "Inventario"){
-        endpoint = "articulos"
+        endpoint = "inventario"
     }
     if(endpoint == "CxC"){
         endpoint = "cuentasPorCobrar"
@@ -244,7 +244,7 @@ function inicializarTabla(data, endpoint){
                         extend: 'excelHtml5',
                         text: 'Descargar Excel',
                         className: 'btn btn-success',
-                        title: 'Listado de Artículos' // Nombre del archivo
+                        title: 'Ingresos' // Nombre del archivo
                     }
                 ],
                 columns: [
@@ -333,7 +333,7 @@ function inicializarTabla(data, endpoint){
                         extend: 'excelHtml5',
                         text: 'Descargar Excel',
                         className: 'btn btn-success',
-                        title: 'Listado de Artículos' // Nombre del archivo
+                        title: 'Gastos' // Nombre del archivo
                     }
                 ],
                 columns: [
@@ -445,7 +445,7 @@ function inicializarTabla(data, endpoint){
                             extend: 'excelHtml5',
                             text: 'Descargar Excel',
                             className: 'btn btn-success',
-                            title: 'Listado de Artículos' // Nombre del archivo
+                            title: 'Ventas' // Nombre del archivo
                         }
                     ],
                     columns: [
@@ -508,7 +508,7 @@ function inicializarTabla(data, endpoint){
 
 
         break;
-        case 'articulos':
+        case 'inventario':
 
             
             elemento = document.getElementById('contenedorMonth');
@@ -535,7 +535,7 @@ function inicializarTabla(data, endpoint){
                         extend: 'excelHtml5',
                         text: 'Descargar Excel',
                         className: 'btn btn-success',
-                        title: 'Listado de Artículos' // Nombre del archivo
+                        title: 'Inventario' // Nombre del archivo
                     }
                 ],
                 columns: [
@@ -621,7 +621,7 @@ function inicializarTabla(data, endpoint){
                         extend: 'excelHtml5',
                         text: 'Descargar Excel',
                         className: 'btn btn-success',
-                        title: 'Listado de Artículos' // Nombre del archivo
+                        title: 'CxP' // Nombre del archivo
                     }
                 ],
                 columns: [
@@ -681,7 +681,7 @@ function inicializarTabla(data, endpoint){
                         extend: 'excelHtml5',
                         text: 'Descargar Excel',
                         className: 'btn btn-success',
-                        title: 'Listado de Artículos' // Nombre del archivo
+                        title: 'CxC' // Nombre del archivo
                     }
                 ],
                 columns: [
@@ -727,7 +727,7 @@ function inicializarTabla(data, endpoint){
                         extend: 'excelHtml5',
                         text: 'Descargar Excel',
                         className: 'btn btn-success',
-                        title: 'Listado de Artículos' // Nombre del archivo
+                        title: 'Compras de mercancia' // Nombre del archivo
                     }
                 ],
                 columns: [
@@ -807,7 +807,7 @@ function inicializarTabla(data, endpoint){
                         extend: 'excelHtml5',
                         text: 'Descargar Excel',
                         className: 'btn btn-success',
-                        title: 'Listado de Artículos' // Nombre del archivo
+                        title: 'Facturado' // Nombre del archivo
                     }
                 ],
                 columns: [

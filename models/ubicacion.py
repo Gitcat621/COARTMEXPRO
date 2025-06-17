@@ -20,11 +20,11 @@ class Ubicacion:
             SELECT cp.codigoPostal, pc.nombrePuebloCiudad, m.nombreMunicipio, e.nombreEstado, p.nombrePais,
             u.pkUbicacion, cp.pkCodigoPostal, pc.pkPuebloCiudad, m.pkMunicipio, e.pkEstado, p.pkPais 
             FROM ubicaciones u 
-            JOIN codigos_postales cp ON cp.pkCodigoPostal = u.fkCodigoPostal 
-            JOIN pueblos_ciudades pc ON pc.pkPuebloCiudad = u.fkPuebloCiudad 
-            JOIN municipios m ON m.pkMunicipio = u.fkMunicipio 
-            JOIN estados e ON e.pkEstado = u.fkEstado 
-            JOIN paises p ON p.pkPais = u.fkPais
+            LEFT JOIN codigos_postales cp ON cp.pkCodigoPostal = u.fkCodigoPostal 
+            LEFT JOIN pueblos_ciudades pc ON pc.pkPuebloCiudad = u.fkPuebloCiudad 
+            LEFT JOIN municipios m ON m.pkMunicipio = u.fkMunicipio 
+            LEFT JOIN estados e ON e.pkEstado = u.fkEstado 
+            LEFT JOIN paises p ON p.pkPais = u.fkPais
         """
         print(consulta)
         resultado = db.execute_query(consulta)

@@ -81,10 +81,9 @@ async function listarNivelesEstudio() {
     }
 }
 
-
 //Asignar funcion al boton de abrir modal
-$("#modalAgregar").click(function() {
-    abrirModal(1);
+$("#agregarEmpleado").click(function() {
+    abrirModalEmpleado(1);
 });
 
 //Inicializar datatable
@@ -145,7 +144,7 @@ $(document).ready(function() {
         document.getElementById('vale').value = vale;
         document.getElementById('puesto_menu').value = fkPuesto;
 
-        abrirModal(2,numeroEmpleado)
+        abrirModalEmpleado(2,numeroEmpleado)
     });
 
     // Eliminar
@@ -198,14 +197,14 @@ async function listarEmpleados() {
             empleados.nombreEmpleado, //2 
             toformatearFecha(empleados.fechaIngreso), //3
             toformatearFecha(empleados.fechaNacimiento), //4
-            '$' + empleados.nomina.toLocaleString('es-MX'),
-            '$' + empleados.vale.toLocaleString('es-MX'),
-            '$' + (parseFloat(empleados.nomina) + parseFloat(empleados.vale)).toLocaleString('es-MX'),
-            empleados.nombrePuesto,
-            empleados.nombreDepartamento, //
-            empleados.nombreNivel,
-            empleados.ubicacion,
-            empleados.estado,
+            '$' + empleados.nomina.toLocaleString('es-MX'), //5
+            '$' + empleados.vale.toLocaleString('es-MX'), //6
+            '$' + (parseFloat(empleados.nomina) + parseFloat(empleados.vale)).toLocaleString('es-MX'), //7
+            empleados.nombrePuesto, //8
+            empleados.nombreDepartamento, //9
+            empleados.nombreNivel, //10
+            empleados.ubicacion, //11
+            empleados.estado, //12
         ])).draw();
     } catch (error) {
         console.error("Error al cargar los datos:", error);
@@ -337,7 +336,7 @@ async function eliminarEmpleado(numeroEmpleado) {
     }
 }
 
-function abrirModal(modo, rfc) {
+function abrirModalEmpleado(modo, rfc) {
 
     //Obtener el valor de los elementos del modal
     const modalTitle = document.getElementById('myModalLabel');

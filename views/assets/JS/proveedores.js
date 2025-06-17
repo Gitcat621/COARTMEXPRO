@@ -41,7 +41,7 @@ $(document).ready(function() {
                 render: function (data, type, row) { // 'row' contiene toda la fila de datos
                     return `<div class="text-center">
                                 <button class="btn btn-xs editar-btn" data-row='${JSON.stringify(row)}'><i class="fa fa-pencil"></i></button>
-                                <button class="btn btn-xs eliminar-btn" data-pk="${row[16]}" data-nombre="${row[0]}"><i class="fa fa-trash"></i></button>
+                                <button class="btn btn-xs eliminar-btn" data-pk="${row[21]}" data-nombre="${row[0]}"><i class="fa fa-trash"></i></button>
                             </div>`;
                 }
             }
@@ -55,17 +55,118 @@ $(document).ready(function() {
 
         const rowData = $(this).data('row'); 
 
-        const nombreProveedor = rowData[0];
-        const correoProveedor = rowData[1];
-        const diasCredito = rowData[4];
-        const fkUbicacion = rowData[15];
-        const pkProveedor = rowData[16];
+        const nombreProveedor     = rowData[0];
+        const correoProveedor     = rowData[1];
+        const telefonos           = rowData[2];
+        const metodosPago         = rowData[3];
+        const diasCredito         = rowData[4];
+        const facturaNota         = rowData[5];
+        const bancos              = rowData[6];
+        const numerosCuenta       = rowData[7];
+        const beneficiarios       = rowData[8];
+        const diasEntrega         = rowData[9];
+        const flete               = rowData[10];
+        const paqueterias         = rowData[11];
+        const codigoPostal        = rowData[12];
+        const nombreMunicipio     = rowData[13];
+        const nombreEstado        = rowData[14];
+        const fkUbicacion         = rowData[15];
+        const pkCodigoPostal      = rowData[16];
+        const pkPuebloCiudad      = rowData[17];
+        const pkMunicipio         = rowData[18];
+        const pkEstado            = rowData[19];
+        const pkTelefonos         = rowData[20];
+        const pkPaqueterias       = rowData[21];
+        const pkProveedor         = rowData[22];
+
 
 
         document.getElementById('nombreProveedor').value = nombreProveedor;
         document.getElementById('correoProveedor').value = correoProveedor;
         document.getElementById('diasCredito').value = diasCredito;
+        document.getElementById('diasEntrega').value = diasEntrega;
+
+        //FLETES
+        const flete_menu = document.getElementById("flete_menu");
+        for (let i = 0; i < flete_menu.options.length; i++) {
+            if (flete_menu.options[i].textContent.trim() === flete.trim()) {
+                flete_menu.selectedIndex = i;
+                break;
+            }
+        }
+
+        //FACTURA / NOTA
+        const fn_menu = document.getElementById('fn_menu');
+        for (let i = 0; i < fn_menu.options.length; i++) {
+            if (fn_menu.options[i].textContent.trim() === facturaNota.trim()) {
+                fn_menu.selectedIndex = i;
+                break;
+            }
+        }
+
+        //TELEFONOS
+        const select = document.getElementById("telefono_menu");
+        select.innerHTML = ""; // Limpiar antes
+        if (
+            telefonos &&
+            typeof telefonos === "string" &&
+            telefonos.trim() !== "" &&
+            pkTelefonos &&
+            typeof pkTelefonos === "string" &&
+            pkTelefonos.trim() !== ""
+        ) {
+            const numeros = telefonos
+                .split(",")
+                .map(t => t.trim())
+                .filter(t => t !== "");
+
+            const ids = pkTelefonos
+                .split("-")
+                .map(id => id.trim())
+                .filter(id => id !== "");
+
+            if (numeros.length > 0 && ids.length > 0 && numeros.length === ids.length) {
+                numeros.forEach((telefono, index) => {
+                    const option = document.createElement("option");
+                    option.value = telefono;
+                    option.textContent = telefono;
+                    option.dataset.id = ids[index];
+                    option.selected = true;
+                    select.appendChild(option);
+                });
+            }
+        }
+
+
+        //PAQUETERIAS
+        if (pkPaqueterias && pkPaqueterias.trim() !== "") {
+            const idsSeleccionados = pkPaqueterias.split("-");
+
+            const select = document.getElementById('paqueteria_menu');
+
+            for (const option of select.options) {
+                if (idsSeleccionados.includes(option.value)) {
+                    option.selected = true;
+                }
+            }
+
+            // Actualizar visualmente si usas Select2
+            $('#paqueteria_menu').trigger('change');
+        } else {
+            console.warn("No se especificaron paqueterías para seleccionar.");
+        }
+
+
+
+
+        
+        document.getElementById('diasCredito').value = diasCredito;
         document.getElementById('ubicacion_menu').value = fkUbicacion;
+
+        $('#codigosPostales_menu').val([pkCodigoPostal]).trigger('change');
+        $('#pueblosCiudades_menu').val([pkPuebloCiudad]).trigger('change');
+        $('#municipios_menu').val([pkMunicipio]).trigger('change');
+        $('#estados_menu').val([pkEstado]).trigger('change');
 
 
         abrirModalProveedor(2,pkProveedor);
@@ -105,6 +206,9 @@ async function agregarProveedor() {
     const flete = document.getElementById('flete_menu').value;
 
     const codigoPostal = document.getElementById('codigosPostales_menu').value;
+    const select = document.getElementById('codigosPostales_menu');
+    const codigoPostalContenido = Array.from(select.selectedOptions).map(opt => opt.textContent);
+
     const puebloCiudad = document.getElementById('pueblosCiudades_menu').value;
     const municipio = document.getElementById('municipios_menu').value;
     const estado = document.getElementById('estados_menu').value;
@@ -112,24 +216,24 @@ async function agregarProveedor() {
     const numerosSeleccionados = Array.from(document.getElementById('telefono_menu').selectedOptions).map(o => o.value);
     const paqueteriasSeleccionadas = Array.from(document.getElementById('paqueteria_menu').selectedOptions).map(o => o.value);
 
-    if (!numerosSeleccionados.every(num => /^\d+$/.test(num))) {
-        toastr.warning('Se ha escrito texto como número de emergencia', 'Atención', { "closeButton": true });
-        return;
-    }
-
-    if (codigoPostal && codigoPostal.length === 5) {
-        console.log("Cadena válida");
-    } else {
-        toastr.warning('EL codigo postal debe tener 5 caracteres', 'Atención', { "closeButton": true });
-        return;
-    }
-
-
+    //Validar datos ingresados
 
     if (!nombreProveedor || !correoProveedor || !diasCredito || !facturaNota || !diasEntrega || !flete ||
         !codigoPostal || !puebloCiudad || !municipio || !estado ||
         numerosSeleccionados.length === 0 || paqueteriasSeleccionadas.length === 0) {
         toastr.warning('Por favor completa todos los campos', 'Advertencia', { "closeButton": true });
+        return;
+    }
+    
+
+    if (!numerosSeleccionados.every(num => /^\d{10}$/.test(num))) {
+        toastr.warning('Cada número de emergencia debe tener exactamente 10 dígitos numéricos', 'Atención', { "closeButton": true });
+        return;
+    }
+
+    
+    if (codigoPostalContenido[0].length !== 5) {
+        toastr.warning('El código postal debe tener exactamente 5 caracteres', 'Atención', { "closeButton": true });
         return;
     }
 
@@ -153,6 +257,10 @@ async function agregarProveedor() {
         toastr.success(`${data.mensaje}`, 'Realizado', { "closeButton": true });
         $('#boostrapModal-1').modal('hide');
         listarProveedores();
+        listarCodigosPostales();
+        listarPueblosCiudades();
+        listarMunicipios();
+        listarEstados();
     } catch (error) {
         console.error('Error:', error);
         toastr.error('Hubo un error al intentar la acción', 'Error', { "closeButton": true });
@@ -170,14 +278,59 @@ async function listarProveedores() {
         if (!response.ok) throw new Error('Error al obtener los datos');
         const data = await response.json();
 
-        const tabla = $('#proveedorTable').DataTable();
-        tabla.clear().draw();
-        tabla.rows.add(data.map(p => [
-            p.nombreProveedor, p.correoProveedor, p.telefonos, p.metodosPago, p.diasCredito,
-            p.facturaNota, p.bancos, p.numerosCuenta, p.beneficiarios, p.diasEntrega,
-            p.flete, p.paqueterias, p.codigoPostal, p.nombreMunicipio, p.nombreEstado,
-            p.fkUbicacion, p.pkCodigoPostal, p.pkPuebloCiudad, p.pkMunicipio, p.pkEstado, p.pkProveedor
-        ])).draw();
+        //console.log(data);
+
+        try {
+            const tabla = $('#proveedorTable').DataTable();
+            tabla.clear().draw();
+            tabla.rows.add(data.map(p => [
+                p.nombreProveedor, //0
+                p.correoProveedor, //1
+                p.telefonos, //2
+                p.metodosPago, //3
+                p.diasCredito, //4
+                p.facturaNota, //5
+                p.bancos, //6
+                p.numerosCuenta, //7
+                p.beneficiarios, //8
+                p.diasEntrega, //9
+                p.flete, //10
+                p.paqueterias, //11 
+                p.codigoPostal, //12
+                p.nombreMunicipio, //13
+                p.nombreEstado, //14
+                p.fkUbicacion, //15
+                p.pkCodigoPostal, //16
+                p.pkPuebloCiudad, //17
+                p.pkMunicipio, //18
+                p.pkEstado, //19
+                p.pkTelefonos, //20
+                p.pkPaqueterias, //21
+                p.pkProveedor //22
+            ])).draw();
+        }catch{
+            console.log('No existe una tabla para: Proveedores')
+        }
+
+        try {
+
+            const select = document.getElementById('proveedor_menu');
+            select.innerHTML = "";
+
+            data.forEach(proveedor => {
+
+                let option = document.createElement('option');
+                option.value = proveedor.pkProveedor;
+                option.textContent = proveedor.nombreProveedor;
+                select.appendChild(option);
+
+            });
+
+        }catch{
+            console.log('No existe una tabla para: Proveedores')
+        }
+
+        
     } catch (error) {
         console.error("Error al cargar los datos:", error);
     }
@@ -185,14 +338,50 @@ async function listarProveedores() {
 
 
 async function editarProveedor(pkProveedor) {
+
     const nombreProveedor = document.getElementById('nombreProveedor').value.trim();
     const correoProveedor = document.getElementById('correoProveedor').value.trim();
     const diasCredito = document.getElementById('diasCredito').value.trim();
     const facturaNota = document.getElementById('fn_menu').value;
+    const diasEntrega = document.getElementById('diasEntrega').value.trim();
+    const flete = document.getElementById('flete_menu').value;
+
+    const codigoPostal = document.getElementById('codigosPostales_menu').value;
+    const codigosPostales_menu = document.getElementById('codigosPostales_menu');
+    const codigoPostalContenido = Array.from(codigosPostales_menu.selectedOptions).map(opt => opt.textContent);
+
+    const puebloCiudad = document.getElementById('pueblosCiudades_menu').value;
+    const municipio = document.getElementById('municipios_menu').value;
+    const estado = document.getElementById('estados_menu').value;
+
+    const telefono_menu = document.getElementById("telefono_menu");
+    const pkTelefonos = Array.from(telefono_menu.selectedOptions)
+    .map(opt => opt.dataset.id)
+    .filter(id => id !== undefined);
+
+
     const fkUbicacion = document.getElementById('ubicacion_menu').value;
 
-    if (!pkProveedor || !nombreProveedor || !correoProveedor || !diasCredito || !facturaNota || !fkUbicacion) {
+    const numerosSeleccionados = Array.from(document.getElementById('telefono_menu').selectedOptions).map(o => o.value);
+    const paqueteriasSeleccionadas = Array.from(document.getElementById('paqueteria_menu').selectedOptions).map(o => o.value);
+    //Validar datos ingresados
+
+    if (!nombreProveedor || !correoProveedor || !diasCredito || !facturaNota || !diasEntrega || !flete ||
+        !codigoPostal || !puebloCiudad || !municipio || !estado ||
+        numerosSeleccionados.length === 0 || paqueteriasSeleccionadas.length === 0) {
         toastr.warning('Por favor completa todos los campos', 'Advertencia', { "closeButton": true });
+        return;
+    }
+    
+
+    if (!numerosSeleccionados.every(num => /^\d{10}$/.test(num))) {
+        toastr.warning('Cada número de emergencia debe tener exactamente 10 dígitos numéricos', 'Atención', { "closeButton": true });
+        return;
+    }
+
+    
+    if (codigoPostalContenido[0].length !== 5) {
+        toastr.warning('El código postal debe tener exactamente 5 caracteres', 'Atención', { "closeButton": true });
         return;
     }
 
@@ -200,7 +389,10 @@ async function editarProveedor(pkProveedor) {
         const response = await fetch('http://127.0.0.1:5000/coartmex/proveedores', {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ pkProveedor, nombreProveedor, correoProveedor, diasCredito, facturaNota, fkUbicacion })
+            body: JSON.stringify({ 
+                pkProveedor ,nombreProveedor, correoProveedor, diasCredito, facturaNota, diasEntrega, flete, fkUbicacion,
+                codigoPostal, puebloCiudad, municipio, estado, numerosSeleccionados, pkTelefonos, paqueteriasSeleccionadas, 
+            })
         });
 
         const data = await response.json();
@@ -210,8 +402,14 @@ async function editarProveedor(pkProveedor) {
             return;
         }
 
+         $('#boostrapModal-1').modal('hide');
         listarProveedores();
+        listarCodigosPostales();
+        listarPueblosCiudades();
+        listarMunicipios();
+        listarEstados();
         toastr.success(`${data.mensaje}`, 'Realizado', { "closeButton": true });
+
     } catch (error) {
         console.error('Error:', error);
         toastr.error('Hubo un error al intentar la acción', 'Error', { "closeButton": true });

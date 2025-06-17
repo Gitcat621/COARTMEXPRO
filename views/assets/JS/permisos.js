@@ -33,8 +33,6 @@ $(document).ready(function() {
         scrollX: true,
     });
 
-    
-
     // Event listeners para los botones
     // Editar
     $('#permisoTable').on('click', '.editar-btn', function () {
