@@ -45,7 +45,13 @@ class Empleado:
             d.nombreDepartamento,
             ne.nombreNivel,
             CONCAT(pc.nombrePuebloCiudad, ', ', es.nombreEstado, ', ',pa.nombrePais) AS ubicacion,
-            e.estado
+            e.estado,
+            p.pkPuesto,
+            ne.pkNivelEstudio,
+            u.pkUbicacion,
+            pc.pkPuebloCiudad,
+            es.pkEstado,
+            pa.pkPais
         FROM empleados e
         LEFT JOIN puestos p ON p.pkPuesto = e.fkPuesto
         LEFT JOIN departamentos d ON d.pkDepartamento = p.fkDepartamento
@@ -57,7 +63,6 @@ class Empleado:
         LEFT JOIN estados es ON es.pkEstado = u.fkEstado 
         LEFT JOIN paises pa ON pa.pkPais = u.fkPais
         GROUP BY e.numeroEmpleado;
-
         '''
         print(consulta)
         resultado = db.execute_query(consulta)
@@ -117,28 +122,76 @@ class Empleado:
         db.close()
         return resultado
 
-    def crear_empleado(self):
+    @staticmethod
+    def es_entero(valor):
+        """Verifica si un valor puede convertirse a entero."""
+        try:
+            int(valor)
+            return True
+        except (ValueError, TypeError):
+            return False
+
+    def crear_empleado(numeroEmpleado, rfc, nombreEmpleado, fechaIngreso, fechaNacimiento, nomina, vale, estado, fkPuesto, fkNivelEstudio, fkUbicacion, ciudadNacimiento, estadoNacimiento, paisNacimiento):
         """Guarda un nuevo registro en la base de datos"""
         db = Database()
-        consulta = '''
-        INSERT INTO empleados 
-        (numeroEmpleado, rfc, nombreEmpleado, fechaIngreso, fechaNacimiento, nomina, vale, estado, fkPuesto, fkNivelEstudio, fkUbicacion) 
-        VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
-        '''
+        try:
+            if fkUbicacion is not None:
+                # --- Insertar o recuperar ID de pueblo ---
+                if Empleado.es_entero(ciudadNacimiento):
+                    ciudadNacimiento = int(ciudadNacimiento)
+                else:
+                    db.cursor.execute('INSERT INTO pueblos_ciudades (nombrePuebloCiudad) VALUES (%s)', (ciudadNacimiento,))
+                    db.cursor.execute('SELECT LAST_INSERT_ID()')
+                    ciudadNacimiento = db.cursor.fetchone()['LAST_INSERT_ID()']
 
-        self.numeroEmpleado = Empleado.generar_numero_empleado(self.fechaIngreso, self.numeroEmpleado)
-        if not self.numeroEmpleado:
-            return False  # O lanzar una excepción indicando el error
+                # --- Insertar o recuperar ID de estado ---
+                if Empleado.es_entero(estadoNacimiento):
+                    estadoNacimiento = int(estadoNacimiento)
+                else:
+                    db.cursor.execute('INSERT INTO estados (nombreEstado) VALUES (%s)', (estadoNacimiento,))
+                    db.cursor.execute('SELECT LAST_INSERT_ID()')
+                    estado = db.cursor.fetchone()['LAST_INSERT_ID()']
 
+                # --- Insertar o recuperar ID de país ---
+                if Empleado.es_entero(paisNacimiento):
+                    paisNacimiento = int(paisNacimiento)
+                else:
+                    db.cursor.execute('INSERT INTO paises (nombrePais) VALUES (%s)', (paisNacimiento,))
+                    db.cursor.execute('SELECT LAST_INSERT_ID()')
+                    paisNacimiento = db.cursor.fetchone()['LAST_INSERT_ID()']
 
-        valores = (self.numeroEmpleado, self.rfc, self.nombreEmpleado, self.fechaIngreso, self.fechaNacimiento, self.nomina, self.vale, self.estado, self.fkPuesto, self.fkNivelEstudio, self.fkUbicacion)
+                # --- Insertar ubicación ---
+                db.cursor.execute('INSERT INTO ubicaciones (fkPuebloCiudad, fkEstado, fkPais) VALUES (%s, %s, %s)', (ciudadNacimiento, estadoNacimiento, paisNacimiento))
+                db.cursor.execute('SELECT LAST_INSERT_ID()')
+                fkUbicacion = db.cursor.fetchone()['LAST_INSERT_ID()']
 
-        print(consulta % valores)
+            consulta = '''
+            INSERT INTO empleados 
+            (numeroEmpleado, rfc, nombreEmpleado, fechaIngreso, fechaNacimiento, nomina, vale, estado, fkPuesto, fkNivelEstudio, fkUbicacion) 
+            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+            '''
 
-        resultado = db.execute_commit(consulta, valores)
+            numeroEmpleado = Empleado.generar_numero_empleado(fechaIngreso, numeroEmpleado)
+            if not numeroEmpleado:
+                return False  # O lanzar una excepción indicando el error
 
-        db.close()
-        return resultado
+            valores = (numeroEmpleado, rfc, nombreEmpleado, fechaIngreso, fechaNacimiento, nomina, vale, estado, fkPuesto, fkNivelEstudio, fkUbicacion)
+
+            print(consulta % valores)
+
+            db.cursor.execute(consulta, valores)
+
+            # ✅ Confirmar transacción
+            db.connection.commit()
+            print("✅ Transacción completada con éxito.")
+            return True
+            
+        except Exception as e:
+            db.connection.rollback()
+            print("❌ Error al insertar empleado:", e)
+            return False
+        finally:
+            db.close()
 
     def generar_numero_empleado(fecha_ingreso, numeroEmpleado):
         """Genera un número de empleado con sufijo incremental"""
@@ -162,15 +215,59 @@ class Empleado:
             print(f"Error generando número de empleado: {e}")
             return None
 
-    def editar_empleado(self):
+    def editar_empleado(numeroEmpleado, rfc, nombreEmpleado, fechaIngreso, fechaNacimiento, nomina, vale, estado, fkPuesto, fkNivelEstudio, fkUbicacion, ciudadNacimiento, estadoNacimiento, paisNacimiento):
         """Edita un registro en la base de datos."""
         db = Database()
-        consulta = "UPDATE empleados SET rfc = %s, nombreEmpleado = %s, fechaIngreso = %s, fechaNacimiento = %s, nomina = %s, vale = %s, estado = %s, fkPuesto = %s, fkNivelEstudio = %s, fkUbicacion = %s WHERE numeroEmpleado = %s"
-        valores = (self.rfc, self.nombreEmpleado, self.fechaIngreso, self.fechaNacimiento, self.nomina, self.vale, self.estado, self.fkPuesto, self.numeroEmpleado, self.fkNivelEstudio, self.fkUbicacion)
-        print(consulta % valores)
-        resultado = db.execute_commit(consulta, valores)
-        db.close()
-        return resultado
+        try:
+            # --- Insertar o recuperar ID de pueblo ---
+            if Empleado.es_entero(ciudadNacimiento):
+                ciudadNacimiento = int(ciudadNacimiento)
+            else:
+                db.cursor.execute('INSERT INTO pueblos_ciudades (nombrePuebloCiudad) VALUES (%s)', (ciudadNacimiento,))
+                db.cursor.execute('SELECT LAST_INSERT_ID()')
+                ciudadNacimiento = db.cursor.fetchone()['LAST_INSERT_ID()']
+
+            # --- Insertar o recuperar ID de estado ---
+            if Empleado.es_entero(estadoNacimiento):
+                estadoNacimiento = int(estadoNacimiento)
+            else:
+                db.cursor.execute('INSERT INTO estados (nombreEstado) VALUES (%s)', (estadoNacimiento,))
+                db.cursor.execute('SELECT LAST_INSERT_ID()')
+                estado = db.cursor.fetchone()['LAST_INSERT_ID()']
+
+            # --- Insertar o recuperar ID de país ---
+            if Empleado.es_entero(paisNacimiento):
+                paisNacimiento = int(paisNacimiento)
+            else:
+                db.cursor.execute('INSERT INTO paises (nombrePais) VALUES (%s)', (paisNacimiento,))
+                db.cursor.execute('SELECT LAST_INSERT_ID()')
+                paisNacimiento = db.cursor.fetchone()['LAST_INSERT_ID()']
+
+
+            #--- Insertar ubicación ---
+            if fkUbicacion is None:
+                db.cursor.execute('INSERT INTO ubicaciones (fkPuebloCiudad, fkEstado, fkPais) VALUES (%s, %s, %s)', (ciudadNacimiento, estadoNacimiento, paisNacimiento))
+                db.cursor.execute('SELECT LAST_INSERT_ID()')
+                fkUbicacion = db.cursor.fetchone()['LAST_INSERT_ID()']
+            else:
+                db.cursor.execute('UPDATE ubicaciones set fkPuebloCiudad = %s, fkEstado = %s, fkPais =%s WHERE pkUbicacion = %s', (ciudadNacimiento, estadoNacimiento, paisNacimiento, fkUbicacion))
+
+            consulta = "UPDATE empleados SET rfc = %s, nombreEmpleado = %s, fechaIngreso = %s, fechaNacimiento = %s, nomina = %s, vale = %s, estado = %s, fkPuesto = %s, fkNivelEstudio = %s, fkUbicacion = %s WHERE numeroEmpleado = %s"
+            valores = (rfc, nombreEmpleado, fechaIngreso, fechaNacimiento, nomina, vale, estado, fkPuesto, fkNivelEstudio, fkUbicacion, numeroEmpleado)
+            print(consulta % valores)
+            db.cursor.execute(consulta, valores)
+            
+            # ✅ Confirmar transacción
+            db.connection.commit()
+            print("✅ Transacción completada con éxito.")
+            return True
+            
+        except Exception as e:
+            db.connection.rollback()
+            print("❌ Error al editar empleado:", e)
+            return False
+        finally:
+            db.close()
 
     def eliminar_empleado(self):
         """Elimina un registro de la base de datos."""
@@ -340,22 +437,43 @@ class Empleado:
         db.close()
         return resultado
     
-    def crear_oportunidad_empleado(fkEmpleado, fkOportunidad):
-        """Guarda un nuevo registro en la base de datos de manera segura"""
+    def crear_oportunidad_empleado(fkEmpleado, oportunidades):
+        """Guarda nuevas oportunidades para un empleado, evitando duplicados y errores de inserción."""
         db = Database()
-        
-        consulta = """
-            INSERT INTO empleados_oportunidades (fkEmpleado, fkOportunidad) 
-            VALUES (%s, %s)
-        """
-        valores = (fkEmpleado, fkOportunidad)
 
-        print("Consulta:", consulta)
-        print("Valores:", valores)
-        
-        resultado = db.execute_commit(consulta, valores)
-        db.close()
-        return resultado
+        try:
+            for oportunidad in oportunidades:
+                if Empleado.es_entero(oportunidad):
+                    fkOportunidad = int(oportunidad)
+                else:
+                    db.cursor.execute('INSERT INTO oportunidades (oportunidad) VALUES (%s)', (oportunidad,))
+                    db.cursor.execute('SELECT LAST_INSERT_ID()')
+                    fkOportunidad = db.cursor.fetchone()['LAST_INSERT_ID()']
+
+                # Validar si ya existe esa relación antes de insertar
+                db.cursor.execute(
+                    'SELECT COUNT(*) as total FROM empleados_oportunidades WHERE fkEmpleado = %s AND fkOportunidad = %s',
+                    (fkEmpleado, fkOportunidad)
+                )
+                existe = db.cursor.fetchone()['total']
+
+                if not existe:
+                    db.cursor.execute(
+                        'INSERT INTO empleados_oportunidades (fkEmpleado, fkOportunidad) VALUES (%s, %s)',
+                        (fkEmpleado, fkOportunidad)
+                    )
+
+            db.connection.commit()
+            print("✅ Transacción completada con éxito.")
+            return True
+
+        except Exception as e:
+            print("❌ Error durante la transacción:", e)
+            db.connection.rollback()
+            return False
+
+        finally:
+            db.close()
     
     def crear_reunionIntegracion_empleado(fechaAsistencia, fkOportunidad):
         """Guarda un nuevo registro en la base de datos de manera segura"""

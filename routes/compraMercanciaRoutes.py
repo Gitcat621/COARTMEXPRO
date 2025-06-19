@@ -30,7 +30,7 @@ def listar_compras():
         if socio not in data:
             data[socio] = {m: 0 for m in meses_es.values()}  # Usar los nombres en español
 
-        data[socio][mes] += int(compra["montoMercancia"])
+        data[socio][mes] += float(compra["montoMercancia"])
 
     return jsonify(data), 200
     #return jsonify(compras), 200

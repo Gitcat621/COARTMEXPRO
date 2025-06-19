@@ -83,10 +83,18 @@ async function listarPuesto() {
         });
 
         const data = await response.json();
-        let tabla = $('#puestoTable').DataTable();
 
-        tabla.clear().draw();
-        tabla.rows.add(data.map(puesto => [puesto.nombrePuesto, puesto.nombreDepartamento, puesto.fkDepartamento, puesto.pkPuesto])).draw();
+        try{
+
+            let tabla = $('#puestoTable').DataTable();
+
+            tabla.clear().draw();
+            tabla.rows.add(data.map(puesto => [puesto.nombrePuesto, puesto.nombreDepartamento, puesto.fkDepartamento, puesto.pkPuesto])).draw();
+
+        }catch{
+            console.log('no existe una tabla para: Puestos');
+        }
+
 
         try{
             
@@ -103,7 +111,7 @@ async function listarPuesto() {
             });
 
         }catch{
-            console.log('no existe este elemento: Puestos');
+            console.log('no existe un menu: Puestos');
         }
 
     } catch (error) {
@@ -151,7 +159,6 @@ async function agregarPuesto() {
         toastr.error('Hubo un error al intentar la acción', 'Error', { "closeButton": true });
     }
 }
-
 
 async function editarPuesto(pkPuesto) {
     try {
@@ -244,6 +251,3 @@ function modalPuesto(modo, pkPuesto) {
     }
 
 }
-
-
-// toastr.success(`Si`, 'simon', {"closeButton": true,});

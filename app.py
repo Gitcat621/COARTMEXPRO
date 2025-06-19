@@ -42,6 +42,7 @@ from routes.funcionPuestoRoutes import funcion_puesto_bp
 from routes.presentadorRoutes import presentador_bp
 from routes.clinicaRoutes import clinica_bp
 from routes.relojChecadorRoutes import relojChecador_bp
+from routes.metodoPagoRoutes import metodo_pago_bp
 
 app = Flask(__name__)
 
@@ -87,7 +88,7 @@ app.register_blueprint(funcion_puesto_bp, url_prefix='/coartmex')
 app.register_blueprint(presentador_bp, url_prefix='/coartmex')
 app.register_blueprint(clinica_bp, url_prefix='/coartmex')
 app.register_blueprint(relojChecador_bp, url_prefix='/coartmex')
-
+app.register_blueprint(metodo_pago_bp, url_prefix='/coartmex')
 
 @app.route('/')
 def default():

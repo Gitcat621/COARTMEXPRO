@@ -42,7 +42,7 @@ def listar_gastos():
                 "meses": {m: 0 for m in meses_es.values()}
             }
 
-        data[motivo]["meses"][mes] += int(gasto["montoGasto"])
+        data[motivo]["meses"][mes] += float(gasto["montoGasto"])
 
     return jsonify(data), 200
 

@@ -49,7 +49,7 @@ $(document).ready(function() {
 
         const codigoArticulo = rowData[0];
         const nombreArticulo = rowData[1];
-        const precioAlmacen = rowData[2];
+        const precioAlmacen = rowData[7];
         const fkProveedor = rowData[5];
         const fkCategoriaArticulo = rowData[6];
 
@@ -190,11 +190,15 @@ async function listarArticulos() {
         tabla.clear().draw();
 
         // Agregar los nuevos datos
-        tabla.rows.add(data.map((articulos) => [
-            //    0                              1                      2                               3             
-            articulos.codigoArticulo, articulos.nombreArticulo, '$' + articulos.precioAlmacen, articulos.nombreProveedor,
-            //                       4                   5                               6                         
-            articulos.nombreCategoriaArticulo, articulos.fkProveedor, articulos.fkCategoriaArticulo
+        tabla.rows.add(data.map((articulos) => [       
+            articulos.codigoArticulo, //0
+            articulos.nombreArticulo, //1
+            '$' + articulos.precioAlmacen, //2 
+            articulos.nombreProveedor, //3               
+            articulos.nombreCategoriaArticulo, //4
+            articulos.fkProveedor, //5
+            articulos.fkCategoriaArticulo, //6
+            articulos.precioAlmacen, //7
         ])).draw();
 
     } catch (error) {

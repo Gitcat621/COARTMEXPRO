@@ -13,7 +13,7 @@ from models.venta import Venta
 from database import Database
 import time
 
-reporteMetrica_bp = Blueprint('reporteMetrica_bp', __name__)
+reporteMetrica_bp = Blueprint('reporte_metricas_bp', __name__)
 
 # Carpeta donde se guardarán los archivos
 UPLOAD_FOLDER = 'reportes_metricas/'
@@ -22,7 +22,7 @@ if not os.path.exists(UPLOAD_FOLDER):
 
 
 
-@reporteMetrica_bp.route('/archivos', methods=['GET'])
+@reporteMetrica_bp.route('/reporte_metricas', methods=['GET'])
 def listar_archivos():
     """Endpoint para obtener todos los registros"""
 
@@ -478,7 +478,7 @@ def procesar_inventario(df):
 
 # ------------------ FIN FUNCIONES AUXILIARES ------------------
 
-@reporteMetrica_bp.route('/archivos', methods=['POST'])
+@reporteMetrica_bp.route('/reporte_metricas', methods=['POST'])
 def crear_archivo():
 
     print("💽 Se ha subido un reporte de metrica")
@@ -513,14 +513,14 @@ def crear_archivo():
         return jsonify({'mensaje': 'Error al procesar el archivo', 'detalles': ''}), 500
 
 
-@reporteMetrica_bp.route('/archivos', methods=['PUT'])
+@reporteMetrica_bp.route('/reporte_metricas', methods=['PUT'])
 def editar_archivo():
     """Endpoint para actualizar un archivo"""
 
     #Sin edicion
 
 
-@reporteMetrica_bp.route('/archivos', methods=['DELETE'])
+@reporteMetrica_bp.route('/reporte_metricas', methods=['DELETE'])
 def eliminar_archivo():
     """Endpoint para eliminar un archivo tanto del servidor como de la base de datos"""
 

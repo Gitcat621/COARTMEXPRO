@@ -110,7 +110,7 @@ function agregarBanco(){
         });
 
         //Acciones posteriores(Cerrar modal y mapear datos)
-        $('#boostrapModal-3').modal('hide');
+        $('#boostrapModal-4').modal('hide');
         listarBancos();
 
     })
@@ -138,18 +138,39 @@ function listarBancos() {
     .then(response => response.json())
     .then(data => {
 
-        //Iniciar la datatable y asignarla a una variable
-        let tabla = $('#bancoTable').DataTable();
+        try{
+            //Iniciar la datatable y asignarla a una variable
+            let tabla = $('#bancoTable').DataTable();
+            
+            // Limpiar la tabla antes de agregar nuevos datos
+            tabla.clear().draw();
+
+            // Agregar los nuevos datos
+            tabla.rows.add(data.map((banco) => [
+
+                banco.nombreBanco, banco.pkBanco
+
+            ])).draw();
+        }catch{
+            console.log('No existe una tabla para: Bancos');
+        }
+
+        try{
+            const select = document.getElementById('banco_menu');
+            select.innerHTML = "";
+
+            data.forEach(banco => {
+
+                let option = document.createElement('option');
+                option.value = banco.pkBanco;
+                option.textContent = banco.nombreBanco;
+                select.appendChild(option);
+
+            });
+        }catch{
+            console.log('No existe un menu para: Bancos')
+        }
         
-        // Limpiar la tabla antes de agregar nuevos datos
-        tabla.clear().draw();
-
-        // Agregar los nuevos datos
-        tabla.rows.add(data.map((banco) => [
-
-            banco.nombreBanco, banco.pkBanco
-
-        ])).draw();
     })
     .catch(error => console.error("Error al cargar los datos:", error));
     
@@ -243,8 +264,8 @@ function eliminarrBanco(pkBanco){
 function abrirModalBanco(modo, pkBanco) {
 
     //Obtener el valor de los elementos del modal
-    const modalTitle = document.getElementById('myModalLabel3');
-    const modalButton = document.querySelector('#boostrapModal-3 .modal-footer .btn-primary');
+    const modalTitle = document.getElementById('myModalLabel4');
+    const modalButton = document.querySelector('#boostrapModal-4 .modal-footer .btn-primary');
 
     //Asignar diseño y comportamiento del modal dependiendo de la accion(Agregar o Editar)
     if (modo === 1) {
@@ -255,7 +276,7 @@ function abrirModalBanco(modo, pkBanco) {
         document.getElementById('nombreBanco').value = '';
     } else if (modo === 2) {
 
-        $('#boostrapModal-3').modal('show');
+        $('#boostrapModal-4').modal('show');
         modalTitle.textContent = 'Editar banco';
         modalButton.setAttribute('onclick', `editarBanco(${pkBanco})`);
 

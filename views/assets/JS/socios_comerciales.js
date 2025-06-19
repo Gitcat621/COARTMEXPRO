@@ -9,8 +9,8 @@ $(document).ready(function () {
 });
 
 //Asignar funcion al boton de abrir modal
-$("#modalAgregar").click(function() {
-    abrirModal(1);
+$("#agregarSocio").click(function() {
+    abrirModalSocio(1);
 });
 
 //Inicializar datatable
@@ -72,7 +72,7 @@ $(document).ready(function() {
 
       
 
-        abrirModal(2,pkSocioComercial);
+        abrirModalSocio(2,pkSocioComercial);
     });
 
     // Eliminar
@@ -294,7 +294,7 @@ async function eliminarSocioComercial(pkSocioComercial) {
     }
 }
 
-function abrirModal(modo, pkSocioComercial) {
+function abrirModalSocio(modo, pkSocioComercial) {
 
     //Obtener el valor de los elementos del modal
     const modalTitle = document.getElementById('myModalLabel');

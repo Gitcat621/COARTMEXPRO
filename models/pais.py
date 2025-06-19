@@ -25,8 +25,6 @@ class Pais:
 
     def editar_pais(self):
         """Edita un registro en la base de datos."""
-        if not self.pkPais:
-            raise ValueError("El pais debe tener un ID para ser editado.")
         db = Database()
         print(self.pkPais)
         query = "UPDATE paises SET nombrePais = %s WHERE pkPais = %s"
@@ -36,9 +34,6 @@ class Pais:
 
     def eliminar_pais(self):
         """Elimina un registro de la base de datos."""
-
-        if not self.pkPais:
-            raise ValueError("El pais debe tener un ID para ser eliminado.")
         db = Database()
         query = "DELETE FROM paises WHERE pkPais = %s"
         resultado = db.execute_commit(query, (self.pkPais,))

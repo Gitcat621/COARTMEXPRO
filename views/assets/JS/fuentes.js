@@ -139,7 +139,7 @@ async function agregarArchivo() {
     });
 
     try {
-        const response = await fetch('http://127.0.0.1:5000/coartmex/archivos', {
+        const response = await fetch('http://127.0.0.1:5000/coartmex/reporte_metricas', {
             method: 'POST',
             body: formData,
         });
@@ -195,7 +195,7 @@ async function agregarArchivo() {
 function listarArchivos() {
 
     //Peticion GET al servidor
-    fetch('http://127.0.0.1:5000/coartmex/archivos', {
+    fetch('http://127.0.0.1:5000/coartmex/reporte_metricas', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
@@ -258,7 +258,7 @@ async function editarArchivo(pkArchivo, nombreArchivo) {
 
     try {
         // Enviar los datos al backend (Flask) para editar
-        const response = await fetch('http://127.0.0.1:5000/coartmex/archivos', {
+        const response = await fetch('http://127.0.0.1:5000/coartmex/reporte_metricas', {
             method: 'PUT',
             body: formData,
         });
@@ -294,7 +294,7 @@ async function eliminarArchivo(nombreArchivo) {
 
     try {
         // Enviar los datos al backend (Flask) para eliminar
-        const response = await fetch('http://127.0.0.1:5000/coartmex/archivos', {
+        const response = await fetch('http://127.0.0.1:5000/coartmex/reporte_metricas', {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json'

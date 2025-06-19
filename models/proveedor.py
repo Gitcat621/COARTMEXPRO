@@ -38,6 +38,7 @@ class Proveedor:
             upc.pkPuebloCiudad,
             m.pkMunicipio,
             e.pkEstado,
+            COALESCE(GROUP_CONCAT(DISTINCT mp.pkMetodoPago SEPARATOR '-')) AS pkMetodos,
             COALESCE(GROUP_CONCAT(DISTINCT tp.pkTelefonoProveedor SEPARATOR '-')) AS pkTelefonos,
             COALESCE(GROUP_CONCAT(DISTINCT pa.pkPaqueteria SEPARATOR '-')) AS pkPaqueterias,
             p.pkProveedor
@@ -69,7 +70,7 @@ class Proveedor:
         except (ValueError, TypeError):
             return False
 
-    def crear_proveedor(nombreProveedor, correoProveedor, diasCredito, facturaNota, diasEntrega, flete, codigoPostal, puebloCiudad, municipio, estado, numerosTelfono, paqueterias):
+    def crear_proveedor(nombreProveedor, correoProveedor, diasCredito, facturaNota, diasEntrega, flete, codigoPostal, puebloCiudad, municipio, estado, metodosPago, numerosTelfono, paqueterias):
         """Guarda un nuevo proveedor en la base de datos"""
         db = Database()
         try:
@@ -78,8 +79,6 @@ class Proveedor:
                 db.cursor.execute('INSERT INTO codigos_postales (codigoPostal) VALUES (%s)', (codigoPostal,))
                 db.cursor.execute('SELECT LAST_INSERT_ID()')
                 codigoPostal = db.cursor.fetchone()['LAST_INSERT_ID()']
-
-                
 
             # --- Insertar o recuperar ID de pueblo ---
             if Proveedor.es_entero(puebloCiudad):
@@ -113,7 +112,6 @@ class Proveedor:
             db.cursor.execute('SELECT LAST_INSERT_ID()')
             fkUbicacion = db.cursor.fetchone()['LAST_INSERT_ID()']
 
-            print("Estoy aqui")
 
             # --- Insertar proveedor ---
             db.cursor.execute(
@@ -135,6 +133,12 @@ class Proveedor:
                 valoresPaqueterias = [(paqueteria, pkProveedor) for paqueteria in paqueterias]
                 db.cursor.executemany(consultaPaqueterias, valoresPaqueterias)
 
+            # --- Insertar metodos de pago ---
+            if metodosPago:
+                consultaMetodos = 'INSERT INTO proveedores_metodos (fkMetodoPago, fkProveedor) VALUES (%s, %s)'
+                valoresMetodos = [(metodo, pkProveedor) for metodo in metodosPago]
+                db.cursor.executemany(consultaMetodos, valoresMetodos)
+
             # ✅ Confirmar transacción
             db.connection.commit()
             print("✅ Transacción completada con éxito.")
@@ -147,11 +151,12 @@ class Proveedor:
         finally:
             db.close()
 
-    def editar_proveedor(pkProveedor, nombreProveedor, correoProveedor, diasCredito, facturaNota, diasEntrega, flete, fkUbicacion, codigoPostal, puebloCiudad, municipio, estado, numerosTelfono, pkTelefonos, paqueterias):
+    def editar_proveedor(pkProveedor, nombreProveedor, correoProveedor, diasCredito, facturaNota, diasEntrega, flete, fkUbicacion, codigoPostal, puebloCiudad, municipio, estado, metodosPago, numerosTelfono, pkTelefonos, paqueterias):
         """Edita un registro en la base de datos."""
         db = Database()
         try:
 
+            #TELEFONOS
             if not pkTelefonos:
                 # --- Insertar todos los números porque no hay registros anteriores ---
                 consultaTelefonos = 'INSERT INTO telefonos_proveedores (telefonoProveedor, fkProveedor) VALUES (%s, %s)'
@@ -221,7 +226,34 @@ class Proveedor:
                     'DELETE FROM proveedores_paqueterias WHERE fkProveedor = %s AND fkPaqueteria = %s',
                     [(pkProveedor, int(p)) for p in eliminadas]
             )
+                
 
+
+            #Metodos de pago
+            # Paso 1: Obtener los metodos actualmente relacionados
+            db.cursor.execute('SELECT fkMetodoPago FROM proveedores_metodos WHERE fkProveedor = %s', (pkProveedor,))
+            existentes = set(str(row['fkMetodoPago']) for row in db.cursor.fetchall())
+
+            # Paso 2: Convertir la lista recibida en set
+            recibidas = set(str(m) for m in metodosPago)
+
+            # Paso 3: Determinar diferencias
+            nuevas = recibidas - existentes       # Para insertar
+            eliminadas = existentes - recibidas  # Para eliminar
+
+            # Paso 4: Insertar nuevas relaciones
+            if nuevas:
+                insertar = [(int(p), pkProveedor) for p in nuevas]
+                db.cursor.executemany('INSERT INTO proveedores_metodos (fkMetodoPago, fkProveedor) VALUES (%s, %s)', insertar)
+
+            # Paso 5: Eliminar relaciones que ya no se enviaron
+            if eliminadas:
+                db.cursor.executemany(
+                    'DELETE FROM proveedores_metodos WHERE fkProveedor = %s AND fkMetodoPago = %s',
+                    [(pkProveedor, int(p)) for p in eliminadas]
+            )
+
+            #UBICACION
             # --- Insertar o recuperar ID del codigo postal ---
             if len(codigoPostal) == 5:
                 db.cursor.execute('INSERT INTO codigos_postales (codigoPostal) VALUES (%s)', (codigoPostal,))
@@ -261,10 +293,25 @@ class Proveedor:
                 db.cursor.execute('UPDATE ubicaciones set fkCodigoPostal = %s, fkPuebloCiudad = %s, fkMunicipio = %s, fkEstado = %s WHERE pkUbicacion = %s', (codigoPostal, puebloCiudad, municipio, estado, fkUbicacion))
 
             # --- editar proveedor ---
+            
             db.cursor.execute(
                 "UPDATE proveedores set nombreProveedor = %s, correoProveedor = %s, diasCredito = %s, facturaNota = %s, diasEntrega = %s, flete = %s, fkUbicacion = %s WHERE pkProveedor = %s",
                 (nombreProveedor, correoProveedor, diasCredito, facturaNota, diasEntrega, flete, fkUbicacion, pkProveedor)
             )
+
+            # Construir la consulta completa solo para depuración
+            query = (
+                f"UPDATE proveedores SET nombreProveedor = '{nombreProveedor}', "
+                f"correoProveedor = '{correoProveedor}', diasCredito = {diasCredito}, "
+                f"facturaNota = {facturaNota}, diasEntrega = {diasEntrega}, flete = {flete}, "
+                f"fkUbicacion = {fkUbicacion} WHERE pkProveedor = {pkProveedor}"
+            )
+
+            print("Consulta con valores:")
+            print(query)
+
+
+
 
             # ✅ Confirmar transacción
             db.connection.commit()
@@ -281,8 +328,6 @@ class Proveedor:
     def eliminar_proveedor(self):
         """Elimina un registro de la base de datos."""
 
-        if not self.pkProveedor:
-            raise ValueError("El proveedor debe tener un ID para ser eliminado.")
         db = Database()
         query = "DELETE FROM proveedores WHERE pkProveedor = %s"
         resultado = db.execute_commit(query, (self.pkProveedor,))

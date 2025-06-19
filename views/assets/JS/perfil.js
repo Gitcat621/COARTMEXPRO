@@ -390,7 +390,7 @@ async function obtenerOportunidadesEmpleado(numeroEmpleado) {
                 });
 
                 // Agregar los botones al mismo <td>
-                accionesTd.appendChild(editarBtn);
+                //accionesTd.appendChild(editarBtn);
                 accionesTd.appendChild(eliminarBtn);
 
                 // Agregar todo a la fila

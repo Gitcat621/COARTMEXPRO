@@ -45,11 +45,11 @@ async function agregarOportunidadEmpleado() {
         const params = new URLSearchParams(window.location.search);
         const numeroEmpleado = params.get("id");
 
-        const Menu = document.getElementById('oportunidad_menu');
-        const fkOportunidad = Menu.value;
+        const oportunidad_menu = document.getElementById('oportunidad_menu');
+        const oportunidades = Array.from(oportunidad_menu.selectedOptions).map(option => option.value);
 
 
-        if (!numeroEmpleado || !fkOportunidad) {
+        if (!numeroEmpleado || oportunidades.length === 0) {
             toastr.warning('Por favor completa todos los campos', 'Advertencia', {"closeButton": true});
             return;
         }
@@ -57,7 +57,7 @@ async function agregarOportunidadEmpleado() {
         const response = await fetch('http://127.0.0.1:5000/coartmex/oportunidad_empleado', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ numeroEmpleado, fkOportunidad })
+            body: JSON.stringify({ numeroEmpleado, oportunidades })
         });
         const data = await response.json();
 
@@ -76,6 +76,7 @@ async function agregarOportunidadEmpleado() {
 
 
         obtenerOportunidadesEmpleado(numeroEmpleado);
+        listarOportunidades();
 
 
     } catch (error) {
@@ -128,6 +129,7 @@ async function editarOportunidadEmpleado(fkOportunidadAnterior) {
 
 
         obtenerOportunidadesEmpleado(numeroEmpleado);
+        listarOportunidades();
 
 
     } catch (error) {
@@ -170,7 +172,7 @@ function abrirModalOportunidades(modo, oportunidad) {
 
         document.getElementById('myModalLabel4').textContent = 'Agregar oportunidad';
         
-        document.getElementById('oportunidad_menu').value = '';
+        document.getElementById('oportunidad_menu').value = 'geteasinco';
 
         document.getElementById('newOpportunity').textContent = 'Agregar';
         document.getElementById('newOpportunity').setAttribute('onclick', 'agregarOportunidadEmpleado()');
@@ -180,7 +182,7 @@ function abrirModalOportunidades(modo, oportunidad) {
 
         document.getElementById('myModalLabel4').textContent = 'Editar oportunidad';
 
-        document.getElementById('oportunidad_menu').value = oportunidad.fkOportunidad;
+        $('#oportunidad_menu').val([oportunidad.fkOportunidad]).trigger('change');
 
         document.getElementById('newOpportunity').textContent = 'Actualizar';
     

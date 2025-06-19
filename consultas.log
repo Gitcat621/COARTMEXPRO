@@ -1,0 +1,14 @@
+INSERT INTO ubicaciones (fkPuebloCiudad, fkCodigoPostal, fkMunicipio, fkEstado, fkPais) VALUES (1, 1, 13, 4, 1)
+
+INSERT INTO ubicaciones (fkPuebloCiudad, fkCodigoPostal, fkMunicipio, fkEstado, fkPais) VALUES (6, 2, 12, 25, 1)
+
+INSERT INTO ubicaciones (fkPuebloCiudad, fkCodigoPostal, fkMunicipio, fkEstado, fkPais) VALUES (1, 2, 3, 11, 1)
+
+INSERT INTO ubicaciones (fkPuebloCiudad, fkCodigoPostal, fkMunicipio, fkEstado, fkPais) VALUES (1, 2, 3, 11, 1)
+
+INSERT INTO ubicaciones (fkPuebloCiudad, fkCodigoPostal, fkMunicipio, fkEstado, fkPais) VALUES (7, 2, 14, 17, 1)
+
+INSERT INTO ubicaciones (fkPuebloCiudad, fkCodigoPostal, fkMunicipio, fkEstado, fkPais) VALUES (7, 2, 14, 17, 1)
+
+INSERT INTO ubicaciones (fkPuebloCiudad, fkCodigoPostal, fkMunicipio, fkEstado, fkPais) VALUES (4, 2, 13, 15, 1)
+

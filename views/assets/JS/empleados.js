@@ -110,7 +110,7 @@ $(document).ready(function() {
                 render: function (data, type, row) { 
                     return `<div class="text-center">
                                 <button class="btn btn-xs editar-btn" data-row='${JSON.stringify(row)}'><i class="fa fa-pencil"></i></button>
-                                <button class="btn btn-xs eliminar-btn" data-rfc="${row[9]}" data-nombre="${row[2]}">
+                                <button class="btn btn-xs eliminar-btn" data-rfc="${row[0]}" data-nombre="${row[2]}">
                                     <i class="fa fa-trash"></i>
                                 </button>
                             </div>`;
@@ -127,22 +127,44 @@ $(document).ready(function() {
         // Obtiene la fila de datos desde el atributo data-row
         const rowData = $(this).data('row');
 
-        const numeroEmpleado = rowData[9];
+        const numeroEmpleado = rowData[0];
         const rfc = rowData[1];
         const nombreEmpleado = rowData[2];
-        const fechaIngreso = rowData[3];
-        const formateada = formatearFecha(fechaIngreso);
-        const nomina = rowData[4];
-        const vale = rowData[5];
-        const fkPuesto = rowData[7];
+        const estado = rowData[12];
+        const fechaIngreso = rowData[13];
+        const fechaNacimiento = rowData[14];
+        const nomina = rowData[15];
+        const vale = rowData[16];
+        const fkPuesto = rowData[17];
+        const fkNivelEstudio = rowData[18];
+        const fkUbicacion = rowData[19];
+        const fkPuebloCiudad = rowData[20];
+        const fkEstado = rowData[21];
+        const fkPais = rowData[22];
 
         // Asignar valores a los inputs del modal
         document.getElementById('rfc').value = rfc;
         document.getElementById('nombreEmpleado').value = nombreEmpleado;
-        document.getElementById('fechaIngreso').value = formateada;
+        document.getElementById('fechaIngreso').value = formatearFecha(fechaIngreso);
+        document.getElementById('fechaNacimiento').value = formatearFecha(fechaNacimiento);
         document.getElementById('nomina').value = nomina;
         document.getElementById('vale').value = vale;
         document.getElementById('puesto_menu').value = fkPuesto;
+        document.getElementById('niveles_menu').value = fkNivelEstudio;
+        document.getElementById('fkUbicacion').value = fkUbicacion;
+
+        //Estado
+        const estadoMenu = document.getElementById('estado');
+        for (let i = 0; i < estadoMenu.options.length; i++) {
+            if (estadoMenu.options[i].textContent.trim() === estado.trim()) {
+                estadoMenu.selectedIndex = i;
+                break;
+            }
+        }
+
+        $('#pueblosCiudades_menu').val([fkPuebloCiudad]).trigger('change');
+        $('#estados_menu').val([fkEstado]).trigger('change');
+        $('#paises_menu').val([fkPais]).trigger('change');
 
         abrirModalEmpleado(2,numeroEmpleado)
     });
@@ -187,7 +209,7 @@ async function listarEmpleados() {
             return;
         }
 
-        console.log(data);
+        //console.log(data);
 
         let tabla = $('#empleadoTable').DataTable();
         tabla.clear().draw();
@@ -205,6 +227,16 @@ async function listarEmpleados() {
             empleados.nombreNivel, //10
             empleados.ubicacion, //11
             empleados.estado, //12
+            empleados.fechaIngreso, //13
+            empleados.fechaNacimiento, //14
+            empleados.nomina, //15
+            empleados.vale, //16
+            empleados.pkPuesto, //17
+            empleados.pkNivelEstudio, //18
+            empleados.pkUbicacion, //19
+            empleados.pkPuebloCiudad, //20
+            empleados.pkEstado, //21
+            empleados.pkPais //22
         ])).draw();
     } catch (error) {
         console.error("Error al cargar los datos:", error);
@@ -213,13 +245,17 @@ async function listarEmpleados() {
 }
 
 async function agregarEmpleado() {
+    
     try {
+
+        const fechaIngreso = document.getElementById('fechaIngreso').value.trim();
+
+        const partesFechaIngreso = fechaIngreso.split("-");
+        const numeroEmpleado = partesFechaIngreso[2] + partesFechaIngreso[1] + partesFechaIngreso[0].slice(2);
 
         const rfc = document.getElementById('rfc').value.trim();
 
         const nombreEmpleado = document.getElementById('nombreEmpleado').value.trim();
-
-        const fechaIngreso = document.getElementById('fechaIngreso').value.trim();
 
         const fechaNacimiento = document.getElementById('fechaNacimiento').value.trim();
 
@@ -227,18 +263,21 @@ async function agregarEmpleado() {
 
         const vale = document.getElementById('vale').value.trim();
 
-        const puesto_menu = document.getElementById('puesto_menu');
-        const fkPuesto = puesto_menu.value;
+        const fkPuesto = document.getElementById('puesto_menu').value;
 
-        const niveles_menu = document.getElementById('niveles_menu');
-        const fkNivelEstudio = niveles_menu.value;
+        const fkNivelEstudio = document.getElementById('niveles_menu').value;
 
         const estado = document.getElementById('estado').value;
 
-        const partes = fechaIngreso.split("-");
-        const numeroEmpleado = partes[2] + partes[1] + partes[0].slice(2);
+        const ciudadNacimiento = document.getElementById('pueblosCiudades_menu').value;
 
-        if (!numeroEmpleado || !rfc || !nombreEmpleado || !fechaIngreso || !fechaNacimiento || !nomina || !vale  || !estado || !fkPuesto || !fkNivelEstudio) {
+        const estadoNacimiento = document.getElementById('estados_menu').value;
+
+        const paisNacimiento = document.getElementById('paises_menu').value;
+
+
+        if (!numeroEmpleado || !rfc || !nombreEmpleado || !fechaIngreso || !fechaNacimiento || !nomina || !vale  
+            || !estado || !fkPuesto || !fkNivelEstudio || !ciudadNacimiento || !estadoNacimiento || !paisNacimiento) {
             toastr.warning('Por favor completa todos los campos', 'Advertencia', {"closeButton": true});
             return;
         }
@@ -246,7 +285,7 @@ async function agregarEmpleado() {
         const response = await fetch('http://127.0.0.1:5000/coartmex/empleados', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ numeroEmpleado, rfc, nombreEmpleado, fechaIngreso, fechaNacimiento, nomina, vale, estado, fkPuesto, fkNivelEstudio })
+            body: JSON.stringify({ numeroEmpleado, rfc, nombreEmpleado, fechaIngreso, fechaNacimiento, nomina, vale, estado, fkPuesto, fkNivelEstudio, ciudadNacimiento, estadoNacimiento, paisNacimiento })
         });
         const data = await response.json();
 
@@ -262,6 +301,9 @@ async function agregarEmpleado() {
         $('#boostrapModal-1').modal('hide');
 
         listarEmpleados();
+        listarPueblosCiudades();
+        listarEstados();
+        listarPaises();
 
     } catch (error) {
 
@@ -273,14 +315,36 @@ async function agregarEmpleado() {
 
 async function editarEmpleado(numeroEmpleado) {
     try {
+
         const rfc = document.getElementById('rfc').value.trim();
+
         const nombreEmpleado = document.getElementById('nombreEmpleado').value.trim();
+
+        const fechaNacimiento = document.getElementById('fechaNacimiento').value.trim();
+
         const fechaIngreso = document.getElementById('fechaIngreso').value.trim();
+
         const nomina = document.getElementById('nomina').value.trim();
+
         const vale = document.getElementById('vale').value.trim();
+
         const fkPuesto = document.getElementById('puesto_menu').value;
 
-        if (!numeroEmpleado || !rfc || !nombreEmpleado || !fechaIngreso || !nomina || !vale || !fkPuesto) {
+        const fkNivelEstudio = document.getElementById('niveles_menu').value;
+
+        const estado = document.getElementById('estado').value;
+
+        const fkUbicacion = document.getElementById('fkUbicacion').value;
+
+        const ciudadNacimiento = document.getElementById('pueblosCiudades_menu').value;
+
+        const estadoNacimiento = document.getElementById('estados_menu').value;
+
+        const paisNacimiento = document.getElementById('paises_menu').value;
+
+
+        if (!numeroEmpleado || !rfc || !nombreEmpleado || !fechaIngreso || !fechaNacimiento || !nomina || !vale  
+            || !estado || !fkPuesto || !fkNivelEstudio || !ciudadNacimiento || !estadoNacimiento || !paisNacimiento) {
             toastr.warning('Por favor completa todos los campos', 'Advertencia', {"closeButton": true});
             return;
         }
@@ -288,7 +352,7 @@ async function editarEmpleado(numeroEmpleado) {
         const response = await fetch('http://127.0.0.1:5000/coartmex/empleados', {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ numeroEmpleado, rfc, nombreEmpleado, fechaIngreso, nomina, vale, fkPuesto })
+            body: JSON.stringify({ numeroEmpleado, rfc, nombreEmpleado, fechaIngreso, fechaNacimiento, nomina, vale, estado, fkPuesto, fkNivelEstudio, fkUbicacion, ciudadNacimiento, estadoNacimiento, paisNacimiento })
         });
         const data = await response.json();
 
@@ -299,8 +363,15 @@ async function editarEmpleado(numeroEmpleado) {
             return;
         }
 
-        listarEmpleados();
         toastr.success(`${data.mensaje}`, 'Realizado', {"closeButton": true});
+
+        listarEmpleados();
+        listarPueblosCiudades();
+        listarEstados();
+        listarPaises();
+
+        $('#boostrapModal-1').modal('hide');
+
     } catch (error) {
         console.error('Error:', error);
         toastr.error('Hubo un error al intentar la acción', 'Error', {"closeButton": true});
@@ -351,10 +422,16 @@ function abrirModalEmpleado(modo, rfc) {
         document.getElementById('rfc').value = '';
         document.getElementById('nombreEmpleado').value = '';
         document.getElementById('fechaIngreso').value = '';
+        document.getElementById('fechaNacimiento').value = '';
         document.getElementById('nomina').value = '';
         document.getElementById('vale').value = '';
         document.getElementById('puesto_menu').value = '';
         document.getElementById('niveles_menu').value = '';
+        document.getElementById('estado').value = '';
+
+        $('#pueblosCiudades_menu').val(null).trigger('change');
+        $('#estados_menu').val(null).trigger('change');
+        $('#paises_menu').val(null).trigger('change');
 
     } else if (modo === 2) {
         
@@ -365,7 +442,6 @@ function abrirModalEmpleado(modo, rfc) {
 
 }
 
-//Formatea las fecha para tener un formato YYYY/MM/DD
 function formatearFecha(fechaString) {
     const fecha = new Date(fechaString);
     const año = fecha.getFullYear();
@@ -373,6 +449,7 @@ function formatearFecha(fechaString) {
     const dia = String(fecha.getDate()).padStart(2, '0');
     return `${año}-${mes}-${dia}`;
 }
+
 
 function toformatearFecha(fechaString) {
     const fecha = new Date(fechaString);

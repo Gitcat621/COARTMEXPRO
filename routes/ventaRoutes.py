@@ -12,7 +12,7 @@ def listar_ventas():
 
     #Convertimos a INT
     try:
-        grupo = int(grupo) if grupo else None
+        grupo = float(grupo) if grupo else None
     except ValueError:
         grupo = None
 
@@ -42,7 +42,7 @@ def listar_ventas():
             if socio not in ventaPorMes:
                 ventaPorMes[socio] = {m: 0 for m in meses_es.values()}
 
-            ventaPorMes[socio][mes] += int(venta["montoVenta"])
+            ventaPorMes[socio][mes] += float(venta["montoVenta"])
 
         return jsonify(ventaPorMes), 200
 

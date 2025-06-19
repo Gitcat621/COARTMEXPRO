@@ -1,9 +1,9 @@
 $(document).ready(function() {
 
     listarColaboradores();
-    listarPuestos();
 
 });
+
 
 //Inicializar datatable
 $(document).ready(function() {
@@ -76,8 +76,8 @@ $(document).ready(function() {
     
 });
 
-$("#newEmployee").click(function() {
-    agregarColaborador();
+$("#agregarColaborador").click(function() {
+    abrirModalColaborador();
 });
 
 async function listarColaboradores() {
@@ -156,7 +156,7 @@ async function agregarColaborador() {
         }
         
 
-        const response = await fetch('http://127.0.0.1:5000/coartmex/empleados', {
+        const response = await fetch('http://127.0.0.1:5000/coartmex/colaborador', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ numeroEmpleado, nombreEmpleado, fechaIngreso, nomina, vale, estado, fkPuesto })
@@ -190,11 +190,6 @@ async function agregarColaborador() {
 
 
     }
-}
-
-function toformatearFecha(fechaString) {
-    const fecha = new Date(fechaString);
-    return fecha.toLocaleDateString('es-ES', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' });
 }
 
 async function eliminarColaborador(numeroEmpleado) {
@@ -233,35 +228,20 @@ async function eliminarColaborador(numeroEmpleado) {
     }
 }
 
-async function listarPuestos() {
+function abrirModalColaborador(){
 
-    try {
-        const response = await fetch('http://127.0.0.1:5000/coartmex/puestos', {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' }
-        });
+    const modalButton = document.querySelector('#boostrapModal-1 .modal-footer .btn-primary');
 
-        const data = await response.json();
+    modalButton.setAttribute('onclick', 'agregarColaborador()');
 
-        const select = document.getElementById('puesto_menu');
-        select.innerHTML = "";
+    document.getElementById('nombreEmpleado').value = '';
+    document.getElementById('fechaIngreso').value = '';
+    document.getElementById('nomina').value = '';
+    document.getElementById('vale').value = '';
+    document.getElementById('puesto_menu').value = '';
+}
 
-
-        data.forEach(puesto => {
-
-            let option = document.createElement('option');
-            option.value = puesto.pkPuesto;
-            option.textContent = puesto.nombrePuesto;
-            select.appendChild(option);
-        });
-
-
-    } catch (error) {
-
-
-        toastr.error('La petición de colaboradores no se pudo concretar', 'Error', {"closeButton": true,});
-
-
-        console.error("Error al cargar los datos:", error);
-    }
+function toformatearFecha(fechaString) {
+    const fecha = new Date(fechaString);
+    return fecha.toLocaleDateString('es-ES', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' });
 }

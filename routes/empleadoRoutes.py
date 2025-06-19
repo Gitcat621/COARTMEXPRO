@@ -42,13 +42,15 @@ def crear_empleado():
     estado = data.get('estado')
     fkPuesto = data.get('fkPuesto')
     fkNivelEstudio = data.get('fkNivelEstudio')
-    fkUbicacion = data.get('fkUbicacion')
+    fkUbicacion = True
+    ciudadNacimiento = data.get('ciudadNacimiento')
+    estadoNacimiento = data.get('estadoNacimiento')
+    paisNacimiento = data.get('paisNacimiento')
 
     if not nombreEmpleado:
         return jsonify({'mensaje': 'Faltan datos'}), 400
     
-    empleado = Empleado(numeroEmpleado, rfc, nombreEmpleado, fechaIngreso, fechaNacimiento, nomina, vale, estado, fkPuesto, fkNivelEstudio, fkUbicacion)
-    if empleado.crear_empleado():
+    if Empleado.crear_empleado(numeroEmpleado, rfc, nombreEmpleado, fechaIngreso, fechaNacimiento, nomina, vale, estado, fkPuesto, fkNivelEstudio, fkUbicacion, ciudadNacimiento, estadoNacimiento, paisNacimiento):
         return jsonify({'mensaje': 'Empleado insertado correctamente'}), 201
     else:
         return jsonify({'mensaje': 'Error al insertar empleado'}), 500
@@ -68,12 +70,14 @@ def crear_colaborador():
     fkPuesto = data.get('fkPuesto')
     fkNivelEstudio = None
     fkUbicacion = None
+    ciudadNacimiento = None
+    estadoNacimiento = None
+    paisNacimiento = None
 
     if not nombreEmpleado:
         return jsonify({'mensaje': 'Faltan datos'}), 400
     
-    empleado = Empleado(numeroEmpleado, rfc, nombreEmpleado, fechaIngreso, fechaNacimiento, nomina, vale, estado, fkPuesto, fkNivelEstudio, fkUbicacion)
-    if empleado.crear_empleado():
+    if Empleado.crear_empleado(numeroEmpleado, rfc, nombreEmpleado, fechaIngreso, fechaNacimiento, nomina, vale, estado, fkPuesto, fkNivelEstudio, fkUbicacion, ciudadNacimiento, estadoNacimiento, paisNacimiento):
         return jsonify({'mensaje': 'Empleado insertado correctamente'}), 201
     else:
         return jsonify({'mensaje': 'Error al insertar empleado'}), 500
@@ -94,18 +98,12 @@ def editar_empleado():
         fkPuesto = data.get('fkPuesto')
         fkNivelEstudio = data.get('fkNivelEstudio')
         fkUbicacion = data.get('fkUbicacion')
-
-        # # Validación de ID (debe ser un número entero)
-        # if not isinstance(id, int):
-        #     return jsonify({'mensaje': 'ID inválido'}), 400
-
-        # # Validación de Nombre (que no esté vacío)
-        # if not nombre or not nombre.strip():
-        #     return jsonify({'mensaje': 'El nombre es obligatorio'}), 400
+        ciudadNacimiento = data.get('ciudadNacimiento')
+        estadoNacimiento = data.get('estadoNacimiento')
+        paisNacimiento = data.get('paisNacimiento')
 
         # Llamar al controlador para actualizar el registro
-        empleado = Empleado(numeroEmpleado, rfc, nombreEmpleado, fechaIngreso, fechaNacimiento, nomina, vale, estado, fkPuesto, fkNivelEstudio, fkUbicacion)
-        if empleado.editar_empleado():
+        if Empleado.editar_empleado(numeroEmpleado, rfc, nombreEmpleado, fechaIngreso, fechaNacimiento, nomina, vale, estado, fkPuesto, fkNivelEstudio, fkUbicacion, ciudadNacimiento, estadoNacimiento, paisNacimiento):
             return jsonify({'mensaje': 'Empleado editado correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo editar el empleado'}), 500
@@ -119,11 +117,6 @@ def eliminar_empleado():
     try:
         data = request.json
         numeroEmpleado = data.get('numeroEmpleado')
-
-        # # Validación de ID (debe ser un número entero)
-        # if not isinstance(id, int):
-        #     return jsonify({'mensaje': 'ID inválido'}), 400
-
 
         # Llamar al controlador para actualizar el registro
         empleado = Empleado(numeroEmpleado)
@@ -269,9 +262,9 @@ def crear_oportunidad_empleado():
     data = request.json
 
     fkEmpleado = str(data.get('numeroEmpleado', '')).strip()
-    fkOportunidad = int(data.get('fkOportunidad'))
+    oportunidades = (data.get('oportunidades'))
 
-    if Empleado.crear_oportunidad_empleado(fkEmpleado, fkOportunidad):
+    if Empleado.crear_oportunidad_empleado(fkEmpleado, oportunidades):
         return jsonify({'mensaje': 'Curso insertado correctamente'}), 201
     else:
         return jsonify({'mensaje': 'Error al insertar oportunidad'}), 500

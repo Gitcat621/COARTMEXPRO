@@ -168,7 +168,7 @@
 					<h4 class="box-title">Tabla de paqueterias</h4>
 					<!-- /.box-title -->
 
-					<button type="button" class="btn btn-success btn-xs waves-effect waves-light margin-bottom-10" data-toggle="modal" data-target="#boostrapModal-2" id="agregarPaqueteria"><i class="fa fa-plus"></i> Agregar</button>
+					<button type="button" class="btn btn-success btn-xs waves-effect waves-light margin-bottom-10" data-toggle="modal" data-target="#boostrapModal-3" id="agregarPaqueteria"><i class="fa fa-plus"></i> Agregar</button>
 
 					<table id="paqueteriaTable" class="table table-hover table-bordered display" style="width:100%">
 						
@@ -184,13 +184,33 @@
 					<h4 class="box-title">Tabla de bancos</h4>
 					<!-- /.box-title -->
 
-					<button type="button" class="btn btn-success btn-xs waves-effect waves-light" data-toggle="modal" data-target="#boostrapModal-3" id="agregarBanco"><i class="fa fa-plus"></i> Agregar</button>
+					<button type="button" class="btn btn-success btn-xs waves-effect waves-light" data-toggle="modal" data-target="#boostrapModal-4" id="agregarBanco"><i class="fa fa-plus"></i> Agregar</button>
 
 					<div class="col-xs-12">
 						<h1></h1>
 					</div>
 
 					<table id="bancoTable" class="table table-hover table-bordered display" style="width:100%">
+						
+					</table>
+					
+				</div>
+				<!-- /.box-content -->
+			</div>
+
+			<!-- CUENTAS DE BANCO -->
+			<div class="col-xs-12">
+				<div class="box-content">
+					<h4 class="box-title">Tabla de cuentas de banco</h4>
+					<!-- /.box-title -->
+
+					<button type="button" class="btn btn-success btn-xs waves-effect waves-light" data-toggle="modal" data-target="#boostrapModal-2" id="agregarCuentaBanco"><i class="fa fa-plus"></i> Agregar</button>
+
+					<div class="col-xs-12">
+						<h1></h1>
+					</div>
+
+					<table id="cuentaBancoTable" class="table table-hover table-bordered display" style="width:100%">
 						
 					</table>
 					
@@ -244,23 +264,20 @@
 						<label>Asignar tipo de flete</label>
 						<select class="form-control" id="flete_menu" >
 							<option value="1">Pagado</option>
-							<option value="2">Prepagado</option>
+							<option value="2">PrePagada</option>
 							<option value="3">No definido</option>
 						</select>
 					</div>
 				</div>
 				<div class="col-xs-6">
 					<div class="form-group">
-						<label id="pkTelefonos">Asignar telefonos</label><br>
-						<select class="select2_2" multiple="multiple" style="width: 100%;" id="telefono_menu">
-
-						</select>
+						<label id="pkTelefonos">Asignar metodos de pago</label><br>
+						<select class="select2_1" multiple="multiple" style="width: 100%;" id="metodoPago_menu"></select>
 					</div>
-					<!-- <div class="form-group">
-						<label>Asignar cuentas de bancos</label><br>
-						<select class="select2_2" multiple="multiple" style="width: 100%;" id="banco_menu"></select>
-						</select>
-					</div> -->
+					<div class="form-group">
+						<label id="pkTelefonos">Asignar telefonos <i class="fa fa-pencil-square-o" aria-hidden="true"></i></label><br>
+						<select class="select2_2" multiple="multiple" style="width: 100%;" id="telefono_menu"></select>
+					</div>
 					<div class="form-group">
 						<label>Asignar paqueterias</label><br>
 						<select class="select2_1" multiple="multiple" style="width: 100%;" id="paqueteria_menu" >
@@ -270,28 +287,28 @@
 						<h4 id="ubicacion_menu">Ubicacion del proveedor</h4>
 					</div>
 					<div class="form-group">
-						<label>Codigo postal</label><br>
+						<label>Codigo postal <i class="fa fa-pencil-square-o" aria-hidden="true"></i></label><br>
 						<select class="select2_2 form-control" multiple="multiple" style="width: 100%;" id="codigosPostales_menu">
 
 						</select>
 						
 					</div>
 					<div class="form-group">
-						<label>Ciudad o pueblo</label><br>
+						<label>Ciudad o pueblo <i class="fa fa-pencil-square-o" aria-hidden="true"></i></label><br>
 						<select class="select2_2 form-control" multiple="multiple" style="width: 100%;" id="pueblosCiudades_menu">
 
 						</select>
 						
 					</div>
 					<div class="form-group">
-						<label>Municipio</label><br>
+						<label>Municipio <i class="fa fa-pencil-square-o" aria-hidden="true"></i></label><br>
 						<select class="select2_2 form-control" multiple="multiple" style="width: 100%;" id="municipios_menu">
 
 						</select>
 						
 					</div>
 					<div class="form-group">
-						<label>Estado</label><br>
+						<label>Estado <i class="fa fa-pencil-square-o" aria-hidden="true"></i></label><br>
 						<select class="select2_2 form-control" multiple="multiple" style="width: 100%;" id="estados_menu">
 
 						</select>
@@ -315,12 +332,24 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<h4 class="modal-title" id="myModalLabel2">Titulo dinamico</h4>
+				<h4 class="modal-title" id="myModalLabel2">Agregar cuenta de banco</h4>
 			</div>
 			<div class="modal-body">
 				<div class="form-group">
-					<label>Nombre del Paqueteria</label>
-					<input type="text" class="form-control" id="nombrePaqueteria">
+					<label>Numero de cuenta</label>
+					<input type="number" class="form-control" id="numeroCuenta">
+				</div>
+				<div class="form-group">
+					<label>Nombre del beneficiario</label>
+					<input type="text" class="form-control" id="nombreBeneficiario">
+				</div>
+				<div class="form-group">
+					<label>Banco afiliado</label>
+					<select class="form-control" id="banco_menu"></select>
+				</div>
+				<div class="form-group" id="proveedorContenedor">
+					<label>Proveedor asignado</label>
+					<select class="form-control" id="proveedor_menu"></select>
 				</div>
 			</div>
 			<div class="modal-footer">
@@ -340,6 +369,27 @@
 			</div>
 			<div class="modal-body">
 				<div class="form-group">
+					<label>Nombre del Paqueteria</label>
+					<input type="text" class="form-control" id="nombrePaqueteria">
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default btn-xs waves-effect waves-light" data-dismiss="modal">Cerrar</button>
+				<button type="button" class="btn btn-primary btn-xs waves-effect waves-light">Guardar</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="boostrapModal-4" tabindex="-4" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel4">Titulo dinamico</h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
 					<label>Nombre del Banco</label>
 					<input type="text" class="form-control" id="nombreBanco">
 				</div>
@@ -353,6 +403,8 @@
 </div>
 
 
+
+
 	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 	<!--[if lt IE 9]>
 		<script src="assets/script/html5shiv.min.js"></script>
@@ -364,6 +416,8 @@
 	<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	<script src="assets/JS/proveedores.js"></script>
+	<script src="assets/JS/metodos_pago.js"></script>
+	<script src="assets/JS/cuentas_bancos.js"></script>
 	<script src="assets/JS/codigos_postales.js"></script>
 	<script src="assets/JS/pueblos_ciudades.js"></script>
 	<script src="assets/JS/municipios.js"></script>

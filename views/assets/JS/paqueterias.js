@@ -110,7 +110,7 @@ function agregarPaqueteria(){
         });
 
         //Acciones posteriores(Cerrar modal y mapear datos)
-        $('#boostrapModal-2').modal('hide');
+        $('#boostrapModal-3').modal('hide');
         listarPaqueterias();
 
     })
@@ -268,8 +268,8 @@ function eliminarPaqueterias(pkPaqueteria){
 function abrirModalPaqueteria(modo, pkPaqueteria) {
 
     //Obtener el valor de los elementos del modal
-    const modalTitle = document.getElementById('myModalLabel2');
-    const modalButton = document.querySelector('#boostrapModal-2 .modal-footer .btn-primary');
+    const modalTitle = document.getElementById('myModalLabel3');
+    const modalButton = document.querySelector('#boostrapModal-3 .modal-footer .btn-primary');
 
     //Asignar diseño y comportamiento del modal dependiendo de la accion(Agregar o Editar)
     if (modo === 1) {
@@ -280,7 +280,7 @@ function abrirModalPaqueteria(modo, pkPaqueteria) {
         document.getElementById('nombrePaqueteria').value = '';
     } else if (modo === 2) {
 
-        $('#boostrapModal-2').modal('show');
+        $('#boostrapModal-3').modal('show');
         modalTitle.textContent = 'Editar banco';
         modalButton.setAttribute('onclick', `editarPaqueterias(${pkPaqueteria})`);
 

@@ -36,11 +36,11 @@ $(document).ready(function() {
 
         const rowData = $(this).data('row'); 
 
-        const oportunidad = rowData[0];
+        const nombrePresentador = rowData[0];
         const pkPresentador = rowData[1];
 
 
-        document.getElementById('oportunidad').value = oportunidad;
+        document.getElementById('nombrePresentador').value = nombrePresentador;
 
         modalPresentador(2,pkPresentador);
     });

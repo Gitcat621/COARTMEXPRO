@@ -112,6 +112,7 @@ async function agregarServicioPacEmpleado() {
 
 
         obtenerServiciosPacEmpleado(numeroEmpleado);
+        listarClinicas();
 
 
     } catch (error) {
@@ -173,6 +174,7 @@ async function editarServicioPacEmpleado(pkServicioPac) {
 
 
         obtenerServiciosPacEmpleado(numeroEmpleado);
+        listarClinicas();
 
 
     } catch (error) {
@@ -233,7 +235,7 @@ function abrirModalServiciosPac(modo, servicio) {
         document.getElementById('beneficio_menu').value = servicio.fkBeneficio;
         document.getElementById('numeroSesion').value = servicio.numeroSesion;
         document.getElementById('costoSesion').value = servicio.costoSesion;
-        document.getElementById('clinica_menu').value = servicio.fkClinica;
+        $('#clinica_menu').val([servicio.fkClinica]).trigger('change');
 
 
         const fecha = new Date(servicio.fechaSesion);

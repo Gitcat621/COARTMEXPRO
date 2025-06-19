@@ -57,7 +57,7 @@ def listar_ingresos():
             socio = ingreso["nombreSocio"] or "SIN SOCIO"
 
             data.setdefault(socio, {m: 0 for m in meses_es.values()})
-            data[socio][mes] += int(ingreso["totalFactura"])
+            data[socio][mes] += float(ingreso["totalFactura"])
 
 
         return jsonify(data), 200

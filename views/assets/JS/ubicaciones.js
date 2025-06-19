@@ -96,17 +96,17 @@ async function listarUbicaciones() {
         const data = await response.json();
         let tabla = $('#ubicacionTable').DataTable();
         tabla.clear().rows.add(data.map(ubicaciones => [
-            ubicaciones.codigoPostal, 
-            ubicaciones.nombrePuebloCiudad, 
-            ubicaciones.nombreMunicipio,
-            ubicaciones.nombreEstado, 
-            ubicaciones.nombrePais,
-            ubicaciones.pkCodigoPostal, 
-            ubicaciones.pkPuebloCiudad, 
-            ubicaciones.pkMunicipio, 
-            ubicaciones.pkEstado, 
-            ubicaciones.pkPais, 
-            ubicaciones.pkUbicacion
+            ubicaciones.codigoPostal, //0
+            ubicaciones.nombrePuebloCiudad, //1 
+            ubicaciones.nombreMunicipio, //2
+            ubicaciones.nombreEstado,  //3
+            ubicaciones.nombrePais, //4
+            ubicaciones.pkCodigoPostal, //5
+            ubicaciones.pkPuebloCiudad, //6
+            ubicaciones.pkMunicipio, //7
+            ubicaciones.pkEstado, //8
+            ubicaciones.pkPais, //9
+            ubicaciones.pkUbicacion //10
         ])).draw();
 
     } catch (error) {
@@ -147,9 +147,32 @@ async function agregarUbicacion() {
 
 async function editarUbicacion(pkUbicacion) {
     try {
-        await agregarUbicacion(pkUbicacion);
+        const fkCodigoPostal = document.getElementById('codigosPostales_menu').value;
+        const fkPuebloCiudad = document.getElementById('pueblosCiudades_menu').value;
+        const fkMunicipio = document.getElementById('municipios_menu').value;
+        const fkEstado = document.getElementById('estados_menu').value;
+        const fkPais = document.getElementById('paises_menu').value;
+
+        if (!pkUbicacion || !fkCodigoPostal || !fkPuebloCiudad || !fkMunicipio || !fkEstado || !fkPais) {
+            toastr.warning('Por favor completa todos los campos', 'Advertencia', { "closeButton": true });
+            return;
+        }
+
+        const response = await fetch('http://127.0.0.1:5000/coartmex/ubicaciones', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ pkUbicacion, fkCodigoPostal, fkPuebloCiudad, fkMunicipio, fkEstado, fkPais })
+        });
+
+        const data = await response.json();
+        toastr.success(`${data.mensaje}`, 'Realizado', { "closeButton": true });
+
+        //$('#boostrapModal-1').modal('hide');
+        await listarUbicaciones();
+
     } catch (error) {
         console.error('Error:', error);
+        toastr.error('Hubo un error al intentar la acción', 'Error', { "closeButton": true });
     }
 }
 

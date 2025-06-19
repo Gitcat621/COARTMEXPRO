@@ -14,40 +14,58 @@ $("#agregarProveedor").click(function() {
     abrirModalProveedor(1);
 });
 
+
+$(document).on('click', '.cuentas-btn', function () {
+
+    const tabla = $('#proveedorTable').DataTable();
+    const rowData = tabla.row($(this).closest('tr')).data();
+
+    $('#boostrapModal-2').modal('show');
+    abrirModalCuentaBanco(1,rowData[23]);
+});
+
+
+
 //Inicializar datatable
 $(document).ready(function() {
 
 
     $('#proveedorTable').DataTable({
-        columns: [
-            { title: "Nombre" },
-            { title: "correo" },
-            { title: "Telefonos" },
-            { title: "Metodos de pago" },
-            { title: "Dias de credito" },
-            { title: "Factura / Nota" },
-            { title: "Bancos" },
-            { title: "Cuentas de banco" },
-            { title: "Beneficiarios" },
-            { title: "Dias de entrega" },
-            { title: "Flete" },
-            { title: "Paqueterias" },
-            { title: "CodigoPostal" },
-            { title: "Municipio" },
-            { title: "Estado" },
-            
-            {
-                title: "Opciones",
-                render: function (data, type, row) { // 'row' contiene toda la fila de datos
-                    return `<div class="text-center">
-                                <button class="btn btn-xs editar-btn" data-row='${JSON.stringify(row)}'><i class="fa fa-pencil"></i></button>
-                                <button class="btn btn-xs eliminar-btn" data-pk="${row[21]}" data-nombre="${row[0]}"><i class="fa fa-trash"></i></button>
-                            </div>`;
-                }
+    columns: [
+        { title: "Nombre" },
+        { title: "Correo" },
+        { title: "Telefonos" },
+        { title: "Metodos de pago"},
+        { title: "Dias de credito" },
+        { title: "Factura / Nota" },
+        {
+            title: "Cuentas de banco",
+            render: function (data, type, row) {
+                const cuentas = data ? data : "Agregar cuenta"; // o usa "" si prefieres dejar vacío
+                return `${cuentas} , <button class="btn btn-xsxs btn-success cuentas-btn"><i class="fa fa-plus"></i></button>`;
             }
-        ],
-        scrollX: true,
+        },
+        { title: "Bancos" },
+        { title: "Beneficiarios" },
+        { title: "Dias de entrega" },
+        { title: "Flete" },
+        { title: "Paqueterias" },
+        { title: "CodigoPostal" },
+        { title: "Municipio" },
+        { title: "Estado" },
+        {
+            title: "Opciones",
+            render: function (data, type, row) {
+                return `<div class="text-center">
+                            <button class="btn btn-xs editar-btn" data-row='${JSON.stringify(row)}'><i class="fa fa-pencil"></i></button>
+                            <button class="btn btn-xs eliminar-btn" data-pk="${row[23]}" data-nombre="${row[0]}"><i class="fa fa-trash"></i></button>
+                        </div>`;
+            }
+        }
+    ],
+    scrollX: true
     });
+
 
     // Event listeners para los botones
     // Editar
@@ -75,9 +93,10 @@ $(document).ready(function() {
         const pkPuebloCiudad      = rowData[17];
         const pkMunicipio         = rowData[18];
         const pkEstado            = rowData[19];
-        const pkTelefonos         = rowData[20];
-        const pkPaqueterias       = rowData[21];
-        const pkProveedor         = rowData[22];
+        const pkMetodos           = rowData[20];
+        const pkTelefonos         = rowData[21];
+        const pkPaqueterias       = rowData[22];
+        const pkProveedor         = rowData[23];
 
 
 
@@ -156,8 +175,23 @@ $(document).ready(function() {
             console.warn("No se especificaron paqueterías para seleccionar.");
         }
 
+        //Metodos
+        if (pkMetodos && pkMetodos.trim() !== "") {
+            const idsSeleccionados = pkMetodos.split("-");
 
+            const select = document.getElementById('metodoPago_menu');
 
+            for (const option of select.options) {
+                if (idsSeleccionados.includes(option.value)) {
+                    option.selected = true;
+                }
+            }
+
+            // Actualizar visualmente si usas Select2
+            $('#metodoPago_menu').trigger('change');
+        } else {
+            console.warn("No se especificaron metodos de pago para seleccionar.");
+        }
 
         
         document.getElementById('diasCredito').value = diasCredito;
@@ -213,13 +247,14 @@ async function agregarProveedor() {
     const municipio = document.getElementById('municipios_menu').value;
     const estado = document.getElementById('estados_menu').value;
 
+    const metodosSeleccionados = Array.from(document.getElementById('metodoPago_menu').selectedOptions).map(o => o.value);
     const numerosSeleccionados = Array.from(document.getElementById('telefono_menu').selectedOptions).map(o => o.value);
     const paqueteriasSeleccionadas = Array.from(document.getElementById('paqueteria_menu').selectedOptions).map(o => o.value);
 
     //Validar datos ingresados
 
     if (!nombreProveedor || !correoProveedor || !diasCredito || !facturaNota || !diasEntrega || !flete ||
-        !codigoPostal || !puebloCiudad || !municipio || !estado ||
+        !codigoPostal || !puebloCiudad || !municipio || !estado || metodosSeleccionados.length === 0 ||
         numerosSeleccionados.length === 0 || paqueteriasSeleccionadas.length === 0) {
         toastr.warning('Por favor completa todos los campos', 'Advertencia', { "closeButton": true });
         return;
@@ -243,7 +278,7 @@ async function agregarProveedor() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 nombreProveedor, correoProveedor, diasCredito, facturaNota, diasEntrega, flete,
-                codigoPostal, puebloCiudad, municipio, estado, numerosSeleccionados, paqueteriasSeleccionadas
+                codigoPostal, puebloCiudad, municipio, estado, metodosSeleccionados, numerosSeleccionados, paqueteriasSeleccionadas
             })
         });
 
@@ -290,8 +325,8 @@ async function listarProveedores() {
                 p.metodosPago, //3
                 p.diasCredito, //4
                 p.facturaNota, //5
-                p.bancos, //6
-                p.numerosCuenta, //7
+                p.numerosCuenta, //6
+                p.bancos, //7
                 p.beneficiarios, //8
                 p.diasEntrega, //9
                 p.flete, //10
@@ -304,9 +339,10 @@ async function listarProveedores() {
                 p.pkPuebloCiudad, //17
                 p.pkMunicipio, //18
                 p.pkEstado, //19
-                p.pkTelefonos, //20
-                p.pkPaqueterias, //21
-                p.pkProveedor //22
+                p.pkMetodos, //20
+                p.pkTelefonos, //21
+                p.pkPaqueterias, //22
+                p.pkProveedor //23
             ])).draw();
         }catch{
             console.log('No existe una tabla para: Proveedores')
@@ -327,7 +363,7 @@ async function listarProveedores() {
             });
 
         }catch{
-            console.log('No existe una tabla para: Proveedores')
+            console.log('No existe un menu para: Proveedores')
         }
 
         
@@ -362,12 +398,13 @@ async function editarProveedor(pkProveedor) {
 
     const fkUbicacion = document.getElementById('ubicacion_menu').value;
 
+    const metodosSeleccionados = Array.from(document.getElementById('metodoPago_menu').selectedOptions).map(o => o.value);
     const numerosSeleccionados = Array.from(document.getElementById('telefono_menu').selectedOptions).map(o => o.value);
     const paqueteriasSeleccionadas = Array.from(document.getElementById('paqueteria_menu').selectedOptions).map(o => o.value);
     //Validar datos ingresados
 
     if (!nombreProveedor || !correoProveedor || !diasCredito || !facturaNota || !diasEntrega || !flete ||
-        !codigoPostal || !puebloCiudad || !municipio || !estado ||
+        !codigoPostal || !puebloCiudad || !municipio || !estado || metodosSeleccionados.length === 0 ||
         numerosSeleccionados.length === 0 || paqueteriasSeleccionadas.length === 0) {
         toastr.warning('Por favor completa todos los campos', 'Advertencia', { "closeButton": true });
         return;
@@ -391,7 +428,7 @@ async function editarProveedor(pkProveedor) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
                 pkProveedor ,nombreProveedor, correoProveedor, diasCredito, facturaNota, diasEntrega, flete, fkUbicacion,
-                codigoPostal, puebloCiudad, municipio, estado, numerosSeleccionados, pkTelefonos, paqueteriasSeleccionadas, 
+                codigoPostal, puebloCiudad, municipio, estado, metodosSeleccionados, numerosSeleccionados, pkTelefonos, paqueteriasSeleccionadas, 
             })
         });
 
@@ -458,12 +495,21 @@ function abrirModalProveedor(modo, pkProveedor) {
         modalTitle.textContent = 'Agregar proveedor';
         modalButton.setAttribute('onclick', 'agregarProveedor()');
         
-        // document.getElementById('nombreProveedor').value = '';
-        // document.getElementById('correoProveedor').value = '';
-        // document.getElementById('diasCredito').value = '';
-        // document.getElementById('fn_menu').value = '';
-        // document.getElementById('ubicacion_menu').value = '';
-        // document.getElementById('telefono_menu').value = '';
+        document.getElementById('nombreProveedor').value = '';
+        document.getElementById('correoProveedor').value = '';
+        document.getElementById('diasCredito').value = '';
+        document.getElementById('fn_menu').value = '';
+        document.getElementById('diasEntrega').value = '';
+        document.getElementById('flete_menu').value = '';
+
+        $('#metodoPago_menu').val(null).trigger('change');
+        $('#telefono_menu').val(null).trigger('change');
+        $('#paqueteria_menu').val(null).trigger('change');
+
+        $('#codigosPostales_menu').val(null).trigger('change');
+        $('#pueblosCiudades_menu').val(null).trigger('change');
+        $('#municipios_menu').val(null).trigger('change');
+        $('#estados_menu').val(null).trigger('change');
 
     } else if (modo === 2) {
 
