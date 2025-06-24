@@ -1,9 +1,20 @@
 from database import Database
 import datetime
+import os
 
 def guardar_en_log(texto):
-    """Guarda el texto en un archivo de log."""
-    with open("registro_log.txt", "a", encoding="utf-8") as archivo:
+    """Guarda el texto en un archivo de log con fecha, dentro de la carpeta 'consultas'."""
+    # Crear carpeta si no existe
+    carpeta = "consultas"
+    os.makedirs(carpeta, exist_ok=True)
+
+    # Generar nombre de archivo con fecha
+    fecha_actual = datetime.datetime.now().strftime("%Y-%m-%d")
+    nombre_archivo = f"log_{fecha_actual}.txt"
+    ruta_archivo = os.path.join(carpeta, nombre_archivo)
+
+    # Escribir en el archivo
+    with open(ruta_archivo, "a", encoding="utf-8") as archivo:
         timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         archivo.write(f"[{timestamp}] {texto}\n")
 

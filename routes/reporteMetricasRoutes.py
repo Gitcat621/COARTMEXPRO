@@ -81,8 +81,7 @@ def procesar_archivo(ruta_archivo):
                     mensaje = procesar_cuentas_por_pagar(df)
                 elif hoja == "ORDEN-VENTA-ENTREGA-FACTURA":
                     mensaje1 = procesar_ordenes(df)
-                    mensaje2 = procesar_facturas(df)
-                    mensajes.extend([mensaje1, mensaje2])
+                    mensajes.extend([mensaje1])
                     continue
                 elif hoja == "CUENTAS COBRADAS":
                     mensaje = procesar_cuentas_cobradas(df)
@@ -173,21 +172,27 @@ def procesar_cuentas_por_pagar(df):
 
 
 def procesar_ordenes(df):
-    """Procesa órdenes de compra, ventas y entregas."""
+    """Procesa órdenes de compra, ventas, entregas y facturas."""
     db = Database()
 
     try:
-        db.connection.autocommit = False  # Desactivar autocommit para manejar la transacción manualmente
+        db.connection.autocommit = False  # Modo transaccional
 
-        # ARREGLAR Y AJUSTAR EL FORMATO DE LOS NUMEROS DE ORDEN DE COMPRA
-        df["No. OC"] = df["No. OC"].fillna("N/A")
-        df["No. OC"] = df["No. OC"].astype(str).str.strip().str.replace(r'\.0$', '', regex=True)
+        # =====================
+        # LIMPIEZA Y FORMATO
+        # =====================
 
-        # DAR FORMATO DE FECHA EN INGLES
-        df["Fecha OC"] = pd.to_datetime(df["Fecha OC"], errors="coerce").dt.strftime('%Y-%m-%d')
+        df["No. OC"] = df["No. OC"].fillna("N/A").astype(str).str.strip().str.replace(r'\.0$', '', regex=True)
+        df["No. factura"] = df["No. factura"].fillna("N/A").astype(str).str.strip().str.replace(r'\.0$', '', regex=True)
 
-        # TRANSFORMAR LOS NOMBRES A LOS DE LA BD
-        df['Socio comercial'] = df['Socio comercial'].replace({
+        # Dar formato a fechas clave
+        fechas_a_formatear = ["Fecha OC", "Fecha de surtido", "Fecha entrega", "Fecha emision", "Fecha de vencimiento"]
+        for col in fechas_a_formatear:
+            if col in df.columns:
+                df[col] = pd.to_datetime(df[col], errors="coerce").dt.strftime('%Y-%m-%d')
+
+        # Normalizar nombre de socios
+        socios_map = {
             'COSTA MUJERES': 'COSTA MUJERES - CATALONIA',
             'WHYNDHAM MAYA': 'MAYA - WYNDHAM',
             'WHYNDHAM AZTECA': 'AZTECA - WYNDHAM',
@@ -195,27 +200,23 @@ def procesar_ordenes(df):
             'ROYALTON SPLASH': 'ROYALTON SPLASH - HOTEL SHOP',
             'SOLUCIONES': 'SOLUCIONES SENCILLAS',
             'CATALONIA ROYAL': 'ROYAL TULUM CATALONIA',
-            'CROWPARADISE':'CROW PARADISE',
-            'CATALONIA COSTA':'COSTA MUJERES - CATALONIA',
-            'PALLADIUM':'PALLADIUM - HOTEL SHOP',
-            'AVA EL CORAZON ':'AVA CORAZON - HOTEL SHOP',
-            'CATALONIA PLAYA':'PLAYA MAROMA - CATALONIA',
-            'MORPHO':'MORPHO TRAVEL'
-        })
+            'CROWPARADISE': 'CROW PARADISE',
+            'CATALONIA COSTA': 'COSTA MUJERES - CATALONIA',
+            'PALLADIUM': 'PALLADIUM - HOTEL SHOP',
+            'AVA EL CORAZON ': 'AVA CORAZON - HOTEL SHOP',
+            'CATALONIA PLAYA': 'PLAYA MAROMA - CATALONIA',
+            'MORPHO': 'MORPHO TRAVEL'
+        }
+        df['Socio comercial'] = df['Socio comercial'].replace(socios_map)
 
-        # DEJAR SOLO UNA APARICION POR ORDEN DE COMPRA DIFERENTE (ELIMINAR REPETIDOS)
+        # =====================
+        # INSERCIÓN DE ÓRDENES ÚNICAS
+        # =====================
+
         ordenes_unicas = df.drop_duplicates(subset=["No. OC", "Fecha OC", "Socio comercial"]).copy()
-
-        # DAR FORMATO EN INGLES A LAS FECHAS
-        ordenes_unicas["Fecha OC"] = pd.to_datetime(ordenes_unicas["Fecha OC"], errors="coerce").dt.strftime('%Y-%m-%d')
-        ordenes_unicas["Fecha de surtido"] = pd.to_datetime(ordenes_unicas["Fecha de surtido"], errors="coerce").dt.strftime('%Y-%m-%d')
-        ordenes_unicas["Fecha entrega"] = pd.to_datetime(ordenes_unicas["Fecha entrega"], errors="coerce").dt.strftime('%Y-%m-%d')
-
-        # LLENAR CELDAS VACIAS CON UN VALOR DEFAULT
         ordenes_unicas["Fecha de surtido"] = ordenes_unicas["Fecha de surtido"].fillna("N/A")
         ordenes_unicas["Fecha entrega"] = ordenes_unicas["Fecha entrega"].fillna("N/A")
-        
-        # ENVIAR DATOS POR FILA PARA ARMAR CONSULTA
+
         with db.connection.cursor() as cursor:
             for _, fila in ordenes_unicas.iterrows():
                 ordenCompra = OrdenCompra(
@@ -223,15 +224,16 @@ def procesar_ordenes(df):
                     fechaOrdenCompra=fila["Fecha OC"],
                     fkSocioComercial=fila["Socio comercial"]
                 )
-
-                resultado = ordenCompra.crear_ordenCompra(cursor)  # Pasamos la conexión activa
-                # SI LA CONSULTA DEVUELVE UN FALSO, BRINCA UN ERROR
-                if resultado is None or resultado is False:
+                if not ordenCompra.crear_ordenCompra(cursor):
                     raise Exception(f"Error al insertar orden {fila['No. OC']}")
+
+        # =====================
+        # INSERCIÓN DE VENTAS Y ENTREGAS
+        # =====================
 
         with db.connection.cursor() as cursor:
             for _, fila in df.iterrows():
-                ordenCompra = OrdenCompra(
+                venta_orden = OrdenCompra(
                     codigoArticulo=fila["Codigo de articulo"],
                     numeroOrdenCompra=fila["No. OC"],
                     fechaOrdenCompra=fila["Fecha OC"],
@@ -240,92 +242,43 @@ def procesar_ordenes(df):
                     cantidadVenta=fila["Cant vendida"],
                     precioVenta=fila["Precio de venta"]
                 )
-                resultado = ordenCompra.crear_venta(cursor)  # Pasamos la conexión activa
-                if resultado is None or resultado is False:
-                    raise Exception(f"Error al insertar orden {fila['No. OC']}")
+                if not venta_orden.crear_venta(cursor):
+                    raise Exception(f"Error al insertar venta para orden {fila['No. OC']}")
 
-        with db.connection.cursor() as cursor:
-            for _, fila in df.iterrows():
-                venta = Venta(
+                entrega = Venta(
                     montoVenta=fila["Cant vendida"] * fila["Precio de venta"],
                     fechaVenta=fila["Fecha entrega"],
                     fkSocioComercial=fila["Socio comercial"],
                 )
-                resultado = venta.crear_venta(cursor)  # Pasamos la conexión activa
-                if resultado is None or resultado is False:
-                    raise Exception(f"Error al insertar orden {fila['No. OC']}")
+                if not entrega.crear_venta(cursor):
+                    raise Exception(f"Error al insertar entrega para orden {fila['No. OC']}")
+
+        # =====================
+        # INSERCIÓN DE RESPUESTAS A ÓRDENES
+        # =====================
 
         with db.connection.cursor() as cursor:
             for _, fila in ordenes_unicas.iterrows():
-                ordenCompra = OrdenCompra(
+                respuesta = OrdenCompra(
                     fechaSurtido=fila["Fecha de surtido"],
                     fechaEntrega=fila["Fecha entrega"],
                     numeroOrdenCompra=fila["No. OC"],
                     fechaOrdenCompra=fila["Fecha OC"],
                     fkSocioComercial=fila["Socio comercial"]
                 )
-                resultado = ordenCompra.crear_respuesta(cursor)  # Pasamos la conexión activa
-                if resultado is None or resultado is False:
-                    raise Exception(f"Error al insertar orden {fila['No. OC']}")
-                
-        db.connection.commit()
-        print("🆗 Órdenes procesadas exitosamente.") 
-        return "🆗 Órdenes procesadas exitosamente."  
+                if not respuesta.crear_respuesta(cursor):
+                    raise Exception(f"Error al insertar respuesta para orden {fila['No. OC']}")
 
-    except Exception as e:
-        db.connection.rollback()
-        print(f"🛑 Error en la transacción de órdenes: {e}")
-        return f"🛑 Error en la transacción de órdenes: {e}"
+        # =====================
+        # INSERCIÓN DE FACTURAS
+        # =====================
 
-    finally:
-        db.close()
-
-
-def procesar_facturas(df):
-    """Procesa y guarda facturas."""
-    db = Database()
-
-    try:
-        db.connection.autocommit = False  # Desactivar autocommit para manejar la transacción manualmente
-
-        df["No. factura"] = df["No. factura"].fillna("N/A")
-        df["No. factura"] = df["No. factura"].astype(str).str.strip().str.replace(r'\.0$', '', regex=True)
-
-        df['Socio comercial'] = df['Socio comercial'].replace({
-            'COSTA MUJERES': 'COSTA MUJERES - CATALONIA',
-            'WHYNDHAM MAYA': 'MAYA - WYNDHAM',
-            'WHYNDHAM AZTECA': 'AZTECA - WYNDHAM',
-            'MOON SUNRISE': 'MOON SUNRISE - HOTEL SHOP',
-            'ROYALTON SPLASH': 'ROYALTON SPLASH - HOTEL SHOP',
-            'SOLUCIONES': 'SOLUCIONES SENCILLAS',
-            'CATALONIA ROYAL': 'ROYAL TULUM CATALONIA',
-            'CROWPARADISE':'CROW PARADISE',
-            'CATALONIA COSTA':'COSTA MUJERES - CATALONIA',
-            'PALLADIUM':'PALLADIUM - HOTEL SHOP',
-            'AVA EL CORAZON ':'AVA CORAZON - HOTEL SHOP',
-            'CATALONIA PLAYA':'PLAYA MAROMA - CATALONIA',
-            'MORPHO':'MORPHO TRAVEL'
-        })
-
-        # Eliminar duplicados
         facturas_unicas = df.drop_duplicates(subset=["No. OC", "Fecha OC", "Socio comercial"]).copy()
-
-        # Reemplazar NaN por None (usualmente útil para columnas numéricas o fechas)
         facturas_unicas["Nota credito"] = facturas_unicas["Nota credito"].apply(lambda x: None if pd.isna(x) else x)
         facturas_unicas["Monto descuento"] = facturas_unicas["Monto descuento"].apply(lambda x: None if pd.isna(x) else x)
-        facturas_unicas["No. OC"] = facturas_unicas["No. OC"].apply(lambda x: None if pd.isna(x) else x)
-
-        # Fechas en formato correcto
-        facturas_unicas["Fecha emision"] = pd.to_datetime(facturas_unicas["Fecha emision"], errors="coerce").dt.strftime('%Y-%m-%d')
-        facturas_unicas["Fecha de vencimiento"] = pd.to_datetime(facturas_unicas["Fecha de vencimiento"], errors="coerce").dt.strftime('%Y-%m-%d')
-        
-        # Se llenan los valores vacios con un valor default
-        facturas_unicas["Fecha emision"] = facturas_unicas["Fecha emision"].apply(lambda x: None if pd.isna(x) else x)
         facturas_unicas["Sub total factura"] = facturas_unicas["Sub total factura"].fillna("N/A")
         facturas_unicas["Total factura"] = facturas_unicas["Total factura"].fillna("N/A")
         facturas_unicas["Razon social"] = facturas_unicas["Razon social"].fillna("N/A")
-        facturas_unicas["Fecha de vencimiento"] = facturas_unicas["Fecha de vencimiento"].apply(lambda x: None if pd.isna(x) else x)
-
 
         with db.connection.cursor() as cursor:
             for _, fila in facturas_unicas.iterrows():
@@ -342,17 +295,18 @@ def procesar_facturas(df):
                     fechaOrdenCompra=fila["Fecha OC"],
                     fkSocioComercial=fila["Socio comercial"],
                 )
-                resultado = factura.crear_factura(cursor)  # Pasamos la conexión activa
-                if resultado is None or resultado is False:
+                if not factura.crear_factura(cursor):
                     raise Exception(f"Error al insertar factura {fila['No. factura']}")
 
-        db.connection.commit()  # Confirmar la transacción si todas las inserciones fueron exitosas
-        print("🆗 Todas las facturas fueron insertadas exitosamente.")
-        return "🆗 Todas las facturas fueron insertadas exitosamente."
+        db.connection.commit()
+        print("✅ Órdenes procesadas exitosamente.")
+        print("✅ Todas las facturas fueron insertadas exitosamente.")
+        return "🆗 Ordenes, ventas y facturas insertadas correctamento."
+
     except Exception as e:
         db.connection.rollback()
-        print(f"🛑 Error en la transacción de facturas: {e}")
-        return f"🛑 Error en la transacción de facturas: {e}"
+        print(f"🛑 Error durante la transacción: {e}")
+        return f"🛑 Error al insertar la hoja de ordenes-venta-factura: {e}"
 
     finally:
         db.close()

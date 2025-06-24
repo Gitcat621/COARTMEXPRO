@@ -350,8 +350,9 @@ async function cargarMetricasServicio(meses) {
 
 function mostrarServicio(data) {
     const tabla = document.getElementById('servicio');
+    
     tabla.innerHTML = "";
-
+    
     // Agrupar por grupo
     const grupos = {};
     let totalOrdenadas = 0;
@@ -442,7 +443,10 @@ function mostrarServicio(data) {
     `;
 
     tabla.innerHTML = htmlBuffer;
+    
 }
+
+
 
 // Función para generar ambas tablas
 function mostrarSociosEnVentas(data) {

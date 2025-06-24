@@ -1,30 +1,6 @@
 $(document).ready(function() {
   var table = $('#example').DataTable();
 
-  $('#example tbody').on('click', 'tr', function () {
-    var tr = $(this);
-    var row = table.row(tr);
-
-    if (row.child.isShown()) {
-      row.child.hide();
-      tr.removeClass('shown');
-    } else {
-      //<td>Juan Pérez</td>
-      //row.child('<div style="padding: 10px;">Más información sobre ' + row.data()[0] + '</div>').show();
-      row.child(`
-        <tr>
-          <td>Full name:</td>
-        </tr>
-        <tr>
-          <td>Extension number:</td>
-        </tr>
-        <tr>
-           <td>Extra info:</td>  
-        </tr>
-      `).show();
-      tr.addClass('shown');
-      }
-  });
 
   cargarMetricasServicio();
 });
@@ -65,7 +41,6 @@ function mostrarServicio(data) {
     const contenedor = document.getElementById('contenedorGruposServicio');
     contenedor.innerHTML = "";
 
-    // Agrupar por grupo
     const grupos = {};
     let totalOrdenadas = 0;
     let totalVendidas = 0;
@@ -76,7 +51,6 @@ function mostrarServicio(data) {
         const grupo = item.nombreGrupoSocio;
         if (!grupos[grupo]) grupos[grupo] = [];
         grupos[grupo].push(item);
-
         ordenesUnicas.add(`${item.nombreGrupoSocio}::${item.numeroOrdenCompra}`);
         totalOrdenadas += parseInt(item.cantidadOrdenada);
         totalVendidas += parseInt(item.cantidadVendida);
@@ -86,24 +60,28 @@ function mostrarServicio(data) {
     let index = 0;
     for (const [grupoNombre, registros] of Object.entries(grupos)) {
         const tableId = `tablaGrupoServicio${index}`;
+        const contenedorId = `contenedorTabla${index}`;
         let subtotalOrdenadas = 0;
         let subtotalVendidas = 0;
         let subtotalPorcentaje = 0;
 
         let tablaHTML = `
             <div class="mb-4">
-                <h5 class="font-weight-bold">${grupoNombre}</h5>
-                <table id="${tableId}" class="table table-bordered table-sm" style="width:100%">
-                    <thead class="thead-light">
-                        <tr>
-                            <th>Socio</th>
-                            <th>Pzas ordenadas</th>
-                            <th>Pzas entregadas</th>
-                            <th># OC</th>
-                            <th>% Entrega</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+                <h5 class="font-weight-bold toggle-tabla" data-target="#${contenedorId}" style="cursor:pointer;">
+                    <i class="fa fa-chevron-down mr-1"></i> ${grupoNombre}
+                </h5>
+                <div id="${contenedorId}" class="tabla-collapse">
+                    <table id="${tableId}" class="table table-bordered table-sm" style="width:100%">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>Socio</th>
+                                <th>Pzas ordenadas</th>
+                                <th>Pzas entregadas</th>
+                                <th># OC</th>
+                                <th>% Entrega</th>
+                            </tr>
+                        </thead>
+                        <tbody>
         `;
 
         registros.forEach(item => {
@@ -128,48 +106,41 @@ function mostrarServicio(data) {
 
         const promedioGrupo = (subtotalPorcentaje / registros.length).toFixed(2);
         tablaHTML += `
-                    </tbody>
-                    <tfoot style="font-weight:bold;">
-                        <tr>
-                            <td>Totales del grupo</td>
-                            <td class="text-center">${subtotalOrdenadas.toLocaleString('es-MX')}</td>
-                            <td class="text-center">${subtotalVendidas.toLocaleString('es-MX')}</td>
-                            <td class="text-center">${new Set(registros.map(r => r.numeroOrdenCompra)).size}</td>
-                            <td class="text-center">${promedioGrupo}%</td>
-                        </tr>
-                    </tfoot>
-                </table>
+                        </tbody>
+                        <tfoot style="font-weight:bold;">
+                            <tr>
+                                <td>Totales del grupo</td>
+                                <td class="text-center">${subtotalOrdenadas.toLocaleString('es-MX')}</td>
+                                <td class="text-center">${subtotalVendidas.toLocaleString('es-MX')}</td>
+                                <td class="text-center">${new Set(registros.map(r => r.numeroOrdenCompra)).size}</td>
+                                <td class="text-center">${promedioGrupo}%</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
             </div>
         `;
 
         contenedor.innerHTML += tablaHTML;
 
-        // Activar DataTable
+        // Activar DataTable con paginación local
         setTimeout(() => {
             $(`#${tableId}`).DataTable({
                 paging: true,
-                pageLength: 5,
+                pageLength: 10,
                 lengthChange: false,
                 searching: false,
                 info: false,
                 ordering: false,
                 scrollX: true,
-                language: {
-                    paginate: {
-                        previous: "Anterior",
-                        next: "Siguiente"
-                    },
-                    emptyTable: "No hay datos disponibles"
-                }
             });
         }, 0);
 
         index++;
     }
 
-    // Total general al final
     const promedioTotal = (totalPorcentaje / data.length).toFixed(2);
-    const resumenHTML = `
+    contenedor.innerHTML += `
         <div class="alert alert-secondary font-weight-bold mt-4">
             Total general — Ordenadas: ${totalOrdenadas.toLocaleString('es-MX')} · 
             Entregadas: ${totalVendidas.toLocaleString('es-MX')} · 
@@ -177,5 +148,21 @@ function mostrarServicio(data) {
             % Entrega: ${promedioTotal}%
         </div>
     `;
-    contenedor.innerHTML += resumenHTML;
+
+    // 🎯 Añadir el evento toggle para mostrar/ocultar
+    setTimeout(() => {
+        document.querySelectorAll('.toggle-tabla').forEach(el => {
+            el.addEventListener('click', () => {
+                const targetId = el.getAttribute('data-target');
+                const target = document.querySelector(targetId);
+                if (target) {
+                    target.classList.toggle('d-none');
+                    const icon = el.querySelector('i');
+                    icon.classList.toggle('fa-chevron-down');
+                    icon.classList.toggle('fa-chevron-up');
+                }
+            });
+        });
+    }, 100);
 }
+

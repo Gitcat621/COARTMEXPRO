@@ -27,6 +27,17 @@
 	
 	<!-- Color Picker -->
 	<link rel="stylesheet" href="assets/color-switcher/color-switcher.min.css">
+
+	 <!-- Data Tables -->
+    <link rel="stylesheet" href="assets/plugin/datatables/media/css/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" href="assets/plugin/datatables/extensions/Responsive/css/responsive.bootstrap.min.css">
+
+	<style>
+		.tabla-collapse.d-none {
+			display: none;
+		}
+	</style>
+
 </head>
 
 <body>
@@ -573,19 +584,8 @@
 				
 				<div class="box-content">
 					<div class="table-responsive table-purchases">
-						<table class="table table-small-font margin-bottom-10 table-hover">
-							<thead>
-								<tr>
-									<th>Socio</th>
-									<th class="text-center">Pzas ordenadas</th>
-									<th class="text-center">Pzas entregadas</th>
-									<th class="text-center"># OC</th>
-									<th class="text-center">% Entrega</th>
-								</tr>
-							</thead>
-							<tbody id="servicio">
-								
-							</tbody>
+						<table class="table table-small-font margin-bottom-10 table-hover" id="example">
+							
 						</table>
 						<!-- /.table -->
 					</div>
@@ -622,6 +622,13 @@
 
 	<!-- Full Screen Plugin -->
 	<script src="assets/plugin/fullscreen/jquery.fullscreen-min.js"></script>
+
+	<!-- Data Tables -->
+	<script src="assets/plugin/datatables/media/js/jquery.dataTables.min.js"></script>
+	<script src="assets/plugin/datatables/media/js/dataTables.bootstrap.min.js"></script>
+	<script src="assets/plugin/datatables/extensions/Responsive/js/dataTables.responsive.min.js"></script>
+	<script src="assets/plugin/datatables/extensions/Responsive/js/responsive.bootstrap.min.js"></script>
+	<script src="assets/scripts/datatables.demo.min.js"></script>
 
 	<script src="assets/scripts/main.min.js"></script>
 	<script src="assets/color-switcher/color-switcher.min.js"></script>
