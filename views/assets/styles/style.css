@@ -473,6 +473,11 @@ h4 strong {
   line-height: 22px;
   padding: 5px 15px;
 }
+.btn.btn-xss {
+  font-size: 10px;
+  line-height: 10px;
+  padding: 5px 6px;
+}
 .btn.btn-xsxs {
   font-size: 12px;
   line-height: 6px;

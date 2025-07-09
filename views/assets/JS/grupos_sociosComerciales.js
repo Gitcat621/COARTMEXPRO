@@ -18,14 +18,15 @@ $(document).ready(function() {
 
 
     $('#grupoTable').DataTable({
+        autoWidth: false,
         columns: [
-            { title: "Nombre del grupo" },
+            { title: "Nombre del grupo", width: "70%" },
             {
                 title: "Opciones",
                 render: function (data, type, row) { // 'row' contiene toda la fila de datos
                     return `<div class="text-center">
-                                <button class="btn btn-xs editar-btn" data-row='${JSON.stringify(row)}'><i class="fa fa-pencil"></i></button>
-                                <button class="btn btn-xs eliminar-btn" data-pk="${row[1]}" data-nombre="${row[0]}"><i class="fa fa-trash"></i></button>
+                                <button class="btn btn-xss editar-btn" data-row='${JSON.stringify(row)}'><i class="fa fa-pencil"></i> EDITAR</button>
+                                <button class="btn btn-xss eliminar-btn" data-pk="${row[1]}" data-nombre="${row[0]}"><i class="fa fa-trash"></i> ELIMINAR</button>
                             </div>`;
                 }
             }
@@ -113,6 +114,11 @@ async function listarGruposSocios() {
         });
 
         const data = await response.json();
+
+        if (!response.ok) {
+            toastr.error(`${data.mensaje}`, 'Error', {"closeButton": true,});
+            return;
+        }
 
         try{
 

@@ -20,8 +20,8 @@ $(document).ready(function() {
                 title: "Opciones",
                 render: function (data, type, row) { // 'row' contiene toda la fila de datos
                     return `<div class="text-center">
-                                <button class="btn btn-xs editar-btn" data-row='${JSON.stringify(row)}'><i class="fa fa-pencil"></i></button>
-                                <button class="btn btn-xs eliminar-btn" data-pk="${row[1]}" data-nombre="${row[0]}"><i class="fa fa-trash"></i></button>
+                                <button class="btn btn-xss editar-btn" data-row='${JSON.stringify(row)}'><i class="fa fa-pencil"></i> EDITAR</button>
+                                <button class="btn btn-xss eliminar-btn" data-pk="${row[1]}" data-nombre="${row[0]}"><i class="fa fa-trash"></i> ELIMINAR</button>
                             </div>`;
                 }
             }
@@ -274,14 +274,14 @@ function abrirModalPaqueteria(modo, pkPaqueteria) {
     //Asignar diseño y comportamiento del modal dependiendo de la accion(Agregar o Editar)
     if (modo === 1) {
 
-        modalTitle.textContent = 'Agregar banco';
+        modalTitle.textContent = 'Agregar paqueteria';
         modalButton.setAttribute('onclick', 'agregarPaqueteria()');
 
         document.getElementById('nombrePaqueteria').value = '';
     } else if (modo === 2) {
 
         $('#boostrapModal-3').modal('show');
-        modalTitle.textContent = 'Editar banco';
+        modalTitle.textContent = 'Editar paqueteria';
         modalButton.setAttribute('onclick', `editarPaqueterias(${pkPaqueteria})`);
 
     }

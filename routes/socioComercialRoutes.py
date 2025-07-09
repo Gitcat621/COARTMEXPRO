@@ -9,6 +9,30 @@ def listar_sociosComerciales():
     sociosComerciales = SocioComercial.listar_sociosComerciales()
     return jsonify(sociosComerciales), 200
 
+@socioComercial_bp.route('/tiendas', methods=['GET'])
+def listar_tiendas_por_zona():
+    """Endpoint para obtener todos los registros"""
+    
+    fkZonaRuta = request.args.get('fkZonaRuta')
+
+    if not 'fkZonaRuta':
+        return jsonify({'mensaje': 'Faltan datos'}), 400  # Devuelve un error si faltan datos
+
+    sociosComerciales = SocioComercial.listar_tiendas_por_zona(fkZonaRuta)
+    return jsonify(sociosComerciales), 200
+
+@socioComercial_bp.route('/socioComercial', methods=['GET'])
+def obtener_socio():
+    """Endpoint para obtener todos los registros"""
+    
+    pkSocioComercial = request.args.get('pkSocioComercial')
+
+    if not pkSocioComercial:
+        return jsonify({'mensaje': 'Faltan datos'}), 400  # Devuelve un error si faltan datos
+
+    sociosComerciales = SocioComercial.obtener_socio(pkSocioComercial)
+    return jsonify(sociosComerciales), 200
+
 @socioComercial_bp.route('/sociosComerciales', methods=['POST'])
 def crear_socioComercial():
     """Endpoint para insertar un registro"""
@@ -16,17 +40,13 @@ def crear_socioComercial():
     nombreSocio = data.get('nombreSocio')
     razonSocial = data.get('razonSocial')
     fkGrupoSocio = data.get('fkGrupoSocio')
+    fkZonaRuta = data.get('fkZonaRuta')
     fkUbicacion = data.get('fkUbicacion')
     puebloCiudad = data.get('puebloCiudad')
     estado = data.get('estado')
     pais = data.get('pais')
 
-    print(fkUbicacion)
-    print(puebloCiudad)
-    print(estado)
-    print(pais)
-
-    if SocioComercial.crear_socioComercial(nombreSocio, razonSocial, fkGrupoSocio, fkUbicacion, puebloCiudad, estado, pais):
+    if SocioComercial.crear_socioComercial(nombreSocio, razonSocial, fkGrupoSocio, fkZonaRuta, fkUbicacion, puebloCiudad, estado, pais):
         return jsonify({'mensaje': 'Socio comercial insertado correctamente'}), 201
     else:
         return jsonify({'mensaje': 'Error al insertar socio comercial'}), 500
@@ -40,6 +60,7 @@ def editar_socioComercial():
         nombreSocio = data.get('nombreSocio')
         razonSocial = data.get('razonSocial')
         fkGrupoSocio = data.get('fkGrupoSocio')
+        fkZonaRuta = data.get('fkZonaRuta')
         fkUbicacion = data.get('fkUbicacion')
         puebloCiudad = data.get('puebloCiudad')
         estado = data.get('estado')
@@ -49,12 +70,13 @@ def editar_socioComercial():
         print(nombreSocio)
         print(razonSocial)
         print(fkGrupoSocio)
+        print('zona',fkZonaRuta)
         print(fkUbicacion)
         print(puebloCiudad)
         print(estado)
         print(pais)
 
-        if SocioComercial.editar_socioComercial(pkSocioComercial,nombreSocio, razonSocial, fkGrupoSocio, fkUbicacion, puebloCiudad, estado, pais):
+        if SocioComercial.editar_socioComercial(pkSocioComercial,nombreSocio, razonSocial, fkGrupoSocio, fkZonaRuta, fkUbicacion, puebloCiudad, estado, pais):
             return jsonify({'mensaje': 'Socio comercial editado correctamente'}), 200
         else:
             return jsonify({'mensaje': 'No se pudo editar el socio comercial'}), 500

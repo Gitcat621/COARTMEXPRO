@@ -4,19 +4,8 @@ $(document).ready(function () {
         //window.location.href = './index.html';
         //toastr.warning('Usted no debería estar aquí', 'Atención', { "closeButton": true });
     }
-    listarSociosComerciales();
     
-});
-
-//Asignar funcion al boton de abrir modal
-$("#agregarSocio").click(function() {
-    abrirModalSocio(1);
-});
-
-//Inicializar datatable
-$(document).ready(function() {
-
-
+    //Inicializar datatable
     $('#socioTable').DataTable({
         columns: [
             { title: "Nombre del socio" },
@@ -98,7 +87,16 @@ $(document).ready(function() {
         
     });
 
+
+    listarSociosComerciales();
+    
 });
+
+//Asignar funcion al boton de abrir modal
+$("#agregarSocio").click(function() {
+    abrirModalSocio(1);
+});
+
 
 async function agregarSocioComercial() {
     // Obtener los datos del formulario
@@ -174,27 +172,53 @@ async function listarSociosComerciales() {
             headers: { 'Content-Type': 'application/json' }
         });
 
-        if (!response.ok) throw new Error('Error al obtener los datos');
-
         const data = await response.json();
 
-        let tabla = $('#socioTable').DataTable();
-        tabla.clear().draw();
+        if (!response.ok) {
+            toastr.error(`${data.mensaje}`, 'Error', {"closeButton": true,});
+            return;
+        }
 
-        tabla.rows.add(data.map(sc => [
-            sc.nombreSocio, //0 
-            sc.razonSocial, //1
-            sc.nombreGrupoSocio, //2 
-            sc.nombrePuebloCiudad, //3
-            sc.nombreEstado, //4
-            sc.nombrePais, //5
-            sc.fkGrupoSocio, //6
-            sc.fkUbicacion, //7
-            sc.pkPuebloCiudad, //8
-            sc.pkEstado, //9
-            sc.pkPais, //10
-            sc.pkSocioComercial //11
-        ])).draw();
+        try{
+            let tabla = $('#socioTable').DataTable();
+            tabla.clear().draw();
+
+            tabla.rows.add(data.map(sc => [
+                sc.nombreSocio, //0 
+                sc.razonSocial, //1
+                sc.nombreGrupoSocio, //2 
+                sc.nombrePuebloCiudad, //3
+                sc.nombreEstado, //4
+                sc.nombrePais, //5
+                sc.fkGrupoSocio, //6
+                sc.fkUbicacion, //7
+                sc.pkPuebloCiudad, //8
+                sc.pkEstado, //9
+                sc.pkPais, //10
+                sc.pkSocioComercial //11
+            ])).draw();
+        }catch{
+            console.log('No hay tabla para: Socios comerciales');
+        }
+
+        try{
+
+            const select = document.getElementById('socio_menu');
+            select.innerHTML = "";
+
+            data.forEach(s => {
+
+                let option = document.createElement('option');
+                option.value = s.pkSocioComercial;
+                option.textContent = s.nombreSocio;
+                select.appendChild(option);
+
+            });
+
+        }catch{
+            console.log('No hay menu para: Socios comerciales')
+        }
+
     } catch (error) {
         console.error("Error al cargar los datos:", error);
     }

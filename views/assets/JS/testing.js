@@ -2,7 +2,17 @@ $(document).ready(function() {
   var table = $('#example').DataTable();
 
 
-  cargarMetricasServicio();
+  //cargarMetricasServicio();
+
+  const table2 = new DataTable('#examples');
+ 
+    table2.on('click', 'tbody tr', function (e) {
+        e.currentTarget.classList.toggle('selected');
+    });
+    
+    document.querySelector('#button').addEventListener('click', function () {
+        alert(table2.rows('.selected').data().length + ' row(s) selected');
+    });
 });
 
 async function cargarMetricasServicio() {

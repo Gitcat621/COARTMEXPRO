@@ -32,7 +32,7 @@ async function listarPuestos() {
             });
 
         }catch{
-            console.log('no existe este elemento: Puestos');
+            console.log('no existe menu para: Puestos');
         }
 
     } catch (error) {
@@ -61,18 +61,26 @@ async function listarNivelesEstudio() {
 
         //console.log(data);
 
-        const select = document.getElementById('niveles_menu');
-        select.innerHTML = "";
+        try{
+            
+            const select = document.getElementById('niveles_menu');
+            select.innerHTML = "";
 
 
-        data.forEach(niveles => {
+            data.forEach(niveles => {
 
-            let option = document.createElement('option');
-            option.value = niveles.pkNivelEstudio;
-            option.textContent = niveles.nombreNivel;
-            select.appendChild(option);
+                let option = document.createElement('option');
+                option.value = niveles.pkNivelEstudio;
+                option.textContent = niveles.nombreNivel;
+                select.appendChild(option);
 
-        });
+            });
+
+        }catch{
+            console.log('no existe menu para: Niveles de estudio');
+        }
+
+
 
        
     } catch (error) {
@@ -211,33 +219,62 @@ async function listarEmpleados() {
 
         //console.log(data);
 
-        let tabla = $('#empleadoTable').DataTable();
-        tabla.clear().draw();
-        tabla.rows.add(data.map((empleados) => [
-            empleados.numeroEmpleado, //0
-            empleados.rfc,  //1
-            empleados.nombreEmpleado, //2 
-            toformatearFecha(empleados.fechaIngreso), //3
-            toformatearFecha(empleados.fechaNacimiento), //4
-            '$' + empleados.nomina.toLocaleString('es-MX'), //5
-            '$' + empleados.vale.toLocaleString('es-MX'), //6
-            '$' + (parseFloat(empleados.nomina) + parseFloat(empleados.vale)).toLocaleString('es-MX'), //7
-            empleados.nombrePuesto, //8
-            empleados.nombreDepartamento, //9
-            empleados.nombreNivel, //10
-            empleados.ubicacion, //11
-            empleados.estado, //12
-            empleados.fechaIngreso, //13
-            empleados.fechaNacimiento, //14
-            empleados.nomina, //15
-            empleados.vale, //16
-            empleados.pkPuesto, //17
-            empleados.pkNivelEstudio, //18
-            empleados.pkUbicacion, //19
-            empleados.pkPuebloCiudad, //20
-            empleados.pkEstado, //21
-            empleados.pkPais //22
-        ])).draw();
+        
+
+        try{
+            
+            let tabla = $('#empleadoTable').DataTable();
+            tabla.clear().draw();
+            tabla.rows.add(data.map((empleados) => [
+                empleados.numeroEmpleado, //0
+                empleados.rfc,  //1
+                empleados.nombreEmpleado, //2 
+                toformatearFecha(empleados.fechaIngreso), //3
+                toformatearFecha(empleados.fechaNacimiento), //4
+                '$' + empleados.nomina.toLocaleString('es-MX'), //5
+                '$' + empleados.vale.toLocaleString('es-MX'), //6
+                '$' + (parseFloat(empleados.nomina) + parseFloat(empleados.vale)).toLocaleString('es-MX'), //7
+                empleados.nombrePuesto, //8
+                empleados.nombreDepartamento, //9
+                empleados.nombreNivel, //10
+                empleados.ubicacion, //11
+                empleados.estado, //12
+                empleados.fechaIngreso, //13
+                empleados.fechaNacimiento, //14
+                empleados.nomina, //15
+                empleados.vale, //16
+                empleados.pkPuesto, //17
+                empleados.pkNivelEstudio, //18
+                empleados.pkUbicacion, //19
+                empleados.pkPuebloCiudad, //20
+                empleados.pkEstado, //21
+                empleados.pkPais //22
+            ])).draw();
+
+        }catch{
+            console.log('no existe tabla para: Empleados');
+        }
+
+        
+        try{
+            
+            const select = document.getElementById('empleado_menu');
+            select.innerHTML = "";
+
+
+            data.forEach(emp => {
+
+                let option = document.createElement('option');
+                option.value = emp.numeroEmpleado;
+                option.textContent = emp.nombreEmpleado;
+                select.appendChild(option);
+
+            });
+
+        }catch{
+            console.log('no existe menu para: Empleados');
+        }
+
     } catch (error) {
         console.error("Error al cargar los datos:", error);
         toastr.error('La petición de colaboradores no se pudo concretar', 'Error', {"closeButton": true,});

@@ -96,6 +96,17 @@
 								<li><a href="reloj_checador.html"><i class="fa fa-clock-o"></i> Reloj checador</a></li>
 								<li><a href="datos_rh.html"><i class="fa fa-wrench"></i> Herramientas de datos</a></li>
 							</ul>
+						</li>
+						<li>
+							<a class="waves-effect parent-item js__control" href="#"><i class="menu-icon fa fa-credit-card-alt"></i><span>Logística comercial </span><span class="menu-arrow fa fa-angle-down"></span></a>
+							<ul class="sub-menu js__content">
+								<li><a href="socios_comercialesLC.html"><i class="fa fa-shopping-bag"></i> Socios comerciales</a></li>
+								<li><a href="rutas.html"><i class="fa fa-car"></i> Rutas</a></li>
+								<li><a href="visitas.html"><i class="mdi mdi-clipboard-check"></i> Seguimiento de visitas</a></li>
+								<li><a href="documentosLC.html"><i class="mdi mdi-file-pdf"></i> Documentos archivados</a></li>
+								<li><a href="vehiculos.html"><i class="mdi mdi-wrench"></i> Vehiculos y servicios a transporte</a></li>
+								<li><a href="bitacora_envios.html"><i class="fa fa-book"></i> Bitacora de envios</a></li>
+							</ul>
 						</li>		
 						<li class="current">
 							<a class="waves-effect parent-item js__control" href="#"><i class="menu-icon fa fa-laptop"></i><span>Sistemas </span><span class="menu-arrow fa fa-angle-down"></span></a>
@@ -143,36 +154,57 @@
 		<div class="row small-spacing">
 			<div class="col-xs-12">
 
-				<!-- Grupos -->
-				<div class="box-content">
+				<!-- SWITCHES -->
+				<ul class="list-inline">
+					<li>
+						<div class="switch info"><input type="checkbox" id="switch-4"><label for="switch-4">ver grupos de socios</label></div>
+						<!-- /.checkbox -->
+					</li>
+					<li>
+						<div class="switch info"><input type="checkbox" id="switch-5"><label for="switch-5">ver zonas de ruta</label></div>
+						<!-- /.checkbox -->
+					</li>
+				</ul>
+				
+
+                <!-- Grupos -->
+				<div class="box-content" id="grupos" style="display: none;">
 					<h4 class="box-title">Tabla de grupos de socios comerciales</h4>
 					<!-- /.box-title -->
 
-
 					<button type="button" class="btn btn-success btn-xs waves-effect waves-light margin-bottom-20" data-toggle="modal" data-target="#boostrapModal-2" id="agregarGrupoSocio"><i class="fa fa-plus"></i> Agregar</button>
 
-					<table id="grupoTable" class="table table-small-font table-hover table-bordered display" style="width:100%">
-						
-					</table>
+					<table id="grupoTable" class="table table-small-font table-hover table-bordered display" style="width:100%"></table>
 					
 				</div>
 				<!-- /.box-content -->
 
-				<!-- Socios / Tiendas -->
+
+				<!-- Zonas -->
+				<div class="box-content" id="zonas" style="display: none;">
+					<h4 class="box-title">Tabla de zonas de ruta</h4>
+					<!-- /.box-title -->
+
+					<button type="button" class="btn btn-success btn-xs waves-effect waves-light margin-bottom-20" data-toggle="modal" data-target="#boostrapModal-3" id="agregarZonaRuta"><i class="fa fa-plus"></i> Agregar</button>
+
+					<table id="zonaTable" class="table table-small-font table-hover table-bordered display" style="width:100%"></table>
+					
+				</div>
+				<!-- /.box-content -->
+                      
+
+                <!-- Socios / Tiendas -->
 				<div class="box-content">
-					<h4 class="box-title">Tabla de socios comerciales</h4>
+					<h4 class="box-title">Tabla de socios / tiendas / hoteles</h4>
 					<!-- /.box-title -->
 
 					<button type="button" class="btn btn-success btn-xs waves-effect waves-light margin-bottom-20" data-toggle="modal" data-target="#boostrapModal-1" id="agregarSocio"><i class="fa fa-plus"></i> Agregar</button>
 
-					<table id="socioTable" class="table table-small-font table-hover table-bordered display" style="width:100%">
-						
-					</table>
+					<table id="socioTable" class="table table-small-font table-hover table-bordered display" style="width:100%"></table>
 					
 				</div>
 				<!-- /.box-content -->
 			</div>
-			
 		</div>
 		<!-- /.row -->		
 	</div>
@@ -270,7 +302,7 @@
 	<!-- Placed at the end of the document so the pages load faster -->
 	<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-	<script src="assets/JS/socios_comerciales.js"></script>
+	<script src="assets/JS/socios_comercialesLC.js"></script>
 	<script src="assets/JS/pueblos_ciudades.js"></script>
 	<script src="assets/JS/estados.js"></script>
 	<script src="assets/JS/paises.js"></script>

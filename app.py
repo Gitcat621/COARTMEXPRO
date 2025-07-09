@@ -43,6 +43,16 @@ from routes.presentadorRoutes import presentador_bp
 from routes.clinicaRoutes import clinica_bp
 from routes.relojChecadorRoutes import relojChecador_bp
 from routes.metodoPagoRoutes import metodo_pago_bp
+from routes.zonaRutaRoutes import zona_ruta_bp
+from routes.listaPrecioRoutes import lista_precio_bp
+from routes.rutaRoutes import ruta_bp
+from routes.visitaTiendaRoutes import visita_tienda_bp
+from routes.vehiculoRoutes import vehiculo_bp
+from routes.servicioVehiculoRoutes import servicio_vehiculo_bp
+from routes.lugarServicioRoutes import lugar_servicio_bp
+from routes.manoObraRoutes import mano_obra_bp
+from routes.enviosRoutes import envio_bp
+from routes.docsLcRoutes import docsLc_bp
 
 app = Flask(__name__)
 
@@ -89,6 +99,16 @@ app.register_blueprint(presentador_bp, url_prefix='/coartmex')
 app.register_blueprint(clinica_bp, url_prefix='/coartmex')
 app.register_blueprint(relojChecador_bp, url_prefix='/coartmex')
 app.register_blueprint(metodo_pago_bp, url_prefix='/coartmex')
+app.register_blueprint(zona_ruta_bp, url_prefix='/coartmex')
+app.register_blueprint(lista_precio_bp, url_prefix='/coartmex')
+app.register_blueprint(ruta_bp, url_prefix='/coartmex')
+app.register_blueprint(visita_tienda_bp, url_prefix='/coartmex')
+app.register_blueprint(vehiculo_bp, url_prefix='/coartmex')
+app.register_blueprint(servicio_vehiculo_bp, url_prefix='/coartmex')
+app.register_blueprint(lugar_servicio_bp, url_prefix='/coartmex')
+app.register_blueprint(mano_obra_bp, url_prefix='/coartmex')
+app.register_blueprint(envio_bp, url_prefix='/coartmex')
+app.register_blueprint(docsLc_bp, url_prefix='/coartmex')
 
 @app.route('/')
 def default():
