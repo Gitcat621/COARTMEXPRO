@@ -70,6 +70,7 @@ async function envio(user,pass){
 
     sessionStorage.setItem("usuario", datos.nombreUsuario);
 		sessionStorage.setItem("departamento", datos.nombreDepartamento);
+    sessionStorage.setItem("ID", datos.fkEmpleado);
 
 
     window.location.href = "./index.html"; 

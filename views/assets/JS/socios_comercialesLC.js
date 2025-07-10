@@ -1,5 +1,10 @@
 $(document).ready(function () {
 
+    if (sessionStorage.getItem("departamento") !== 'REABASTO' && sessionStorage.getItem("departamento") !== 'DIRECCION COMERCIAL') {
+        window.location.href = './index.html';
+        toastr.warning('Usted no debería estar aquí', 'Atención', { "closeButton": true });
+    }
+
     //Inicializar datatable
     $('#socioTable').DataTable({
         columns: [
@@ -143,25 +148,47 @@ async function listarSociosComerciales() {
             return;
         }
 
-        let tabla = $('#socioTable').DataTable();
-        tabla.clear().draw();
+        try{
+            let tabla = $('#socioTable').DataTable();
+            tabla.clear().draw();
 
-        tabla.rows.add(data.map(sc => [
-            sc.nombreSocio, //0 
-            sc.razonSocial, //1
-            sc.nombreGrupoSocio, //2 
-            sc.nombrePuebloCiudad, //3
-            sc.nombreEstado, //4
-            sc.nombrePais, //5
-            sc.nombreZonaRuta,//6
-            sc.fkGrupoSocio, //7
-            sc.fkUbicacion, //8
-            sc.pkPuebloCiudad, //9
-            sc.pkEstado, //10
-            sc.pkPais, //11
-            sc.pkZonaRuta, //12
-            sc.pkSocioComercial //13
-        ])).draw();
+            tabla.rows.add(data.map(sc => [
+                sc.nombreSocio, //0 
+                sc.razonSocial, //1
+                sc.nombreGrupoSocio, //2 
+                sc.nombrePuebloCiudad, //3
+                sc.nombreEstado, //4
+                sc.nombrePais, //5
+                sc.nombreZonaRuta,//6
+                sc.fkGrupoSocio, //7
+                sc.fkUbicacion, //8
+                sc.pkPuebloCiudad, //9
+                sc.pkEstado, //10
+                sc.pkPais, //11
+                sc.pkZonaRuta, //12
+                sc.pkSocioComercial //13
+            ])).draw();
+        }catch{
+            console.log('No hay tabla para: Socios comerciales');
+        }
+
+        try{
+
+            const select = document.getElementById('socio_menu');
+            select.innerHTML = "";
+
+            data.forEach(s => {
+
+                let option = document.createElement('option');
+                option.value = s.pkSocioComercial;
+                option.textContent = s.nombreSocio;
+                select.appendChild(option);
+
+            });
+
+        }catch{
+            console.log('No hay menu para: Socios comerciales')
+        }
     } catch (error) {
         console.error("Error al cargar los datos:", error);
     }

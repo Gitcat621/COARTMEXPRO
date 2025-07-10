@@ -41,25 +41,31 @@ class Usuario:
         db = Database()
 
         consulta = '''
-        SELECT u.nombreUsuario, u.contrasena, d.nombreDepartamento FROM usuarios u 
+        SELECT u.nombreUsuario, u.contrasena, d.nombreDepartamento, u.fkEmpleado FROM usuarios u 
         JOIN empleados e ON e.numeroEmpleado = u.fkEmpleado 
-        JOIN departamentos d ON d.pkDepartamento = e.fkDepartamento WHERE u.nombreUsuario = %s
+        JOIN puestos p ON e.fkPuesto = p.pkPuesto
+        JOIN departamentos d ON d.pkDepartamento = p.fkDepartamento WHERE u.nombreUsuario = %s
         '''
         valores = (self.nombreUsuario,)
 
         print(consulta % valores)
 
+
         resultado = db.execute_query(consulta, valores)
+
+        print(resultado)
+
         db.close()
 
         if resultado:
             contrasena_hash = resultado[0]["contrasena"]
+
             if bcrypt.checkpw(self.contrasena.encode('utf-8'), contrasena_hash.encode('utf-8')):
                 self.nombreDepartamento = resultado[0]["nombreDepartamento"]
+                self.fkEmpleado = resultado[0]["fkEmpleado"]
                 return True
 
         return False
-
 
     def crear_usuario(self):
         """Guarda un nuevo usuario en la base de datos"""

@@ -1,8 +1,8 @@
 $(document).ready(function () {
 
-    if (sessionStorage.getItem("departamento") !== 'Sistemas' && sessionStorage.getItem("departamento") !== 'Dirección general') {
-        //window.location.href = './index.html';
-        //toastr.warning('Usted no debería estar aquí', 'Atención', { "closeButton": true });
+    if (sessionStorage.getItem("departamento") !== 'SISTEMAS' && sessionStorage.getItem("departamento") !== 'DIRECCION COMERCIAL') {
+        window.location.href = './index.html';
+        toastr.warning('Usted no debería estar aquí', 'Atención', { "closeButton": true });
     }
     listarProveedores();
     

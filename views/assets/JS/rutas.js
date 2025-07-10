@@ -2,9 +2,9 @@ var tabla;
 
 $(document).ready(function () {
 
-    if (sessionStorage.getItem("departamento") !== 'Sistemas' && sessionStorage.getItem("departamento") !== 'Dirección general') {
-        //window.location.href = './index.html';
-        //toastr.warning('Usted no debería estar aquí', 'Atención', { "closeButton": true });
+    if (sessionStorage.getItem("departamento") !== 'REABASTO' && sessionStorage.getItem("departamento") !== 'DIRECCION COMERCIAL') {
+        window.location.href = './index.html';
+        toastr.warning('Usted no debería estar aquí', 'Atención', { "closeButton": true });
     }
 
     //Inicializar datatable
@@ -41,7 +41,6 @@ $(document).ready(function () {
 
         document.getElementById('fechaNacimiento').value = fechaRuta;
         document.getElementById('zona_menu').value = fkZonaRuta;
-        document.getElementById('empleado_menu').value = numeroEmpleado;
         document.getElementById('pkRuta').value = pkRuta;
 
         abrirModalRuta(2,pkRuta);
@@ -290,7 +289,7 @@ async function agregarRuta() {
 
         const fechaRuta = document.getElementById('fechaNacimiento').value.trim();
 
-        const fkEmpleado = document.getElementById('empleado_menu').value;
+        const fkEmpleado = sessionStorage.getItem("ID");
 
         const tiendas = obtenerSociosSeleccionados();
 
@@ -327,7 +326,7 @@ async function editarRuta(pkRuta) {
     try {
         const fechaRuta = document.getElementById('fechaNacimiento').value.trim();
 
-        const fkEmpleado = document.getElementById('empleado_menu').value;
+        const fkEmpleado = sessionStorage.getItem("ID");
 
         const tiendas = obtenerSociosSeleccionados();
 
@@ -420,7 +419,6 @@ function abrirModalRuta(modo, pkZonaRuta) {
 
         document.getElementById('fechaNacimiento').value = '';
         document.getElementById('zona_menu').value = '';
-        document.getElementById('empleado_menu').value = '';
         document.getElementById('pkRuta').value = '';
 
         $('.checkbox-socio').prop('checked', false);

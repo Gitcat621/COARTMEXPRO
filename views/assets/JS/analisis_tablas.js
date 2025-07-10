@@ -1,5 +1,10 @@
 $(document).ready(function () {
 
+    if (sessionStorage.getItem("departamento") !== 'ADMINISTRACION CONTABLE Y FISCAL' && sessionStorage.getItem("departamento") !== 'DIRECCION COMERCIAL') {
+        window.location.href = './index.html';
+        toastr.warning('Usted no debería estar aquí', 'Atención', { "closeButton": true });
+    }
+
     gruposSocios();
 
 });

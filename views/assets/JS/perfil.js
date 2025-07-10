@@ -1,5 +1,10 @@
 $(document).ready(function () {
 
+    if (sessionStorage.getItem("departamento") !== 'RECURSOS HUMANOS' && sessionStorage.getItem("departamento") !== 'DIRECCION COMERCIAL') {
+        window.location.href = './index.html';
+        toastr.warning('Usted no debería estar aquí', 'Atención', { "closeButton": true });
+    }
+
     // Recuperar en la nueva vista
     const params = new URLSearchParams(window.location.search);
     const numeroEmpleado = params.get("id");

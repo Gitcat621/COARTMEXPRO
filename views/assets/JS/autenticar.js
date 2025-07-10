@@ -1,12 +1,11 @@
 $(document).ready(function () {
     
-    //document.getElementById("elemento1").addEventListener("click", miFuncion);
 
     if(sessionStorage.getItem("usuario") === null ){
         
-        //window.location.href='./login.html';
+        window.location.href='./login.html';
 
-        //toastr.warning(`No hay usuario`, 'Atencion', {"closeButton": true,});
+        toastr.warning(`No hay usuario`, 'Atencion', {"closeButton": true,});
 
     }else{
         obtenerUsuario()

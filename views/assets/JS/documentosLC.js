@@ -1,5 +1,10 @@
 $(document).ready(function () {
 
+    if (sessionStorage.getItem("departamento") !== 'REABASTO' && sessionStorage.getItem("departamento") !== 'DIRECCION COMERCIAL') {
+        window.location.href = './index.html';
+        toastr.warning('Usted no debería estar aquí', 'Atención', { "closeButton": true });
+    }
+
      $('#miDropify').dropify();
 
     for (var i = 1; i < 4; i++) {

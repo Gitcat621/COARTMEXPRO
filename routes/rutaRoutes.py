@@ -31,6 +31,7 @@ def crear_ruta():
     fkEmpleado = data.get('fkEmpleado')
     tiendas = data.get('tiendas')
 
+    print(fkEmpleado)
     print(tiendas)
 
     if not fechaRuta or not fkEmpleado:

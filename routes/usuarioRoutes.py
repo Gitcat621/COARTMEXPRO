@@ -28,7 +28,8 @@ def iniciar_sesion():
     if usuario.iniciar_sesion():
         return jsonify({
             "nombreUsuario": usuario.nombreUsuario,
-            "nombreDepartamento": usuario.nombreDepartamento
+            "nombreDepartamento": usuario.nombreDepartamento,
+            "fkEmpleado": usuario.fkEmpleado
         }), 200 # Devuelve los datos del usuario si el inicio de sesión es exitoso
     else:
         return jsonify({'mensaje': 'Credenciales inválidas'}), 401  # Devuelve un error si las credenciales son inválidas

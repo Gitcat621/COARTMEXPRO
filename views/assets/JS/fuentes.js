@@ -1,12 +1,11 @@
 $(document).ready(function () {
 
-    listarArchivos();
-
-    if (sessionStorage.getItem("departamento") !== 'Admon. Contable y Fiscal' && sessionStorage.getItem("departamento") !== 'Dirección general') {
-        //window.location.href = './index.html';
-        //toastr.warning('Usted no debería estar aquí', 'Atención', { "closeButton": true });
+    if (sessionStorage.getItem("departamento") !== 'ADMINISTRACION CONTABLE Y FISCAL' && sessionStorage.getItem("departamento") !== 'DIRECCION COMERCIAL') {
+        window.location.href = './index.html';
+        toastr.warning('Usted no debería estar aquí', 'Atención', { "closeButton": true });
     }
 
+    listarArchivos();
     
 });
 

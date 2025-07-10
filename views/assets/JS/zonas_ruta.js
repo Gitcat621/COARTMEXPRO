@@ -219,5 +219,3 @@ function abrirModalZonasRuta(modo, pkZonaRuta) {
     }
 
 }
-
-
