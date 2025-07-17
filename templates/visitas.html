@@ -1,0 +1,82 @@
+
+{% extends "Dashboard.html" %}
+
+{% block title %}Visitas a tiendas{% endblock %}
+
+{% block NavBar %}Visitas a tiendas{% endblock %}
+
+{% block content %}
+<div id="wrapper">
+	<div class="main-content">
+		<div class="row small-spacing">
+			<div class="col-xs-12">
+
+                <!-- Socios / Tiendas -->
+				<div class="box-content">
+					<h4 class="box-title">Visitas hechas</h4>
+					<!-- /.box-title -->
+
+					<button type="button" class="btn btn-success btn-xs waves-effect waves-light margin-bottom-20" data-toggle="modal" data-target="#boostrapModal-1" id="agregarVisita"><i class="fa fa-plus"></i> Agregar</button>
+
+					
+                    <table id="visitaTable" class="table table-bordered display" style="width:100%"></table>
+					
+				</div>
+				<!-- /.box-content -->
+
+				
+			</div>
+			
+		</div>
+		<!-- /.row -->		
+	</div>
+	<!-- /.main-content -->
+</div><!--/#wrapper -->
+
+
+<!-- AQUI ESTAN LOS MODALES -->
+<!-- Modal -->
+<div class="modal fade" id="boostrapModal-1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel">Crear ruta</h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<label>Seleccionar tienda</label>
+					<select class="form-control" id="socio_menu" ></select>
+				</div>
+				<div class="form-group">
+					<label>Observacion</label>
+					<textarea class="form-control" id="observacion"></textarea>
+				</div>
+				<div class="form-group">
+					<label>Fecha de visita</label>
+					<input type="text" class="form-control" placeholder="aaaa-mm-dd" id="fechaIngreso" autocomplete="off">
+				</div>
+				<div class="form-group">
+					<label>¿Se le hizo venta?</label>
+					<div class="checkbox circled success"><input type="checkbox" id="checkbox-circled-8"><label for="checkbox-circled-8"></label>Venta</div>
+				</div>
+				<div class="form-group">
+					<label>¿Se le hizo servicio?</label>
+					<div class="checkbox circled success"><input type="checkbox" id="checkbox-circled-9"><label for="checkbox-circled-9"></label>Servicio</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default btn-xs waves-effect waves-light" data-dismiss="modal">Cerrar</button>
+				<button type="button" class="btn btn-primary btn-xs waves-effect waves-light">Guardar</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='assets/JS/visitas.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/JS/socios_comerciales.js') }}"></script>
+
+{% endblock %}

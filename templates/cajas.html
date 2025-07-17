@@ -1,0 +1,68 @@
+
+
+{% extends "Dashboard.html" %}
+
+{% block title %}Cajas en envios{% endblock %}
+
+{% block NavBar %}Cajas en envios{% endblock %}
+
+{% block content %}
+
+<div id="wrapper">
+	<div class="main-content">
+		<div class="row small-spacing">
+			<div class="col-xs-12">
+
+                <!-- Socios / Tiendas -->
+				<div class="box-content">
+					<h4 class="box-title">Cajas en este envio</h4>
+					<!-- /.box-title -->
+
+					<button type="button" class="btn btn-success btn-xs waves-effect waves-light margin-bottom-20" data-toggle="modal" data-target="#boostrapModal-1" id="agregarCaja"><i class="fa fa-plus"></i> Agregar</button>
+                    <div id="contenedorCajas"></div>
+
+				</div>
+				<!-- /.box-content -->
+
+			</div>
+			
+		</div>
+		<!-- /.row -->		
+	</div>
+	<!-- /.main-content -->
+</div><!--/#wrapper -->
+
+
+<!-- AQUI ESTAN LOS MODALES -->
+<!-- Modal -->
+<div class="modal fade" id="boostrapModal-1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel">Agregar articulos a caja</h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<label>Seleccionar articulos</label>
+					<table id="cajaContenidoTable" class="table table-small-font table-hover table-bordered display" style="width:100%"></table>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default btn-xs waves-effect waves-light" data-dismiss="modal">Cerrar</button>
+				<button type="button" class="btn btn-primary btn-xs waves-effect waves-light">Guardar</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='assets/JS/cajas.js') }}"></script>
+
+{% endblock %}
+
+
+
+	

@@ -1,0 +1,134 @@
+{% extends "Dashboard.html" %}
+
+{% block title %}Análisis con graficas{% endblock %}
+
+{% block NavBar %}Análisis con graficas{% endblock %}
+
+{% block content %}
+
+<div id="wrapper">
+	<div class="main-content">
+		<div class="row small-spacing">
+
+			<div class="col-xs-12">
+				<div class="box-content">
+					<h4 class="box-title">Filtro por meses</h4>
+					<!-- /.box-title -->
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="row-inline-block">
+								<div class="col-md-1 col-xs-3"><div class="checkbox"><input value="01" type="checkbox" id="checkbox-1"><label for="checkbox-1">Ene</label></div></div>
+								<div class="col-md-1 col-xs-3"><div class="checkbox"><input value="02" type="checkbox" id="checkbox-2"><label for="checkbox-2">Feb</label></div></div>
+								<div class="col-md-1 col-xs-3"><div class="checkbox"><input value="03" type="checkbox" id="checkbox-3"><label for="checkbox-3">Mar</label></div></div>
+								<div class="col-md-1 col-xs-3"><div class="checkbox"><input value="04" type="checkbox" id="checkbox-4"><label for="checkbox-4">Abr</label></div></div>
+								<div class="col-md-1 col-xs-3"><div class="checkbox"><input value="05" type="checkbox" id="checkbox-5"><label for="checkbox-5">May</label></div></div>
+								<div class="col-md-1 col-xs-3"><div class="checkbox"><input value="06" type="checkbox" id="checkbox-6"><label for="checkbox-6">Jun</label></div></div>
+								<div class="col-md-1 col-xs-3"><div class="checkbox"><input value="07" type="checkbox" id="checkbox-7"><label for="checkbox-7">Jul</label></div></div>
+								<div class="col-md-1 col-xs-3"><div class="checkbox"><input value="08" type="checkbox" id="checkbox-8"><label for="checkbox-8">Ago</label></div></div>
+								<div class="col-md-1 col-xs-3"><div class="checkbox"><input value="09" type="checkbox" id="checkbox-9"><label for="checkbox-9">Sep</label></div></div>
+								<div class="col-md-1 col-xs-3"><div class="checkbox"><input value="10" type="checkbox" id="checkbox-10"><label for="checkbox-10">Oct</label></div></div>
+								<div class="col-md-1 col-xs-3"><div class="checkbox"><input value="11" type="checkbox" id="checkbox-11"><label for="checkbox-11">Nov</label></div></div>
+								<div class="col-md-1 col-xs-3"><div class="checkbox"><input value="12" type="checkbox" id="checkbox-12"><label for="checkbox-12">Dic</label></div></div>
+							</div>
+
+							<div class="col-sm-offset-3 margin-top-2 margin-left-2" >
+								<ul class="list-inline">
+									<li>
+										<select class="form-control" id="grupoSocio_menu"></select>
+									</li>
+									<li>
+										<button class="btn btn-default btn-bordered btn-sm waves-effect waves-light" id="todos">Todos</button>
+										
+									</li>
+									<li>
+										<button class="btn btn-info btn-bordered btn-sm waves-effect waves-light" id="meses"><i class="fa fa-search"></i> Aplicar filtro</button>
+										
+									</li>
+								</ul>
+							</div>
+							<!--  -->
+						</div>
+						<!-- /.col-lg-8 -->
+
+					</div>
+					<!-- /.row -->
+				</div>
+				<!-- /.box-content -->
+			</div>
+
+			<div class="col-xs-12">
+				<div class="box-content">
+					<h4 class="box-title">Grafica de barras - Cantidad ventas</h4>
+					<!-- /.box-title -->
+					
+					<div id="bar-morris-chart" class="morris-chart" style="height: 320px"></div>
+					
+				</div>
+				<!-- /.box-content -->
+			</div>
+			<!-- /.col-lg-6 col-xs-12 -->
+
+			<div class="col-lg-6 col-xs-12">
+				<div class="box-content">
+					<h4 class="box-title">Grafica de dona - Porcentaje de ventas por mes</h4>
+					<!-- /.box-title -->
+
+					<!-- /.dropdown js__dropdown -->
+					<div id="donut-morris-chart-month" class="morris-chart" style="height: 320px"></div>
+					<!-- /#donut-morris-chart.morris-chart -->
+				</div>
+				<!-- /.box-content -->
+			</div>
+
+			<div class="col-lg-6 col-xs-12">
+				<div class="box-content">
+					<h4 class="box-title">Grafica de dona - Porcentaje de ventas</h4>
+					<!-- /.box-title -->
+					
+					<div id="donut-morris-chart" class="morris-chart" style="height: 320px"></div>
+					<!-- /#donut-morris-chart.morris-chart -->
+				</div>
+				<!-- /.box-content -->
+			</div>
+			 
+			<div class="col-xs-12">
+				<div class="box-content">
+					<h4 class="box-title">Grafica de pilas - Ventas por año</h4>
+					<!-- /.box-title -->
+
+					<div id="stack-morris-chart" class="morris-chart" style="height: 320px"></div>
+					<!-- /#stack-morris-chart.morris-chart -->
+				</div>
+				<!-- /.box-content -->
+			</div>
+			<!-- /.col-lg-6 col-xs-12 -->
+
+
+			<div class="col-xs-12">
+				<div class="box-content">
+					<h4 class="box-title">Grafica de area - Venta por pzas</h4>
+					<!-- /.box-title -->
+					<!-- /.dropdown js__dropdown -->
+					<div id="area-morris-chart" class="morris-chart" style="height: 320px; position: relative; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
+					</div>
+					<!-- /#area-morris-chart.morris-chart -->
+				</div>
+				<!-- /.box-content -->
+			</div>
+						
+		</div>
+		<!-- /.row -->	
+	</div>
+	<!-- /.main-content -->
+</div><!--/#wrapper -->
+{% endblock %}
+
+    
+{% block scripts %}
+
+<script src="{{ url_for('static', filename='assets/JS/analisis_graficas.js') }}"></script>
+
+<!-- Sparkline Chart -->
+<script src="{{ url_for('static', filename='assets/plugin/chart/sparkline/jquery.sparkline.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/scripts/chart.sparkline.init.js') }}"></script>
+{% endblock %}

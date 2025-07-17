@@ -1,0 +1,109 @@
+{% extends "Dashboard.html" %}
+
+{% block title %}Beneficios PAC{% endblock %}
+
+{% block NavBar %}Beneficios PAC{% endblock %}
+
+{% block content %}
+
+<div id="wrapper">
+	<div class="main-content">
+		<div class="row small-spacing">
+
+			<!-- BENEFICIOS -->
+            <div class="col-xs-6">
+				<div class="box-content">
+					<h4 class="box-title">Beneficios PAC</h4>
+					<!-- /.box-title -->
+
+					<button type="button" class="btn btn-success btn-xs waves-effect waves-light margin-bottom-10" data-toggle="modal" data-target="#boostrapModal-7" id="agregarBeneficio"><i class="fa fa-plus"></i> Agregar</button>
+
+					<table id="beneficioTable" class="table table-small-font table-hover table-bordered display nowrap" style="width:100%">
+						
+					</table>
+
+
+					
+				</div>
+				<!-- /.box-content -->
+
+                
+			</div>
+
+			<!-- CLINICAS -->
+            <div class="col-xs-6">
+				<div class="box-content">
+					<h4 class="box-title">Clinicas</h4>
+					<!-- /.box-title -->
+
+					<button type="button" class="btn btn-success btn-xs waves-effect waves-light margin-bottom-10" data-toggle="modal" data-target="#boostrapModal-8" id="agregarClinica"><i class="fa fa-plus"></i> Agregar</button>
+
+					<table id="clinicaTable" class="table table-small-font table-hover table-bordered display nowrap" style="width:100%">
+						
+					</table>
+
+
+					
+				</div>
+				<!-- /.box-content -->
+
+                
+			</div>
+			
+		</div>
+		<!-- /.row -->		
+	</div>
+	<!-- /.main-content -->
+</div><!--/#wrapper -->
+
+
+<!-- AQUI ESTAN LOS MODALES -->
+<!-- Modal -->
+<div class="modal fade" id="boostrapModal-7" tabindex="-7" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel7">Titulo dinamico</h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<label>Beneficio</label>
+					<input type="text" placeholder="" class="form-control" id="nombreBeneficio">
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default btn-xs waves-effect waves-light" data-dismiss="modal">Cerrar</button>
+				<button type="button" class="btn btn-primary btn-xs waves-effect waves-light" id="guardarBeneficio">Guardar</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="boostrapModal-8" tabindex="-8" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel8">Titulo dinamico</h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<label>Nombre de la clinica</label>
+					<input type="text" placeholder="" class="form-control" id="nombreClinica">
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default btn-xs waves-effect waves-light" data-dismiss="modal">Cerrar</button>
+				<button type="button" class="btn btn-primary btn-xs waves-effect waves-light">Guardar</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='assets/JS/beneficios.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/JS/clinica.js') }}"></script>
+{% endblock %}

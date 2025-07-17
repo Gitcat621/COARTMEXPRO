@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Tabla Expandible</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container mt-4">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Detalles</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Fila principal -->
+            <tr data-toggle="collapse" data-target=".grupo1" class="clickable">
+                <td>Juan Pérez</td>
+                <td><button class="btn btn-primary btn-sm">Ver más</button></td>
+            </tr>
+        
+            <!-- Fila de detalle 1 -->
+            <tr class="collapse grupo1">
+                <td colspan="2">Detalle 1: Dirección - Calle 123</td>
+            </tr>
+        
+            <!-- Fila de detalle 2 -->
+            <tr class="collapse grupo1">
+                <td colspan="2">Detalle 2: Teléfono - 555-1234</td>
+            </tr>
+        </tbody>
+        
+        
+    </table>
+</div>
+
+<style>
+    .clickable {
+        cursor: pointer;
+    }
+</style>
+
+</body>
+</html>

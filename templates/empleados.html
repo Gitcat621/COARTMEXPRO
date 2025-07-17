@@ -1,0 +1,115 @@
+{% extends "Dashboard.html" %}
+
+{% block title %}Colaboradores{% endblock %}
+
+{% block NavBar %}Colaboradores{% endblock %}
+
+{% block content %}
+<div id="wrapper">
+	<div class="main-content">
+		<div class="row small-spacing">
+			<!-- EMPLEADOS -->
+			<div class="col-xs-12">
+				<div class="box-content">
+					<h4 class="box-title">Tabla de colaboradores</h4>
+					<!-- /.box-title -->
+
+					<button type="button" class="btn btn-success btn-xs waves-effect waves-light margin-bottom-10" data-toggle="modal" data-target="#boostrapModal-1" id="agregarEmpleado"><i class="fa fa-plus"></i> Agregar</button>
+					
+
+					<table id="empleadoTable" class="table table-small-font table-hover table-bordered display nowrap" style="width:100%">
+
+					</table>
+					
+				</div>
+				<!-- /.box-content -->
+			</div>
+			
+		</div>
+		<!-- /.row -->		
+	</div>
+	<!-- /.main-content -->
+</div><!--/#wrapper -->
+
+
+<!-- AQUI ESTAN LOS MODALES -->
+<!-- Modal -->
+<div class="modal fade" id="boostrapModal-1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel">Titulo dinamico</h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<label>RFC del empleado</label>
+					<input type="text" class="form-control" id="rfc">
+				</div>
+				<div class="form-group">
+					<label>Nombre del empleado</label>
+					<input type="text" class="form-control" id="nombreEmpleado">
+				</div>
+				<div class="form-group">
+					<label>Fecha de ingreso</label>
+					<input type="text" class="form-control" placeholder="aaaa-mm-dd" id="fechaIngreso" autocomplete="off">
+				</div>
+				<div class="form-group">
+					<label>Fecha de nacimiento</label>
+					<input type="text" class="form-control" placeholder="aaaa-mm-dd" id="fechaNacimiento" autocomplete="off">
+				</div>
+				<div class="form-group">
+					<label>Sueldo de nomina</label>
+					<input type="number" class="form-control" id="nomina">
+				</div>
+				<div class="form-group">
+					<label>Sueldo de vales</label>
+					<input type="number" class="form-control" id="vale">
+				</div>
+				<div class="form-group">
+					<label>Asignar puesto</label>
+					<select class="form-control" id="puesto_menu" ></select>
+				</div>
+				<div class="form-group">
+					<label>Seleccionar nivel de estudios</label>
+					<select class="form-control" id="niveles_menu" >
+					</select>
+				</div>
+				<div class="form-group">
+					<label id="fkUbicacion">Ciudad de nacimiento <i class="fa fa-pencil-square-o" aria-hidden="true"></i></label><br>
+					<select class="select2_2 form-control" multiple="multiple" style="width: 100%;" id="pueblosCiudades_menu"></select>
+				</div>
+				<div class="form-group">
+					<label>Estado de nacimiento <i class="fa fa-pencil-square-o" aria-hidden="true"></i></label><br>
+					<select class="select2_2 form-control" multiple="multiple" style="width: 100%;" id="estados_menu"></select>
+				</div>
+				<div class="form-group">
+					<label>Pais de nacimiento <i class="fa fa-pencil-square-o" aria-hidden="true"></i></label><br>
+					<select class="select2_2 form-control" multiple="multiple" style="width: 100%;" id="paises_menu"></select>
+				</div>
+				<div class="form-group">
+					<label>Estado del empleado</label><br>
+					<select class="form-control" style="width: 100%;" id="estado">
+						<option value="1">Activo</option>
+						<option value="2">Inactivo</option>
+					</select>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default btn-xs waves-effect waves-light" data-dismiss="modal">Cerrar</button>
+				<button type="button" class="btn btn-primary btn-xs waves-effect waves-light">Guardar</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='assets/JS/empleados.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/JS/puestos.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/JS/pueblos_ciudades.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/JS/estados.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/JS/paises.js') }}"></script>
+
+{% endblock %}

@@ -1,0 +1,105 @@
+
+
+{% extends "Dashboard.html" %}
+
+{% block title %}Documentos de logistica comercial{% endblock %}
+
+{% block NavBar %}Documentos de logistica comercial{% endblock %}
+
+{% block content %}
+<div id="wrapper">
+	<div class="main-content">
+		<div class="row small-spacing">
+			<div class="col-xs-12">
+
+                <!-- Socios / Tiendas -->
+				<div class="box-content">
+					<h4 class="box-title">Documentos</h4>
+					<!-- /.box-title -->
+
+					<div id="tabs-ui" class="margin-top-10 js__ui_tab ui-tabs ui-corner-all ui-widget ui-widget-content">
+							<ul role="tablist" class="ui-tabs-nav ui-corner-all ui-helper-reset ui-helper-clearfix ui-widget-header">
+								<li role="tab" tabindex="0" class="ui-tabs-tab ui-corner-top ui-state-default ui-tab ui-tabs-active ui-state-active" aria-controls="tabs-1" aria-labelledby="ui-id-7" aria-selected="true" aria-expanded="true"><a href="#tabs-1" role="presentation" tabindex="-1" class="ui-tabs-anchor" id="ui-id-7">Tarjeta de circulación <i class="ico mdi mdi-account-card-details"></i> </a></li>
+								<li role="tab" tabindex="-1" class="ui-tabs-tab ui-corner-top ui-state-default ui-tab" aria-controls="tabs-2" aria-labelledby="ui-id-8" aria-selected="false" aria-expanded="false"><a href="#tabs-2" role="presentation" tabindex="-1" class="ui-tabs-anchor" id="ui-id-8">Permiso mercantil <i class="ico icon-doc-2"></i></a></li>
+                                <li role="tab" tabindex="-2" class="ui-tabs-tab ui-corner-top ui-state-default ui-tab" aria-controls="tabs-3" aria-labelledby="ui-id-9" aria-selected="false" aria-expanded="false"><a href="#tabs-3" role="presentation" tabindex="-1" class="ui-tabs-anchor" id="ui-id-9">Póliza de seguros <i class="ico icon-clipboard-1"></i></a></li>
+								
+							</ul>
+							<div id="tabs-1" aria-labelledby="ui-id-7" role="tabpanel" class="ui-tabs-panel ui-corner-bottom ui-widget-content" aria-hidden="false">
+
+                                <button type="button" class="btn btn-primary btn-xs waves-effect waves-light margin-bottom-20" data-toggle="modal" data-target="#boostrapModal-1" id="agregarCirculacion"><i class="fa fa-plus"></i> Actualizar</button>
+
+                                <h4>Vigencia: <span id="vigencia1"></span></h4>
+								<iframe id="iframe1" src="/api/documentos_logistica_comercial/pdf?tipo=1" width="100%" height="600px"></iframe>
+
+                                
+								<p>.</p>
+							</div>
+							<div id="tabs-2" aria-labelledby="ui-id-8" role="tabpanel" class="ui-tabs-panel ui-corner-bottom ui-widget-content" aria-hidden="true" style="display: none;">
+                                
+                                <button type="button" class="btn btn-primary btn-xs waves-effect waves-light margin-bottom-20" data-toggle="modal" data-target="#boostrapModal-1" id="agregarMercantil"><i class="fa fa-plus"></i> Actualizar</button>
+
+								<h4>Vigencia: <span id="vigencia2"></span></h4>
+                               <iframe id="iframe2" src="/api/documentos_logistica_comercial/pdf?tipo=2" width="100%" height="600px"></iframe>
+
+								<p>.</p>
+							</div>
+                            <div id="tabs-3" aria-labelledby="ui-id-9" role="tabpanel" class="ui-tabs-panel ui-corner-bottom ui-widget-content" aria-hidden="true" style="display: none;">
+								
+                                <button type="button" class="btn btn-primary btn-xs waves-effect waves-light margin-bottom-20" data-toggle="modal" data-target="#boostrapModal-1" id="agregarSeguro"><i class="fa fa-plus"></i> Actualizar</button>
+
+								<h4>Vigencia: <span id="vigencia3"></span></h4>
+                                <iframe id="iframe3" src="/api/documentos_logistica_comercial/pdf?tipo=3" width="100%" height="600px"></iframe>
+
+								<p>.</p>
+							</div>
+                    </div>
+					
+				</div>
+				<!-- /.box-content -->
+
+				
+			</div>
+			
+		</div>
+		<!-- /.row -->		
+	</div>
+	<!-- /.main-content -->
+</div><!--/#wrapper -->
+
+
+<!-- AQUI ESTAN LOS MODALES -->
+<!-- Modal -->
+<div class="modal fade" id="boostrapModal-1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel">Subir TIPO DE ARCHIVO</h4>
+			</div>
+			<div class="modal-body">
+
+				<!-- SUBIDA -->
+				<input type="file" id="archivoSubido" class="dropify" accept=".pdf"/>
+
+				<div class="form-group margin-top-20">
+					<label>Fecha vigencia</label>
+                    <input type="text" class="form-control" placeholder="aaaa-mm-dd" id="fechaIngreso" autocomplete="off">
+				</div>
+
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default btn-sm waves-effect waves-light" data-dismiss="modal">Cerrar</button>
+				<button type="button" class="btn btn-primary btn-sm waves-effect waves-light">Subir</button>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='assets/JS/documentosLC.js') }}"></script>
+
+
+{% endblock %}
+
+	

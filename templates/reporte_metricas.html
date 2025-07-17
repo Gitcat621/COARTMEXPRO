@@ -1,0 +1,73 @@
+
+{% extends "Dashboard.html" %}
+
+{% block title %}Subir reporte de metricas{% endblock %}
+
+{% block NavBar %}Subir reporte de metricas{% endblock %}
+
+{% block content %}
+<div id="wrapper">
+	<div class="main-content">
+		<div class="row small-spacing">
+			<div class="col-xs-12">
+				<div class="box-content">
+					
+					<h5 class="position">Reportes de metricas subidas</h5>
+
+					<button type="button" class="btn btn-success btn-xs waves-effect waves-light margin-bottom-10" data-toggle="modal" data-target="#boostrapModal-1" id="modalAgregar">Subir archivo</button>
+
+
+					<table id="fuenteTable" class="table table-small-font table-hover table-bordered display" style="width:100%">
+						
+					</table>
+
+					
+				</div>
+			</div>
+			<!-- /.box-content -->
+		</div>
+		<!-- /.col-xs-12 -->
+			
+	</div>
+	<!-- /.row -->		
+	<!-- /.main-content -->
+</div><!--/#wrapper -->
+
+
+<!-- AQUI ESTAN LOS MODALES -->
+<!-- Modal -->
+<div class="modal fade" id="boostrapModal-1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel">Titulo dinamico</h4>
+			</div>
+			<div class="modal-body">
+
+				<!-- SUBIDA -->
+				<input type="file" id="archivoSubido" class="dropify" accept=".xlsx,.xls"/>
+
+				<br><br>
+				<div id="contenidoExcel"></div>
+
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default btn-sm waves-effect waves-light" data-dismiss="modal">Cerrar</button>
+				<button type="button" class="btn btn-primary btn-sm waves-effect waves-light">Subir</button>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
+<script src="{{ url_for('static', filename='assets/JS/reporte_metricas.js') }}"></script>
+{% endblock %}
+
+	
+
+
+
+	

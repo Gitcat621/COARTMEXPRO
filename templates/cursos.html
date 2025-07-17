@@ -1,0 +1,134 @@
+{% extends "Dashboard.html" %}
+
+{% block title %}Usuarios{% endblock %}
+
+{% block NavBar %}Usuarios{% endblock %}
+
+{% block content %}
+<div id="wrapper">
+	<div class="main-content">
+		<div class="row small-spacing">
+
+			<!-- PRESENTADORES -->
+            <div class="col-xs-12">
+				<div class="box-content">
+					<h4 class="box-title">Presentadores</h4>
+					<!-- /.box-title -->
+
+					<button type="button" class="btn btn-success btn-xs waves-effect waves-light margin-bottom-10" data-toggle="modal" data-target="#boostrapModal-4" id="agregarPresentador"><i class="fa fa-plus"></i> Agregar</button>
+
+					<table id="presentadorTable" class="table table-small-font table-hover table-bordered display nowrap" style="width:100%">
+						
+					</table>
+					
+				</div>
+				<!-- /.box-content -->
+			</div>
+
+			<!-- CURSOS -->
+			<div class="col-xs-12">
+				<div class="box-content">
+					<h4 class="box-title">Cursos</h4>
+					<!-- /.box-title -->
+
+					<button type="button" class="btn btn-success btn-xs waves-effect waves-light margin-bottom-10" data-toggle="modal" data-target="#boostrapModal-5" id="agregarCurso"><i class="fa fa-plus"></i> Agregar</button>
+
+					<table id="cursoTable" class="table table-small-font table-hover table-bordered display nowrap" style="width:100%">
+						
+					</table>
+					
+				</div>
+				<!-- /.box-content -->
+
+                
+			</div>
+
+		</div>
+		<!-- /.row -->		
+	</div>
+	<!-- /.main-content -->
+</div><!--/#wrapper -->
+
+
+<!-- AQUI ESTAN LOS MODALES -->
+<!-- Modal -->
+<div class="modal fade" id="boostrapModal-4" tabindex="-4" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel4">Titulo dinamico</h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<label>Nombre del presentador de curso</label>
+					<input type="text" placeholder="" class="form-control" id="nombrePresentador">
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default btn-xs waves-effect waves-light" data-dismiss="modal">Cerrar</button>
+				<button type="button" class="btn btn-primary btn-xs waves-effect waves-light" id="guardarPresentador">Guardar</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="boostrapModal-5" tabindex="-5" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel5">Titulo dinamico</h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<label>Nombre del curso</label>
+					<input type="text" placeholder="" class="form-control" id="nombreCurso">
+				</div>
+				<div class="form-group">
+					<label>Documento o beneficio a obtener</label>
+					<select class="form-control" id="documento_menu">
+                        <option value="1">Certificado</option>
+                        <option value="2">Diploma</option>
+                        <option value="3">Constancia</option>
+                        <option value="4">Reconocimiento</option>
+                        <option value="5">Solo horas adquiridas</option>
+                    </select>
+				</div>
+
+                <div class="form-group">
+                    <label>Duracion del curso</label>
+                    <ul class="list-inline">
+                        <li class="form-group col-xs-4">
+                            <input type="number" placeholder="dias" class="form-control" id="dias">
+                        </li>
+                        <li class="form-group col-xs-4">
+                            <input type="number" placeholder="horas" min="0" max="60" class="form-control" id="horas">
+                        </li>
+                        <li class="form-group col-xs-4">
+                            <input type="number" placeholder="minutos" min="0" max="60" class="form-control" id="minutos">
+                        </li>
+                    </ul>
+                </div>
+				<div class="form-group">
+					<label>Asignar presentador</label>
+					<select class="select2 form-control" style="width: 100%;" id="presentador_menu">
+
+					</select>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default btn-xs waves-effect waves-light" data-dismiss="modal">Cerrar</button>
+				<button type="button" class="btn btn-primary btn-xs waves-effect waves-light" id="guardarCurso">Guardar</button>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='assets/JS/presentadores.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/JS/cursos.js') }}"></script>
+{% endblock %}
+
+

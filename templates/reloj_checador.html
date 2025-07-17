@@ -1,0 +1,138 @@
+{% extends "Dashboard.html" %}
+
+{% block title %}Reloj checador{% endblock %}
+
+{% block NavBar %}Reloj checador{% endblock %}
+
+{% block content %}
+
+<div id="wrapper">
+	<div class="main-content">
+		<div class="row small-spacing">
+
+			<div class="col-xs-12">
+				<div class="box-content">
+					<h5 class="position">Reportes estadistico de asistencia</h5>
+
+					<div class="row margin-bottom-10">
+						<div class="col-md-2 margin-bottom-20" id="contenedorYear">
+							<input type="text" class="form-control" placeholder="año" id="datepicker" autocomplete="off">	
+						</div>
+						<div class="col-md-2 margin-bottom-20" id="contenedorMonth">
+							<input type="text" class="form-control" placeholder="mes" id="datepicker2" autocomplete="off">
+						</div>
+						 <div class="col-md-2 margin-bottom-20" id="contenedorGasto">
+							<select class="form-control" id="quincena_menu">
+								<option value="1">15</option>
+								<option value="2">30</option>
+							</select>
+						</div>
+						<div class="col-md-4 margin-bottom-20" id="contenedorBoton">
+							<button class="btn btn-info btn-bordered btn-sm waves-effect waves-light" id="busqueda"><i class="fa fa-search"></i> </button>
+						</div> 
+					</div>
+					
+					<p id="periodo">Periodo <span id="fechaInicio" style="color: rgb(42, 147, 165);"></span> al <span id="fechaFin" style="color: rgb(42, 147, 165);"></span></p>
+
+					<h5>Reporte de asistencia</h5>
+					<div class="table-responsive">
+						<table id="tablaAsistencia" class="display nowrap table table-hover table-bordered" style="width:100%">
+							<thead></thead>
+							<tbody></tbody>
+						</table>
+					</div>
+
+					<div class="margin-top-20">
+						<p id="observacionAsistencia">Observaciones</p>
+						<textarea id="observacion" style="width: 100%; height: 150px;"></textarea>
+						<div class="text-right">
+							<button class="btn btn-primary btn-xs" id="agregarObservacion">Guardar</button>
+						</div>
+					</div>
+
+					<button class="btn btn-danger" onclick="exportarPDF()">Exportar a PDF <i class="fa fa-file-pdf-o" aria-hidden="true"></i></button>
+
+					<h5>Reporte de estadistico</h5>
+					<table id="resumen_asistencia" class="table table-small-font table-hover table-bordered display nowrap margin-top-20" style="width:100%">
+						<thead>
+							<tr>
+								<th>No. empleado</th>
+								<th>Empleado</th>
+								<th>Departamento</th>
+								<th>Dias laborados</th>
+								<th>Numero de faltas</th>
+								<th>Numero de retardos</th>
+								<th>Minutos de retardo</th>
+								<th>Horas extra</th>
+
+							</tr>
+						</thead>
+						<tbody></tbody> <!-- 🔹 Aquí se insertarán los datos -->
+					</table>
+
+
+					
+				</div>
+			</div>
+			<!-- /.box-content -->
+			
+			<div class="col-xs-12">
+				<div class="box-content">
+					
+					<h5 class="position">Reportes de reloj subidas</h5>
+
+					<button type="button" class="btn btn-success btn-xs waves-effect waves-light margin-bottom-10" data-toggle="modal" data-target="#boostrapModal-1" id="modalAgregar">Subir archivo</button>
+					
+					<table id="relojTable" class="table table-small-font table-hover table-bordered display" style="width:100%">
+					</table>
+						
+				</div>
+			</div>
+
+			
+		</div>
+		<!-- /.col-xs-12 -->
+			
+	</div>
+	<!-- /.row -->		
+	<!-- /.main-content -->
+</div><!--/#wrapper -->
+
+
+<!-- AQUI ESTAN LOS MODALES -->
+<!-- Modal -->
+<div class="modal fade" id="boostrapModal-1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel">Subir reporte de reloj</h4>
+			</div>
+			<div class="modal-body">
+
+				<!-- SUBIDA -->
+				<input type="file" id="archivoSubido" class="dropify" accept=".xlsx,.xls"/>
+
+				<br><br>
+				<div id="contenidoExcel"></div>
+
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default btn-sm waves-effect waves-light" data-dismiss="modal">Cerrar</button>
+				<button type="button" class="btn btn-primary btn-sm waves-effect waves-light">Subir</button>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='assets/JS/asistencias.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/JS/reloj_checador.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/JS/observaciones_asistencias.js') }}"></script>
+{% endblock %}
+
+
+
+	
+	

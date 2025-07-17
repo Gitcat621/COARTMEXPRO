@@ -1,0 +1,174 @@
+
+{% extends "Dashboard.html" %}
+
+{% block title %}Servicios a vehiculo{% endblock %}
+
+{% block NavBar %}Servicios a vehiculo{% endblock %}
+
+{% block content %}
+
+<div id="wrapper">
+	<div class="main-content">
+		<div class="row small-spacing">
+			<div class="col-xs-12">
+
+				<!-- Switches -->
+				<ul class="list-inline">
+					<li>
+						<div class="switch info"><input type="checkbox" id="switch-4"><label for="switch-4">ver lugares de servicio</label></div>
+						<!-- /.checkbox -->
+					</li>
+					<li>
+						<div class="switch info"><input type="checkbox" id="switch-5"><label for="switch-5">ver manos de obra</label></div>
+						<!-- /.checkbox -->
+					</li>
+				</ul>
+               
+                <!-- Lugares de servicio -->
+				<div class="box-content" id="lugares" style="display: none;">
+					<h4 class="box-title">Tabla de lugares de servicio</h4>
+					<!-- /.box-title -->
+
+
+					<button type="button" class="btn btn-success btn-xs waves-effect waves-light margin-bottom-20" data-toggle="modal" data-target="#boostrapModal-2" id="agregarLugar"><i class="fa fa-plus"></i> Agregar</button>
+
+					<table id="lugarTable" class="table table-small-font table-hover table-bordered display" style="width:100%"></table>
+					
+				</div>
+				<!-- /.box-content -->
+
+				<!-- Manos de obra -->
+				<div class="box-content" id="manos" style="display: none;">
+					<h4 class="box-title">Tabla de manos de obra</h4>
+					<!-- /.box-title -->
+
+
+					<button type="button" class="btn btn-success btn-xs waves-effect waves-light margin-bottom-20" data-toggle="modal" data-target="#boostrapModal-3" id="agregarManoObra"><i class="fa fa-plus"></i> Agregar</button>
+
+					<table id="manoTable" class="table table-small-font table-hover table-bordered display" style="width:100%"></table>
+					
+				</div>
+				<!-- /.box-content -->
+                      
+
+                <!-- Servicios -->
+				<div class="box-content">
+					<h4 class="box-title">Servicios hechos</h4>
+					<!-- /.box-title -->
+					<h3 id="nombreVehiculo">Vehiculo</h3>
+					<button type="button" class="btn btn-success btn-xs waves-effect waves-light margin-bottom-20" data-toggle="modal" data-target="#boostrapModal-1" id="agregarServicioVehiculo"><i class="fa fa-plus"></i> Agregar</button>
+
+					<table id="servicioVehiculoTable" class="table table-small-font table-hover table-bordered display" style="width:100%"></table>
+				</div>
+				<!-- /.box-content -->
+			</div>
+		</div>
+		<!-- /.row -->		
+	</div>
+	<!-- /.main-content -->
+</div><!--/#wrapper -->
+
+
+<!-- AQUI ESTAN LOS MODALES -->
+<!-- Modal -->
+<div class="modal fade" id="boostrapModal-1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel">AGREGAR SERVICIO</h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<label>Numero del servicio</label>
+					<input type="text" class="form-control" id="numeroServicio">
+				</div>
+				<div class="form-group">
+					<label>Fecha del servicio</label>
+					<input type="text" class="form-control" placeholder="aaaa-mm-dd" id="fechaIngreso" autocomplete="off">
+				</div>
+				<div class="form-group">
+					<label>Nombre del servicio</label>
+					<input type="text" class="form-control" id="nombreServicio">
+				</div>
+				<div class="form-group">
+					<label>Mano de obra</label>
+					<select class="form-control" id="mano_menu" ></select>
+				</div>
+				<div class="form-group">
+					<label>Kilometraje inicial</label>
+					<input type="number" class="form-control" id="kilometrajeInicial">
+					
+				</div>
+				<div class="form-group">
+					<label>Kilometraje final </label>
+					<input type="number" class="form-control" id="kilometrajeFinal">
+					
+				</div>
+				<div class="form-group">
+					<label>Numero de factura </label>
+					<input type="text" class="form-control" id="numeroFactura">
+				</div>
+                <div class="form-group">
+					<label>Lugar de servicio</label>
+					<select class="form-control" id="lugar_menu" ></select>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default btn-xs waves-effect waves-light" data-dismiss="modal">Cerrar</button>
+				<button type="button" class="btn btn-primary btn-xs waves-effect waves-light">Guardar</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="boostrapModal-2" tabindex="-2" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel2">Titulo dinamico</h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<label>Nombre del lugar de servicio</label>
+					<input type="text" class="form-control" id="nombreLugarServicio">
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default btn-xs waves-effect waves-light" data-dismiss="modal">Cerrar</button>
+				<button type="button" class="btn btn-primary btn-xs waves-effect waves-light">Guardar</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="boostrapModal-3" tabindex="-3" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel3">Titulo dinamico</h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<label>Nombre</label>
+					<input type="text" class="form-control" id="nombreManoObra">
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default btn-xs waves-effect waves-light" data-dismiss="modal">Cerrar</button>
+				<button type="button" class="btn btn-primary btn-xs waves-effect waves-light">Guardar</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='assets/JS/servicios_vehiculo.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/JS/lugares_servicio.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/JS/manos_obra.js') }}"></script>
+
+{% endblock %}

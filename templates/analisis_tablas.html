@@ -1,0 +1,80 @@
+{% extends "Dashboard.html" %}
+
+{% block title %}Análisis con tablas{% endblock %}
+
+{% block NavBar %}Análisis con tablas{% endblock %}
+
+{% block content %}
+
+<div id="wrapper">
+	<div class="main-content">
+		<div class="row small-spacing">
+            <div class="col-xs-12">
+				<div class="box-content">
+					<h4 class="box-title">Selecciona una tabla para visualizar</h4>
+					
+					<div class="col-sm-offset-2 margin-left-2" >
+
+						<button type="button" class="btn btn-bordered btn-xs btn-violet dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Ingresos</button> 
+
+						<button type="button" class="btn btn-bordered btn-xs btn-violet dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Gastos</button>
+	
+						<button type="button" class="btn btn-bordered btn-xs btn-violet dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Ventas</button> 
+
+						<button type="button" class="btn btn-bordered btn-xs btn-violet dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Inventario</button> 
+
+						<button type="button" class="btn btn-bordered btn-xs btn-violet dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">CxP</button> 
+
+						<button type="button" class="btn btn-bordered btn-xs btn-violet dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">CxC</button> 
+
+						<button type="button" class="btn btn-bordered btn-xs btn-violet dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Compras de mercancía</button>
+						
+					</div>
+ 
+				</div>
+
+				<div class="box-content">
+					<h4 class="box-title" id="tableTitle">Aqui visualizara la tabla</h4>
+
+					<div class="row margin-bottom-10">
+						<div class="col-md-2 margin-bottom-20" id="contenedorYear" style="display: none;">
+							<input type="text" class="form-control" placeholder="año" id="datepicker" autocomplete="off">	
+						</div>
+						<div class="col-md-2 margin-bottom-20" id="contenedorMonth" style="display: none;">
+							<input type="text" class="form-control" placeholder="mes" id="datepicker2" autocomplete="off">
+						</div>
+						<div class="col-md-3 margin-bottom-20" id="contenedorGrupo" style="display: none;">
+							<select class="form-control" id="grupoSocio_menu"></select>
+						</div>
+						 <div class="col-md-3 margin-bottom-20" id="contenedorGasto" style="display: none;">
+							<select class="form-control" id="gasto_menu">
+								<option value="0">GENERAL</option>
+								<option value="1">FIJOS</option>
+								<option value="2">VARIABLES</option>
+							</select>
+						</div>
+						<div class="col-md-4 margin-bottom-20" id="contenedorBoton" style="display: none;">
+							<button class="btn btn-info btn-bordered btn-sm waves-effect waves-light" id="busqueda"><i class="fa fa-search"></i> </button>
+						</div> 
+					</div>
+					
+					<table id="dataTable" class="table table-small-font table-bordered table-hover display nowrap" style="width:100%">
+
+					</table>
+					
+				</div>
+				<!-- /.box-content -->
+			</div>
+		</div>
+		<!-- /.row -->	
+	</div>
+	<!-- /.main-content -->
+</div><!--/#wrapper -->
+{% endblock %}
+
+{% block scripts %}
+
+<script src="{{ url_for('static', filename='assets/JS/analisis_tablas.js') }}"></script>
+
+{% endblock %}
+

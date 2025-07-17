@@ -1,0 +1,131 @@
+{% extends "Dashboard.html" %}
+
+{% block title %}Articulos{% endblock %}
+
+{% block NavBar %}Articulos{% endblock %}
+
+{% block content %}
+<div id="wrapper">
+	<div class="main-content">
+		<div class="row small-spacing">
+
+			<!-- CATEGORIA ARTICULOS -->
+			<div class="col-xs-12">
+				<div class="box-content">
+					<h4 class="box-title">Tabla de categoria de los artículos</h4>
+					<!-- /.box-title -->
+					
+					<button type="button" class="btn btn-success btn-xs waves-effect waves-light margin-bottom-10" data-toggle="modal" data-target="#boostrapModal-2" id="agregarCategoriaArticulo">
+						<i class="fa fa-plus"></i> Agregar
+					</button>
+
+					<table id="categoriaArticuloTable" class="table table-small-font table-hover table-bordered display nowrap" style="width:100%">
+
+					</table>
+					
+				</div>
+				<!-- /.box-content -->
+			</div>
+
+			<!-- ARTICULOS -->
+			<div class="col-xs-12">
+				<div class="box-content">
+					<h4 class="box-title">Tabla de artículos </h4>
+					<!-- /.box-title -->
+					
+					<button type="button" class="btn btn-success btn-xs waves-effect waves-light margin-bottom-10" data-toggle="modal" data-target="#boostrapModal-1" id="agregarArticulo">
+						<i class="fa fa-plus"></i> Agregar
+					</button>
+
+					<table id="articuloTable" class="table table-small-font table-hover table-bordered display nowrap" style="width:100%">
+
+					</table>
+					
+				</div>
+				<!-- /.box-content -->
+			</div>
+			
+		</div>
+		<!-- /.row -->		
+	</div>
+	<!-- /.main-content -->
+</div><!--/#wrapper -->
+
+
+<!-- AQUI ESTAN LOS MODALES -->
+<!-- Modal -->
+<div class="modal fade" id="boostrapModal-1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel">Titulo dinamico</h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<label>Codigo de articulo</label>
+					<input type="number" class="form-control" id="codigoArticulo">
+				</div>
+				<div class="form-group">
+					<label>Nombre del articulo</label>
+					<input type="text" class="form-control" id="nombreArticulo">
+				</div>
+				<div class="form-group">
+					<label>Precio de almacen</label>
+					<input type="number" class="form-control" id="precioAlmacen">
+				</div>
+
+				<div class="form-group">
+					<label>Asignar artesano</label>
+					<select class="form-control" id="proveedor_menu" >
+
+					</select>
+				</div>
+
+				<div class="form-group">
+					<label>Asignar categoria</label>
+					<select class="form-control" id="categoria_menu" >
+
+					</select>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default btn-xs waves-effect waves-light" data-dismiss="modal">Cerrar</button>
+				<button type="button" class="btn btn-primary btn-xs waves-effect waves-light">Guardar</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="boostrapModal-2" tabindex="-2" role="dialog" aria-labelledby="myModalLabel2">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel2">Titulo dinamico</h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<label>Nombre de la categoría</label>
+					<input type="text" class="form-control" id="nombreCategoriaArticulo">
+				</div>
+				
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default btn-xs waves-effect waves-light" data-dismiss="modal">Cerrar</button>
+				<button type="button" class="btn btn-primary btn-xs waves-effect waves-light">Guardar</button>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='assets/JS/articulos.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/JS/proveedores.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/JS/categoria_articulos.js') }}"></script>
+
+
+{% endblock %}
+
+	

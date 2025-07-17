@@ -1,0 +1,110 @@
+
+{% extends "Dashboard.html" %}
+
+{% block title %}Rutas{% endblock %}
+
+{% block NavBar %}Rutas{% endblock %}
+
+{% block content %}
+<div id="wrapper">
+	<div class="main-content">
+		<div class="row small-spacing">
+			<div class="col-xs-12">
+
+                <!-- Socios / Tiendas -->
+				<div class="box-content">
+					<h4 class="box-title" data-empleado="{{ empleado }}">Rutas de la semana</h4>
+					<!-- /.box-title -->
+
+					<button class="btn btn-success btn-sm waves-effect waves-light margin-bottom-10" data-toggle="modal" data-target="#boostrapModal-1" id="agregarRuta"><i class="fa fa-plus"></i> Agregar</button>
+
+					<div class="row margin-bottom-10">
+						<div class="col-md-3 margin-bottom-20" id="contenedorYear">
+							<input type="text" class="form-control" placeholder="visitas anteriores a..." id="fechaIngreso" autocomplete="off">
+						</div>
+						<div class="col-md-4 margin-bottom-20" id="contenedorBoton">
+							<button class="btn btn-info btn-bordered btn-sm waves-effect waves-light" id="busqueda"><i class="fa fa-search"></i> </button>
+						</div> 
+					</div>
+
+					
+                    <table id="rutaTable" class="table table-bordered display" style="width:100%"></table>					
+					
+				</div>
+				<!-- /.box-content -->
+
+				
+			</div>
+			
+		</div>
+		<!-- /.row -->		
+	</div>
+	<!-- /.main-content -->
+</div><!--/#wrapper -->
+
+
+<!-- AQUI ESTAN LOS MODALES -->
+<!-- Modal -->
+<div class="modal fade" id="boostrapModal-1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel">Crear ruta</h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<label id="pkRuta">Fecha de la ruta</label>
+                    <input type="text" class="form-control" id="fechaNacimiento" autocomplete="off">
+				</div>
+				<div class="form-group">
+					<label>Seleccionar destino</label>
+					<select class="form-control" id="zona_menu" >
+
+					</select>
+				</div>
+                <div class="form-group">
+					<label>Seleccionar tiendas</label>
+					<table id="tiendaTable" class="table table-small-font table-hover table-bordered display" style="width:100%"></table>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default btn-xs waves-effect waves-light" data-dismiss="modal">Cerrar</button>
+				<button type="button" class="btn btn-primary btn-xs waves-effect waves-light">Guardar</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="boostrapModal-1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel1">Titulo dinamico</h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<label>Nombre del grupo</label>
+					<input type="text" class="form-control" id="nombreGrupoSocio">
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default btn-xs waves-effect waves-light" data-dismiss="modal">Cerrar</button>
+				<button type="button" class="btn btn-primary btn-xs waves-effect waves-light">Guardar</button>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='assets/JS/rutas.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/JS/zonas_ruta.js') }}"></script>
+
+{% endblock %}
+
+  
+
+
+

@@ -1,0 +1,238 @@
+$(document).ready(function () {
+
+     $('#grupoTable').DataTable({
+        autoWidth: false,
+        columns: [
+            { title: "Nombre del grupo", width: "70%" },
+            {
+                title: "Opciones",
+                render: function (data, type, row) { // 'row' contiene toda la fila de datos
+                    return `<div class="text-center">
+                                <button class="btn btn-xss editar-btn" data-row='${JSON.stringify(row)}'><i class="fa fa-pencil"></i> EDITAR</button>
+                                <button class="btn btn-xss eliminar-btn" data-pk="${row[1]}" data-nombre="${row[0]}"><i class="fa fa-trash"></i> ELIMINAR</button>
+                            </div>`;
+                }
+            }
+        ],
+        scrollX: true,
+    });
+
+    // Event listeners para los botones
+    // Editar
+    $('#grupoTable').on('click', '.editar-btn', function () {
+
+        const rowData = $(this).data('row'); 
+
+        const nombreGrupoSocio = rowData[0];
+        const pkGrupoSocio = rowData[1];
+
+
+        document.getElementById('nombreGrupoSocio').value = nombreGrupoSocio;
+
+
+        abrirModalGrupoSocio(2,pkGrupoSocio);
+    });
+
+    // Eliminar
+    $('#grupoTable').on('click', '.eliminar-btn', function () {
+
+        const pkGrupoSocio = $(this).data('pk');
+        const nombreGrupoSocio = $(this).data('nombre');
+
+        Swal.fire({
+            title: `¿Eliminar a ${nombreGrupoSocio}?`,
+            text: "No se podrá recuperar",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#B71C1C",
+            cancelButtonColor: "#C1C0C0",
+            confirmButtonText: "Eliminar",
+            cancelButtonText: "Cancelar"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                eliminarGrupoSocio(pkGrupoSocio);    
+            }
+        });
+        
+    });
+
+    listargrupos_socios();
+    
+});
+
+//Asignar funcion al boton de abrir modal
+$("#agregarGrupoSocio").click(function() {
+    abrirModalGrupoSocio(1);
+});
+
+
+async function agregarGrupoSocio() {
+    const nombreGrupoSocio = document.getElementById('nombreGrupoSocio').value.trim();
+
+    if (!nombreGrupoSocio) {
+        toastr.warning('Por favor completa todos los campos', 'Advertencia', { "closeButton": true });
+        return;
+    }
+
+    try {
+        const response = await fetch('/api/grupos_socio', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ nombreGrupoSocio })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            toastr.error(`${data.mensaje}`, 'Error', {"closeButton": true,});
+            return;
+        }
+
+        toastr.success(`${data.mensaje}`, 'Realizado', { "closeButton": true });
+        $('#boostrapModal-2').modal('hide');
+        listargrupos_socios();
+    } catch (error) {
+        console.error('Error:', error);
+        toastr.error('Hubo un error al intentar la acción', 'Error', { "closeButton": true });
+    }
+}
+
+
+async function listargrupos_socios() {
+    try {
+        const response = await fetch('/api/grupos_socio', {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            toastr.error(`${data.mensaje}`, 'Error', {"closeButton": true,});
+            return;
+        }
+
+        try{
+
+            const tabla = $('#grupoTable').DataTable();
+            tabla.clear().draw();
+            tabla.rows.add(data.map(grupo => [
+                grupo.nombreGrupoSocio,
+                grupo.pkGrupoSocio
+            ])).draw();
+
+        }catch{
+            console.log('No existe tabla para: Grupo de socios comerciales');
+        }
+
+        try{
+
+            document.getElementById('grupo_menu').innerHTML = "";
+
+            //Mapear en un select
+            data.forEach(function(data) {
+                
+            
+                let HTML = `<option value="${data.pkGrupoSocio}">${data.nombreGrupoSocio}</option>`;
+            
+                //Mapear valor por cada elemento en la consulta 
+                document.getElementById('grupo_menu').innerHTML += HTML;
+
+
+            });
+
+        }catch{
+            console.log('No existe menu para: Grupo de socios comerciales');
+        }
+
+        
+    } catch (error) {
+        console.error("Error al cargar los datos:", error);
+    }
+}
+
+
+async function editarGrupoSocio(pkGrupoSocio) {
+    const nombreGrupoSocio = document.getElementById('nombreGrupoSocio').value.trim();
+
+    if (!pkGrupoSocio || !nombreGrupoSocio) {
+        toastr.warning('Por favor, completa todos los campos', 'Advertencia', { "closeButton": true });
+        return;
+    }
+
+    try {
+        const response = await fetch('/api/grupos_socio', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ pkGrupoSocio, nombreGrupoSocio })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            toastr.error(`${data.mensaje}`, 'Error', {"closeButton": true,});
+            return;
+        }
+
+        listargrupos_socios();
+        toastr.success(`${data.mensaje}`, 'Realizado', { "closeButton": true });
+    } catch (error) {
+        console.error('Error:', error);
+        toastr.error('Hubo un error al intentar la acción', 'Error', { "closeButton": true });
+    }
+}
+
+
+async function eliminarGrupoSocio(pkGrupoSocio) {
+    if (!pkGrupoSocio) {
+        toastr.warning('No se pudo obtener el elemento', 'Advertencia', { "closeButton": true });
+        return;
+    }
+
+    try {
+        const response = await fetch('/api/grupos_socio', {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ pkGrupoSocio })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            toastr.error(`${data.mensaje}`, 'Error', {"closeButton": true,});
+            return;
+        }
+
+        listargrupos_socios();
+        toastr.success(`${data.mensaje}`, 'Realizado', { "closeButton": true });
+    } catch (error) {
+        console.error('Error:', error);
+        toastr.error('Hubo un error al intentar la acción', 'Error', { "closeButton": true });
+    }
+}
+
+
+function abrirModalGrupoSocio(modo, pkGrupoSocio) {
+
+    //Obtener el valor de los elementos del modal
+    const modalTitle = document.getElementById('myModalLabel2');
+    const modalButton = document.querySelector('#boostrapModal-2 .modal-footer .btn-primary');
+
+    //Asignar diseño y comportamiento del modal dependiendo de la accion(Agregar o Editar)
+    if (modo === 1) {
+
+        modalTitle.textContent = 'Agregar grupo de socio';
+        modalButton.setAttribute('onclick', 'agregarGrupoSocio()');
+
+        document.getElementById('nombreGrupoSocio').value = '';
+    } else if (modo === 2) {
+
+        $('#boostrapModal-2').modal('show');
+        modalTitle.textContent = 'Editar grupo de socio';
+        modalButton.setAttribute('onclick', `editarGrupoSocio(${pkGrupoSocio})`);
+
+    }
+
+}
+
+

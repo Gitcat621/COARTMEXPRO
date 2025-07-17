@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<!-- <title>Bienvenida - COARTMEX-PRO</title> -->
+    <title>{% block title %}Dashboard{% endblock %}</title>
+
+	<!-- Main Styles -->
+	<link rel="stylesheet" href="{{ url_for('static', filename='assets/styles/style.css') }}">
+
+	<!-- mCustomScrollbar -->
+	<link rel="stylesheet" href="{{ url_for('static', filename='assets/plugin/mCustomScrollbar/jquery.mCustomScrollbar.min.css') }}">
+
+	<!-- Waves Effect -->
+	<link rel="stylesheet" href="{{ url_for('static', filename='assets/plugin/waves/waves.min.css') }}">
+
+	<!-- Sweet Alert -->
+	<link rel="stylesheet" href="{{ url_for('static', filename='assets/plugin/sweet-alert/sweetalert.css') }}">
+
+	<!-- Toastr -->
+	<link rel="stylesheet" href="{{ url_for('static', filename='assets/plugin/toastr/toastr.css') }}">
+
+	<!-- Fontello Icon -->
+	<link rel="stylesheet" href="{{ url_for('static', filename='assets/fonts/fontello/fontello.css') }}">
+
+	<!-- Material Design Icon -->
+	<link rel="stylesheet" href="{{ url_for('static', filename='assets/fonts/material-design/css/materialdesignicons.css') }}">
+
+</head>
+
+<body>
+     {% block content %}{% endblock %}
+
+
+	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+	<!--[if lt IE 9]>
+		<script src="assets/script/html5shiv.min.js"></script>
+		<script src="assets/script/respond.min.js"></script>
+	<![endif]-->
+	<!-- 
+	================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+
+	<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+	<script src="{{ url_for('static', filename='assets/scripts/modernizr.min.js') }}"></script>
+	<script src="{{ url_for('static', filename='assets/plugin/bootstrap/js/bootstrap.min.js') }}"></script>
+	<script src="{{ url_for('static', filename='assets/plugin/mCustomScrollbar/jquery.mCustomScrollbar.concat.min.js') }}"></script>
+	<script src="{{ url_for('static', filename='assets/plugin/nprogress/nprogress.js') }}"></script>
+	<script src="{{ url_for('static', filename='assets/plugin/waves/waves.min.js') }}"></script>
+	<script src="{{ url_for('static', filename='assets/scripts/main.min.js') }}"></script>
+
+	<!-- Toastr -->
+	<script src="{{ url_for('static', filename='assets/plugin/toastr/toastr.min.js') }}"></script>
+
+</body>
+</html>

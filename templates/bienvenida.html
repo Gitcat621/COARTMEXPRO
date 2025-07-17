@@ -1,0 +1,38 @@
+{% extends "Dashboard.html" %}
+
+{% block title %}Bienvenida{% endblock %}
+
+{% block NavBar %}Bienvenida{% endblock %}
+
+{% block content %}
+
+<div id="wrapper">
+	<div class="main-content">
+		<div class="row small-spacing">
+			<div class="col-xs-12">
+				<div class="box-content">
+
+					<!-- /.box-title -->
+
+					<h1>Bienvenido</h1>
+					<p>Somos una empresa transparente, proveedora de artesanías trabajadas en conjunto con grandes artesanos de nuestro país, vinculo principal entre artesanos y nuestros socios comerciales.
+						#CreamosConNuestrasManos.
+					</p>
+					<br><br><br>
+					<div class="text-center"><img src="{{ url_for('static', filename='assets/images/logo.jpg') }}" alt="Logo" width="500" height="400"><span class="status online"></span></div>
+					<br><br><br>
+						
+
+				</div>
+				<!-- /.box-content -->
+			</div>
+			<!-- /.col-xs-12 -->
+			
+		</div>
+		<!-- /.row -->		
+	</div>
+	<!-- /.main-content -->
+</div><!--/#wrapper -->
+{% endblock %}
+
+

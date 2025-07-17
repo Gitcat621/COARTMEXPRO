@@ -1,0 +1,197 @@
+{% extends "Dashboard.html" %}
+
+{% block title %}Socios comerciales{% endblock %}
+
+{% block NavBar %}Socios comerciales{% endblock %}
+
+{% block content %}
+<div id="wrapper">
+	<div class="main-content">
+		<div class="row small-spacing">
+			<div class="col-xs-12">
+
+				<!-- SWITCHES -->
+				<ul class="list-inline">
+					<li>
+						<div class="switch info"><input type="checkbox" id="switch-4"><label for="switch-4">ver grupos de socios</label></div>
+						<!-- /.checkbox -->
+					</li>
+					<li>
+						<div class="switch info"><input type="checkbox" id="switch-5"><label for="switch-5">ver zonas de ruta</label></div>
+						<!-- /.checkbox -->
+					</li>
+				</ul>
+				
+
+                <!-- Grupos -->
+				<div class="box-content" id="grupos" style="display: none;">
+					<h4 class="box-title">Tabla de grupos de socios comerciales</h4>
+					<!-- /.box-title -->
+
+					<button type="button" class="btn btn-success btn-xs waves-effect waves-light margin-bottom-20" data-toggle="modal" data-target="#boostrapModal-2" id="agregarGrupoSocio"><i class="fa fa-plus"></i> Agregar</button>
+
+					<table id="grupoTable" class="table table-small-font table-hover table-bordered display" style="width:100%"></table>
+					
+				</div>
+				<!-- /.box-content -->
+
+
+				<!-- Zonas -->
+				<div class="box-content" id="zonas" style="display: none;">
+					<h4 class="box-title">Tabla de zonas de ruta</h4>
+					<!-- /.box-title -->
+
+					<button type="button" class="btn btn-success btn-xs waves-effect waves-light margin-bottom-20" data-toggle="modal" data-target="#boostrapModal-3" id="agregarZonaRuta"><i class="fa fa-plus"></i> Agregar</button>
+
+					<table id="zonaTable" class="table table-small-font table-hover table-bordered display" style="width:100%"></table>
+					
+				</div>
+				<!-- /.box-content -->
+                      
+
+                <!-- Socios / Tiendas -->
+				<div class="box-content">
+					<h4 class="box-title">Tabla de socios / tiendas / hoteles</h4>
+					<!-- /.box-title -->
+
+					<button type="button" class="btn btn-success btn-xs waves-effect waves-light margin-bottom-20" data-toggle="modal" data-target="#boostrapModal-1" id="agregarSocio"><i class="fa fa-plus"></i> Agregar</button>
+
+					<table id="socioTable" class="table table-small-font table-hover table-bordered display" style="width:100%"></table>
+					
+				</div>
+				<!-- /.box-content -->
+			</div>
+		</div>
+		<!-- /.row -->		
+	</div>
+	<!-- /.main-content -->
+</div><!--/#wrapper -->
+
+
+<!-- AQUI ESTAN LOS MODALES -->
+<!-- Modal -->
+<div class="modal fade" id="boostrapModal-1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel">Titulo dinamico</h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<label>Nombre del socio comercial</label>
+					<input type="text" class="form-control" id="nombreSocio">
+				</div>
+				<div class="form-group">
+					<label>Razón social</label>
+					<input type="text" class="form-control" id="razonSocial">
+				</div>
+				<div class="form-group">
+					<label>Asignar grupo perteneciente</label>
+					<select class="form-control" id="grupo_menu" >
+                        <option value="1">Hoteles</option>
+                        <option value="2">7e</option>
+                        <option value="3">GAP</option>
+                        <option value="4">TuriStore</option>
+					</select>
+				</div>
+				<div class="form-group">
+					<h4 id="ubicacion_menu">Ubicacion de la tienda</h4>
+				</div>
+
+				<div class="form-group">
+					<label>Ciudad donde se ubica <i class="fa fa-pencil-square-o" aria-hidden="true"></i></label><br>
+					<select class="select2_2 form-control" multiple="multiple" style="width: 100%;" id="pueblosCiudades_menu">
+
+					</select>
+					
+				</div>
+				<div class="form-group">
+					<label>Estado donde se ubica <i class="fa fa-pencil-square-o" aria-hidden="true"></i></label><br>
+					<select class="select2_2 form-control" multiple="multiple" style="width: 100%;" id="estados_menu">
+
+					</select>
+					
+				</div>
+				<div class="form-group">
+					<label>Pais donde se ubica <i class="fa fa-pencil-square-o" aria-hidden="true"></i></label><br>
+					<select class="select2_2 form-control" multiple="multiple" style="width: 100%;" id="paises_menu">
+
+					</select>
+					
+				</div>
+                <div class="form-group">
+					<label>Asignar zona de ruta</label>
+					<select class="form-control" id="zona_menu" >
+                        <option value="1">Zona hotelera</option>
+                        <option value="2">Riviera maya</option>
+                        <option value="3">Tulum</option>
+                        <option value="4">Cozumel</option>
+                        <option value="0" selected>No aplica</option>
+					</select>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default btn-xs waves-effect waves-light" data-dismiss="modal">Cerrar</button>
+				<button type="button" class="btn btn-primary btn-xs waves-effect waves-light">Guardar</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="boostrapModal-2" tabindex="-2" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel2">Titulo dinamico</h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<label>Nombre del grupo</label>
+					<input type="text" class="form-control" id="nombreGrupoSocio">
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default btn-xs waves-effect waves-light" data-dismiss="modal">Cerrar</button>
+				<button type="button" class="btn btn-primary btn-xs waves-effect waves-light">Guardar</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="boostrapModal-3" tabindex="-3" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel3">Zonas</h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<label>Nombre de la zona de ruta</label>
+					<input type="text" class="form-control" id="nombreZonaRuta">
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default btn-xs waves-effect waves-light" data-dismiss="modal">Cerrar</button>
+				<button type="button" class="btn btn-primary btn-xs waves-effect waves-light">Guardar</button>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='assets/JS/socios_comercialesLC.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/JS/grupos_sociosComerciales.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/JS/zonas_ruta.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/JS/pueblos_ciudades.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/JS/estados.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/JS/paises.js') }}"></script>
+
+{% endblock %}
+
+
+
+	

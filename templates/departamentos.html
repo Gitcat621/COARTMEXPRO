@@ -1,0 +1,152 @@
+{% extends "Dashboard.html" %}
+
+{% block title %}Departamentos{% endblock %}
+
+{% block NavBar %}Departamentos{% endblock %}
+
+{% block content %}
+
+<div id="wrapper">
+	<div class="main-content">
+		<div class="row small-spacing">
+			
+            <!-- DEPARTAMENTOS -->
+			<div class="col-xs-12">
+				<div class="box-content">
+					<h4 class="box-title">Departamentos</h4>
+					<!-- /.box-title -->
+
+					<button type="button" class="btn btn-success btn-xs waves-effect waves-light margin-bottom-10" data-toggle="modal" data-target="#boostrapModal-1" id="agregarDepartamento"><i class="fa fa-plus"></i> Agregar</button>
+				
+
+					<table id="departamentoTable" class="table table-small-font table-hover table-bordered display nowrap" style="width:100%">
+						
+					</table>
+					
+				</div>
+				<!-- /.box-content -->
+			</div>
+
+			<!-- PUESTOS -->
+			<div class="col-xs-6">
+				<div class="box-content">
+					<h4 class="box-title">Puestos</h4>
+					<!-- /.box-title -->
+
+					<button type="button" class="btn btn-success btn-xs waves-effect waves-light margin-bottom-10" data-toggle="modal" data-target="#boostrapModal-2" id="agregarPuesto"><i class="fa fa-plus"></i> Agregar</button>
+				
+					<table id="puestoTable" class="table table-small-font table-hover table-bordered display nowrap" style="width:100%">
+						
+					</table>
+					
+				</div>
+				<!-- /.box-content -->
+			</div>
+
+			<!-- FUCNIONES PUESTOS -->
+			<div class="col-xs-6">
+				<div class="box-content">
+					<h4 class="box-title">Funciones de los puestos</h4>
+					<!-- /.box-title -->
+
+					<button type="button" class="btn btn-success btn-xs waves-effect waves-light margin-bottom-10" data-toggle="modal" data-target="#boostrapModal-3" id="agregarFuncionesPuesto"><i class="fa fa-plus"></i> Agregar</button>
+				
+					<table id="funcionPuestoTable" class="table table-small-font table-hover table-bordered display nowrap" style="width:100%">
+						
+					</table>
+					
+				</div>
+				<!-- /.box-content -->
+			</div>
+			
+		</div>
+		<!-- /.row -->		
+	</div>
+	<!-- /.main-content -->
+</div><!--/#wrapper -->
+
+
+<!-- AQUI ESTAN LOS MODALES -->
+<!-- Modal -->
+<div class="modal fade" id="boostrapModal-1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel">Titulo dinamico</h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<label>Nombre del departamento</label>
+					<input type="text" class="form-control" id="nombreDepartamento">
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default btn-xs waves-effect waves-light" data-dismiss="modal">Cerrar</button>
+				<button type="button" class="btn btn-primary btn-xs waves-effect waves-light" id="guardarDepartamento">Guardar</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="boostrapModal-2" tabindex="-2" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel2">Titulo dinamico</h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<label>Nombre del puesto</label>
+					<input type="text" class="form-control" id="nombrePuesto">
+				</div>
+                <div class="form-group">
+					<label>Seleccionar departamento</label>
+					<select class="form-control" id="departamento_menu">
+
+                    </select>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default btn-xs waves-effect waves-light" data-dismiss="modal">Cerrar</button>
+				<button type="button" class="btn btn-primary btn-xs waves-effect waves-light" id="guardarDepartamento">Guardar</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="boostrapModal-3" tabindex="-3" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel3">Titulo dinamico</h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<label>Descripcion de la funcion</label>
+					<input type="text" class="form-control" id="descripcionFuncion">
+				</div>
+                <div class="form-group">
+					<label>Seleccionar puesto</label>
+					<select class="form-control" id="puesto_menu">
+
+                    </select>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default btn-xs waves-effect waves-light" data-dismiss="modal">Cerrar</button>
+				<button type="button" class="btn btn-primary btn-xs waves-effect waves-light" id="guardarFuncionDepartamento">Guardar</button>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='assets/JS/departamentos.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/JS/puestos.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/JS/funciones_puesto.js') }}"></script>
+
+{% endblock %}
