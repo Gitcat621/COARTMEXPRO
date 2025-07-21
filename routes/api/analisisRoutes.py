@@ -66,13 +66,13 @@ def listar_ingresos():
 
     #return jsonify(analisis), 200
 
-@api_analisis.route('/cuentasPorPagar', methods=['GET'])
+@api_analisis.route('/cuentas_por_pagar', methods=['GET'])
 def listar_cuentasPorPagar():
     """Endpoint para obtener todos los registros"""
     analisis = Analisis.listar_cuentasPorPagar()
     return jsonify(analisis), 200
 
-@api_analisis.route('/cuentasPorCobrar', methods=['GET'])
+@api_analisis.route('/cuentas_por_cobrar', methods=['GET'])
 def listar_cuentasPorCobrar():
     """Endpoint para obtener todos los registros"""
     analisis = Analisis.listar_cuentasPorCobrar()
@@ -85,7 +85,7 @@ def listar_servicio(meses):
     analisis = Analisis.listar_servicio(meses)
     return analisis
 
-@api_analisis.route('/sociosEnVentas', methods=['GET'])
+@api_analisis.route('/socios_en_ventas', methods=['GET'])
 def listar_sociosEnVentas(meses, year):
     """Endpoint para obtener todos los registros"""
 

@@ -4,6 +4,8 @@ $(document).ready(function () {
 
     document.getElementById("currentYear").textContent = year;
     document.getElementById("lastYear").textContent = year - 1;
+
+    
     
 });
 
@@ -240,6 +242,11 @@ function mostrarTop1(data) {
     `;
     
     tabla.innerHTML += filaTotalHTML;
+
+    // $('#contenedor-tabla').data('responsiveTable', null); // eliminar instancia anterior
+    // $('#contenedor-tabla').responsiveTable();
+
+          
 }
 
 

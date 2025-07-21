@@ -1,0 +1,45 @@
+
+{% extends "Dashboard.html" %}
+
+{% block title %}Cuentas por cobrar{% endblock %}
+
+{% block NavBar %}Cuentas por cobrar{% endblock %}
+
+{% block content %}
+<div id="wrapper">
+	<div class="main-content">
+		<div class="row small-spacing">
+			<div class="col-xs-12">
+
+                <!-- Socios / Tiendas -->
+				<div class="box-content">
+					<h4 class="box-title">Cuentas por cobrar</h4>
+					<!-- /.box-title -->
+
+					
+                    <table id="cxcTable" class="table table-bordered display" style="width:100%"></table>					
+					
+				</div>
+				<!-- /.box-content -->
+
+				
+			</div>
+			
+		</div>
+		<!-- /.row -->		
+	</div>
+	<!-- /.main-content -->
+</div><!--/#wrapper -->
+
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='assets/JS/cuentas_por_cobrar.js') }}"></script>
+
+{% endblock %}
+
+  
+
+
+

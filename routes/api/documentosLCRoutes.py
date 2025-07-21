@@ -6,7 +6,7 @@ from flask import send_from_directory
 api_documentosLC = Blueprint('api_documentosLC', __name__)
 
 # Carpeta donde se guardarán los archivos
-UPLOAD_FOLDER = 'documentos_lc'
+UPLOAD_FOLDER = 'documentos_LC'
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 

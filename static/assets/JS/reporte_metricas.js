@@ -21,11 +21,6 @@ $(document).ready(function () {
     });
 
     // Event listeners para los botones
-    // Editar
-    $('#fuenteTable').on('click', '.editar-btn', function () {
-        alert("Como presionaste este boton?");
-    });
-
     // Eliminar
     $('#fuenteTable').on('click', '.eliminar-btn', function () {
 
@@ -55,9 +50,16 @@ $(document).ready(function () {
 
 //Asignar funcion al boton de abrir modal
 $("#modalAgregar").click(function() {
-    abrirModal(1);
-});
 
+    //Obtener el valor de los elementos del modal
+    const modalTitle = document.getElementById('myModalLabel');
+    const modalButton = document.querySelector('#boostrapModal-1 .modal-footer .btn-primary');
+
+    modalTitle.textContent = 'Agregar Archivo';
+    modalButton.setAttribute('onclick', 'recordatorio()');
+
+    document.getElementById('archivoSubido').value = '';
+});
 
 // Función para validar archivo antes de enviarlo
 function validarArchivo() {
@@ -89,6 +91,24 @@ function validarArchivo() {
     }
 
     return archivo;
+}
+
+function recordatorio(){
+    Swal.fire({
+        //width: 500,
+        title: "¿Han sincronizado los datos?",
+        text: "Los proveedores, socios/tiendas y codigos de articulos podrian causar una subida fallida",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#3085D6",
+        cancelButtonColor: "#C1C0C0",
+        confirmButtonText: "Subir",
+        cancelButtonText: "Cancelar"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            agregarArchivo();
+        }
+    });
 }
 
 // Función asíncrona para enviar el archivo al backend
@@ -165,7 +185,6 @@ async function agregarArchivo() {
     }
 }
 
-
 function listarArchivos() {
 
     //Peticion GET al servidor
@@ -194,69 +213,6 @@ function listarArchivos() {
    .catch(error => console.error("Error al cargar los datos:", error));
     
 }
-
-async function editarArchivo(pkArchivo, nombreArchivo) {   
-
-    // Evita que se envíe el formulario si falta pkArchivo o nombreArchivo
-    if (!pkArchivo || !nombreArchivo) {
-        toastr.error('No se pudieron obtener los datos.', 'Error', {"closeButton": true});
-        return false;
-    }
-
-    // Obtiene el archivo del input
-    const archivo = document.getElementById('archivoSubido').files[0];
-
-    // Evita que se envíe el formulario si no hay archivo
-    if (!archivo) {
-        toastr.warning('Por favor selecciona un archivo.', 'Advertencia', {"closeButton": true});
-        return false;
-    }
-
-    // Obtiene la extensión del archivo
-    const EnombreArchivo = archivo.name;
-    const extension = EnombreArchivo.substring(EnombreArchivo.lastIndexOf('.')).toLowerCase();
-
-    // Extensiones permitidas
-    const extensionesValidas = ['.xlsx', '.xls', '.pdf'];
-
-    if (!extensionesValidas.includes(extension)) {
-        toastr.warning('Por favor, selecciona un archivo válido.', 'Advertencia', {"closeButton": true});
-        return false;
-    }
-
-    // Crear FormData y agregar datos
-    const formData = new FormData();
-    formData.append('archivo', archivo);
-    formData.append('pkArchivo', pkArchivo);
-    formData.append('nombreArchivo', nombreArchivo);
-
-    try {
-        // Enviar los datos al backend (Flask) para editar
-        const response = await fetch('/api/reportes_metricas', {
-            method: 'PUT',
-            body: formData,
-        });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-
-            toastr.error(`${data.mensaje}`, 'Error', {"closeButton": true});
-
-            throw new Error('Hubo un problema al enviar la solicitud');
-        }
-
-        // Mostrar el mensaje de la respuesta de la API
-        listarArchivos();
-        
-        toastr.success(`${data.mensaje}`, 'Realizado', {"closeButton": true});
-        
-    } catch (error) {
-        console.error('Error:', error);
-        toastr.error('Hubo un error al intentar la acción', 'Error', {"closeButton": true});
-    }
-}
-
 
 async function eliminarArchivo(nombreArchivo) {
 
@@ -296,32 +252,6 @@ async function eliminarArchivo(nombreArchivo) {
         toastr.error('Hubo un error al intentar la acción', 'Error', { "closeButton": true });
     }
 }
-
-
-function abrirModal(modo, pkArchivo, nombreArchivo) {
-
-    //Obtener el valor de los elementos del modal
-    const modalTitle = document.getElementById('myModalLabel');
-    const modalButton = document.querySelector('#boostrapModal-1 .modal-footer .btn-primary');
-
-    //Asignar diseño y comportamiento del modal dependiendo de la accion(Agregar o Editar)
-    if (modo === 1) {
-
-        modalTitle.textContent = 'Agregar Archivo';
-        modalButton.setAttribute('onclick', 'agregarArchivo()');
-
-        document.getElementById('archivoSubido').value = '';
-
-    } else if (modo === 2) {
-
-        $('#boostrapModal-1').modal('show');
-        modalTitle.textContent = 'Editar Archivo';
-        modalButton.setAttribute('onclick', `editarArchivo('${pkArchivo}', '${nombreArchivo}')`);
-
-    }
-
-}
-
 
 document.getElementById('archivoSubido').addEventListener('change', function(e) {
     const archivo = e.target.files[0];

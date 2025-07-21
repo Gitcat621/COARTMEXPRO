@@ -106,10 +106,10 @@ async function cargarTablas(endpoint, grupo, anio, mes) {
         endpoint = "/articulos/inventario"
     }
     if(endpoint == "CxC"){
-        endpoint = "/analisis/cuentasPorCobrar"
+        endpoint = "/analisis/cuentas_por_cobrar"
     }
     if(endpoint == "CxP"){
-        endpoint = "/analisis/cuentasPorPagar"
+        endpoint = "/analisis/cuentas_por_pagar"
     }
     if(endpoint == "Compras de mercancía"){
         endpoint = "compras_mercancia"
@@ -593,7 +593,7 @@ function inicializarTabla(data, endpoint){
 
 
         break;
-        case '/analisis/cuentasPorPagar':
+        case '/analisis/cuentas_por_pagar':
 
             elemento = document.getElementById('contenedorGrupo');
             if (elemento.style.display === 'block') {
@@ -653,7 +653,7 @@ function inicializarTabla(data, endpoint){
             tabla.row.add(["TOTAL GENERAL", "---", formatoMoneda(total)]).draw(false);
 
         break;
-        case '/analisis/cuentasPorCobrar':
+        case '/analisis/cuentas_por_cobrar':
 
             elemento = document.getElementById('contenedorGrupo');
             if (elemento.style.display === 'block') {

@@ -282,7 +282,7 @@ def procesar_ordenes(df):
         with db.connection.cursor() as cursor:
             for _, fila in facturas_unicas.iterrows():
                 factura = Factura(
-                    numeroAño=fila["No. factura"],
+                    numeroAnio=fila["No. factura"],
                     fechaFactura=fila["Fecha emision"],
                     subTotalFactura=fila["Sub total factura"],
                     totalFactura=fila["Total factura"],
@@ -324,7 +324,7 @@ def procesar_cuentas_cobradas(df):
         with db.connection.cursor() as cursor:
             for _, fila in df.iterrows():
                 factura = Factura(
-                    numeroAño=fila["No. factura"],
+                    numeroAnio=fila["No. factura"],
                     fechaPagado=fila["Fecha pagada"]
                 )
                 resultado = factura.editar_factura(cursor)  # Pasamos la conexión activa

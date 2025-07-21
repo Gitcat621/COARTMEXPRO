@@ -346,19 +346,21 @@
 		</div>
 		<!-- /.row small-spacing -->
 			
-
+		<!-- TOPS 1 - 2 -->
         <div class="row small-spacing">
 			
+			<!-- TOP1 -->
 			<div class="col-lg-12 col-xs-12">
 				<div class="box-content">
 					<h4 class="text-center box-title">Detalle articulos vendidos</h4>
 					<!-- /.box-title -->
+					<div class="text-right">
+						<button class="btn btn-xs btn-bordered" onclick="toggleTabla()">Mostrar/Ocultar Tabla</button>
+					</div>
+
 					<div class="table-responsive table-purchases">
-						<div class="text-right">
-							<button class="btn btn-xs btn-bordered" onclick="toggleTabla()">Mostrar/Ocultar Tabla</button>
-						</div>
 						<div id="contenedor-tabla" style="display: block;">
-							<table class="table table-hover margin-bottom-10">
+							<table id="top1Table" class="table table-hover margin-bottom-10">
 								<thead>
 									<tr>
 										<th>Articulo</th>
@@ -383,12 +385,13 @@
 		</div>
 		<!-- /.row -->
 
+		<!-- TOP3 -->
 		<div class="row small-spacing">
 			<div class="col-lg-6 col-xs-12">
 				<div class="box-content">
 					<h4 class="text-center box-title">Cantidad articulos entregados</h4>
 					<!-- /.box-title -->
-					<div class="table-responsive table-purchases">
+					<div id="top3Contenedor" class="table-responsive table-purchases">
 						<table class="table table-small-font table-hover margin-bottom-10">
 							<thead>
 								<tr>

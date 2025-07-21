@@ -1,0 +1,68 @@
+
+{% extends "Dashboard.html" %}
+
+{% block title %}Constancia situación fiscal{% endblock %}
+
+{% block NavBar %}Constancia situación fiscal{% endblock %}
+
+{% block content %}
+<div id="wrapper">
+	<div class="main-content">
+		<div class="row small-spacing">
+			<div class="col-xs-12">
+
+                <!-- Socios / Tiendas -->
+				<div class="box-content">
+					<h4 class="box-title">Constancia de situación fiscal</h4>
+					<!-- /.box-title -->
+
+					<button class="btn btn-primary btn-sm waves-effect waves-light margin-bottom-10" data-toggle="modal" data-target="#boostrapModal-1" id="agregarCSF"><i class="fa fa-plus"></i> Actualizar</button>
+
+					<iframe id="iframe" src="/api/constancias_situacion_fiscal/pdf" width="100%" height="600px"></iframe>
+								
+					
+				</div>
+				<!-- /.box-content -->
+
+				
+			</div>
+			
+		</div>
+		<!-- /.row -->		
+	</div>
+	<!-- /.main-content -->
+</div><!--/#wrapper -->
+
+<!-- AQUI ESTAN LOS MODALES -->
+<!-- Modal -->
+<div class="modal fade" id="boostrapModal-1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel">Subir TIPO DE ARCHIVO</h4>
+			</div>
+			<div class="modal-body">
+
+				<!-- SUBIDA -->
+				<input type="file" id="archivoSubido" class="dropify" accept=".pdf"/>
+
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default btn-sm waves-effect waves-light" data-dismiss="modal">Cerrar</button>
+				<button type="button" class="btn btn-primary btn-sm waves-effect waves-light">Subir</button>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='assets/JS/CSF.js') }}"></script>
+
+{% endblock %}
+
+  
+
+
+

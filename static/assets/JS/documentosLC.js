@@ -68,6 +68,10 @@ function listarArchivos(tipo) {
     .then(response => response.json())
     .then(data => {
 
+        console.log(data);
+
+        evaluarFecha(data.vigencia, tipo);
+
         let contenedor;
         if(tipo === 1){
             contenedor = document.getElementById('vigencia1');
@@ -169,4 +173,36 @@ function toformatearFecha(fechaString) {
 
     // Capitalizar primera letra del resultado
     return fechaFormateada.charAt(0).toUpperCase() + fechaFormateada.slice(1);
+}
+
+function evaluarFecha(fechaString, tipo) {
+    const hoy = new Date();
+    const fechaEvaluada = new Date(fechaString);
+
+    // Calcular diferencia en milisegundos
+    const diferenciaMs = fechaEvaluada - hoy;
+    const diferenciaDias = Math.floor(diferenciaMs / (1000 * 60 * 60 * 24));
+
+    let doc;
+    if(tipo === 1){
+        doc = 'Tarjeta de circulacion';
+    }else if(tipo ===2){
+        doc = 'Permiso mercantil';
+    }else{
+        doc = 'Poliza de seguros';
+    }
+
+    toastr.options = {
+    closeButton: true,       // Muestra el botón para cerrar
+    timeOut: 0,              // ⏱️ Sin límite de tiempo
+    extendedTimeOut: 0,      // ⏱️ También desactiva el auto-cierre extendido
+};
+
+    if (diferenciaDias < 0) {
+        toastr.error(`${doc} vencido.`, 'Vigencia expirada', {"closeButton": true, });
+    } else if (diferenciaDias <= 30) {
+        toastr.warning(`${doc} pierde vigencia en menos de un mes.`, 'Vigencia proxima', {"closeButton": true,});
+    } else {
+        toastr.info(`${doc} tiene vigencia distante a más de un mes.`, 'Documento vigente', {"closeButton": true,});
+    }
 }

@@ -45,7 +45,7 @@ from routes.api.cuentaBancoRoutes import api_cuentasBanco
 from routes.api.metodoPagoRoutes import api_metodosPago
 from routes.api.bancoRoutes import api_bancos
 from routes.api.proveedorRoutes import api_proveedores
-
+from routes.api.constanciaSituacionFiscalRoutes import api_CSF
 from routes.api.compraMercanciaRoutes import api_comprasMercancia
 from routes.api.entregaRoutes import api_entregas
 from routes.api.facturaRoutes import api_facturas
@@ -63,6 +63,7 @@ from routes.web.administracionCF import web_administracionCF
 from routes.web.recursosHumanosRoutes import web_recursosHumanos
 from routes.web.logisticaComercialRoutes import web_logisticaComercial
 from routes.web.sistemasRoutes import web_sistemas
+from routes.web.administracionContable import web_administracionContable
 
 
 app = Flask(__name__)
@@ -118,7 +119,7 @@ app.register_blueprint(api_cuentasBanco, url_prefix="/api/cuentas_banco")
 app.register_blueprint(api_metodosPago, url_prefix="/api/metodos_pago")
 app.register_blueprint(api_bancos, url_prefix="/api/bancos")
 app.register_blueprint(api_proveedores, url_prefix="/api/proveedores")
-
+app.register_blueprint(api_CSF, url_prefix="/api/constancias_situacion_fiscal")
 app.register_blueprint(api_comprasMercancia, url_prefix="/api/compras_mercancia")
 app.register_blueprint(api_entregas, url_prefix="/api/entregas")
 app.register_blueprint(api_facturas, url_prefix="/api/facturas")
@@ -136,6 +137,7 @@ app.register_blueprint(web_administracionCF, url_prefix="/web/contable_fiscal")
 app.register_blueprint(web_recursosHumanos, url_prefix="/web/recursos_humanos")
 app.register_blueprint(web_logisticaComercial, url_prefix="/web/logistica_comercial")
 app.register_blueprint(web_sistemas, url_prefix="/web/sistemas")
+app.register_blueprint(web_administracionContable, url_prefix="/web/administracion_contable")
 
 @app.route('/')
 def login():
@@ -151,6 +153,13 @@ def bienvenida():
         return redirect('/')
     
     return render_template('bienvenida.html')
+
+@app.route('/web/prueba')
+def test():
+    if 'usuario' not in session:
+        return redirect('/')
+    
+    return render_template('testing.html')
 
 @app.route('/logout')
 def logout():

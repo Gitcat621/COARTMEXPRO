@@ -1,0 +1,54 @@
+
+{% extends "Dashboard.html" %}
+
+{% block title %}Rutas de entrega{% endblock %}
+
+{% block NavBar %}Rutas de entrega{% endblock %}
+
+{% block content %}
+<div id="wrapper">
+	<div class="main-content">
+		<div class="row small-spacing">
+			<div class="col-xs-12">
+
+                <!-- Socios / Tiendas -->
+				<div class="box-content">
+					<h4 class="box-title">Rutas de la semana</h4>
+					<!-- /.box-title -->
+
+					<div class="row margin-bottom-10">
+						<div class="col-md-3 margin-bottom-20" id="contenedorYear">
+							<input type="text" class="form-control" placeholder="visitas anteriores a..." id="fechaIngreso" autocomplete="off">
+						</div>
+						<div class="col-md-4 margin-bottom-20" id="contenedorBoton">
+							<button class="btn btn-info btn-bordered btn-sm waves-effect waves-light" id="busqueda"><i class="fa fa-search"></i> </button>
+						</div> 
+					</div>
+
+					
+                    <table id="rutaEntregaTable" class="table table-bordered display" style="width:100%"></table>					
+					
+				</div>
+				<!-- /.box-content -->
+
+				
+			</div>
+			
+		</div>
+		<!-- /.row -->		
+	</div>
+	<!-- /.main-content -->
+</div><!--/#wrapper -->
+
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='assets/JS/rutas_entrega.js') }}"></script>
+
+{% endblock %}
+
+  
+
+
+
