@@ -3,14 +3,13 @@ $(document).ready(function () {
     $('#usuarioTable').DataTable({
         columns: [
             { title: "Nombre" },
-            { title: "Empleado" },
             { title: "Departamento" },
             {
                 title: "Opciones",
                 render: function (data, type, row) { // 'row' contiene toda la fila de datos
                     return `<div class="text-center">
                                 <button class="btn btn-xss editar-btn" data-row='${JSON.stringify(row)}'><i class="fa fa-pencil"></i> EDITAR</button>
-                                <button class="btn btn-xss eliminar-btn" data-pk="${row[4]}" data-nombre="${row[0]}"><i class="fa fa-trash"></i> ELIIMINAR</button>
+                                <button class="btn btn-xss eliminar-btn" data-pk="${row[3]}" data-nombre="${row[0]}"><i class="fa fa-trash"></i> ELIIMINAR</button>
                             </div>`;
                 }
             }
@@ -25,14 +24,14 @@ $(document).ready(function () {
         const rowData = $(this).data('row'); 
 
         const nombreUsuario = rowData[0];
-        const contrasena = rowData[1];
-        const fkEmpleado = rowData[3];
-        const pkUsuario = rowData[4];
+        const contrasena = "NO VISIBLE PASSWORD. CHANGE IF YOU FORGOT IT";
+        const fkDepartamento = rowData[2];
+        const pkUsuario = rowData[3];
 
 
         document.getElementById('nombreUsuario').value = nombreUsuario;
         document.getElementById('contrasena').value = contrasena;
-        document.getElementById('empleado_menu').value = fkEmpleado;
+        document.getElementById('departamento_menu').value = fkDepartamento;
 
         abrirModal(2,pkUsuario);
     });
@@ -87,8 +86,10 @@ async function listarUsuarios() {
         let tabla = $('#usuarioTable').DataTable();
         tabla.clear().draw();
         tabla.rows.add(data.map((usuarios) => [
-            usuarios.nombreUsuario, usuarios.nombreEmpleado, usuarios.nombreDepartamento,
-            usuarios.fkEmpleado, usuarios.pkUsuario
+            usuarios.nombreUsuario, 
+            usuarios.nombreDepartamento,
+            usuarios.fkDepartamento, 
+            usuarios.pkUsuario
         ])).draw();
     } catch (error) {
         console.error("Error al cargar los datos:", error);
@@ -100,9 +101,9 @@ async function agregarUsuario() {
     try {
         const nombreUsuario = document.getElementById('nombreUsuario').value.trim();
         const contrasena = document.getElementById('contrasena').value.trim();
-        const fkEmpleado = document.getElementById('empleado_menu').value;
+        const fkDepartamento = document.getElementById('departamento_menu').value;
 
-        if (!nombreUsuario || !contrasena || !fkEmpleado) {
+        if (!nombreUsuario || !contrasena || !fkDepartamento) {
             toastr.warning('Por favor completa todos los campos', 'Advertencia', { "closeButton": true });
             return;
         }
@@ -110,7 +111,7 @@ async function agregarUsuario() {
         const response = await fetch('/api/usuarios', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ nombreUsuario, contrasena, fkEmpleado })
+            body: JSON.stringify({ nombreUsuario, contrasena, fkDepartamento })
         });
         
         const data = await response.json();
@@ -135,9 +136,9 @@ async function editarUsuario(pkUsuario) {
     try {
         const nombreUsuario = document.getElementById('nombreUsuario').value.trim();
         const contrasena = document.getElementById('contrasena').value.trim();
-        const fkEmpleado = document.getElementById('empleado_menu').value;
+        const fkDepartamento = document.getElementById('departamento_menu').value;
 
-        if (!pkUsuario || !nombreUsuario || !contrasena || !fkEmpleado) {
+        if (!pkUsuario || !nombreUsuario || !contrasena || !fkDepartamento) {
             toastr.warning('Por favor completa todos los campos', 'Advertencia', { "closeButton": true });
             return;
         }
@@ -145,7 +146,7 @@ async function editarUsuario(pkUsuario) {
         const response = await fetch('/api/usuarios', {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ pkUsuario, nombreUsuario, contrasena, fkEmpleado })
+            body: JSON.stringify({ pkUsuario, nombreUsuario, contrasena, fkDepartamento })
         });
         const data = await response.json();
 
@@ -209,7 +210,7 @@ function abrirModal(modo, pkUsuario) {
         
         document.getElementById('nombreUsuario').value = '';
         document.getElementById('contrasena').value = '';
-        Menu = document.getElementById('empleado_menu').value = '';
+        Menu = document.getElementById('departamento_menu').value = '';
 
     } else if (modo === 2) {
 

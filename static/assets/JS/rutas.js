@@ -37,10 +37,11 @@ $(document).ready(function () {
         document.getElementById('fechaNacimiento').value = fechaRuta;
         document.getElementById('zona_menu').value = fkZonaRuta;
         document.getElementById('pkRuta').value = pkRuta;
+        document.getElementById('empleado_menu').value = numeroEmpleado;
 
         abrirModalRuta(2,pkRuta);
 
-        chatGtp(fkZonaRuta,pkRuta);
+        listarTiendasDestinosEmpleados(fkZonaRuta,pkRuta);
     });
 
     // Eliminar
@@ -124,10 +125,10 @@ zonaSelect.addEventListener("change", function () {
     if(!pkRuta){
         pkRuta = 0;
     }
-    chatGtp(valorSeleccionado,pkRuta);
+    listarTiendasDestinosEmpleados(valorSeleccionado,pkRuta);
 });
 
-async function chatGtp(fkZonaRuta,pkRuta) {
+async function listarTiendasDestinosEmpleados(fkZonaRuta,pkRuta) {
 
     const [tiendasResponse, destinosResponse] = await Promise.all([
     fetch(`/api/socios_comerciales/tiendas?fkZonaRuta=${fkZonaRuta}`),
@@ -282,9 +283,7 @@ async function agregarRuta() {
 
         const fechaRuta = document.getElementById('fechaNacimiento').value.trim();
 
-        const titulo = document.querySelector('.box-title');
-
-        const fkEmpleado = titulo.dataset.empleado;
+        const fkEmpleado = document.getElementById('empleado_menu').value;;
 
         const tiendas = obtenerSociosSeleccionados();
 
@@ -321,9 +320,7 @@ async function editarRuta(pkRuta) {
     try {
         const fechaRuta = document.getElementById('fechaNacimiento').value.trim();
 
-        const titulo = document.querySelector('.box-title');
-
-        const fkEmpleado = titulo.dataset.empleado;
+        const fkEmpleado = document.getElementById('empleado_menu').value;;
 
         const tiendas = obtenerSociosSeleccionados();
 
@@ -401,7 +398,7 @@ function toformatearFechaRuta(fechaString) {
 function abrirModalRuta(modo, pkZonaRuta) {
 
     //Obtener el valor de los elementos del modal
-    const modalTitle = document.getElementById('myModalLabel1');
+    const modalTitle = document.getElementById('myModalLabel');
     const modalButton = document.querySelector('#boostrapModal-1 .modal-footer .btn-primary');
 
     setTimeout(() => {
@@ -417,6 +414,7 @@ function abrirModalRuta(modo, pkZonaRuta) {
         document.getElementById('fechaNacimiento').value = '';
         document.getElementById('zona_menu').value = '';
         document.getElementById('pkRuta').value = '';
+        document.getElementById('empleado_menu').value = '';
 
         $('.checkbox-socio').prop('checked', false);
     } else if (modo === 2) {

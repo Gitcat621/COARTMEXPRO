@@ -6,12 +6,12 @@ id_generado = str(uuid.uuid4())
 
 
 class Usuario:
-    def __init__(self, pkUsuario=None, nombreUsuario=None, contrasena=None, fkEmpleado=None):
+    def __init__(self, pkUsuario=None, nombreUsuario=None, contrasena=None, fkDepartamento=None):
         """Inicializa un usuario"""
         self.pkUsuario = pkUsuario
         self.nombreUsuario = nombreUsuario
         self.contrasena = contrasena
-        self.fkEmpleado = fkEmpleado
+        self.fkDepartamento = fkDepartamento
 
 
     @staticmethod
@@ -24,15 +24,10 @@ class Usuario:
         u.pkUsuario, 
         u.nombreUsuario, 
         u.contrasena, 
-        e.nombreEmpleado, 
-        p.nombrePuesto,
         d.nombreDepartamento,
-        u.fkEmpleado, 
-        e.numeroEmpleado 
+        u.fkDepartamento
         FROM usuarios u
-        JOIN empleados e ON e.numeroEmpleado = u.fkEmpleado
-        LEFT JOIN puestos p ON p.pkPuesto = e.fkPuesto
-        LEFT JOIN departamentos d ON d.pkDepartamento = p.fkDepartamento;
+        LEFT JOIN departamentos d ON d.pkDepartamento = u.fkDepartamento;
         '''
 
         print (consulta) 
@@ -45,10 +40,8 @@ class Usuario:
         db = Database()
 
         consulta = '''
-        SELECT u.nombreUsuario, u.contrasena, d.nombreDepartamento, u.fkEmpleado FROM usuarios u 
-        JOIN empleados e ON e.numeroEmpleado = u.fkEmpleado 
-        JOIN puestos p ON e.fkPuesto = p.pkPuesto
-        JOIN departamentos d ON d.pkDepartamento = p.fkDepartamento WHERE u.nombreUsuario = %s
+        SELECT u.nombreUsuario, u.contrasena, d.nombreDepartamento FROM usuarios u 
+        JOIN departamentos d ON d.pkDepartamento = u.fkDepartamento WHERE u.nombreUsuario = %s
         '''
         valores = (self.nombreUsuario,)
 
@@ -66,7 +59,7 @@ class Usuario:
 
             if bcrypt.checkpw(self.contrasena.encode('utf-8'), contrasena_hash.encode('utf-8')):
                 self.nombreDepartamento = resultado[0]["nombreDepartamento"]
-                self.fkEmpleado = resultado[0]["fkEmpleado"]
+                self.nombreUsuario = resultado[0]["nombreUsuario"]
                 return True
 
         return False
@@ -78,8 +71,8 @@ class Usuario:
         # 🔐 Hashear la contraseña antes de insertarla
         hashed_password = bcrypt.hashpw(self.contrasena.encode('utf-8'), bcrypt.gensalt())
         
-        query = "INSERT INTO usuarios (nombreUsuario, contrasena, fkEmpleado) VALUES (%s, %s, %s)"
-        valores = (self.nombreUsuario, hashed_password, self.fkEmpleado)
+        query = "INSERT INTO usuarios (nombreUsuario, contrasena, fkDepartamento) VALUES (%s, %s, %s)"
+        valores = (self.nombreUsuario, hashed_password, self.fkDepartamento)
 
         print(query % valores)
 
@@ -94,8 +87,8 @@ class Usuario:
         # 🔐 Hashear la contraseña antes de insertarla
         hashed_password = bcrypt.hashpw(self.contrasena.encode('utf-8'), bcrypt.gensalt())
 
-        query = "UPDATE usuarios SET nombreUsuario = %s, contrasena = %s, fkEmpleado = %s WHERE pkUsuario = %s"
-        valores = (self.nombreUsuario, hashed_password, self.fkEmpleado, self.pkUsuario)
+        query = "UPDATE usuarios SET nombreUsuario = %s, contrasena = %s, fkDepartamento = %s WHERE pkUsuario = %s"
+        valores = (self.nombreUsuario, hashed_password, self.fkDepartamento, self.pkUsuario)
 
         print(f"\n{query % valores}\n")
 

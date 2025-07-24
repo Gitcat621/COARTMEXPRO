@@ -50,7 +50,7 @@ async function obtenerEmpleado(numeroEmpleado) {
 
         document.getElementById('numero_empleado').textContent = data[0].numeroEmpleado;
 
-        document.getElementById('nombreUsuario').textContent = data[0].nombreUsuario;
+        //document.getElementById('nombreUsuario').textContent = data[0].nombreUsuario;
 
         document.getElementById('rfc_empleado').textContent = data[0].rfc;
 
@@ -71,7 +71,7 @@ async function obtenerEmpleado(numeroEmpleado) {
         document.getElementById('nombrePuesto').textContent = data[0].nombrePuesto;
         document.getElementById('nombrePuesto').value = data[0].fkPuesto;
 
-        document.getElementById('funciones').textContent = data[0].funciones;
+        //document.getElementById('funciones').textContent = data[0].funciones;
 
         document.getElementById('uniforme').textContent = data[0].uniforme;
         document.getElementById('uniforme').value = data[0].pkUniformeEmpleado + "-"+ data[0].tallaUniforme + "-"+data[0].pzasUniforme;
@@ -87,6 +87,8 @@ async function obtenerEmpleado(numeroEmpleado) {
         document.getElementById('nombre_nivel').value = data[0].fkNivelEstudio;
 
         document.getElementById('estado_empleado').textContent = data[0].estado;
+
+        document.getElementById('idRelojChecador_empleado').textContent = data[0].idRelojChecador;
 
         
         function calcularAntiguedadCompleta(fechaInicio) {
@@ -983,7 +985,7 @@ function armarFormulario() {
     const camposAVaciar = [
         'nombreEmpleado', 'fechaIngreso', 'nomina', 'vale', 'puesto_menu', 'rfc', 
         'fechaNacimiento', 'talla_menu', 'pzasUniforme', 'niveles_menu', 'estado', 
-        'ciudad_menu', 'estado_menu', 'pais_menu'
+        'ciudad_menu', 'estado_menu', 'pais_menu', 'idRelojChecador'
     ];
     camposAVaciar.forEach(limpiarCampo);
     
@@ -1010,6 +1012,7 @@ function armarFormulario() {
 
     asignarValor('nombreEmpleado', 'nombre_empleado');
     asignarValor('rfc', 'rfc_empleado');
+    asignarValor('idRelojChecador','idRelojChecador_empleado');
     asignarValor('puesto_menu', 'nombrePuesto', true); // Ahora obtiene el "value"
     asignarValor('niveles_menu', 'nombre_nivel', true); // Ahora obtiene el "value"
 
@@ -1138,6 +1141,8 @@ async function agregarInfoComplementaria() {
 
         const fechaNacimiento = document.getElementById('fechaNacimiento').value;
 
+        const idRelojChecador = document.getElementById('idRelojChecador').value;
+
         const pkNumerosEmergencia = document.getElementById('numeros').value;
 
         const numeroEmergencia_menu = document.getElementById('numeroEmergencia_menu');
@@ -1201,7 +1206,7 @@ async function agregarInfoComplementaria() {
         const response = await fetch('/api/empleados/infoEmpleado', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ nombreEmpleado, fechaIngreso, nomina, vale, fkPuesto, state, numeroEmpleado, rfc, fechaNacimiento, pkNumerosEmergencia, numerosSeleccionados, pkUniformeEmpleado, pkUniformeEmpleado, tallaUniforme, pzasUniforme, fkNivelEstudio, fkUbicacion, puebloCiudad, estado, pais })
+            body: JSON.stringify({ nombreEmpleado, fechaIngreso, idRelojChecador, nomina, vale, fkPuesto, state, numeroEmpleado, rfc, fechaNacimiento, pkNumerosEmergencia, numerosSeleccionados, pkUniformeEmpleado, pkUniformeEmpleado, tallaUniforme, pzasUniforme, fkNivelEstudio, fkUbicacion, puebloCiudad, estado, pais })
         });
         const data = await response.json();
 

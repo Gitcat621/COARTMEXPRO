@@ -82,12 +82,12 @@ class Empleado:
             e.fechaNacimiento,
             e.nomina,
             e.vale,
+            e.idRelojChecador,
             p.nombrePuesto,
             d.nombreDepartamento,
             ne.nombreNivel,
             CONCAT(pc.nombrePuebloCiudad, ', ', es.nombreEstado, ', ',pa.nombrePais) AS ubicacion,
             e.estado,
-            us.nombreUsuario,
             GROUP_CONCAT(DISTINCT fp.descripcionFuncion SEPARATOR ', ') AS funciones,
             CONCAT_WS('', 'talla ', ue.tallaUniforme, ', ', ue.pzasUniforme, ' pzas') AS uniforme,
             GROUP_CONCAT(DISTINCT nue.numeroEmergencia SEPARATOR '-') AS numeros,
@@ -111,7 +111,6 @@ class Empleado:
         LEFT JOIN municipios m ON m.pkMunicipio = u.fkMunicipio 
         LEFT JOIN estados es ON es.pkEstado = u.fkEstado 
         LEFT JOIN paises pa ON pa.pkPais = u.fkPais
-        LEFT JOIN usuarios us ON us.fkEmpleado = e.numeroEmpleado
         LEFT JOIN funciones_puesto fp ON fp.fkPuesto = p.pkPuesto
         LEFT JOIN uniformes_empleados ue ON ue.fkEmpleado = e.numeroEmpleado
         LEFT JOIN numeros_emergencia nue ON nue.fkEmpleado = e.numeroEmpleado
@@ -271,7 +270,7 @@ class Empleado:
             db.close()
 
     @staticmethod
-    def agregar_info_empleado(nombreEmpleado, fechaIngreso, nomina, vale, fkPuesto, state, numeroEmpleado, rfc, fechaNacimiento, pkNumerosEmergencia, 
+    def agregar_info_empleado(nombreEmpleado, fechaIngreso, idRelojChecador, nomina, vale, fkPuesto, state, numeroEmpleado, rfc, fechaNacimiento, pkNumerosEmergencia, 
                         numerosEmergencia, pkUniformeEmpleado, tallaUniforme, pzasUniforme, fkNivelEstudio, fkUbicacion, puebloCiudad, estado, pais):
     
         db = Database()
@@ -350,8 +349,8 @@ class Empleado:
                 db.cursor.execute('UPDATE ubicaciones set fkPuebloCiudad = %s, fkEstado = %s, fkPais =%s WHERE pkUbicacion = %s', (puebloCiudad, estado, pais, fkUbicacion))
                 
             # --- Actualizar empleado ---
-            consultaEmpleado = "UPDATE empleados SET nombreEmpleado = %s, fechaIngreso = %s, nomina = %s, vale = %s, fkPuesto = %s, estado = %s,rfc = %s, fechaNacimiento = %s, fkNivelEstudio = %s, fkUbicacion = %s WHERE numeroEmpleado = %s"
-            valoresEmpleado = (nombreEmpleado, fechaIngreso, nomina, vale, fkPuesto, state, rfc, fechaNacimiento, fkNivelEstudio, fkUbicacion, numeroEmpleado)
+            consultaEmpleado = "UPDATE empleados SET nombreEmpleado = %s, fechaIngreso = %s, idRelojChecador = %s, nomina = %s, vale = %s, fkPuesto = %s, estado = %s,rfc = %s, fechaNacimiento = %s, fkNivelEstudio = %s, fkUbicacion = %s WHERE numeroEmpleado = %s"
+            valoresEmpleado = (nombreEmpleado, fechaIngreso, idRelojChecador,nomina, vale, fkPuesto, state, rfc, fechaNacimiento, fkNivelEstudio, fkUbicacion, numeroEmpleado)
             db.cursor.execute(consultaEmpleado, valoresEmpleado)
 
             # ✅ Confirmar transacción

@@ -2,6 +2,7 @@ import subprocess
 import os
 
 # Ruta al archivo que contiene tu app Flask
+# app_path = "run.py"  # Cambia si tu archivo se llama diferente
 app_path = "app.py"  # Cambia si tu archivo se llama diferente
 
 # Comando para abrir una nueva ventana de cmd y ejecutar el script

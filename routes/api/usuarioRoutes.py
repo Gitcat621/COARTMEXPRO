@@ -26,7 +26,6 @@ def iniciar_sesion():
     if usuario.iniciar_sesion():
         session['usuario'] = usuario.nombreUsuario
         session['departamento'] = usuario.nombreDepartamento
-        session['empleado'] = usuario.fkEmpleado 
         return jsonify({"mensaje": "Login exitoso"}), 200
     else:
         return jsonify({"mensaje": "Credenciales inválidas"}), 401
@@ -37,12 +36,12 @@ def crear_usuario():
     data = request.json
     nombreUsuario = data.get('nombreUsuario')
     contrasena = data.get('contrasena')
-    fkEmpleado = data.get('fkEmpleado') 
+    fkDepartamento = data.get('fkDepartamento') 
 
     if not nombreUsuario or not contrasena:
         return jsonify({'mensaje': 'Faltan datos'}), 400
     
-    usuario = Usuario(nombreUsuario=nombreUsuario, contrasena=contrasena, fkEmpleado=fkEmpleado)
+    usuario = Usuario(nombreUsuario=nombreUsuario, contrasena=contrasena, fkDepartamento=fkDepartamento)
     if usuario.crear_usuario():
         return jsonify({'mensaje': 'Usuario insertado correctamente'}), 201
     else:
@@ -56,7 +55,7 @@ def editar_usuario():
         pkUsuario = int(data.get('pkUsuario')) 
         nombreUsuario = data.get('nombreUsuario')
         contrasena = data.get('contrasena')
-        fkEmpleado = data.get('fkEmpleado') 
+        fkDepartamento = data.get('fkDepartamento') 
 
         # Validación de ID (debe ser un número entero)
         if not isinstance(pkUsuario, int):
@@ -69,12 +68,12 @@ def editar_usuario():
         if not contrasena or not contrasena.strip():
             return jsonify({'mensaje': 'La contraseña es obligatorio'}), 400
 
-        if not fkEmpleado or not fkEmpleado.strip():
+        if not fkDepartamento or not fkDepartamento.strip():
             return jsonify({'mensaje': 'El ID del empleado es obligatorio'}), 400
         
         # Llamar al controlador para actualizar el usuario
         
-        usuario = Usuario(pkUsuario=pkUsuario, nombreUsuario=nombreUsuario, contrasena=contrasena, fkEmpleado=fkEmpleado)
+        usuario = Usuario(pkUsuario=pkUsuario, nombreUsuario=nombreUsuario, contrasena=contrasena, fkDepartamento=fkDepartamento)
         if usuario.editar_usuario():
             return jsonify({'mensaje': 'Usuario editado correctamente'}), 200
         else:

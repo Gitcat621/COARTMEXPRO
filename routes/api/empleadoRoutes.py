@@ -120,6 +120,7 @@ def agregar_info_empleado():
     fkPuesto = data.get('fkPuesto')
     state = data.get('state')
     
+    idRelojChecador = data.get('idRelojChecador')
     nomina = data.get('nomina')
     vale = data.get('vale')
     numeroEmpleado = data.get('numeroEmpleado')
@@ -164,7 +165,7 @@ def agregar_info_empleado():
     # if not nombreEmpleado or not fechaIngreso or not nomina or not vale or not fkPuesto or not state or not numeroEmpleado or not rfc or not fechaNacimiento or not numerosEmergencia or not tallaUniforme or not pzasUniforme or not fkNivelEstudio or not puebloCiudad or not estado or not pais:
     #     return jsonify({'mensaje': 'Faltan datos'}), 400
     
-    if Empleado.agregar_info_empleado(nombreEmpleado,fechaIngreso,nomina,vale,fkPuesto,state,numeroEmpleado,rfc,fechaNacimiento, pkNumerosEmergencia, numerosEmergencia, pkUniformeEmpleado,tallaUniforme,pzasUniforme,fkNivelEstudio,fkUbicacion,puebloCiudad,estado,pais):
+    if Empleado.agregar_info_empleado(nombreEmpleado,fechaIngreso,idRelojChecador,nomina,vale,fkPuesto,state,numeroEmpleado,rfc,fechaNacimiento, pkNumerosEmergencia, numerosEmergencia, pkUniformeEmpleado,tallaUniforme,pzasUniforme,fkNivelEstudio,fkUbicacion,puebloCiudad,estado,pais):
         return jsonify({'mensaje': 'Empleado actualizado correctamente'}), 200
     else:
         return jsonify({'mensaje': 'Error al actualizar la informacion del empleado'}), 500

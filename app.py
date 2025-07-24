@@ -67,7 +67,6 @@ from routes.web.administracionContable import web_administracionContable
 
 
 app = Flask(__name__)
-app.secret_key = '6212'  # ⚠️ Usa una variable de entorno en producción
 
 @app.context_processor
 def inject_user_data():
@@ -171,6 +170,25 @@ def pagina_no_encontrada(error):
     return render_template('notFound.html'), 404
 
 load_dotenv() 
+
+app.secret_key = os.getenv("SECRET_KEY", "dev_key")
+
+# if not app.debug:
+#     import logging
+#     from logging.handlers import RotatingFileHandler
+
+#     if not os.path.exists('logs'):
+#         os.mkdir('logs')
+
+#     file_handler = RotatingFileHandler('logs/error.log', maxBytes=10240, backupCount=5)
+#     file_handler.setLevel(logging.ERROR)
+#     file_handler.setFormatter(logging.Formatter(
+#         '%(asctime)s %(levelname)s: %(message)s [en %(pathname)s:%(lineno)d]'
+#     ))
+#     app.logger.addHandler(file_handler)
+
+#     app.logger.setLevel(logging.INFO)
+#     app.logger.info('App iniciada en producción.')
 
 if __name__ == '__main__':
     app.run(debug=True, host=os.getenv("FLASK_HOST"), port=int(os.getenv("FLASK_PORT")))

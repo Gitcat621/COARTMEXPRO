@@ -81,10 +81,18 @@ async function listarDepartamentos() {
         });
 
         const data = await response.json();
-        let tabla = $('#departamentoTable').DataTable();
 
-        tabla.clear().draw();
-        tabla.rows.add(data.map(depa => [depa.nombreDepartamento, depa.pkDepartamento])).draw();
+        try{
+            
+            let tabla = $('#departamentoTable').DataTable();
+
+            tabla.clear().draw();
+            tabla.rows.add(data.map(depa => [depa.nombreDepartamento, depa.pkDepartamento])).draw();
+
+        }catch{
+            console.log('no existe este tabla para: Departamentos');
+        }
+
 
         try{
             
@@ -101,7 +109,7 @@ async function listarDepartamentos() {
             });
 
         }catch{
-            console.log('no existe este elemento: Departamentos');
+            console.log('no existe menu para: Departamentos');
         }
         
     } catch (error) {
