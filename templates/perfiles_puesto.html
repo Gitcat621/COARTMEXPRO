@@ -2,11 +2,21 @@
 
 {% block title %}Perfiles de puestos{% endblock %}
 
-{% block NavBar %}Puestos y perfil{% endblock %}
-
 {% block content %}
 
 <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> -->
+<div class="fixed-navbar">
+	<div class="pull-left">
+		<button type="button" class="menu-mobile-button glyphicon glyphicon-menu-hamburger js__menu_mobile"></button>
+		<h1 class="page-title">Puestos y perfil</h1>
+		<!-- /.page-title -->
+	</div>
+	<!-- /.pull-left -->
+	<div class="pull-right">
+		<a id="cerrarSesion" class="ico-item fa fa-power-off logout"></a>
+	</div>
+	<!-- /.pull-right -->
+</div>
 
 <div id="wrapper">
 	<div class="main-content">

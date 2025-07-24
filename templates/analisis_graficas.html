@@ -2,14 +2,24 @@
 
 {% block title %}Análisis con graficas{% endblock %}
 
-{% block NavBar %}Análisis con graficas{% endblock %}
-
 {% block content %}
+<div class="fixed-navbar">
+	<div class="pull-left">
+		<button type="button" class="menu-mobile-button glyphicon glyphicon-menu-hamburger js__menu_mobile"></button>
+		<h1 class="page-title">Análisis con graficas</h1>
+		<!-- /.page-title -->
+	</div>
+	<!-- /.pull-left -->
+	<div class="pull-right">
+		<a id="cerrarSesion" class="ico-item fa fa-power-off logout"></a>
+	</div>
+	<!-- /.pull-right -->
+</div>
 
 <div id="wrapper">
 	<div class="main-content">
 		<div class="row small-spacing">
-
+			<!-- CHECKBOXES -->
 			<div class="col-xs-12">
 				<div class="box-content">
 					<h4 class="box-title">Filtro por meses</h4>
@@ -31,7 +41,7 @@
 								<div class="col-md-1 col-xs-3"><div class="checkbox"><input value="12" type="checkbox" id="checkbox-12"><label for="checkbox-12">Dic</label></div></div>
 							</div>
 
-							<div class="col-sm-offset-3 margin-top-2 margin-left-2" >
+							<div class="scroll-horizontal col-xs-12 col-sm-offset-3 margin-top-2 margin-left-2" >
 								<ul class="list-inline">
 									<li>
 										<select class="form-control" id="grupoSocio_menu"></select>

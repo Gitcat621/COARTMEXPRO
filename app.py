@@ -26,7 +26,7 @@ from routes.api.permisoRoutes import api_permisos
 from routes.api.prestamoRoutes import api_prestamos
 from routes.api.empleadoRoutes import api_empleados
 from routes.api.asistenciaRoutes import api_asistencias
-from routes.api.ReportesRelojChecadorRoutes import api_reportesRelojChecador
+from routes.api.reportesRelojChecadorRoutes import api_reportesRelojChecador
 from routes.api.funcionPuestoRoutes import api_funcionesPuesto
 from routes.api.departamentoRoutes import api_departamentos
 from routes.api.zonaRutaRoutes import api_zonasRuta

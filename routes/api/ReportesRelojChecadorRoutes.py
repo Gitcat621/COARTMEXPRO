@@ -258,7 +258,8 @@ def crear_archivo():
             os.remove(ruta_archivo)
             return jsonify({'mensaje': 'Error al procesar el archivo', 'detalles': mensajes}), 500
         elif any("🛑" in m for m in mensajes):
-            return jsonify({'mensaje': 'El archivo fue procesado con errores.', 'detalles': mensajes}), 200
+            os.remove(ruta_archivo)
+            return jsonify({'mensaje': 'Error al procesar el archivo', 'detalles': mensajes}), 500
         else:
             return jsonify({'mensaje': 'Archivo procesado correctamente.', 'detalles': mensajes}), 201
 

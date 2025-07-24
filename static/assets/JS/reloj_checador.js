@@ -1,20 +1,6 @@
 $(document).ready(function () {
 
-    listarArchivos();
-    
-});
-
-//Asignar funcion al boton de abrir modal
-$("#modalAgregar").click(function() {
-    abrirModal(1);
-});
-
-$(document).ready(function() {
     $('#miDropify').dropify();
-});
-
-//Inicializar datatable
-$(document).ready(function() {
 
     $('#relojTable').DataTable({
         columns: [
@@ -66,8 +52,14 @@ $(document).ready(function() {
         
     });
 
+    listarArchivos();
+    
 });
 
+//Asignar funcion al boton de abrir modal
+$("#modalAgregar").click(function() {
+    abrirModal(1);
+});
 
 // Función para validar archivo antes de enviarlo
 function validarArchivo() {

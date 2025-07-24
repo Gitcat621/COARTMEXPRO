@@ -1,6 +1,6 @@
 $(document).ready(function () {
 
-     $('#grupoTable').DataTable({
+    $('#grupoTable').DataTable({
         autoWidth: false,
         columns: [
             { title: "Nombre del grupo", width: "70%" },

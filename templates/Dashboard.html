@@ -47,6 +47,9 @@
 	<!-- Chartist Chart -->
 	<link rel="stylesheet" href="{{ url_for('static', filename='assets/plugin/chart/chartist/chartist.min.css') }}">
 
+	<!-- Morris Chart -->
+	<link rel="stylesheet" href="{{ url_for('static', filename='assets/plugin/chart/morris/morris.css') }}">
+
 	<!-- Dropify -->
 	<link rel="stylesheet" href="{{ url_for('static', filename='assets/plugin/dropify/css/dropify.min.css') }}">
 
@@ -69,7 +72,7 @@
 		<a href="/web/bienvenida" class="logo">COARTMEX-PRO</a>
 		<button type="button" class="button-close fa fa-times js__menu_close"></button>
 		<div class="user">
-			<a href="#" class="avatar"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTomPrJLgLq4aZpXJJhxQ5HjtOgBguGXzsJw&s" alt=""><span class="status online"></span></a>
+			<a href="#" class="avatar"><img src="{{ url_for('static', filename='assets/images/logoCircular.png') }}" alt=""><span class="status online"></span></a>
 			<h5 class="name"><a id="usuario" href="#">{{ usuario }}</a></h5>
 			<h5 class="position" id="departamento">{{ departamento }}</h5>
 			<!-- /.name -->
@@ -155,20 +158,6 @@
 		<!-- /.navigation -->
 	</div>
 	<!-- /.content -->
-	 
-	<div class="fixed-navbar">
-		<div class="pull-left">
-			<button type="button" class="menu-mobile-button glyphicon glyphicon-menu-hamburger js__menu_mobile"></button>
-			<h1 class="page-title">{% block NavBar %}Dashboard{% endblock %}</h1>
-			<!-- /.page-title -->
-		</div>
-		<!-- /.pull-left -->
-		<div class="pull-right">
-			<a id="cerrarSesion" class="ico-item fa fa-power-off logout"></a>
-		</div>
-		<!-- /.pull-right -->
-	</div>
-<!-- /.fixed-navbar -->
 </div>
 <!-- Contenedor donde se cargan las vistas AJAX -->
 <div id="contenido">

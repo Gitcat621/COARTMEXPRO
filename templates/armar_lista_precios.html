@@ -1,12 +1,14 @@
 {% extends "Dashboard.html" %}
 
-{% block title %}Armar la lista de precios{% endblock %}
+{% block title %}Lista de precios{% endblock %}
+
+{% block NavBar %}Lista de precios{% endblock %}
 
 {% block content %}
 <div class="fixed-navbar">
 	<div class="pull-left">
 		<button type="button" class="menu-mobile-button glyphicon glyphicon-menu-hamburger js__menu_mobile"></button>
-		<h1 class="page-title">Lista de precios</h1>
+		<h1 class="page-title">Asignar lista de precios</h1>
 		<!-- /.page-title -->
 	</div>
 	<!-- /.pull-left -->
@@ -24,16 +26,13 @@
 
                 <!-- Socios / Tiendas -->
 				<div class="box-content">
-					<h4 class="box-title">Ver la lista de precios</h4>
+					<h4 class="box-title">Asignar lista de precios</h4>
 					<!-- /.box-title -->
 					<h3><span id="nombreGrupo">grupo -</span><span id="nombreTienda"> tienda</span></h3>
+					<button type="button" class="btn btn-primary btn-xs waves-effect waves-light margin-bottom-20"  id="agregarListaPrecios"><i class="fa fa-check"></i> Guardar</button>
+                    <div class="switch warning"><input type="checkbox" id="switch-1"><label for="switch-1">Aplicar a todo el grupo</label></div>
 
-					<button type="button" class="btn btn-success btn-xs waves-effect waves-light margin-bottom-20"  id="agregarListaPrecios"><i class="fa fa-plus"></i> Agregar articulos</button>
-
-					<div class="table-responsive">
-						<table id="VerlistaPrecioTable" class="table table-small-font table-hover table-bordered display" style="width:100%"></table>
-					</div>
-										
+					<table id="listaPrecioTable" class="table table-small-font table-hover table-bordered display" style="width:100%"></table>					
 					
 				</div>
 				<!-- /.box-content -->
@@ -48,7 +47,7 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="{{ url_for('static', filename='assets/JS/lista_precios.js') }}"></script>
+<script src="{{ url_for('static', filename='assets/JS/armar_lista_precios.js') }}"></script>
 
 {% endblock %}
 

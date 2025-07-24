@@ -139,14 +139,15 @@ function armarCajas(data){
                             <i class="fa fa-trash"></i>
                         </button> 
                     </h3>
-                    <table id="${tablaId}" class="table table-small-font table-hover table-bordered display" style="width:100%">
-                        <thead>
-                            <tr>
-                                <th>Articulo</th>
-                                <th style="width: 20%;" class='text-center'>Cantidad</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                    <div class="table-responsive">
+                        <table id="${tablaId}" class="table table-small-font table-hover table-bordered display" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Articulo</th>
+                                    <th style="width: 20%;" class='text-center'>Cantidad</th>
+                                </tr>
+                            </thead>
+                            <tbody>
             `;
 
             articulos.forEach(a => {
@@ -159,8 +160,9 @@ function armarCajas(data){
             });
 
             tablaHTML += `
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             `;
 

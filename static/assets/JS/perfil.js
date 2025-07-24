@@ -774,7 +774,16 @@ async function obtenerAsistenciaReunionesIntegracionEmpleado(numeroEmpleado) {
 
 function toformatearFecha(fechaString) {
     const fecha = new Date(fechaString);
-    return fecha.toLocaleDateString('es-ES', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' });
+    const fechaFormateada = fecha.toLocaleDateString('es-MX', {
+        weekday: 'long',
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric',
+        timeZone: 'UTC'
+    });
+
+    // Capitalizar primera letra del resultado
+    return fechaFormateada.charAt(0).toUpperCase() + fechaFormateada.slice(1);
 }
 
 
@@ -968,7 +977,7 @@ function armarFormulario() {
     // Vaciar todos los campos antes de asignar valores
     const limpiarCampo = (id) => {
         const elemento = document.getElementById(id);
-        if (elemento) elemento.value = "";
+        if (elemento) elemento.value = '';
     };
 
     const camposAVaciar = [
@@ -977,6 +986,7 @@ function armarFormulario() {
         'ciudad_menu', 'estado_menu', 'pais_menu'
     ];
     camposAVaciar.forEach(limpiarCampo);
+    
 
     // Vaciar selects múltiples
     const limpiarSelect = (id) => {
@@ -992,6 +1002,7 @@ function armarFormulario() {
         if (elementoOrigen) {
             const valor = esValor ? elementoOrigen.value : elementoOrigen.textContent.trim();
             if (valor) {
+                //alert('se agrego el valor ' + valor + " a " + idDestino);
                 document.getElementById(idDestino).value = valor;
             }
         }
@@ -1002,14 +1013,22 @@ function armarFormulario() {
     asignarValor('puesto_menu', 'nombrePuesto', true); // Ahora obtiene el "value"
     asignarValor('niveles_menu', 'nombre_nivel', true); // Ahora obtiene el "value"
 
-    // Formatear fechas
     const formatearFecha = (idDestino, idOrigen) => {
         const elementoOrigen = document.getElementById(idOrigen);
-        if (elementoOrigen && elementoOrigen.value) {
-            const fecha = new Date(elementoOrigen.value);
-            document.getElementById(idDestino).value = fecha.toISOString().split("T")[0];
+        const destino = document.getElementById(idDestino);
+
+        if (elementoOrigen && destino) {
+            const valor = elementoOrigen.value;
+            const fecha = new Date(valor);
+
+            if (!isNaN(fecha.getTime())) {
+                destino.value = fecha.toISOString().split("T")[0];
+            } else {
+                destino.value = ''; // ❌ No es una fecha válida
+            }
         }
     };
+
 
     formatearFecha('fechaIngreso', 'fecha_ingreso');
     formatearFecha('fechaNacimiento', 'fecha_nacimiento');
@@ -1051,7 +1070,7 @@ function armarFormulario() {
     const uniforme = document.getElementById('uniforme')?.value;
     if (uniforme) {
         const partes_uniforme = uniforme.split("-");
-        const talla = partes_uniforme[1] === 'PEQUEÑA' ? 1 : partes_uniforme[1] === 'MEDIANA' ? 2 : 3;
+        const talla = partes_uniforme[1] === 'PEQUEÑA' ? 3 : partes_uniforme[1] === 'MEDIANA' ? 2 : partes_uniforme[1] === 'MEDIANA' ? 1 : null;
         document.getElementById('talla_menu').value = talla;
         document.getElementById('pzasUniforme').value = partes_uniforme[2];
     }
@@ -1083,6 +1102,7 @@ function armarFormulario() {
 
     // Procesar estado del empleado
     const estadoEmpleado = document.getElementById('estado_empleado')?.textContent;
+
     if (estadoEmpleado) {
         document.getElementById('estado').value = estadoEmpleado === 'Activo' ? 1 : 2;
     }
@@ -1114,7 +1134,7 @@ async function agregarInfoComplementaria() {
         
         /////////////////////////////////////////////////////////////
 
-        const rfc = document.getElementById('rfc').value;
+        let rfc = document.getElementById('rfc').value;
 
         const fechaNacimiento = document.getElementById('fechaNacimiento').value;
 
@@ -1132,7 +1152,7 @@ async function agregarInfoComplementaria() {
 
         const pzasUniforme = document.getElementById('pzasUniforme').value;
 
-        const fkNivelEstudio = document.getElementById('niveles_menu').value;
+        var fkNivelEstudio = document.getElementById('niveles_menu').value;
 
         var fkUbicacion = document.getElementById('ubicacion').value;
         fkUbicacion = fkUbicacion.split('-');
@@ -1170,9 +1190,11 @@ async function agregarInfoComplementaria() {
         estado = estadoSeleccionada[0];
         pais = paisSeleccionado[0];
 
+        if(fkNivelEstudio === '')
+            fkNivelEstudio = null;
 
-        if (!nombreEmpleado || !fechaIngreso || !nomina || !vale || !fkPuesto || !state || !numeroEmpleado || !rfc || !fechaNacimiento || !numerosSeleccionados || !tallaUniforme || !pzasUniforme || !fkNivelEstudio || !puebloCiudad || !estado || !pais) {
-            toastr.warning('Por favor completa todos los campos', 'Advertencia', {"closeButton": true});
+        if (!nombreEmpleado || !fechaIngreso  || !fkPuesto) {
+            toastr.warning('Por favor completa todos los campos obligatorios *', 'Advertencia', {"closeButton": true});
             return;
         }
 

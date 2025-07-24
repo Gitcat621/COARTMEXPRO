@@ -6,7 +6,7 @@ web_administracionCF = Blueprint('web_administracionCF', __name__)
 
 #RUTAS TEMPLATES
 @web_administracionCF.route("/subir_reporte_metricas")
-@rol_requerido('Sistemas', 'Administrador')
+@rol_requerido('ADMINISTRACION CONTABLE Y FISCAL', 'DIRECCION GENERAL')
 def analisis():
     if 'usuario' not in session:
         return redirect('/')

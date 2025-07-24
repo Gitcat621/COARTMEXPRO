@@ -6,7 +6,7 @@ web_administracionContable = Blueprint('web_administracionContable', __name__)
 
 #RUTAS TEMPLATES
 @web_administracionContable.route("/rutas_entrega")
-@rol_requerido('Sistemas', 'Administrador')
+@rol_requerido('ADMINISTRACION CONTABLE', 'DIRECCION GENERAL')
 def rutasEntrega():
     if 'usuario' not in session:
         return redirect('/')
@@ -14,7 +14,7 @@ def rutasEntrega():
     return render_template("rutas_entrega.html")
 
 @web_administracionContable.route("/cuentas_por_cobrar")
-@rol_requerido('Sistemas', 'Administrador')
+@rol_requerido('ADMINISTRACION CONTABLE', 'DIRECCION GENERAL')
 def cxc():
     if 'usuario' not in session:
         return redirect('/')
@@ -22,7 +22,7 @@ def cxc():
     return render_template("cuentas_por_cobrar.html")
 
 @web_administracionContable.route("/cuentas_por_pagar")
-@rol_requerido('Sistemas', 'Administrador')
+@rol_requerido('ADMINISTRACION CONTABLE', 'DIRECCION GENERAL')
 def cxp():
     if 'usuario' not in session:
         return redirect('/')
@@ -30,7 +30,7 @@ def cxp():
     return render_template("cuentas_por_pagar.html")
 
 @web_administracionContable.route("/constancia_situacion_fiscal")
-@rol_requerido('Sistemas', 'Administrador')
+@rol_requerido('ADMINISTRACION CONTABLE', 'DIRECCION GENERAL')
 def csf():
     if 'usuario' not in session:
         return redirect('/')

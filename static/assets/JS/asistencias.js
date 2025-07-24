@@ -1,16 +1,5 @@
 document.getElementById('busqueda').addEventListener('click', () => {
 
-    
-    listarAsistencia();
-    listarResumenAsistencia();
-    obtenerObservacion();
-
-});
-
-
-//Inicializar datatable
-$(document).ready(function() {
-
     $('#asistenciaTable').DataTable({
         columns: [
             { title: "Nombre" },
@@ -18,7 +7,12 @@ $(document).ready(function() {
         ],
     });
 
+    listarAsistencia();
+    listarResumenAsistencia();
+    obtenerObservacion();
+
 });
+
 
 async function listarResumenAsistencia(){
     try {
@@ -85,7 +79,6 @@ async function listarResumenAsistencia(){
     }
 }
 
-
 async function listarAsistencia() {
     try {
 
@@ -124,8 +117,6 @@ async function listarAsistencia() {
         toastr.error('No se pueden obtener las asistencias', 'Error', {"closeButton": true,});
     }
 }
-
-
 
 function renderizarTablaAsistenciaDataTable(data) {
     const empleados = {};
@@ -245,8 +236,6 @@ function renderizarTablaAsistenciaDataTable(data) {
     });
 
 }
-
-
 
 function actualizarPeriodo(data) {
     if (data.length === 0) {

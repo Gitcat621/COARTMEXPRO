@@ -2,9 +2,20 @@
 
 {% block title %}Análisis comparativo por mes{% endblock %}
 
-{% block NavBar %}Análisis comparativo por mes{% endblock %}
-
 {% block content %}
+<div class="fixed-navbar">
+	<div class="pull-left">
+		<button type="button" class="menu-mobile-button glyphicon glyphicon-menu-hamburger js__menu_mobile"></button>
+		<h1 class="page-title">Análisis comp. por mes</h1>
+		<!-- /.page-title -->
+	</div>
+	<!-- /.pull-left -->
+	<div class="pull-right">
+		<a id="cerrarSesion" class="ico-item fa fa-power-off logout"></a>
+	</div>
+	<!-- /.pull-right -->
+</div>
+
 <div id="wrapper">
 	<div class="main-content">
 		<div class="row small-spacing">
@@ -37,7 +48,7 @@
 			<!-- /.col-lg-4 col-xs-12 -->
 
 			<!-- VENTAS -->
-			<div class="col-lg-4 col-xs-4">
+			<div class="col-lg-4 col-xs-12">
 				<div class="box-content">
 					<h4 class="text-center box-title text-info">Ventas <span class="mes1"></span></h4>
 					<!-- /.box-title -->
@@ -50,7 +61,7 @@
 				<!-- /.box-content -->
 			</div>
 
-			<div class="col-lg-4 col-xs-4">
+			<div class="col-lg-4 col-xs-12">
 				<div class="box-content">
 					<h4 class="text-center box-title text-info">Diferencia</h4>
 					<!-- /.box-title -->
@@ -72,7 +83,7 @@
 				<!-- /.box-content -->
 			</div>
 
-			<div class="col-lg-4 col-xs-4">
+			<div class="col-lg-4 col-xs-12">
 				<div class="box-content">
 					<h4 class="text-center box-title text-info">Ventas <span class="mes2"></span></h4>
 					<!-- /.box-title -->
@@ -85,10 +96,14 @@
 				</div>
 				<!-- /.box-content -->
 			</div>
+
+			<div class="col-lg-12 col-xs-12">
+				<div class="linea-separadora"></div>
+			</div>
 			<!-- /.col-lg-4 col-xs-12 -->
 
 			<!-- CRECIMIENTO -->
-			<div class="col-lg-4 col-xs-4">
+			<div class="col-lg-4 col-xs-12">
 				<div class="box-content">
 					<h4 class="text-center box-title text-info">Crecimiento vs <span id="lastYear1"></span></h4>
 					<!-- /.box-title -->
@@ -101,7 +116,7 @@
 				<!-- /.box-content -->
 			</div>
 
-			<div class="col-lg-4 col-xs-4">
+			<div class="col-lg-4 col-xs-12">
 				<div class="box-content">
 					<h4 class="text-center box-title text-info">Diferencia</h4>
 					<!-- /.box-title -->
@@ -118,7 +133,7 @@
 				<!-- /.box-content -->
 			</div>
 
-			<div class="col-lg-4 col-xs-4">
+			<div class="col-lg-4 col-xs-12">
 				<div class="box-content">
 					<h4 class="text-center box-title text-info">Crecimiento vs <span id="lastYear2"></span></h4>
 					<!-- /.box-title -->
@@ -130,10 +145,14 @@
 				</div>
 				<!-- /.box-content -->
 			</div>
+
+			<div class="col-lg-12 col-xs-12">
+				<div class="linea-separadora"></div>
+			</div>
 			<!-- /.col-lg-4 col-xs-12 -->
 
 			<!-- INGRESOS -->
-			<div class="col-lg-4 col-xs-4">
+			<div class="col-lg-4 col-xs-12">
 				<div class="box-content">
 					<h4 class="text-center box-title text-info">Ingresos <span class="mes1"></span></h4>
 					<!-- /.box-title -->
@@ -146,7 +165,7 @@
 				<!-- /.box-content -->
 			</div>
 
-			<div class="col-lg-4 col-xs-4">
+			<div class="col-lg-4 col-xs-12">
 				<div class="box-content">
 					<h4 class="text-center box-title text-info">Diferencia</h4>
 					<!-- /.box-title -->
@@ -163,7 +182,7 @@
 				<!-- /.box-content -->
 			</div>
 
-			<div class="col-lg-4 col-xs-4">
+			<div class="col-lg-4 col-xs-12">
 				<div class="box-content">
 					<h4 class="text-center box-title text-info">Ingresos <span class="mes2"></span></h4>
 					<!-- /.box-title -->
@@ -175,10 +194,14 @@
 				</div>
 				<!-- /.box-content -->
 			</div>
+
+			<div class="col-lg-12 col-xs-12">
+				<div class="linea-separadora"></div>
+			</div>
 			<!-- /.col-lg-4 col-xs-12 -->
 
 			<!-- EGRESOS -->
-			<div class="col-lg-4 col-xs-4">
+			<div class="col-lg-4 col-xs-12">
 				<div class="box-content">
 					<h4 class="text-center box-title text-info">Egresos <span class="mes1"></span></h4>
 					<!-- /.box-title -->
@@ -191,7 +214,7 @@
 				<!-- /.box-content -->
 			</div>
 
-			<div class="col-lg-4 col-xs-4">
+			<div class="col-lg-4 col-xs-12">
 				<div class="box-content">
 					<h4 class="text-center box-title text-info">Diferencia</h4>
 					<!-- /.box-title -->
@@ -208,7 +231,7 @@
 				<!-- /.box-content -->
 			</div>
 
-			<div class="col-lg-4 col-xs-4">
+			<div class="col-lg-4 col-xs-12">
 				<div class="box-content">
 					<h4 class="text-center box-title text-info">Egresos <span class="mes2"></span></h4>
 					<!-- /.box-title -->
@@ -222,10 +245,14 @@
 				</div>
 				<!-- /.box-content -->
 			</div>
+
+			<div class="col-lg-12 col-xs-12">
+				<div class="linea-separadora"></div>
+			</div>
 			<!-- /.col-lg-4 col-xs-12 -->
 
 			<!-- FLUJO DISPONIBLE -->
-			<div class="col-lg-4 col-xs-4">
+			<div class="col-lg-4 col-xs-12">
 				<div class="box-content">
 					<h4 class="text-center box-title text-info">Efectivo disponible <span class="mes1"></span></h4>
 					<!-- /.box-title -->
@@ -239,7 +266,7 @@
 				<!-- /.box-content -->
 			</div>
 
-			<div class="col-lg-4 col-xs-4">
+			<div class="col-lg-4 col-xs-12">
 				<div class="box-content">
 					<h4 class="text-center box-title text-info">Diferencia</h4>
 					<!-- /.box-title -->
@@ -256,7 +283,7 @@
 				<!-- /.box-content -->
 			</div>
 
-			<div class="col-lg-4 col-xs-4">
+			<div class="col-lg-4 col-xs-12">
 				<div class="box-content">
 					<h4 class="text-center box-title text-info">Efectivo disponible <span class="mes2"></span></h4>
 					<!-- /.box-title -->
@@ -268,10 +295,14 @@
 				</div>
 				<!-- /.box-content -->
 			</div>
+
+			<div class="col-lg-12 col-xs-12">
+				<div class="linea-separadora"></div>
+			</div>
 			<!-- /.col-lg-4 col-xs-12 -->
 
 			<!-- VAlOR INVENTARIO -->
-			<div class="col-lg-4 col-md-4 col-xs-4">
+			<div class="col-lg-4 col-md-4 col-xs-12">
 				<div class="box-content">
 					<div class="statistics-box with-icon">
 						<i class="ico small fa fa-tag text-info"></i><!-- text-inverse -->
@@ -282,7 +313,7 @@
 				<!-- /.box-content -->
 			</div>
 
-			<div class="col-lg-4 col-md-4 col-xs-4">
+			<div class="col-lg-4 col-md-4 col-xs-12">
 				<div class="box-content">
 					<div class="statistics-box">
 						<p class="text text-center text-info">DIFERENCIA</p>
@@ -299,7 +330,7 @@
 				<!-- /.box-content -->
 			</div>
 
-			<div class="col-lg-4 col-md-4 col-xs-4">
+			<div class="col-lg-4 col-md-4 col-xs-12">
 				<div class="box-content">
 					<div class="statistics-box with-icon">
 						<i class="ico small fa fa-tag text-info"></i><!-- text-inverse -->
@@ -309,10 +340,14 @@
 				</div>
 				<!-- /.box-content -->
 			</div>
+
+			<div class="col-lg-12 col-xs-12">
+				<div class="linea-separadora"></div>
+			</div>
 			<!-- /.col-lg-3 col-md-6 col-xs-12 -->
 
 			<!-- CUENTAS POR COBRAR -->
-			<div class="col-lg-4 col-md-4 col-xs-4">
+			<div class="col-lg-4 col-md-4 col-xs-12">
 				<div class="box-content">
 					<div class="statistics-box with-icon text-info">
 						<i class="ico small icon-money-2"></i>
@@ -323,7 +358,7 @@
 				<!-- /.box-content -->
 			</div>
 
-			<div class="col-lg-4 col-md-4 col-xs-4">
+			<div class="col-lg-4 col-md-4 col-xs-12">
 				<div class="box-content">
 					<div class="statistics-box text-info">
 						<p class="text text-center text-info">DIFERENCIA</p>
@@ -339,7 +374,7 @@
 				<!-- /.box-content -->
 			</div>
 
-			<div class="col-lg-4 col-md-4 col-xs-4">
+			<div class="col-lg-4 col-md-4 col-xs-12">
 				<div class="box-content">
 					<div class="statistics-box with-icon text-info">
 						<i class="ico small icon-money-2"></i>
@@ -349,10 +384,14 @@
 				</div>
 				<!-- /.box-content -->
 			</div>
+
+			<div class="col-lg-12 col-xs-12">
+				<div class="linea-separadora"></div>
+			</div>
 			<!-- /.col-lg-3 col-md-6 col-xs-12 -->
 
 			<!-- CUENTAS POR PAGAR -->
-			<div class="col-lg-4 col-md-4 col-xs-4">
+			<div class="col-lg-4 col-md-4 col-xs-12">
 				<div class="box-content">
 					<div class="statistics-box with-icon">
 						<i class="ico small fa fa-calculator text-info"></i>
@@ -363,7 +402,7 @@
 				<!-- /.box-content -->
 			</div>
 
-			<div class="col-lg-4 col-md-4 col-xs-4">
+			<div class="col-lg-4 col-md-4 col-xs-12">
 				<div class="box-content">
 					<div class="statistics-box">
 						<p class="text text-center text-info">DIFERENCIA</p>
@@ -379,7 +418,7 @@
 				<!-- /.box-content -->
 			</div>
 
-			<div class="col-lg-4 col-md-4 col-xs-4">
+			<div class="col-lg-4 col-md-4 col-xs-12">
 				<div class="box-content">
 					<div class="statistics-box with-icon">
 						<i class="ico small fa fa-calculator text-info"></i>
@@ -389,10 +428,14 @@
 				</div>
 				<!-- /.box-content -->
 			</div>
+
+			<div class="col-lg-12 col-xs-12">
+				<div class="linea-separadora"></div>
+			</div>
 			<!-- /.col-lg-3 col-md-6 col-xs-12 -->
 
 			<!-- GASTOS -->
-			<div class="col-lg-4 col-md-4 col-xs-4">
+			<div class="col-lg-4 col-md-4 col-xs-12">
 				<div class="box-content">
 					<div class="statistics-box with-icon">
 						<i class="ico small fa fa-wrench text-info"></i>
@@ -403,7 +446,7 @@
 				<!-- /.box-content -->
 			</div>
 
-			<div class="col-lg-4 col-md-4 col-xs-4">
+			<div class="col-lg-4 col-md-4 col-xs-12">
 				<div class="box-content">
 					<div class="statistics-box">
 						<p class="text text-center text-info">DIFERENCIA</p>
@@ -419,7 +462,7 @@
 				<!-- /.box-content -->
 			</div>
 
-			<div class="col-lg-4 col-md-4 col-xs-4">
+			<div class="col-lg-4 col-md-4 col-xs-12">
 				<div class="box-content">
 					<div class="statistics-box with-icon">
 						<i class="ico small fa fa-wrench text-info"></i>
@@ -430,8 +473,12 @@
 				<!-- /.box-content -->
 			</div>
 
+			<div class="col-lg-12 col-xs-12">
+				<div class="linea-separadora"></div>
+			</div>
+
 			<!-- EXISTENCIAS -->
-			<div class="col-lg-4 col-md-4 col-xs-4">
+			<div class="col-lg-4 col-md-4 col-xs-12">
 				<div class="box-content">
 					<div class="statistics-box with-icon">
 						<p class="text-center text-info">PZAS EXIST INV <span class="mes1"></span></p>
@@ -442,7 +489,7 @@
 				<!-- /.box-content -->
 			</div>
 
-			<div class="col-lg-4 col-md-4 col-xs-4">
+			<div class="col-lg-4 col-md-4 col-xs-12">
 				<div class="box-content">
 					<div class="statistics-box">
 						<p class="text-center text-info">DIFERENCIA</p>
@@ -458,7 +505,7 @@
 				<!-- /.box-content -->
 			</div>
 
-			<div class="col-lg-4 col-md-4 col-xs-4">
+			<div class="col-lg-4 col-md-4 col-xs-12">
 				<div class="box-content">
 					<div class="statistics-box with-icon">
 						<p class="text-center text-info">PZAS EXIST INV <span class="mes2"></span></p>
@@ -468,10 +515,14 @@
 				</div>
 				<!-- /.box-content -->
 			</div>
+
+			<div class="col-lg-12 col-xs-12">
+				<div class="linea-separadora"></div>
+			</div>
 			<!-- /.col-lg-3 col-md-6 col-xs-12 -->
 
 			<!-- COMPRAS DE MERCANCIA -->
-			<div class="col-lg-4 col-md-4 col-xs-4">
+			<div class="col-lg-4 col-md-4 col-xs-12">
 				<div class="box-content">
 					<div class="statistics-box with-icon">
 						<p class="text-center text-info">COMPRAS MCIA <span class="mes1"></span></p>
@@ -482,7 +533,7 @@
 				<!-- /.box-content -->
 			</div>
 
-			<div class="col-lg-4 col-md-4 col-xs-4">
+			<div class="col-lg-4 col-md-4 col-xs-12">
 				<div class="box-content">
 					<div class="statistics-box">
 						<p class="text-center text-info">DIFERENCIA</p>
@@ -498,7 +549,7 @@
 				<!-- /.box-content -->
 			</div>
 
-			<div class="col-lg-4 col-md-4 col-xs-4">
+			<div class="col-lg-4 col-md-4 col-xs-12">
 				<div class="box-content">
 					<div class="statistics-box with-icon">
 						<p class="text-center text-info">COMPRAS MCIA <span class="mes2"></span></p>
@@ -508,10 +559,14 @@
 				</div>
 				<!-- /.box-content -->
 			</div>
+
+			<div class="col-lg-12 col-xs-12">
+				<div class="linea-separadora"></div>
+			</div>
 			<!-- /.col-lg-3 col-md-6 col-xs-12 -->
 
 			<!-- CLIENTES -->
-			<div class="col-lg-4 col-md-4 col-xs-4">
+			<div class="col-lg-4 col-md-4 col-xs-12">
 				<div class="box-content">
 					<div class="statistics-box with-icon">
 						<p class="text-center text-info">CLIENTES/VTA <span class="mes1"></span></p>
@@ -522,7 +577,7 @@
 				<!-- /.box-content -->
 			</div>
 
-			<div class="col-lg-4 col-md-4 col-xs-4">
+			<div class="col-lg-4 col-md-4 col-xs-12">
 				<div class="box-content">
 					<div class="statistics-box">
 						<p class="text-center text-info">DIFERENCIA</p>
@@ -538,7 +593,7 @@
 				<!-- /.box-content -->
 			</div>
 
-			<div class="col-lg-4 col-md-4 col-xs-4">
+			<div class="col-lg-4 col-md-4 col-xs-12">
 				<div class="box-content">
 					<div class="statistics-box with-icon">
 						<p class="text-center text-info">CLIENTES/VTA <span class="mes2"></span></p>
@@ -548,10 +603,14 @@
 				</div>
 				<!-- /.box-content -->
 			</div>
+
+			<div class="col-lg-12 col-xs-12">
+				<div class="linea-separadora"></div>
+			</div>
 			<!-- /.col-lg-3 col-md-6 col-xs-12 -->
 
 			<!-- ARTICULOS VENDIDOS -->
-			<div class="col-lg-4 col-md-4 col-xs-4" >
+			<div class="col-lg-4 col-md-4 col-xs-12" >
 				<div class="box-content ">
 					<div class="statistics-box with-icon">
 						<p class="text-center text-info">ART VENDIDOS <span class="mes1"></span></p>
@@ -562,7 +621,7 @@
 				<!-- /.box-content -->
 			</div>
 
-			<div class="col-lg-4 col-md-4 col-xs-4" >
+			<div class="col-lg-4 col-md-4 col-xs-12" >
 				<div class="box-content ">
 					<div class="statistics-box">
 						<p class="text-center text-info">DIFERENCIA</p>
@@ -578,7 +637,7 @@
 				<!-- /.box-content -->
 			</div>
 
-			<div class="col-lg-4 col-md-4 col-xs-4" >
+			<div class="col-lg-4 col-md-4 col-xs-12" >
 				<div class="box-content ">
 					<div class="statistics-box with-icon">
 						<p class="text-center text-info">ART VENDIDOS <span class="mes2"></span></p>
@@ -587,6 +646,10 @@
 					</div>
 				</div>
 				<!-- /.box-content -->
+			</div>
+
+			<div class="col-lg-12 col-xs-12">
+				<div class="linea-separadora"></div>
 			</div>
 			<!-- /.col-lg-3 col-md-6 col-xs-12 -->
 

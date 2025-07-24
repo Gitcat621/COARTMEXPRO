@@ -24,6 +24,7 @@ body {
   background: #f5f7fa;
   color: #505458;
 }
+
 #wrapper {
   position: relative;
   top: 0px;
@@ -44,6 +45,13 @@ body {
   -ms-transition: -ms-transform 0.4s ease;
 }
 
+.scroll-horizontal {
+  width: 100%;             /* O cualquier ancho fijo */
+  overflow-x: auto;        /* Muestra scroll horizontal si es necesario */
+  white-space: nowrap;     /* Impide que los elementos bajen al siguiente renglón */
+  /* border: 1px solid #ccc;  Opcional: solo para visualizar el contenedor */
+}
+
 .clickeable {
   cursor: pointer;
 }
@@ -60,11 +68,18 @@ body {
 
 .popup-card {
   background: white;
-  padding: 20px;
-  width: 400px;
+  padding: 10px;
+  width: 350px;
   position: absolute;
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.linea-separadora {
+  height: 1px;
+  background-color: #0dcaf0;
+  width: 100%;        /* o un ancho fijo */
+  margin: 0px 0px 20px 0px;
 }
 
 .oculto {
@@ -815,6 +830,9 @@ h4 strong {
 }
 .bg-orange {
   background-color: #ff460b !important;
+}
+.bg-grey {
+  background-color: #efefef !important;
 }
 /* Text colors */
 .text-custom {

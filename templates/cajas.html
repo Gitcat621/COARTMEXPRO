@@ -4,9 +4,19 @@
 
 {% block title %}Cajas en envios{% endblock %}
 
-{% block NavBar %}Cajas en envios{% endblock %}
-
 {% block content %}
+<div class="fixed-navbar">
+	<div class="pull-left">
+		<button type="button" class="menu-mobile-button glyphicon glyphicon-menu-hamburger js__menu_mobile"></button>
+		<h1 class="page-title">Cajas en envios</h1>
+		<!-- /.page-title -->
+	</div>
+	<!-- /.pull-left -->
+	<div class="pull-right">
+		<a id="cerrarSesion" class="ico-item fa fa-power-off logout"></a>
+	</div>
+	<!-- /.pull-right -->
+</div>
 
 <div id="wrapper">
 	<div class="main-content">
@@ -45,7 +55,9 @@
 			<div class="modal-body">
 				<div class="form-group">
 					<label>Seleccionar articulos</label>
-					<table id="cajaContenidoTable" class="table table-small-font table-hover table-bordered display" style="width:100%"></table>
+					<div class="table-responsive">
+						<table id="cajaContenidoTable" class="table table-small-font table-hover table-bordered display" style="width:100%"></table>
+					</div>
 				</div>
 			</div>
 			<div class="modal-footer">

@@ -112,17 +112,16 @@ def editar_empleado():
     except Exception as e:
         return jsonify({'mensaje': f'Error en el servidor: {str(e)}'}), 500
 
-
 @api_empleados.route('/infoEmpleado', methods=['POST'])
 def agregar_info_empleado():
     data = request.json
     nombreEmpleado = data.get('nombreEmpleado')
     fechaIngreso = data.get('fechaIngreso')
-    nomina = data.get('nomina')
-    vale = data.get('vale')
     fkPuesto = data.get('fkPuesto')
     state = data.get('state')
-
+    
+    nomina = data.get('nomina')
+    vale = data.get('vale')
     numeroEmpleado = data.get('numeroEmpleado')
     rfc = data.get('rfc')
     fechaNacimiento = data.get('fechaNacimiento')
@@ -137,24 +136,23 @@ def agregar_info_empleado():
     estado = data.get('estado')
     pais = data.get('pais')
 
+    print(numeroEmpleado)
     print(nombreEmpleado)
     print(fechaIngreso)
-    print(nomina)
-    print(vale)
     print(fkPuesto)
     print(state)
 
     print('--------------------')
-
-    print(numeroEmpleado)
-    print(rfc)
-    print(fechaNacimiento)
+    print(nomina)
+    print(vale)
+    print('rfc',rfc)
+    print('fechaNacimiento',fechaNacimiento)
     print(pkNumerosEmergencia)
     print(numerosEmergencia)
     print(pkUniformeEmpleado)
     print(tallaUniforme)
     print(pzasUniforme)
-    print(fkNivelEstudio)
+    print('fkNivelEstudio',fkNivelEstudio)
     print(fkUbicacion)
     print(puebloCiudad)
     print(estado)
@@ -163,8 +161,8 @@ def agregar_info_empleado():
     # return jsonify({'mensaje': 'HEYYYY'}), 400
 
 
-    if not nombreEmpleado or not fechaIngreso or not nomina or not vale or not fkPuesto or not state or not numeroEmpleado or not rfc or not fechaNacimiento or not numerosEmergencia or not tallaUniforme or not pzasUniforme or not fkNivelEstudio or not puebloCiudad or not estado or not pais:
-        return jsonify({'mensaje': 'Faltan datos'}), 400
+    # if not nombreEmpleado or not fechaIngreso or not nomina or not vale or not fkPuesto or not state or not numeroEmpleado or not rfc or not fechaNacimiento or not numerosEmergencia or not tallaUniforme or not pzasUniforme or not fkNivelEstudio or not puebloCiudad or not estado or not pais:
+    #     return jsonify({'mensaje': 'Faltan datos'}), 400
     
     if Empleado.agregar_info_empleado(nombreEmpleado,fechaIngreso,nomina,vale,fkPuesto,state,numeroEmpleado,rfc,fechaNacimiento, pkNumerosEmergencia, numerosEmergencia, pkUniformeEmpleado,tallaUniforme,pzasUniforme,fkNivelEstudio,fkUbicacion,puebloCiudad,estado,pais):
         return jsonify({'mensaje': 'Empleado actualizado correctamente'}), 200

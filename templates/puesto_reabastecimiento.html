@@ -3,9 +3,20 @@
 
 {% block title %}Encargado de reabasto{% endblock %}
 
-{% block NavBar %}Encargado de reabasto{% endblock %}
-
 {% block content %}
+<div class="fixed-navbar">
+	<div class="pull-left">
+		<button type="button" class="menu-mobile-button glyphicon glyphicon-menu-hamburger js__menu_mobile"></button>
+		<h1 class="page-title">Encargado de reabasto</h1>
+		<!-- /.page-title -->
+	</div>
+	<!-- /.pull-left -->
+	<div class="pull-right">
+		<a id="cerrarSesion" class="ico-item fa fa-power-off logout"></a>
+	</div>
+	<!-- /.pull-right -->
+</div>
+
 <div id="wrapper">
 	<div class="main-content">
 		<div class="row small-spacing">
@@ -24,7 +35,7 @@
 								<li role="tab" tabindex="-1" class="ui-tabs-tab ui-corner-top ui-state-default ui-tab" aria-controls="tabs-2" aria-labelledby="ui-id-8" aria-selected="false" aria-expanded="false"><a href="#tabs-2" role="presentation" tabindex="-1" class="ui-tabs-anchor" id="ui-id-8">Perfil del puesto <i class="ico icon-vcard"></i></a></li>
 								
 							</ul>
-							<div id="tabs-1" aria-labelledby="ui-id-7" role="tabpanel" class="ui-tabs-panel ui-corner-bottom ui-widget-content" aria-hidden="false" style="">
+							<div id="tabs-1" aria-labelledby="ui-id-7" role="tabpanel" class="ui-tabs-panel ui-corner-bottom ui-widget-content" aria-hidden="false">
 								<!-- DESCRIPCION DEL PUESTO -->
 								<div class="col-lg-12 col-md-12 col-xs-12">
 									<div class="box-content js__card card-closed">
@@ -36,7 +47,7 @@
 											<!-- /.controls -->
 										</h4>
 										<!-- /.box-title -->
-										<div class="js__card_content" style="display: none;">
+										<div class="js__card_content table-responsive" style="display: none;">
 											<table class="table">
 												<thead>
 													<th>Puesto</th>
@@ -71,7 +82,7 @@
 											<!-- /.controls -->
 										</h4>
 										<!-- /.box-title -->
-										<div class="js__card_content" style="display: none;">
+										<div class="js__card_content scroll-horizontal" style="display: none;">
 											<p>
 												Asistir en las actividades de almacén, recibiendo, revisando y organizando los materiales, productos, equipos y herramientas a fin de atender oportunamente las entregas a los socios comerciales.
 											</p>

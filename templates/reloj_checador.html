@@ -2,9 +2,19 @@
 
 {% block title %}Reloj checador{% endblock %}
 
-{% block NavBar %}Reloj checador{% endblock %}
-
 {% block content %}
+<div class="fixed-navbar">
+	<div class="pull-left">
+		<button type="button" class="menu-mobile-button glyphicon glyphicon-menu-hamburger js__menu_mobile"></button>
+		<h1 class="page-title">Reloj checador</h1>
+		<!-- /.page-title -->
+	</div>
+	<!-- /.pull-left -->
+	<div class="pull-right">
+		<a id="cerrarSesion" class="ico-item fa fa-power-off logout"></a>
+	</div>
+	<!-- /.pull-right -->
+</div>
 
 <div id="wrapper">
 	<div class="main-content">
@@ -53,25 +63,24 @@
 					<button class="btn btn-danger" onclick="exportarPDF()">Exportar a PDF <i class="fa fa-file-pdf-o" aria-hidden="true"></i></button>
 
 					<h5>Reporte de estadistico</h5>
-					<table id="resumen_asistencia" class="table table-small-font table-hover table-bordered display nowrap margin-top-20" style="width:100%">
-						<thead>
-							<tr>
-								<th>No. empleado</th>
-								<th>Empleado</th>
-								<th>Departamento</th>
-								<th>Dias laborados</th>
-								<th>Numero de faltas</th>
-								<th>Numero de retardos</th>
-								<th>Minutos de retardo</th>
-								<th>Horas extra</th>
+					<div class="table-responsive">
+						<table id="resumen_asistencia" class="table table-small-font table-hover table-bordered display nowrap margin-top-20" style="width:100%">
+							<thead>
+								<tr>
+									<th>No. empleado</th>
+									<th>Empleado</th>
+									<th>Departamento</th>
+									<th>Dias laborados</th>
+									<th>Numero de faltas</th>
+									<th>Numero de retardos</th>
+									<th>Minutos de retardo</th>
+									<th>Horas extra</th>
 
-							</tr>
-						</thead>
-						<tbody></tbody> <!-- 🔹 Aquí se insertarán los datos -->
-					</table>
-
-
-					
+								</tr>
+							</thead>
+							<tbody></tbody>
+						</table>
+					</div>					
 				</div>
 			</div>
 			<!-- /.box-content -->
@@ -124,6 +133,9 @@
 		</div>
 	</div>
 </div>
+
+<img id="logoChico" src="{{ url_for('static', filename='assets/images/logo.jpg') }}" style="display:none" />
+
 {% endblock %}
 
 {% block scripts %}

@@ -315,28 +315,31 @@ class Empleado:
                 db.cursor.execute(consultaUniformes, valoresUniforme)
 
             # --- Insertar o recuperar ID de pueblo ---
-            if Empleado.es_entero(puebloCiudad):
-                puebloCiudad = int(puebloCiudad)
-            else:
-                db.cursor.execute('INSERT INTO pueblos_ciudades (nombrePuebloCiudad) VALUES (%s)', (puebloCiudad,))
-                db.cursor.execute('SELECT LAST_INSERT_ID()')
-                puebloCiudad = db.cursor.fetchone()['LAST_INSERT_ID()']
+            if puebloCiudad is not None:
+                if Empleado.es_entero(puebloCiudad):
+                    puebloCiudad = int(puebloCiudad)
+                else:
+                    db.cursor.execute('INSERT INTO pueblos_ciudades (nombrePuebloCiudad) VALUES (%s)', (puebloCiudad,))
+                    db.cursor.execute('SELECT LAST_INSERT_ID()')
+                    puebloCiudad = db.cursor.fetchone()['LAST_INSERT_ID()']
 
             # --- Insertar o recuperar ID de estado ---
-            if Empleado.es_entero(estado):
-                estado = int(estado)
-            else:
-                db.cursor.execute('INSERT INTO estados (nombreEstado) VALUES (%s)', (estado,))
-                db.cursor.execute('SELECT LAST_INSERT_ID()')
-                estado = db.cursor.fetchone()['LAST_INSERT_ID()']
+            if estado is not None:
+                if Empleado.es_entero(estado):
+                    estado = int(estado)
+                else:
+                    db.cursor.execute('INSERT INTO estados (nombreEstado) VALUES (%s)', (estado,))
+                    db.cursor.execute('SELECT LAST_INSERT_ID()')
+                    estado = db.cursor.fetchone()['LAST_INSERT_ID()']
 
             # --- Insertar o recuperar ID de país ---
-            if Empleado.es_entero(pais):
-                pais = int(pais)
-            else:
-                db.cursor.execute('INSERT INTO paises (nombrePais) VALUES (%s)', (pais,))
-                db.cursor.execute('SELECT LAST_INSERT_ID()')
-                pais = db.cursor.fetchone()['LAST_INSERT_ID()']
+            if pais is not None:
+                if Empleado.es_entero(pais):
+                    pais = int(pais)
+                else:
+                    db.cursor.execute('INSERT INTO paises (nombrePais) VALUES (%s)', (pais,))
+                    db.cursor.execute('SELECT LAST_INSERT_ID()')
+                    pais = db.cursor.fetchone()['LAST_INSERT_ID()']
 
             # --- Insertar ubicación ---
             if fkUbicacion is None:

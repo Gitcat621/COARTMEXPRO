@@ -5,7 +5,7 @@ $(document).ready(function () {
         columns: [
             { title: "Vehiculo" },
             {
-                title: "Opciones", width: "30%",
+                title: "Opciones", width: "40%",
                 render: function (data, type, row) {
                     return `<div class="text-center">
                     <button class="btn btn-xss servicios-btn" data-row='${JSON.stringify(row)}'><i class="fa fa-list"></i> <i class="fa fa-wrench"></i> </button>

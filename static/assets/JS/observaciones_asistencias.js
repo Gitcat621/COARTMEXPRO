@@ -1,4 +1,3 @@
-
 $("#agregarObservacion").click(function() {
     
     pkObservacionAsistencia = document.getElementById('observacionAsistencia').value;
@@ -136,6 +135,12 @@ function exportarPDF() {
     doc.text("Reporte de Asistencia", 10, 15);
 
     const observacion = document.getElementById("observacion").value;
+
+    const img = document.getElementById("logoChico");
+
+    if (img && img.src) {
+        doc.addImage(img, 'PNG', 260, 5, 20, 10); // x=10, y=5, ancho=20, alto=10
+    }
 
     doc.autoTable({
         html: '#tablaAsistencia',
