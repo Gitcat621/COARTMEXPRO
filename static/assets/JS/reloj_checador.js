@@ -115,7 +115,7 @@ async function agregarArchivo() {
     });
 
     try {
-        const response = await fetch('/api/reportes_reloj_checador', {
+        const response = await fetch('/api/reportes_reloj_checador/', {
             method: 'POST',
             body: formData,
         });
@@ -279,49 +279,3 @@ function abrirModal(modo, pkArchivo, nombreArchivo) {
     }
 
 }
-
-document.getElementById('archivoSubido').addEventListener('change', function(e) {
-    const archivo = e.target.files[0];
-    if (!archivo) return;
-
-    // Validar que sea un archivo de Excel
-    const extensionesValidas = ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel'];
-    if (!extensionesValidas.includes(archivo.type)) {
-        alert('Por favor, selecciona un archivo de Excel (.xlsx o .xls)');
-        return;
-    }
-
-    const lector = new FileReader();
-
-    lector.onload = function(e) {
-        const datos = new Uint8Array(e.target.result);
-        const workbook = XLSX.read(datos, { type: 'array' });
-
-        // Mostrar nombres de hojas
-        const hojas = workbook.SheetNames;
-        const contenedor = document.getElementById('contenidoExcel');
-        contenedor.innerHTML = ''; // Limpiar contenido previo
-
-        hojas.forEach(nombreHoja => {
-            const hoja = workbook.Sheets[nombreHoja];
-            const datosJSON = XLSX.utils.sheet_to_json(hoja, { header: 1 }); // Array de arrays
-
-            // Contenedor con scroll
-            let tablaHTML = `<h4>Hoja: ${nombreHoja}</h4>
-                <div class='' style="overflow: auto; max-width: 100%; max-height: 400px; border: 1px solid #ccc;">
-                    <table class='table table-bordered table-hover' cellpadding="5" style="width: max-content;">
-                        `;
-            datosJSON.forEach(fila => {
-                tablaHTML += "<tr>";
-                fila.forEach(celda => {
-                    tablaHTML += `<td>${celda ?? ''}</td>`;
-                });
-                tablaHTML += "</tr>";
-            });
-            tablaHTML += "</table></div><br>";
-            contenedor.innerHTML += tablaHTML;
-        });
-    };
-
-    lector.readAsArrayBuffer(archivo);
-});

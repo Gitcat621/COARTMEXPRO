@@ -188,16 +188,16 @@ def procesar_asistencias(hoja2):
                 fila_asistencia = hoja2.iloc[i + 1]
 
                 # Buscar nombre
-                nombre_completo = ""
+                idRelojChecador = ""
                 for col_index, celda in enumerate(fila):
-                    if isinstance(celda, str) and "Nombre:" in celda:
+                    if isinstance(celda, str) and "ID:" in celda:
                         nombre_col_index = col_index + 2
                         if nombre_col_index < len(fila):
-                            nombre_completo = str(fila.iloc[nombre_col_index]).strip()
+                            idRelojChecador = str(fila.iloc[nombre_col_index]).strip()
                         break
 
-                # Formatear el nombre
-                nombre_formateado = " ".join(re.findall(r"[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+", nombre_completo))
+                print(idRelojChecador)
+
 
                 # Procesar asistencias por columna
                 for col_idx, celda in enumerate(fila_asistencia):
@@ -213,11 +213,11 @@ def procesar_asistencias(hoja2):
                                 insert_query = '''
                                     INSERT INTO asistencias (fkEmpleado, registroAsistencia)
                                     VALUES (
-                                        (SELECT numeroEmpleado FROM empleados WHERE nombreEmpleado = %s),
+                                        (SELECT numeroEmpleado FROM empleados WHERE idRelojChecador = %s),
                                         %s
                                     )
                                 '''
-                                db.cursor.execute(insert_query, (nombre_formateado, registro_asistencia))
+                                db.cursor.execute(insert_query, (idRelojChecador, registro_asistencia))
 
         db.connection.commit()
         return "✅ Todos los registros de asistencia fueron insertados exitosamente."
