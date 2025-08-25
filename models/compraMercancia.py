@@ -41,6 +41,8 @@ class CompraMercancia:
         '''
         if self.fechaMercancia:
             consulta += f" {self.fechaMercancia}"
+
+        print("\nSe listaron las compras de mercancia en", self.fechaMercancia)
             
         resultado = db.execute_query(consulta)
         db.close()

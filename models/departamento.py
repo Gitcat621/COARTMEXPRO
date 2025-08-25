@@ -12,7 +12,7 @@ class Departamento:
         """Obtiene todos los registros de la base de datos."""
         db = Database()
         consulta = "SELECT * FROM departamentos"
-        print (consulta)
+        print("\nSe listaron los departamentos")
         resultado = db.execute_query(consulta)
         db.close()
         return resultado
@@ -22,7 +22,7 @@ class Departamento:
         db = Database()
         consulta = "INSERT INTO departamentos (nombreDepartamento) VALUES (%s)"
         valores = (self.nombreDepartamento,)
-        print(consulta % valores)
+        print("\nSe creó un departamento")
         resultado = db.execute_commit(consulta, valores)
         db.close()
         return resultado
@@ -32,7 +32,7 @@ class Departamento:
         db = Database()
         consulta = "UPDATE departamentos SET nombreDepartamento = %s WHERE pkDepartamento = %s"
         valores = (self.nombreDepartamento, self.pkDepartamento)
-        print(consulta % valores)
+        print("\nSe editó un departamento")
         resultado = db.execute_commit(consulta, valores)
         db.close()
         return resultado
@@ -42,7 +42,7 @@ class Departamento:
         db = Database()  
         consulta = "DELETE FROM departamentos WHERE pkDepartamento = %s"
         valores = (self.pkDepartamento,)
-        print(consulta % valores)
+        print("\nSe eliminó un departamento")
         resultado = db.execute_commit(consulta, valores)
         db.close()
         return resultado

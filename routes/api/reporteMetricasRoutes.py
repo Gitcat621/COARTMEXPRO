@@ -25,7 +25,7 @@ if not os.path.exists(UPLOAD_FOLDER):
 def listar_archivos():
     """Endpoint para obtener todos los registros"""
 
-    print("🔍 Se listaron los reportes de metricas")
+    print("\nSe listaron los reportes de metricas")
     archivos = []
 
     for idx, archivo in enumerate(os.listdir(UPLOAD_FOLDER), start=1):
@@ -434,7 +434,7 @@ def procesar_inventario(df):
 @api_reportesMetricas.route('/', methods=['POST'])
 def crear_archivo():
 
-    print("💽 Se ha subido un reporte de metrica")
+    print("\nSe ha subido un reporte de metrica")
 
     if 'archivo' not in request.files:
         return jsonify({'mensaje': 'No se ha enviado ningún archivo'}), 400
@@ -477,7 +477,7 @@ def editar_archivo():
 def eliminar_archivo():
     """Endpoint para eliminar un archivo tanto del servidor como de la base de datos"""
 
-    print("🗑️ Se ha eliminado un reporte de metrica")
+    print("\nSe ha eliminado un reporte de metrica")
 
     data = request.json
     nombreArchivo = data.get('nombreArchivo')

@@ -22,7 +22,7 @@ def analisisGraficas():
     return render_template("analisis_graficas.html")
 
 @web_analisis.route("/tablas")
-@rol_requerido('Sistemas', 'DIRECCION GENERAL')
+@rol_requerido('ADMINISTRACION CONTABLE Y FISCAL', 'DIRECCION GENERAL')
 def analisisTablas():
     if 'usuario' not in session:
         return redirect('/')

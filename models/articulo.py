@@ -48,7 +48,7 @@ class Articulo:
         JOIN proveedores p ON p.pkProveedor = a.fkProveedor
         '''
 
-        print(consulta)
+        print("\nSe listaron los articulos")
 
         resultado = db.execute_query(consulta)
         db.close()
@@ -66,7 +66,7 @@ class Articulo:
         WHERE YEAR(e.fechaExistencia) = {year} AND MONTH(e.fechaExistencia) = {month}
         '''
 
-        print(consulta)
+        print("\nSe listó el inventario de", month, "de", year)
 
         resultado = db.execute_query(consulta)
         db.close()
@@ -76,6 +76,7 @@ class Articulo:
         """Guarda un nuevo registro en la base de datos"""
         db = Database()
         query = "INSERT INTO articulos (codigoArticulo, nombreArticulo, precioAlmacen, fkProveedor, fkCategoriaArticulo) VALUES (%s,%s,%s,%s,%s)"
+        print("\nSe agregó un articulo")
         resultado = db.execute_commit(query, (self.codigoArticulo, self.nombreArticulo,self.precioAlmacen, self.fkProveedor, self.fkCategoriaArticulo))
         db.close()
         return resultado
@@ -84,8 +85,6 @@ class Articulo:
         """Guarda un nuevo registro en la base de datos"""
 
         query = "INSERT INTO existencias (cantidadExistencia, fechaExistencia, fkCodigoArticulo) VALUES (%s,%s,%s)"
-
-
         valores = (self.cantidadExistencia, self.fechaExistencia, self.codigoArticulo)
         
         try:
@@ -108,18 +107,16 @@ class Articulo:
         query = "UPDATE articulos SET codigoArticulo = %s, nombreArticulo = %s, precioAlmacen = %s, fkProveedor = %s, fkCategoriaArticulo = %s  WHERE codigoArticulo = %s"
         resultado = db.execute_commit(query, (self.codigoArticulo, self.nombreArticulo, self.precioAlmacen, self.fkProveedor, self.fkCategoriaArticulo, self.codigoArticulo))
 
-        print(query)
+        print("\nSe editó un articulo")
 
         db.close()
         return resultado
 
     def eliminar_articulo(self):
         """Elimina un registro de la base de datos."""
-
-        if not self.codigoArticulo:
-            raise ValueError("El articulo debe tener un ID para ser eliminado.")
         db = Database()
         query = "DELETE FROM articulos WHERE codigoArticulo = %s"
+        print("\nSe eliminó un articulo")
         resultado = db.execute_commit(query, (self.codigoArticulo,))
         db.close()
         return resultado

@@ -188,7 +188,7 @@ class Analisis:
         )) AS fechaMasRecienteMes
         '''
 
-        print(consulta)
+        print("\nSe llamó al resumen para analizar con" , meses, "en", year)
 
         resultado = db.execute_query(consulta)
         db.close()
@@ -199,6 +199,8 @@ class Analisis:
     def listar_ingresos(self):
 
         db = Database()
+
+        print("\nSe listaron los ingresos")
 
         if self.foreingKey == 'AND gs.pkGrupoSocio = 621':
             consulta = '''
@@ -212,8 +214,7 @@ class Analisis:
             ORDER BY totalFacturado DESC;
             '''
 
-            print(consulta)
-
+            
             resultado = db.execute_query(consulta, (self.fecha,))
             db.close()
 
@@ -235,7 +236,6 @@ class Analisis:
             if self.foreingKey:
                 consulta += f" {self.foreingKey}"
 
-            print(consulta)
             resultado = db.execute_query(consulta)
             db.close()
             return resultado
@@ -251,7 +251,7 @@ class Analisis:
         WHERE cm.pagoPendiente  != 0
         '''
 
-        print(consulta)
+        print("\nSe listaron las cuentas por pagar")
 
         resultado = db.execute_query(consulta)
         db.close()
@@ -271,7 +271,7 @@ class Analisis:
         WHERE f.fechaPagado IS NULL;
         '''
 
-        print(consulta)
+        print("\nSe listaron las cuentas por cobrar")
 
         resultado = db.execute_query(consulta)
         db.close()
@@ -298,7 +298,7 @@ class Analisis:
         '''
         #
 
-        print(consulta)
+        print("\nSe listó el top 1 con" , meses , "en el año actual")
 
         resultado = db.execute_query(consulta)
         db.close()
@@ -327,8 +327,8 @@ class Analisis:
         ORDER BY totalOrdenesCompra DESC;
         
         '''
-        #GROUP BY sc.nombreSocio
-        print(consulta)
+
+        print("\nSe listó el top2 con" , meses , "en el año actual")
 
         resultado = db.execute_query(consulta)
         db.close()
@@ -354,7 +354,7 @@ class Analisis:
                 GROUP BY gs.nombreGrupoSocio;
         '''
 
-        print(consulta)
+        print("\nSe listó el top 3 con" , meses , "en el año actual")
 
         resultado = db.execute_query(consulta)
         db.close()
@@ -378,7 +378,7 @@ class Analisis:
         GROUP BY sc.nombreSocio
         '''
 
-        print(consulta)
+        print("\nSe listó la grafica 1 con", meses, " y el grupo", grupo)
 
         resultado = db.execute_query(consulta)
         db.close()
@@ -406,7 +406,7 @@ class Analisis:
         ORDER BY gs.nombreGrupoSocio, mes;
         '''
 
-        print(consulta)
+        print("\nSe listó la grafica 2 con", meses)
 
         resultado = db.execute_query(consulta)
         db.close()
@@ -433,7 +433,7 @@ class Analisis:
         ORDER BY totalPiezasVendidas DESC;
         '''
 
-        print(consulta)
+        print("\nSe listó la grafica 3 con", meses)
 
         resultado = db.execute_query(consulta)
         db.close()
@@ -469,7 +469,7 @@ class Analisis:
         ORDER BY oc.numeroOrdenCompra, a.nombreArticulo;
         '''
 
-        print(consulta)
+        print("\nSe listó la metrica de servicio con" , meses, "en el año actual")
 
         resultado = db.execute_query(consulta)
         db.close()
@@ -493,7 +493,7 @@ class Analisis:
         GROUP BY sc.nombreSocio ORDER BY totalVenta DESC;
         '''
 
-        print(consulta)
+        print("\nSe listaron los socios en ventas con" , meses, "en el año actual")
 
         resultado = db.execute_query(consulta)
         db.close()

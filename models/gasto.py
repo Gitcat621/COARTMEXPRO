@@ -36,6 +36,8 @@ class Gasto:
         JOIN motivos_gasto mg ON mg.pkMotivoGasto = g.fkMotivoGasto AND YEAR(g.fechaGasto) =
         '''
 
+        print("\nSe listaron los gastos")
+
         if self.fechaGasto:
             consulta += f" {self.fechaGasto}"
         resultado = db.execute_query(consulta)
@@ -44,7 +46,7 @@ class Gasto:
             consulta += f" {self.tipoGasto}"
         resultado = db.execute_query(consulta)
         
-        print(consulta)
+        
         db.close()
         return resultado
     

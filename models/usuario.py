@@ -21,8 +21,7 @@ class Usuario:
 
         consulta = '''
         SELECT 
-        u.pkUsuario, 
-        u.nombreUsuario, 
+        u.pkUsuario, u.nombreUsuario, 
         u.contrasena, 
         d.nombreDepartamento,
         u.fkDepartamento
@@ -30,7 +29,7 @@ class Usuario:
         LEFT JOIN departamentos d ON d.pkDepartamento = u.fkDepartamento;
         '''
 
-        print (consulta) 
+        print ("\nSe listaron a los usuarios") 
 
         usuarios = db.execute_query(consulta)
         db.close()
@@ -40,17 +39,17 @@ class Usuario:
         db = Database()
 
         consulta = '''
-        SELECT u.nombreUsuario, u.contrasena, d.nombreDepartamento FROM usuarios u 
-        JOIN departamentos d ON d.pkDepartamento = u.fkDepartamento WHERE u.nombreUsuario = %s
+        SELECT u.nombreUsuario, u.contrasena, d.nombreDepartamento 
+        FROM usuarios u 
+        JOIN departamentos d ON d.pkDepartamento = u.fkDepartamento
+        WHERE u.nombreUsuario = %s
         '''
+
         valores = (self.nombreUsuario,)
 
-        print(consulta % valores)
-
+        print("\nSe intentó iniciar sesion")
 
         resultado = db.execute_query(consulta, valores)
-
-        print(resultado)
 
         db.close()
 
@@ -60,8 +59,10 @@ class Usuario:
             if bcrypt.checkpw(self.contrasena.encode('utf-8'), contrasena_hash.encode('utf-8')):
                 self.nombreDepartamento = resultado[0]["nombreDepartamento"]
                 self.nombreUsuario = resultado[0]["nombreUsuario"]
+                print("Inicio de sesion exitoso para", self.nombreUsuario, self.nombreDepartamento)
                 return True
-
+            
+        print("Inicio de sesion fallido")
         return False
 
     def crear_usuario(self):
@@ -74,7 +75,7 @@ class Usuario:
         query = "INSERT INTO usuarios (nombreUsuario, contrasena, fkDepartamento) VALUES (%s, %s, %s)"
         valores = (self.nombreUsuario, hashed_password, self.fkDepartamento)
 
-        print(query % valores)
+        print ("\nSe creó un usuario") 
 
         resultado = db.execute_commit(query, valores)
         db.close()
@@ -90,8 +91,7 @@ class Usuario:
         query = "UPDATE usuarios SET nombreUsuario = %s, contrasena = %s, fkDepartamento = %s WHERE pkUsuario = %s"
         valores = (self.nombreUsuario, hashed_password, self.fkDepartamento, self.pkUsuario)
 
-        print(f"\n{query % valores}\n")
-
+        print ("\nSe editó un usuario")
 
         resultado = db.execute_commit(query, valores)
         db.close()
@@ -103,12 +103,8 @@ class Usuario:
     
         query = "DELETE FROM usuarios WHERE pkUsuario = %s"
         valores = (self.pkUsuario,)
-        
+        print ("\nSe eliminó un usuario") 
         resultado = db.execute_commit(query, valores)
-
-        print(query % valores)
-
-        print(resultado)
-
+        
         db.close()
         return resultado

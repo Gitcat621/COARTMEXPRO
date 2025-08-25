@@ -70,7 +70,7 @@ $("#modalAgregar").click(function() {
 
 async function listarUsuarios() {
     try {
-        const response = await fetch('/api/usuarios', {
+        const response = await fetch('/api/usuarios/', {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' }
         });
@@ -108,7 +108,7 @@ async function agregarUsuario() {
             return;
         }
 
-        const response = await fetch('/api/usuarios', {
+        const response = await fetch('/api/usuarios/', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ nombreUsuario, contrasena, fkDepartamento })
@@ -143,7 +143,7 @@ async function editarUsuario(pkUsuario) {
             return;
         }
 
-        const response = await fetch('/api/usuarios', {
+        const response = await fetch('/api/usuarios/', {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ pkUsuario, nombreUsuario, contrasena, fkDepartamento })
@@ -172,7 +172,7 @@ async function eliminarUsuario(pkUsuario) {
             return;
         }
 
-        const response = await fetch('/api/usuarios', {
+        const response = await fetch('/api/usuarios/', {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ pkUsuario })

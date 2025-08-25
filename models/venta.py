@@ -31,6 +31,8 @@ class Venta:
 
         db = Database()
 
+        print("\nSe listaron las ventas")
+
         if self.fkSocioComercial == None:
             filtros = []
             if self.fechaVenta:
@@ -54,8 +56,6 @@ class Venta:
             ORDER BY totalVentas DESC;
 
             '''
-
-            print(consulta)
 
             resultado = db.execute_query(consulta)
             db.close()
@@ -85,8 +85,6 @@ class Venta:
             {clausula_where}
 
             '''
-
-            print(consulta)
 
             resultado = db.execute_query(consulta)
             db.close()
